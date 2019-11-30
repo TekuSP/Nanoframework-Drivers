@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.161
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "Meteostanice", "Meteostanice\Meteostanice.nfproj", "{DAAE16C7-8DF2-4C76-AE01-209F162B0908}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{FE469048-9F4B-4913-818A-50961AEC9A83}"
+EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "HDC1080", "HDC1080\HDC1080.nfproj", "{97D42F12-92D6-4CD3-8027-896C663A700D}"
+EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "ESP32-DriverBase", "ESP32-DriverBase\ESP32-DriverBase.nfproj", "{392595B2-2E74-4DEC-8AE8-50EFBF15AA6D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{97D42F12-92D6-4CD3-8027-896C663A700D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97D42F12-92D6-4CD3-8027-896C663A700D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97D42F12-92D6-4CD3-8027-896C663A700D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{97D42F12-92D6-4CD3-8027-896C663A700D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97D42F12-92D6-4CD3-8027-896C663A700D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97D42F12-92D6-4CD3-8027-896C663A700D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{392595B2-2E74-4DEC-8AE8-50EFBF15AA6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{392595B2-2E74-4DEC-8AE8-50EFBF15AA6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{392595B2-2E74-4DEC-8AE8-50EFBF15AA6D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{392595B2-2E74-4DEC-8AE8-50EFBF15AA6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{392595B2-2E74-4DEC-8AE8-50EFBF15AA6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{392595B2-2E74-4DEC-8AE8-50EFBF15AA6D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{97D42F12-92D6-4CD3-8027-896C663A700D} = {FE469048-9F4B-4913-818A-50961AEC9A83}
+		{392595B2-2E74-4DEC-8AE8-50EFBF15AA6D} = {FE469048-9F4B-4913-818A-50961AEC9A83}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7DF9E729-B9E5-45B4-95E1-2FE94D0CE06F}
+	EndGlobalSection
+EndGlobal
