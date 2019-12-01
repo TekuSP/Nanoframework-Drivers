@@ -2,6 +2,6 @@
 {
     public enum TemperatureUnit
     {
-        Kelvin, Celsius, Fahrenheit, Rankine, Other = 100
+        Kelvin, KelvinQ16, Celsius, CelsiusQ16, Fahrenheit, FahrenheitQ16, Rankine, RankineQ16, Other = 100
     }
 }

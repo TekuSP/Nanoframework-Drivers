@@ -8,29 +8,21 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{11A8DD76-328B-46DF-9F39-F559912D0360};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>392595b2-2e74-4dec-8ae8-50efbf15aa6d</ProjectGuid>
+    <ProjectGuid>b1965b4a-f69e-4581-991e-b064d71db622</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>ESP32_DriverBase</RootNamespace>
-    <AssemblyName>ESP32_DriverBase</AssemblyName>
+    <RootNamespace>TSL2561</RootNamespace>
+    <AssemblyName>TSL2561</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Enums\CommunicationType.cs" />
-    <Compile Include="DriverBase.cs" />
-    <Compile Include="Enums\HumidityType.cs" />
-    <Compile Include="Enums\TemperatureUnit.cs" />
-    <Compile Include="Helpers\BitHelper.cs" />
-    <Compile Include="Interfaces\IAdvancedHumiditySensor.cs" />
-    <Compile Include="Interfaces\IAdvancedTemperatureSensor.cs" />
-    <Compile Include="Interfaces\IDewPointSensor.cs" />
-    <Compile Include="Interfaces\IHumiditySensor.cs" />
-    <Compile Include="Interfaces\IRegister.cs" />
-    <Compile Include="Interfaces\IRegisterSensor.cs" />
-    <Compile Include="Interfaces\ITemperatureSensor.cs" />
+    <Compile Include="TSL2561.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ESP32-DriverBase\ESP32-DriverBase.nfproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
