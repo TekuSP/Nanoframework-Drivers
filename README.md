@@ -9,3 +9,4 @@ Meteostanice + Libraries
 6) View => Other Windows => Device Explorer
 7) Connect and select your ESP-32
 8) Develop, build and enjoy
+9) Feel free to commit
