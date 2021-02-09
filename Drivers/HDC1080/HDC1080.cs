@@ -3,9 +3,13 @@ using DriverBase.Enums;
 using DriverBase.Interfaces;
 using System;
 using System.Threading;
+using Windows.Devices.I2c;
 
 namespace HDC1080
 {
+    /// <summary>
+    /// Driver for Texas Instruments HDC1080, <a href="https://www.ti.com/lit/ds/symlink/hdc1080.pdf"/>
+    /// </summary>
     public class HDC1080 : I2CDriverBase, IAdvancedTemperatureSensor, IAdvancedHumiditySensor, IRegisterSensor, IDewPointSensor
     {
         #region Private Fields
@@ -15,8 +19,32 @@ namespace HDC1080
         #endregion Private Fields
 
         #region Public Constructors
-
+        /// <summary>
+        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
+        /// </summary>
+        /// <remarks>Recommended to set resolution <see cref="SetHumidityResolution(int)"/> and <see cref="SetTemperatureResolution(int)"/></remarks>
+        /// <param name="I2CBusID">I2C Bus ID</param>
+        /// <param name="deviceAddress">I2C Device Address, default 0x40</param>
         public HDC1080(string I2CBusID, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, deviceAddress)
+        {
+        }
+        /// <summary>
+        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
+        /// </summary>
+        /// <remarks>Recommended to set resolution <see cref="SetHumidityResolution(int)"/> and <see cref="SetTemperatureResolution(int)"/></remarks>
+        /// <param name="I2CBusID">I2C Bus ID</param>
+        /// <param name="connectionSettings">I2C Custom connection settings</param>
+        /// <param name="deviceAddress">I2C Device Address, default 0x40</param>
+        public HDC1080(string I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, connectionSettings, deviceAddress)
+        {
+        }
+        /// <summary>
+        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
+        /// </summary>
+        /// <remarks>Recommended to set resolution <see cref="SetHumidityResolution(int)"/> and <see cref="SetTemperatureResolution(int)"/></remarks>
+        /// <param name="I2C_BUS">ESP32 I2C Bus to use</param>
+        /// <param name="deviceAddress">I2C Device Address, default 0x40</param>
+        public HDC1080(ESP32_I2C I2C_BUS = ESP32_I2C.I2C1, int deviceAddress = 0x40) : base("HDC 1080", I2C_BUS, deviceAddress)
         {
         }
 

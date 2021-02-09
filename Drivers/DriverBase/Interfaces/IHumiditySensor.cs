@@ -4,12 +4,12 @@
     {
         #region Public Methods
         /// <summary>
-        /// Read humidity from sensor
+        /// Read humidity from sensor, if supports <see cref="IAdvancedHumiditySensor"/> then use <see cref="IAdvancedHumiditySensor.HeatUp(int)"/> before reading
         /// </summary>
         /// <returns>Returns raw data from sensor</returns>
         float ReadHumidity();
         /// <summary>
-        /// Read humidity from sensor and gets them with target type
+        /// Read humidity from sensor and gets them with target type, if supports <see cref="IAdvancedHumiditySensor"/> then use <see cref="IAdvancedHumiditySensor.HeatUp(int)"/> before reading
         /// </summary>
         /// <param name="readHumidityType">Target type to process</param>
         /// <returns>Returns data from sensor processed to target type</returns>

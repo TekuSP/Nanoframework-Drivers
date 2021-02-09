@@ -1,6 +1,8 @@
 ﻿using DriverBase;
+using DriverBase.Enums;
 using DriverBase.Helpers;
 using System;
+using Windows.Devices.I2c;
 
 namespace TSL2561
 {
@@ -10,6 +12,15 @@ namespace TSL2561
         {
 
         }
+
+        public TSL2561(string I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x39) : base("TSL2561", I2CBusID, connectionSettings, deviceAddress)
+        {
+        }
+
+        public TSL2561(ESP32_I2C I2C_BUS = ESP32_I2C.I2C1, int deviceAddress = 0x39) : base("TSL2561", I2C_BUS, deviceAddress)
+        {
+        }
+
         public override long ReadData(byte pointer)
         {
             byte[] result = new byte[1];

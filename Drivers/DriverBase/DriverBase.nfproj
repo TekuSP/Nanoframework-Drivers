@@ -19,6 +19,8 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Enums\CommunicationType.cs" />
+    <Compile Include="Enums\ESP32_I2C.cs" />
+    <Compile Include="Enums\ESP32_SPI.cs" />
     <Compile Include="Enums\HumidityType.cs" />
     <Compile Include="Enums\TemperatureUnit.cs" />
     <Compile Include="Helpers\BitHelper.cs" />
