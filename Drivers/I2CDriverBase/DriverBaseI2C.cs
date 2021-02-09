@@ -1,9 +1,10 @@
 ﻿using DriverBase.Enums;
+using DriverBase.Interfaces;
 using Windows.Devices.I2c;
 
 namespace DriverBase
 {
-    public abstract class I2CDriverBase
+    public abstract class I2CDriverBase : IDriverBase
     {
         #region Protected Fields
 
