@@ -27,12 +27,27 @@
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
+    <Reference Include="nanoFramework.Hardware.Esp32, Version=1.3.2.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.Hardware.Esp32.1.3.2-preview.21\lib\nanoFramework.Hardware.Esp32.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="nanoFramework.Runtime.Events, Version=1.9.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.Runtime.Events.1.9.0-preview.9\lib\nanoFramework.Runtime.Events.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="Windows.Devices.Spi, Version=1.4.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.Windows.Devices.Spi.1.4.1-preview.26\lib\Windows.Devices.Spi.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ESP32\DriverBase\ESP32-DriverBase.nfproj" />
+    <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>

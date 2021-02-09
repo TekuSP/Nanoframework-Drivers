@@ -1,9 +1,9 @@
-﻿using ESP32_DriverBase.Enums;
+﻿using DriverBase.Enums;
 using Windows.Devices.I2c;
 
-namespace ESP32_DriverBase
+namespace DriverBase
 {
-    public abstract class DriverBase
+    public abstract class DriverBaseClass
     {
         #region Protected Fields
 
@@ -14,7 +14,7 @@ namespace ESP32_DriverBase
 
         #region Public Constructors
 
-        public DriverBase(string name, CommunicationType communicationType, int deviceAddress)
+        public DriverBaseClass(string name, CommunicationType communicationType, int deviceAddress)
         {
             Name = name;
             CommunicationType = communicationType;

@@ -1,4 +1,4 @@
-﻿namespace ESP32_DriverBase.Helpers
+﻿namespace DriverBase.Helpers
 {
     public static class BitHelper
     {

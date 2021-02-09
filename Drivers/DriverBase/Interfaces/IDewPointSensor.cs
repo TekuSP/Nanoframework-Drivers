@@ -1,4 +1,4 @@
-﻿namespace ESP32_DriverBase.Interfaces
+﻿namespace DriverBase.Interfaces
 {
     /// <summary>
     /// This interfaces requires sensors having both ITemperatureSensor and IHumiditySensor

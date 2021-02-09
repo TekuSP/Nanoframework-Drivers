@@ -1,4 +1,4 @@
-﻿namespace ESP32_DriverBase.Interfaces
+﻿namespace DriverBase.Interfaces
 {
     public interface IRegister
     {

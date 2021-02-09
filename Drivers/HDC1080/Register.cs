@@ -1,5 +1,5 @@
-﻿using ESP32_DriverBase.Helpers;
-using ESP32_DriverBase.Interfaces;
+﻿using DriverBase.Helpers;
+using DriverBase.Interfaces;
 
 namespace HDC1080
 {

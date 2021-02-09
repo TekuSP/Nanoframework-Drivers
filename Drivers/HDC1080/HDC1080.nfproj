@@ -44,7 +44,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ESP32\DriverBase\ESP32-DriverBase.nfproj" />
+    <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>

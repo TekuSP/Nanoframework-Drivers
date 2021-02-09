@@ -1,4 +1,4 @@
-﻿namespace ESP32_DriverBase.Enums
+﻿namespace DriverBase.Enums
 {
     public enum TemperatureUnit
     {

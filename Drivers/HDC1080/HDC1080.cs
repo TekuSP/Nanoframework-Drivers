@@ -1,12 +1,12 @@
-﻿using ESP32_DriverBase;
-using ESP32_DriverBase.Enums;
-using ESP32_DriverBase.Interfaces;
+﻿using DriverBase;
+using DriverBase.Enums;
+using DriverBase.Interfaces;
 using System;
 using System.Threading;
 
 namespace HDC1080
 {
-    public class HDC1080 : DriverBase, IAdvancedTemperatureSensor, IAdvancedHumiditySensor, IRegisterSensor, IDewPointSensor
+    public class HDC1080 : DriverBaseClass, IAdvancedTemperatureSensor, IAdvancedHumiditySensor, IRegisterSensor, IDewPointSensor
     {
         #region Private Fields
 

@@ -1,12 +1,12 @@
-﻿using ESP32_DriverBase;
-using ESP32_DriverBase.Helpers;
+﻿using DriverBase;
+using DriverBase.Helpers;
 using System;
 
 namespace TSL2561
 {
-    public class TSL2561 : DriverBase
+    public class TSL2561 : DriverBaseClass
     {
-        public TSL2561(int deviceAddress = 0x39) : base("TSL2561", ESP32_DriverBase.Enums.CommunicationType.I2C, deviceAddress)
+        public TSL2561(int deviceAddress = 0x39) : base("TSL2561", DriverBase.Enums.CommunicationType.I2C, deviceAddress)
         {
 
         }

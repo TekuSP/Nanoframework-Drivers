@@ -1,5 +1,6 @@
 ﻿using nanoFramework.Hardware.Esp32;
 using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Meteostanice
@@ -10,7 +11,7 @@ namespace Meteostanice
 
         public static void Main()
         {
-            Console.WriteLine("Hello world!");
+            Debug.WriteLine("Hello world!");
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
             Configuration.SetPinFunction(21, DeviceFunction.I2C1_DATA);
 
