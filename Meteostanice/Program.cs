@@ -15,7 +15,7 @@ namespace Meteostanice
             Configuration.SetPinFunction(22, DeviceFunction.I2C1_CLOCK);
             Configuration.SetPinFunction(21, DeviceFunction.I2C1_DATA);
 
-            HDC1080.HDC1080 hDC1080 = new HDC1080.HDC1080(0x40);
+            HDC1080.HDC1080 hDC1080 = new HDC1080.HDC1080("I2C1",0x40);
             hDC1080.Start();
             var manu = hDC1080.ReadManufacturerId();
             var serial = hDC1080.ReadSerialNumber();

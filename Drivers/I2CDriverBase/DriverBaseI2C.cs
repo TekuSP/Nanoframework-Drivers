@@ -10,21 +10,23 @@ namespace DriverBase
 
         protected I2cConnectionSettings I2CConnectionSettings;
         protected I2cDevice I2CDevice;
+        protected string I2CBusID;
 
         #endregion Protected Fields
 
         #region Public Constructors
 
-        public I2CDriverBase(string name, CommunicationType communicationType, int deviceAddress)
+        public I2CDriverBase(string name, string I2CBusID, int deviceAddress)
         {
             Name = name;
-            CommunicationType = communicationType;
+            CommunicationType = CommunicationType.I2C;
             DeviceAddress = deviceAddress;
             I2CConnectionSettings = new I2cConnectionSettings(deviceAddress)
             {
                 BusSpeed = I2cBusSpeed.FastMode,
                 SharingMode = I2cSharingMode.Shared
             };
+            this.I2CBusID = I2CBusID;
         }
 
         #endregion Public Constructors
@@ -58,7 +60,7 @@ namespace DriverBase
 
         public virtual void Start()
         {
-            I2CDevice = I2cDevice.FromId("I2C1", I2CConnectionSettings);
+            I2CDevice = I2cDevice.FromId(I2CBusID, I2CConnectionSettings);
         }
 
         public virtual void Stop()

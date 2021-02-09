@@ -16,7 +16,7 @@ namespace HDC1080
 
         #region Public Constructors
 
-        public HDC1080(int deviceAddress = 0x40) : base("HDC 1080", CommunicationType.I2C, deviceAddress)
+        public HDC1080(string I2CBusID, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, deviceAddress)
         {
         }
 
