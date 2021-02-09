@@ -39,11 +39,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ESP32-DriverBase\ESP32-DriverBase.nfproj" />
-    <ProjectReference Include="..\HDC1080\HDC1080.nfproj" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Drivers\ESP32\DriverBase\ESP32-DriverBase.nfproj" />
+    <ProjectReference Include="..\Drivers\HDC1080\HDC1080.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>
