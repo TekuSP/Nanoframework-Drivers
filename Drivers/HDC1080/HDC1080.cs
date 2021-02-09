@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace HDC1080
 {
-    public class HDC1080 : DriverBaseClass, IAdvancedTemperatureSensor, IAdvancedHumiditySensor, IRegisterSensor, IDewPointSensor
+    public class HDC1080 : I2CDriverBase, IAdvancedTemperatureSensor, IAdvancedHumiditySensor, IRegisterSensor, IDewPointSensor
     {
         #region Private Fields
 

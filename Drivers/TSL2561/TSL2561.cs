@@ -4,7 +4,7 @@ using System;
 
 namespace TSL2561
 {
-    public class TSL2561 : DriverBaseClass
+    public class TSL2561 : I2CDriverBase
     {
         public TSL2561(int deviceAddress = 0x39) : base("TSL2561", DriverBase.Enums.CommunicationType.I2C, deviceAddress)
         {

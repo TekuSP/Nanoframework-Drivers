@@ -3,7 +3,7 @@ using Windows.Devices.I2c;
 
 namespace DriverBase
 {
-    public abstract class DriverBaseClass
+    public abstract class DriverBaseI2C
     {
         #region Protected Fields
 
