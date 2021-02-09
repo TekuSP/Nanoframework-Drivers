@@ -8,38 +8,22 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{11A8DD76-328B-46DF-9F39-F559912D0360};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>392595b2-2e74-4dec-8ae8-50efbf15aa6d</ProjectGuid>
+    <ProjectGuid>bd7a8399-5541-43fd-9ea1-4cfec8ea9ace</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>ESP32_DriverBase</RootNamespace>
-    <AssemblyName>ESP32_DriverBase</AssemblyName>
+    <RootNamespace>SSD1331</RootNamespace>
+    <AssemblyName>SSD1331</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Enums\CommunicationType.cs" />
-    <Compile Include="DriverBase.cs" />
-    <Compile Include="Enums\HumidityType.cs" />
-    <Compile Include="Enums\TemperatureUnit.cs" />
-    <Compile Include="Helpers\BitHelper.cs" />
-    <Compile Include="Interfaces\IAdvancedHumiditySensor.cs" />
-    <Compile Include="Interfaces\IAdvancedTemperatureSensor.cs" />
-    <Compile Include="Interfaces\IDewPointSensor.cs" />
-    <Compile Include="Interfaces\IHumiditySensor.cs" />
-    <Compile Include="Interfaces\IRegister.cs" />
-    <Compile Include="Interfaces\IRegisterSensor.cs" />
-    <Compile Include="Interfaces\ITemperatureSensor.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib, Version=1.10.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.10.1-preview.9\lib\mscorlib.dll</HintPath>
-      <Private>True</Private>
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="Windows.Devices.I2c, Version=1.4.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.Windows.Devices.I2c.1.4.1-preview.24\lib\Windows.Devices.I2c.dll</HintPath>
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
