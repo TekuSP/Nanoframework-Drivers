@@ -16,6 +16,7 @@ namespace SSD1331
 
         //If dcPin is high, data is written to Graphic Display Data RAM (GDDRAM). If it is low, the inputs at D0-D15 are interpreted as a Command and it will be decoded and be written to the corresponding command register.
         protected GpioPin dcPin; //Command Decoder Interface, digital PIN
+
         protected int dcPinInt;
         protected GpioController gpio;
         protected GpioPin chipSelectPin;
@@ -25,7 +26,14 @@ namespace SSD1331
         #endregion Protected Fields
 
         #region Public Constructors
-
+        /// <summary>
+        /// Constructs SSD1331 Device Driver, but does not start it, see <see cref="Start"/> to start it
+        /// </summary>
+        /// <param name="SPIBusID">SPI Bus ID</param>
+        /// <param name="chipSelectPin">Digital Chip Select Pin</param>
+        /// <param name="commandDecoderPin">Digital Command Decoder Pin</param>
+        /// <param name="resetPin">Digital Reset Pin</param>
+        /// <param name="gpioController">GPIO Controller OnBoard</param>
         public SSD1331(string SPIBusID, int chipSelectPin, int commandDecoderPin, int resetPin, GpioController gpioController) : base("SSD1331", SPIBusID, chipSelectPin)
         {
             dcPinInt = commandDecoderPin;
@@ -34,7 +42,14 @@ namespace SSD1331
             Height = 96;
             Width = 64;
         }
-
+        /// <summary>
+        /// Constructs SSD1331 Device Driver, but does not start it, see <see cref="Start"/> to start it
+        /// </summary>
+        /// <param name="SPIBusID">SPI Bus ID</param>
+        /// <param name="spiConnectionSettings">Custom SPI Connection Settings</param>
+        /// <param name="commandDecoderPin">Digital Command Decoder Pin</param>
+        /// <param name="resetPin">Digital Reset Pin</param>
+        /// <param name="gpioController">GPIO Controller OnBoard</param>
         public SSD1331(string SPIBusID, SpiConnectionSettings spiConnectionSettings, int commandDecoderPin, int resetPin, GpioController gpioController) : base("SSD1331", SPIBusID, spiConnectionSettings)
         {
             dcPinInt = commandDecoderPin;
@@ -43,7 +58,14 @@ namespace SSD1331
             Height = 96;
             Width = 64;
         }
-
+        /// <summary>
+        /// Constructs SSD1331 Device Driver, but does not start it, see <see cref="Start"/> to start it
+        /// </summary>
+        /// <param name="SPI_BUS">ESP32 SPI Bus to use</param>
+        /// <param name="chipSelectPin">Digital Chip Select Pin</param>
+        /// <param name="commandDecoderPin">Digital Command Decoder Pin</param>
+        /// <param name="resetPin">Digital Reset Pin</param>
+        /// <param name="gpioController">GPIO Controller OnBoard</param>
         public SSD1331(ESP32_SPI SPI_BUS, int chipSelectPin, int commandDecoderPin, int resetPin, GpioController gpioController) : base("SSD1331", SPI_BUS, chipSelectPin)
         {
             dcPinInt = commandDecoderPin;
@@ -109,11 +131,198 @@ namespace SSD1331
         #region Public Properties
 
         public int Height { get; }//TODO: Move to interface
-        public int Width { get; }//TODO: Move to interface
+        public int Width { get; }
 
         #endregion Public Properties
 
-        #region Fundamental Commands
+        //TODO: Move to interface
+
+        #region Public Methods
+
+        /// <summary>
+        /// Activates scrolling of <see cref="ContinuousHorizontalAndVerticalScroll(byte, byte, byte, byte, byte)"/>
+        /// </summary>
+        public void ActivateScrolling()
+        {
+            WriteCommand(0x2F);
+        }
+
+        /// <summary>
+        /// Deletes segment of a screen
+        /// </summary>
+        /// <param name="xStart">X coordinate to start</param>
+        /// <param name="yStart">Y coordinate to start</param>
+        /// <param name="xEnd">X coordinate to end</param>
+        /// <param name="yEnd">Y coordinate to end</param>
+        public void ClearWindow(byte xStart, byte yStart, byte xEnd, byte yEnd)
+        {
+            WriteCommand(0x25, xStart, yStart, xEnd, yEnd);
+        }
+
+        /// <summary>
+        /// Continuous Horizontal And Vertical Scrolling Setup
+        /// </summary>
+        /// <param name="horizontalScrollOffset">Set number of column as horizontal scroll offset, from 0x00 to 0x5F</param>
+        /// <param name="yStart">Start row address</param>
+        /// <param name="numberOfRowsHorizontallyScrolled">Set number of rows to be horizontal scrolled, but <paramref name="yStart"/> + <paramref name="numberOfRowsHorizontallyScrolled"/> must be more than 64, see <see cref="Width"/> </param>
+        /// <param name="numberOfRowsVerticalScrollOffset">Set number of row as vertical scroll offset, from 0x00 to 0x3F</param>
+        /// <param name="timeBetweenEachScrollStep">
+        /// Set time interval between each scroll step <br/>
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Byte</term>
+        /// <description>Frames</description>
+        /// </listheader>
+        /// <item>
+        /// <term>0x00</term>
+        /// <description>6 frames</description>
+        /// </item>
+        /// <item>
+        /// <term>0x01</term>
+        /// <description>10 frames</description>
+        /// </item>
+        /// <item>
+        /// <term>0x02</term>
+        /// <description>100 frames</description>
+        /// </item>
+        /// <item>
+        /// <term>0x03</term>
+        /// <description>200 frames</description>
+        /// </item>
+        /// </list>
+        /// </param>
+        public void ContinuousHorizontalAndVerticalScroll(byte horizontalScrollOffset, byte yStart, byte numberOfRowsHorizontallyScrolled, byte numberOfRowsVerticalScrollOffset, byte timeBetweenEachScrollStep)
+        {
+            if (timeBetweenEachScrollStep > 0x03)
+                return;
+            if ((yStart + numberOfRowsHorizontallyScrolled) < 64)
+                return;
+            WriteCommand(0x27, horizontalScrollOffset, yStart, numberOfRowsHorizontallyScrolled, numberOfRowsVerticalScrollOffset, timeBetweenEachScrollStep);
+        }
+
+        /// <summary>
+        /// Copies what is on screen
+        /// </summary>
+        /// <param name="xStart">X coordinate to start</param>
+        /// <param name="yStart">Y coordinate to start</param>
+        /// <param name="xEnd">X coordinate to end</param>
+        /// <param name="yEnd">Y coordinate to end</param>
+        /// <param name="xNew">New X coordinate to copy to</param>
+        /// <param name="yNew">New Y coordinate to copy to</param>
+        public void Copy(byte xStart, byte yStart, byte xEnd, byte yEnd, byte xNew, byte yNew)
+        {
+            WriteCommand(0x23, xStart, yStart, xEnd, yEnd, xNew, yNew);
+        }
+
+        /// <summary>
+        /// Deactivates scrolling of <see cref="ContinuousHorizontalAndVerticalScroll(byte, byte, byte, byte, byte)"/>
+        /// </summary>
+        public void DeactivateScrolling()
+        {
+            WriteCommand(0x2E);
+        }
+
+        /// <summary>
+        /// Dims segment of a screen
+        /// </summary>
+        /// <param name="xStart">X coordinate to start</param>
+        /// <param name="yStart">Y coordinate to start</param>
+        /// <param name="xEnd">X coordinate to end</param>
+        /// <param name="yEnd">Y coordinate to end</param>
+        public void DimWindow(byte xStart, byte yStart, byte xEnd, byte yEnd)
+        {
+            WriteCommand(0x24, xStart, yStart, xEnd, yEnd);
+        }
+
+        /// <summary>
+        /// Draws line, more complicated version of <see cref="DrawPixel(byte, byte, ushort)"/>
+        /// </summary>
+        /// <param name="xStart">X coordinate to start</param>
+        /// <param name="yStart">Y coordinate to start</param>
+        /// <param name="xEnd">X coordinate to end</param>
+        /// <param name="yEnd">Y coordinate to end</param>
+        /// <param name="colorC">Color C</param>
+        /// <param name="colorB">Color B</param>
+        /// <param name="colorA">Color A</param>
+        public void DrawLine(byte xStart, byte yStart, byte xEnd, byte yEnd, byte colorC, byte colorB, byte colorA)
+        {
+            WriteCommand(0x21, xStart, yStart, xEnd, yEnd, colorC, colorB, colorA);
+        }
+
+        /// <summary>
+        /// Draws one pixel... yes that's all
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="color">Color to draw with</param>
+        public void DrawPixel(byte x, byte y, ushort color)
+        {
+            if ((x >= 0) && (x < Width) && (y >= 0) && (y < Height))
+            {
+                SetColumnAddress(y, y);
+                SetRowAddress(x, x);
+                WriteData(color);
+            }
+        }
+
+        /// <summary>
+        /// Draws rectangle, more complicated version of <see cref="DrawLine(byte, byte, byte, byte, byte, byte, byte)"/>
+        /// </summary>
+        /// <param name="xStart">X coordinate to start</param>
+        /// <param name="yStart">Y coordinate to start</param>
+        /// <param name="xEnd">X coordinate to end</param>
+        /// <param name="yEnd">Y coordinate to end</param>
+        /// <param name="lineColorC">Line color C</param>
+        /// <param name="lineColorB">Line color B</param>
+        /// <param name="lineColorA">Line color A</param>
+        /// <param name="fillColorC">Fill color C, if fill enabled <see cref="Fill(bool, bool)"/></param>
+        /// <param name="fillColorB">Fill color B, if fill enabled <see cref="Fill(bool, bool)"/></param>
+        /// <param name="fillColorA">Fill color A, if fill enabled <see cref="Fill(bool, bool)"/></param>
+        public void DrawRectangle(byte xStart, byte yStart, byte xEnd, byte yEnd, byte lineColorC, byte lineColorB, byte lineColorA, byte fillColorC, byte fillColorB, byte fillColorA)
+        {
+            WriteCommand(0x22, xStart, yStart, xEnd, yEnd, lineColorC, lineColorB, lineColorA, fillColorC, fillColorB, fillColorA);
+        }
+
+        /// <summary>
+        /// Enable fill on <see cref="DrawRectangle(byte, byte, byte, byte, byte, byte, byte, byte, byte, byte)"/> and enable reverse during <see cref="Copy(byte, byte, byte, byte, byte, byte)"/>
+        /// </summary>
+        /// <param name="enable">Enable Fill</param>
+        /// <param name="reverseCopyEnable">Enable Copy</param>
+        public void Fill(bool enable, bool reverseCopyEnable)
+        {
+            byte result = 0x00;
+            result = BitHelper.SetBit(result, 0, enable);
+            result = BitHelper.SetBit(result, 4, reverseCopyEnable);
+            WriteCommand(0x26, result);
+        }
+
+        public override long ReadData(byte pointer)
+        {
+            WriteData(pointer);
+            return -1; //This is Display, we never return any data as MISO is disconnected
+        }
+
+        public override long ReadData(params byte[] data)
+        {
+            WriteData(data);
+            return -1; //This is Display, we never return any data as MISO is disconnected
+        }
+
+        public override string ReadDeviceId()
+        {
+            return SpiDevice.DeviceId;
+        }
+
+        public override string ReadManufacturerId()
+        {
+            return "Device does not support manufacturer id";
+        }
+
+        public override string ReadSerialNumber()
+        {
+            return "Device does not support serial number";
+        }
+
         //TODO, Display specific commands, think about interface?
         /// <summary>
         /// Setup Column start and end address
@@ -202,6 +411,7 @@ namespace SSD1331
             resultByte = BitHelper.SetBit(resultByte, 7, BitHelper.GetBit(foscFrequency, 4));
             WriteCommand(0xB3, resultByte);
         }
+
         /// <summary>
         /// Set Display Clock Divider / Oscillator Frequency
         /// </summary>
@@ -213,6 +423,7 @@ namespace SSD1331
         {
             WriteCommand(0xB3, dividerWithFosc);
         }
+
         /// <summary>
         /// Set Display Mode
         /// </summary>
@@ -346,14 +557,16 @@ namespace SSD1331
             resultByte = BitHelper.SetBit(resultByte, 7, BitHelper.GetBit(phase2, 3));
             WriteCommand(0xB1, resultByte);
         }
+
         /// <summary>
         /// Phase 1 and 2 period adjustment
         /// </summary>
         /// <param name="phases">Phases period adujstment</param>
-        public void SetPhaseOneAndTwoPeriodAdjustment(byte phases) 
+        public void SetPhaseOneAndTwoPeriodAdjustment(byte phases)
         {
             WriteCommand(0xB1, phases);
         }
+
         /// <summary>
         /// Set Power Save Mode
         /// </summary>
@@ -471,186 +684,7 @@ namespace SSD1331
             VCOMH = (byte)(VCOMH << 1 & 0xFF); //Bit shift to the left by the specification
             WriteCommand(0xBE, VCOMH);
         }
-        #endregion Fundamental Commands
 
-        #region Graphic Acceleration Commands
-        /// <summary>
-        /// Draws line, more complicated version of <see cref="DrawPixel(byte, byte, ushort)"/>
-        /// </summary>
-        /// <param name="xStart">X coordinate to start</param>
-        /// <param name="yStart">Y coordinate to start</param>
-        /// <param name="xEnd">X coordinate to end</param>
-        /// <param name="yEnd">Y coordinate to end</param>
-        /// <param name="colorC">Color C</param>
-        /// <param name="colorB">Color B</param>
-        /// <param name="colorA">Color A</param>
-        public void DrawLine(byte xStart, byte yStart, byte xEnd, byte yEnd, byte colorC, byte colorB, byte colorA)
-        {
-            WriteCommand(0x21, xStart, yStart, xEnd, yEnd, colorC, colorB, colorA);
-        }
-        /// <summary>
-        /// Draws rectangle, more complicated version of <see cref="DrawLine(byte, byte, byte, byte, byte, byte, byte)"/>
-        /// </summary>
-        /// <param name="xStart">X coordinate to start</param>
-        /// <param name="yStart">Y coordinate to start</param>
-        /// <param name="xEnd">X coordinate to end</param>
-        /// <param name="yEnd">Y coordinate to end</param>
-        /// <param name="lineColorC">Line color C</param>
-        /// <param name="lineColorB">Line color B</param>
-        /// <param name="lineColorA">Line color A</param>
-        /// <param name="fillColorC">Fill color C, if fill enabled <see cref="Fill(bool, bool)"/></param>
-        /// <param name="fillColorB">Fill color B, if fill enabled <see cref="Fill(bool, bool)"/></param>
-        /// <param name="fillColorA">Fill color A, if fill enabled <see cref="Fill(bool, bool)"/></param>
-        public void DrawRectangle(byte xStart, byte yStart, byte xEnd, byte yEnd, byte lineColorC, byte lineColorB, byte lineColorA, byte fillColorC, byte fillColorB, byte fillColorA)
-        {
-            WriteCommand(0x22, xStart, yStart, xEnd, yEnd, lineColorC, lineColorB, lineColorA, fillColorC, fillColorB, fillColorA);
-        }
-        /// <summary>
-        /// Copies what is on screen
-        /// </summary>
-        /// <param name="xStart">X coordinate to start</param>
-        /// <param name="yStart">Y coordinate to start</param>
-        /// <param name="xEnd">X coordinate to end</param>
-        /// <param name="yEnd">Y coordinate to end</param>
-        /// <param name="xNew">New X coordinate to copy to</param>
-        /// <param name="yNew">New Y coordinate to copy to</param>
-        public void Copy(byte xStart, byte yStart, byte xEnd, byte yEnd, byte xNew, byte yNew)
-        {
-            WriteCommand(0x23, xStart, yStart, xEnd, yEnd, xNew, yNew);
-        }
-        /// <summary>
-        /// Dims segment of a screen
-        /// </summary>
-        /// <param name="xStart">X coordinate to start</param>
-        /// <param name="yStart">Y coordinate to start</param>
-        /// <param name="xEnd">X coordinate to end</param>
-        /// <param name="yEnd">Y coordinate to end</param>
-        public void DimWindow(byte xStart, byte yStart, byte xEnd, byte yEnd)
-        {
-            WriteCommand(0x24, xStart, yStart, xEnd, yEnd);
-        }
-        /// <summary>
-        /// Deletes segment of a screen
-        /// </summary>
-        /// <param name="xStart">X coordinate to start</param>
-        /// <param name="yStart">Y coordinate to start</param>
-        /// <param name="xEnd">X coordinate to end</param>
-        /// <param name="yEnd">Y coordinate to end</param>
-        public void ClearWindow(byte xStart, byte yStart, byte xEnd, byte yEnd)
-        {
-            WriteCommand(0x25, xStart, yStart, xEnd, yEnd);
-        }
-        /// <summary>
-        /// Enable fill on <see cref="DrawRectangle(byte, byte, byte, byte, byte, byte, byte, byte, byte, byte)"/> and enable reverse during <see cref="Copy(byte, byte, byte, byte, byte, byte)"/>
-        /// </summary>
-        /// <param name="enable">Enable Fill</param>
-        /// <param name="reverseCopyEnable">Enable Copy</param>
-        public void Fill(bool enable, bool reverseCopyEnable)
-        {
-            byte result = 0x00;
-            result = BitHelper.SetBit(result, 0, enable);
-            result = BitHelper.SetBit(result, 4, reverseCopyEnable);
-            WriteCommand(0x26, result);
-        }
-        /// <summary>
-        /// Continuous Horizontal And Vertical Scrolling Setup
-        /// </summary>
-        /// <param name="horizontalScrollOffset">Set number of column as horizontal scroll offset, from 0x00 to 0x5F</param>
-        /// <param name="yStart">Start row address</param>
-        /// <param name="numberOfRowsHorizontallyScrolled">Set number of rows to be horizontal scrolled, but <paramref name="yStart"/> + <paramref name="numberOfRowsHorizontallyScrolled"/> must be more than 64, see <see cref="Width"/> </param>
-        /// <param name="numberOfRowsVerticalScrollOffset">Set number of row as vertical scroll offset, from 0x00 to 0x3F</param>
-        /// <param name="timeBetweenEachScrollStep">
-        /// Set time interval between each scroll step <br/>
-        /// <list type="table">
-        /// <listheader>
-        /// <term>Byte</term>
-        /// <description>Frames</description>
-        /// </listheader>
-        /// <item>
-        /// <term>0x00</term>
-        /// <description>6 frames</description>
-        /// </item>
-        /// <item>
-        /// <term>0x01</term>
-        /// <description>10 frames</description>
-        /// </item>
-        /// <item>
-        /// <term>0x02</term>
-        /// <description>100 frames</description>
-        /// </item>
-        /// <item>
-        /// <term>0x03</term>
-        /// <description>200 frames</description>
-        /// </item>
-        /// </list>
-        /// </param>
-        public void ContinuousHorizontalAndVerticalScroll(byte horizontalScrollOffset, byte yStart, byte numberOfRowsHorizontallyScrolled, byte numberOfRowsVerticalScrollOffset, byte timeBetweenEachScrollStep)
-        {
-            if (timeBetweenEachScrollStep > 0x03)
-                return;
-            if ((yStart + numberOfRowsHorizontallyScrolled) < 64)
-                return;
-            WriteCommand(0x27, horizontalScrollOffset, yStart, numberOfRowsHorizontallyScrolled, numberOfRowsVerticalScrollOffset, timeBetweenEachScrollStep);
-        }
-        /// <summary>
-        /// Deactivates scrolling of <see cref="ContinuousHorizontalAndVerticalScroll(byte, byte, byte, byte, byte)"/>
-        /// </summary>
-        public void DeactivateScrolling()
-        {
-            WriteCommand(0x2E);
-        }
-        /// <summary>
-        /// Activates scrolling of <see cref="ContinuousHorizontalAndVerticalScroll(byte, byte, byte, byte, byte)"/>
-        /// </summary>
-        public void ActivateScrolling()
-        {
-            WriteCommand(0x2F);
-        }
-        /// <summary>
-        /// Draws one pixel... yes that's all
-        /// </summary>
-        /// <param name="x">X coordinate</param>
-        /// <param name="y">Y coordinate</param>
-        /// <param name="color">Color to draw with</param>
-        public void DrawPixel(byte x, byte y, ushort color)
-        {
-            if ((x >= 0) && (x < Width) && (y >= 0) && (y < Height))
-            {
-                SetColumnAddress(y, y);
-                SetRowAddress(x, x);
-                WriteData(color);
-            }
-        }
-        #endregion
-
-        #region Public Methods
-
-        public override long ReadData(byte pointer)
-        {
-            WriteData(pointer);
-            return -1; //This is Display, we never return any data as MISO is disconnected
-        }
-
-        public override long ReadData(params byte[] data)
-        {
-            WriteData(data);
-            return -1; //This is Display, we never return any data as MISO is disconnected
-        }
-
-        public override string ReadDeviceId()
-        {
-            return SpiDevice.DeviceId;
-        }
-
-        public override string ReadManufacturerId()
-        {
-            return "Device does not support manufacturer id";
-        }
-
-        public override string ReadSerialNumber()
-        {
-            return "Device does not support serial number";
-        }
         public override void Start()
         {
             //Start SPI communication
@@ -662,6 +696,13 @@ namespace SSD1331
             rstPin.SetDriveMode(GpioPinDriveMode.Output);
             chipSelectPin = gpio.OpenPin(SpiConnectionSettings.ChipSelectLine, GpioSharingMode.SharedReadOnly);
             chipSelectPin.SetDriveMode(GpioPinDriveMode.Output);
+            //Start Reseting display
+            rstPin.Write(GpioPinValue.High);
+            Thread.Sleep(100);
+            rstPin.Write(GpioPinValue.Low);
+            Thread.Sleep(100);
+            rstPin.Write(GpioPinValue.High);
+            Thread.Sleep(200);
             //Starting display
             SetDisplayOnOff(DisplayState.OFF); //Based on https://github.com/adafruit/Adafruit-SSD1331-OLED-Driver-Library-for-Arduino/blob/488737cb7ac00355365584edd5d060c8a691bd27/Adafruit_SSD1331.cpp#L87
             SetRemapAndColorDepth(0x72);
@@ -690,6 +731,7 @@ namespace SSD1331
             SetDisplayMode(DisplayModes.AllPixelsOff);
             SetDisplayOnOff(DisplayState.OFF);
             dcPin.Write(GpioPinValue.Low);
+            rstPin.Write(GpioPinValue.Low);
             Thread.Sleep(100); //Waiting for power off
             //Cleanup DC/RST/CHP
             dcPin.Dispose();

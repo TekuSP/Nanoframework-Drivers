@@ -68,12 +68,15 @@ namespace DriverBase.Interfaces
         void Restart();
 
         /// <summary>
-        /// Starts device driver, this is required to call other methods
+        /// Starts device driver, this is required to call other methods <br/>
+        /// To stop it use <see cref="Stop"/> <br/>
+        /// To restart it use <see cref="Restart"/>
         /// </summary>
         void Start();
 
         /// <summary>
-        /// Stops device driver and clears memory
+        /// Stops device driver and clears memory <br/>
+        /// To start it use <see cref="Start"/>
         /// </summary>
         void Stop();
 
