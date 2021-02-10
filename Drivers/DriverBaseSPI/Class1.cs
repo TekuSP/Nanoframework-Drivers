@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DriverBaseSPI
+﻿namespace DriverBaseSPI
 {
     public class DriverBaseSPI
     {

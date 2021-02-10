@@ -3,11 +3,13 @@
     public interface IRegisterSensor
     {
         #region Public Methods
+
         /// <summary>
         /// Reads register from device
         /// </summary>
         /// <returns>IRegister type read from device</returns>
         IRegister ReadRegister();
+
         /// <summary>
         /// Sets register to device
         /// </summary>

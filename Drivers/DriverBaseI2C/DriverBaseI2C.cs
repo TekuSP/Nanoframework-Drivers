@@ -8,13 +8,14 @@ namespace DriverBase
     {
         #region Protected Fields
 
+        protected string I2CBusID;
         protected I2cConnectionSettings I2CConnectionSettings;
         protected I2cDevice I2CDevice;
-        protected string I2CBusID;
 
         #endregion Protected Fields
 
         #region Public Constructors
+
         /// <summary>
         /// Constructs I2C Driver, but does not start it, call <see cref="Start"/> for starting it
         /// </summary>
@@ -33,6 +34,7 @@ namespace DriverBase
             };
             this.I2CBusID = I2CBusID;
         }
+
         /// <summary>
         /// Constructs I2C Driver, but does not start it, call <see cref="Start"/> for starting it
         /// </summary>
@@ -51,6 +53,7 @@ namespace DriverBase
             };
             this.I2CBusID = I2C_BUS.ToString();
         }
+
         /// <summary>
         /// Constructs I2C Driver, but does not start it, call <see cref="Start"/> for starting it
         /// </summary>

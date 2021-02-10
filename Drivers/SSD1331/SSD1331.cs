@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SSD1331
+﻿namespace SSD1331
 {
     public class SSD1331
     {

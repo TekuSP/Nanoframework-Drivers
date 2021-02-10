@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MHZ19
+﻿namespace MHZ19
 {
     public class MHZ19
     {

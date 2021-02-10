@@ -1,5 +1,4 @@
 ﻿using nanoFramework.Hardware.Esp32;
-using System;
 using System.Diagnostics;
 using System.Threading;
 

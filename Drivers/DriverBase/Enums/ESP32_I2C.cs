@@ -6,6 +6,7 @@
         /// DATA GPIO 18 & Clock GPIO 19
         /// </summary>
         I2C1,
+
         /// <summary>
         /// DATA GPIO 25 & CLOCK GPIO 26
         /// </summary>

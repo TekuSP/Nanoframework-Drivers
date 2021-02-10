@@ -19,6 +19,7 @@ namespace HDC1080
         #endregion Private Fields
 
         #region Public Constructors
+
         /// <summary>
         /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
         /// </summary>
@@ -28,6 +29,7 @@ namespace HDC1080
         public HDC1080(string I2CBusID, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, deviceAddress)
         {
         }
+
         /// <summary>
         /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
         /// </summary>
@@ -38,6 +40,7 @@ namespace HDC1080
         public HDC1080(string I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, connectionSettings, deviceAddress)
         {
         }
+
         /// <summary>
         /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
         /// </summary>

@@ -3,11 +3,13 @@
     public interface IAdvancedHumiditySensor : IHumiditySensor
     {
         #region Public Methods
+
         /// <summary>
         /// Heat up sensor for period of time
         /// </summary>
         /// <param name="seconds">Seconds how long to heat up</param>
         void HeatUp(int seconds);
+
         /// <summary>
         /// Sets heater to on or off
         /// </summary>
@@ -19,6 +21,7 @@
         /// </summary>
         /// <param name="resolution">Resolution to set for humidity sensor</param>
         void SetHumidityResolution(int resolution);
+
         #endregion Public Methods
     }
 }
