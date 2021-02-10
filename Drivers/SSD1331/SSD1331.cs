@@ -1,6 +1,7 @@
 ﻿using DriverBase;
 using DriverBase.Enums;
 using DriverBase.Helpers;
+using System.Threading;
 using Windows.Devices.Gpio;
 using Windows.Devices.Spi;
 
@@ -144,7 +145,7 @@ namespace SSD1331
         /// <param name="contrast">Contrast from 0x00 to 0x80, default 0x80</param>
         public void SetContrastForAColor(byte contrast = 0x80)
         {
-            WriteCommand(81, contrast);
+            WriteCommand(0x81, contrast);
         }
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace SSD1331
         /// <param name="contrast">Contrast from 0x00 to 0x80, default 0x80</param>
         public void SetContrastForBColor(byte contrast = 0x80)
         {
-            WriteCommand(82, contrast);
+            WriteCommand(0x82, contrast);
         }
 
         /// <summary>
@@ -162,7 +163,7 @@ namespace SSD1331
         /// <param name="contrast">Contrast from 0x00 to 0x80, default 0x80</param>
         public void SetContrastForCColor(byte contrast = 0x80)
         {
-            WriteCommand(83, contrast);
+            WriteCommand(0x83, contrast);
         }
 
         /// <summary>
@@ -201,7 +202,17 @@ namespace SSD1331
             resultByte = BitHelper.SetBit(resultByte, 7, BitHelper.GetBit(foscFrequency, 4));
             WriteCommand(0xB3, resultByte);
         }
-
+        /// <summary>
+        /// Set Display Clock Divider / Oscillator Frequency
+        /// </summary>
+        /// <param name="dividerWithFosc">
+        /// Define the divide ratio (D) of the display clocks (DCLK): Divide ratio (D) = <paramref name="divideRatio"/> + 1 (i.e., 1 to 16) <br/>
+        /// Fosc frequency. Frequency increases as setting value increases. <br/>
+        /// </param>
+        public void SetDisplayClockDividerOscillatorFrequency(byte dividerWithFosc) //TODO: Verify
+        {
+            WriteCommand(0xB3, dividerWithFosc);
+        }
         /// <summary>
         /// Set Display Mode
         /// </summary>
@@ -305,7 +316,7 @@ namespace SSD1331
         /// <param name="attenuationFactor">Attenuation factor from 0x00 to 0x00, default 0x0F</param>
         public void SetMasterCurrentControl(byte attenuationFactor = 0x0F)
         {
-            WriteCommand(87, attenuationFactor);
+            WriteCommand(0x87, attenuationFactor);
         }
 
         /// <summary>
@@ -335,7 +346,14 @@ namespace SSD1331
             resultByte = BitHelper.SetBit(resultByte, 7, BitHelper.GetBit(phase2, 3));
             WriteCommand(0xB1, resultByte);
         }
-
+        /// <summary>
+        /// Phase 1 and 2 period adjustment
+        /// </summary>
+        /// <param name="phases">Phases period adujstment</param>
+        public void SetPhaseOneAndTwoPeriodAdjustment(byte phases) 
+        {
+            WriteCommand(0xB1, phases);
+        }
         /// <summary>
         /// Set Power Save Mode
         /// </summary>
@@ -644,10 +662,35 @@ namespace SSD1331
             rstPin.SetDriveMode(GpioPinDriveMode.Output);
             chipSelectPin = gpio.OpenPin(SpiConnectionSettings.ChipSelectLine, GpioSharingMode.SharedReadOnly);
             chipSelectPin.SetDriveMode(GpioPinDriveMode.Output);
+            //Starting display
+            SetDisplayOnOff(DisplayState.OFF); //Based on https://github.com/adafruit/Adafruit-SSD1331-OLED-Driver-Library-for-Arduino/blob/488737cb7ac00355365584edd5d060c8a691bd27/Adafruit_SSD1331.cpp#L87
+            SetRemapAndColorDepth(0x72);
+            SetDisplayStartLine();
+            SetDisplayOffset();
+            SetDisplayMode();
+            SetMultiplexRatio();
+            SetMasterConfiguration(0x8E);
+            SetPowerSaveMode(0x0B);
+            SetPhaseOneAndTwoPeriodAdjustment(0x31);
+            SetDisplayClockDividerOscillatorFrequency(0xF0);
+            SetSecondPreChargeSpeed(0x64, 0x78, 0x64);
+            SetPreChargeLevel(0x3A);
+            SetVCOMH(0x3E);
+            SetMasterCurrentControl(0x06);
+            SetContrastForAColor(0x91);
+            SetContrastForBColor(0x50);
+            SetContrastForCColor(0x7D);
+            SetDisplayOnOff(DisplayState.ON);
+            dcPin.Write(GpioPinValue.High);
         }
 
         public override void Stop()
         {
+            //Stopping display
+            SetDisplayMode(DisplayModes.AllPixelsOff);
+            SetDisplayOnOff(DisplayState.OFF);
+            dcPin.Write(GpioPinValue.Low);
+            Thread.Sleep(100); //Waiting for power off
             //Cleanup DC/RST/CHP
             dcPin.Dispose();
             dcPin = null;
