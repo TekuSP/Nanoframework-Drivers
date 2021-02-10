@@ -5,7 +5,7 @@ using Windows.Devices.I2c;
 
 namespace TSL2561
 {
-    public class TSL2561 : I2CDriverBase
+    public class TSL2561 : DriverBaseI2C
     {
         #region Public Constructors
 

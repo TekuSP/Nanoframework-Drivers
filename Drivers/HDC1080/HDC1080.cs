@@ -10,7 +10,7 @@ namespace HDC1080
     /// <summary>
     /// Driver for Texas Instruments HDC1080, <a href="https://www.ti.com/lit/ds/symlink/hdc1080.pdf"/>
     /// </summary>
-    public class HDC1080 : I2CDriverBase, IAdvancedTemperatureSensor, IAdvancedHumiditySensor, IRegisterSensor, IDewPointSensor
+    public class HDC1080 : DriverBaseI2C, IAdvancedTemperatureSensor, IAdvancedHumiditySensor, IRegisterSensor, IDewPointSensor
     {
         #region Private Fields
 
@@ -21,7 +21,7 @@ namespace HDC1080
         #region Public Constructors
 
         /// <summary>
-        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
+        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="DriverBaseI2C.Start"/> to start it
         /// </summary>
         /// <remarks>Recommended to set resolution <see cref="SetHumidityResolution(int)"/> and <see cref="SetTemperatureResolution(int)"/></remarks>
         /// <param name="I2CBusID">I2C Bus ID</param>
@@ -31,7 +31,7 @@ namespace HDC1080
         }
 
         /// <summary>
-        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
+        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="DriverBaseI2C.Start"/> to start it
         /// </summary>
         /// <remarks>Recommended to set resolution <see cref="SetHumidityResolution(int)"/> and <see cref="SetTemperatureResolution(int)"/></remarks>
         /// <param name="I2CBusID">I2C Bus ID</param>
@@ -42,7 +42,7 @@ namespace HDC1080
         }
 
         /// <summary>
-        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="I2CDriverBase.Start"/> to start it
+        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="DriverBaseI2C.Start"/> to start it
         /// </summary>
         /// <remarks>Recommended to set resolution <see cref="SetHumidityResolution(int)"/> and <see cref="SetTemperatureResolution(int)"/></remarks>
         /// <param name="I2C_BUS">ESP32 I2C Bus to use</param>

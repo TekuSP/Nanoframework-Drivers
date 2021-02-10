@@ -4,7 +4,7 @@ using Windows.Devices.I2c;
 
 namespace DriverBase
 {
-    public abstract class I2CDriverBase : IDriverBase
+    public abstract class DriverBaseI2C : IDriverBase
     {
         #region Protected Fields
 
@@ -22,7 +22,7 @@ namespace DriverBase
         /// <param name="name">Name of the device</param>
         /// <param name="I2CBusID">I2C Bus ID</param>
         /// <param name="deviceAddress">I2C Device Address</param>
-        public I2CDriverBase(string name, string I2CBusID, int deviceAddress)
+        public DriverBaseI2C(string name, string I2CBusID, int deviceAddress)
         {
             Name = name;
             CommunicationType = CommunicationType.I2C;
@@ -41,7 +41,7 @@ namespace DriverBase
         /// <param name="name">Name of the device</param>
         /// <param name="I2C_BUS">ESP32 I2C Bus to use</param>
         /// <param name="deviceAddress">I2C Device Address</param>
-        public I2CDriverBase(string name, ESP32_I2C I2C_BUS, int deviceAddress)
+        public DriverBaseI2C(string name, ESP32_I2C I2C_BUS, int deviceAddress)
         {
             Name = name;
             CommunicationType = CommunicationType.I2C;
@@ -51,7 +51,7 @@ namespace DriverBase
                 BusSpeed = I2cBusSpeed.FastMode,
                 SharingMode = I2cSharingMode.Shared
             };
-            this.I2CBusID = I2C_BUS.ToString();
+            I2CBusID = I2C_BUS.ToString();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace DriverBase
         /// <param name="I2CBusID">I2C Bus ID</param>
         /// <param name="connectionSettings">I2C Custom connection settings</param>
         /// <param name="deviceAddress">I2C Device Address</param>
-        public I2CDriverBase(string name, string I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress)
+        public DriverBaseI2C(string name, string I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress)
         {
             Name = name;
             CommunicationType = CommunicationType.I2C;
@@ -106,7 +106,7 @@ namespace DriverBase
 
         public virtual void Stop()
         {
-            I2CDevice.Dispose();
+            I2CDevice?.Dispose();
             I2CDevice = null;
         }
 
