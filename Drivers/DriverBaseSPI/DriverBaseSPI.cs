@@ -2,7 +2,7 @@
 using DriverBase.Interfaces;
 using Windows.Devices.Spi;
 
-namespace DriverBaseSPI
+namespace DriverBase
 {
     /// <summary>
     /// Base driver class for SPI devices
