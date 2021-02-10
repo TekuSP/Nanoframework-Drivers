@@ -4,6 +4,9 @@ using Windows.Devices.Spi;
 
 namespace DriverBaseSPI
 {
+    /// <summary>
+    /// Base driver class for SPI devices
+    /// </summary>
     public abstract class DriverBaseSPI : IDriverBase
     {
         #region Protected Fields

@@ -4,6 +4,9 @@ using Windows.Devices.I2c;
 
 namespace DriverBase
 {
+    /// <summary>
+    /// Base driver class for I2C devices
+    /// </summary>
     public abstract class DriverBaseI2C : IDriverBase
     {
         #region Protected Fields
