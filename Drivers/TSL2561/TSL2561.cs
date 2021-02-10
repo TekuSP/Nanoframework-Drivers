@@ -32,7 +32,7 @@ namespace TSL2561
             return result[0];
         }
 
-        public override long ReadData(byte[] data)
+        public override long ReadData(params byte[] data)
         {
             byte[] result = new byte[1];
             I2CDevice.WriteRead(data, result);
@@ -61,7 +61,7 @@ namespace TSL2561
             return "Not supported";
         }
 
-        public override void WriteData(byte[] data)
+        public override void WriteData(params byte[] data)
         {
             data[0] = (byte)((data[0] & 0x0F) | 0x80);
             I2CDevice.Write(data);

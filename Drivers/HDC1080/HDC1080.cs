@@ -123,10 +123,10 @@ namespace HDC1080
             return resultData[0] << 8 | resultData[1];
         }
 
-        public override long ReadData(byte[] data)
+        public override long ReadData(params byte[] data)
         {
             I2CDevice.Read(data);
-            return 0;
+            return data.Length;
         }
 
         public override string ReadDeviceId() => ReadData(0xFF).ToString();
@@ -210,7 +210,7 @@ namespace HDC1080
             WriteRegister(register);
         }
 
-        public override void WriteData(byte[] data)
+        public override void WriteData(params byte[] data)
         {
             I2CDevice.Write(data);
         }

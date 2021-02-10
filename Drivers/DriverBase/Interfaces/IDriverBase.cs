@@ -31,17 +31,17 @@ namespace DriverBase.Interfaces
         #region Public Methods
 
         /// <summary>
-        /// Read data from device, if not supported, calls <see cref="WriteData(byte[])"/>
+        /// Read data from device, if not supported, calls <see cref="WriteData(byte[])"/> and returns -1
         /// </summary>
         /// <param name="pointer">Pointer where to read in device</param>
-        /// <returns>Data from device</returns>
+        /// <returns>Data from device or -1 if not supported</returns>
         long ReadData(byte pointer);
 
         /// <summary>
-        /// Read data from device, if not supported, calls <see cref="WriteData(byte[])"/>
+        /// Read data from device, if not supported, calls <see cref="WriteData(byte[])"/> and returns -1
         /// </summary>
         /// <param name="data">Data which to send to device</param>
-        /// <returns>Data from device</returns>
+        /// <returns>Lenght of data from device and fills <paramref name="data"/> with data or -1 if not supported</returns>
         long ReadData(byte[] data);
 
         /// <summary>
