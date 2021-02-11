@@ -9,7 +9,7 @@ namespace MHZ19B
     {
         #region Public Constructors
 
-        public MHZ19B(string serialBusID) : base("MH-Z19", serialBusID)
+        public MHZ19B(string serialBusID) : base("MH-Z19B", serialBusID)
         {
         }
 
