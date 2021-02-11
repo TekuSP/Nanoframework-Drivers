@@ -22,8 +22,10 @@
     <Compile Include="Enums\HumidityType.cs" />
     <Compile Include="Enums\TemperatureUnit.cs" />
     <Compile Include="Helpers\BitHelper.cs" />
+    <Compile Include="Interfaces\IAdvancedCO2Sensor.cs" />
     <Compile Include="Interfaces\IAdvancedHumiditySensor.cs" />
     <Compile Include="Interfaces\IAdvancedTemperatureSensor.cs" />
+    <Compile Include="Interfaces\ICO2Sensor.cs" />
     <Compile Include="Interfaces\IDewPointSensor.cs" />
     <Compile Include="Interfaces\IDriverBase.cs" />
     <Compile Include="Interfaces\IHumiditySensor.cs" />
