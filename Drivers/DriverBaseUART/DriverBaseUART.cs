@@ -4,6 +4,9 @@ using Windows.Devices.SerialCommunication;
 
 namespace DriverBase
 {
+    /// <summary>
+    /// Base driver for UART (Serial) devices
+    /// </summary>
     public abstract class DriverBaseUART : IDriverBase
     {
         #region Protected Fields
