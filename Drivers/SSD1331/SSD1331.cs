@@ -19,7 +19,6 @@ namespace SSD1331
 
         protected int dcPinInt;
         protected GpioController gpio;
-        protected GpioPin chipSelectPin;
         protected GpioPin rstPin;
         protected int rstPinInt;
 
@@ -694,8 +693,6 @@ namespace SSD1331
             dcPin.SetDriveMode(GpioPinDriveMode.Output);
             rstPin = gpio.OpenPin(rstPinInt, GpioSharingMode.Exclusive);
             rstPin.SetDriveMode(GpioPinDriveMode.Output);
-            chipSelectPin = gpio.OpenPin(SpiConnectionSettings.ChipSelectLine, GpioSharingMode.SharedReadOnly);
-            chipSelectPin.SetDriveMode(GpioPinDriveMode.Output);
             //Start Reseting display
             rstPin.Write(GpioPinValue.High);
             Thread.Sleep(100);
@@ -738,8 +735,6 @@ namespace SSD1331
             dcPin = null;
             rstPin.Dispose();
             rstPin = null;
-            chipSelectPin.Dispose();
-            chipSelectPin = null;
             //Stop SPI communication
             base.Stop();
         }
@@ -748,11 +743,9 @@ namespace SSD1331
         {
             foreach (var item in command) //Really retarded Adafruit communication speciality?
             {
-                chipSelectPin.Write(GpioPinValue.Low); // Chip Select Low - Adafruit speciality?
                 dcPin.Write(GpioPinValue.Low); // Command mode
                 SpiDevice.Write(new byte[] { item }); // Send the command byte
                 dcPin.Write(GpioPinValue.High); // Memory mode
-                chipSelectPin.Write(GpioPinValue.High); // Chip Select High - Adafruit speciality?
             }
         }
 
