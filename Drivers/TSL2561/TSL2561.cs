@@ -1,7 +1,7 @@
 ﻿using DriverBase;
 using DriverBase.Enums;
 using DriverBase.Helpers;
-using Windows.Devices.I2c;
+using System.Device.I2c;
 
 namespace TSL2561
 {
@@ -9,11 +9,11 @@ namespace TSL2561
     {
         #region Public Constructors
 
-        public TSL2561(string I2CBusID, int deviceAddress = 0x39) : base("TSL2561", I2CBusID, deviceAddress)
+        public TSL2561(int I2CBusID, int deviceAddress = 0x39) : base("TSL2561", I2CBusID, deviceAddress)
         {
         }
 
-        public TSL2561(string I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x39) : base("TSL2561", I2CBusID, connectionSettings, deviceAddress)
+        public TSL2561(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x39) : base("TSL2561", I2CBusID, connectionSettings, deviceAddress)
         {
         }
 

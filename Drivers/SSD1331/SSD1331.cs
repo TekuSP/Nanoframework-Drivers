@@ -2,7 +2,7 @@
 using DriverBase.Enums;
 using DriverBase.Helpers;
 using System.Threading;
-using Windows.Devices.Gpio;
+using System.Device.Gpio;
 using Windows.Devices.Spi;
 
 namespace SSD1331
@@ -679,16 +679,14 @@ namespace SSD1331
             //Start SPI communication
             base.Start();
             //Start DC/RST/CHP
-            dcPin = gpio.OpenPin(dcPinInt, GpioSharingMode.Exclusive);
-            dcPin.SetDriveMode(GpioPinDriveMode.Output);
-            rstPin = gpio.OpenPin(rstPinInt, GpioSharingMode.Exclusive);
-            rstPin.SetDriveMode(GpioPinDriveMode.Output);
+            dcPin = gpio.OpenPin(dcPinInt, PinMode.Output);
+            rstPin = gpio.OpenPin(rstPinInt, PinMode.Output);
             //Start Reseting display
-            rstPin.Write(GpioPinValue.High);
+            rstPin.Write(PinValue.High);
             Thread.Sleep(100);
-            rstPin.Write(GpioPinValue.Low);
+            rstPin.Write(PinValue.Low);
             Thread.Sleep(100);
-            rstPin.Write(GpioPinValue.High);
+            rstPin.Write(PinValue.High);
             Thread.Sleep(200);
             //Starting display
             SetDisplayOnOff(DisplayState.OFF); //Based on https://github.com/adafruit/Adafruit-SSD1331-OLED-Driver-Library-for-Arduino/blob/488737cb7ac00355365584edd5d060c8a691bd27/Adafruit_SSD1331.cpp#L87
@@ -709,7 +707,7 @@ namespace SSD1331
             SetContrastForBColor(0x50);
             SetContrastForCColor(0x7D);
             SetDisplayOnOff(DisplayState.ON);
-            dcPin.Write(GpioPinValue.High);
+            dcPin.Write(PinValue.High);
             ClearWindow(); //Clear screen
         }
 
@@ -718,8 +716,8 @@ namespace SSD1331
             //Stopping display
             SetDisplayMode(DisplayModes.AllPixelsOff);
             SetDisplayOnOff(DisplayState.OFF);
-            dcPin.Write(GpioPinValue.Low);
-            rstPin.Write(GpioPinValue.Low);
+            dcPin.Write(PinValue.Low);
+            rstPin.Write(PinValue.Low);
             Thread.Sleep(100); //Waiting for power off
             //Cleanup DC/RST/CHP
             dcPin.Dispose();
@@ -734,9 +732,9 @@ namespace SSD1331
         {
             foreach (var item in command) //Really retarded Adafruit communication speciality?
             {
-                dcPin.Write(GpioPinValue.Low); // Command mode
+                dcPin.Write(PinValue.Low); // Command mode
                 SpiDevice.Write(new byte[] { item }); // Send the command byte
-                dcPin.Write(GpioPinValue.High); // Memory mode
+                dcPin.Write(PinValue.High); // Memory mode
             }
         }
 

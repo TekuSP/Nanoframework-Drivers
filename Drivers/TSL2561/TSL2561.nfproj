@@ -27,8 +27,8 @@
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
-    <Reference Include="Windows.Devices.I2c, Version=1.4.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.Windows.Devices.I2c.1.4.1-preview.24\lib\Windows.Devices.I2c.dll</HintPath>
+    <Reference Include="System.Device.I2c, Version=1.0.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.System.Device.I2c.1.0.1-preview.18\lib\System.Device.I2c.dll</HintPath>
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>

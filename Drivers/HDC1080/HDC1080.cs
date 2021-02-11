@@ -3,7 +3,7 @@ using DriverBase.Enums;
 using DriverBase.Interfaces;
 using System;
 using System.Threading;
-using Windows.Devices.I2c;
+using System.Device.I2c;
 
 namespace HDC1080
 {
@@ -26,7 +26,7 @@ namespace HDC1080
         /// <remarks>Recommended to set resolution <see cref="SetHumidityResolution(int)"/> and <see cref="SetTemperatureResolution(int)"/></remarks>
         /// <param name="I2CBusID">I2C Bus ID</param>
         /// <param name="deviceAddress">I2C Device Address, default 0x40</param>
-        public HDC1080(string I2CBusID, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, deviceAddress)
+        public HDC1080(int I2CBusID, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, deviceAddress)
         {
         }
 
@@ -37,7 +37,7 @@ namespace HDC1080
         /// <param name="I2CBusID">I2C Bus ID</param>
         /// <param name="connectionSettings">I2C Custom connection settings</param>
         /// <param name="deviceAddress">I2C Device Address, default 0x40</param>
-        public HDC1080(string I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, connectionSettings, deviceAddress)
+        public HDC1080(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x40) : base("HDC 1080", I2CBusID, connectionSettings, deviceAddress)
         {
         }
 

@@ -1,6 +1,6 @@
 ﻿using DriverBase.Enums;
 using DriverBase.Interfaces;
-using Windows.Devices.I2c;
+using System.Device.I2c;
 
 namespace DriverBase
 {
@@ -11,7 +11,6 @@ namespace DriverBase
     {
         #region Protected Fields
 
-        protected string I2CBusID;
         protected I2cConnectionSettings I2CConnectionSettings;
         protected I2cDevice I2CDevice;
 
@@ -25,17 +24,12 @@ namespace DriverBase
         /// <param name="name">Name of the device</param>
         /// <param name="I2CBusID">I2C Bus ID</param>
         /// <param name="deviceAddress">I2C Device Address</param>
-        public DriverBaseI2C(string name, string I2CBusID, int deviceAddress)
+        public DriverBaseI2C(string name, int I2CBusID, int deviceAddress)
         {
             Name = name;
             CommunicationType = CommunicationType.I2C;
             DeviceAddress = deviceAddress;
-            I2CConnectionSettings = new I2cConnectionSettings(deviceAddress)
-            {
-                BusSpeed = I2cBusSpeed.FastMode,
-                SharingMode = I2cSharingMode.Shared
-            };
-            this.I2CBusID = I2CBusID;
+            I2CConnectionSettings = new I2cConnectionSettings(I2CBusID, deviceAddress, I2cBusSpeed.FastMode);
         }
 
         /// <summary>
@@ -45,13 +39,12 @@ namespace DriverBase
         /// <param name="I2CBusID">I2C Bus ID</param>
         /// <param name="connectionSettings">I2C Custom connection settings</param>
         /// <param name="deviceAddress">I2C Device Address</param>
-        public DriverBaseI2C(string name, string I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress)
+        public DriverBaseI2C(string name, int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress)
         {
             Name = name;
             CommunicationType = CommunicationType.I2C;
             DeviceAddress = deviceAddress;
             I2CConnectionSettings = connectionSettings;
-            this.I2CBusID = I2CBusID;
         }
 
         #endregion Public Constructors
@@ -85,7 +78,7 @@ namespace DriverBase
 
         public virtual void Start()
         {
-            I2CDevice = I2cDevice.FromId(I2CBusID, I2CConnectionSettings);
+            I2CDevice = new I2cDevice(I2CConnectionSettings);
         }
 
         public virtual void Stop()
