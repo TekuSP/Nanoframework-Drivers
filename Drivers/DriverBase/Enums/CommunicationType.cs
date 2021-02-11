@@ -2,6 +2,6 @@
 {
     public enum CommunicationType
     {
-        I2C, SPI, OneWire, Other = 100
+        I2C, SPI, OneWire, Serial, Other = 100
     }
 }
