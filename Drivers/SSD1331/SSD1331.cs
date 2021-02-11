@@ -38,8 +38,8 @@ namespace SSD1331
             dcPinInt = commandDecoderPin;
             rstPinInt = resetPin;
             gpio = gpioController;
-            Height = 96;
-            Width = 64;
+            Height = 64;
+            Width = 96;
         }
         /// <summary>
         /// Constructs SSD1331 Device Driver, but does not start it, see <see cref="Start"/> to start it
@@ -54,8 +54,8 @@ namespace SSD1331
             dcPinInt = commandDecoderPin;
             rstPinInt = resetPin;
             gpio = gpioController;
-            Height = 96;
-            Width = 64;
+            Height = 64;
+            Width = 96;
         }
         /// <summary>
         /// Constructs SSD1331 Device Driver, but does not start it, see <see cref="Start"/> to start it
@@ -70,8 +70,8 @@ namespace SSD1331
             dcPinInt = commandDecoderPin;
             rstPinInt = resetPin;
             gpio = gpioController;
-            Height = 96;
-            Width = 64;
+            Height = 64;
+            Width = 96;
         }
 
         #endregion Public Constructors
@@ -129,8 +129,8 @@ namespace SSD1331
 
         #region Public Properties
 
-        public int Height { get; }//TODO: Move to interface
-        public int Width { get; }
+        public byte Height { get; }//TODO: Move to interface
+        public byte Width { get; }
 
         #endregion Public Properties
 
@@ -157,7 +157,13 @@ namespace SSD1331
         {
             WriteCommand(0x25, xStart, yStart, xEnd, yEnd);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ClearWindow()
+        {
+            ClearWindow(0, 0, (byte)(Width - 1), (byte)(Height - 1)); //Clear screen
+        }
         /// <summary>
         /// Continuous Horizontal And Vertical Scrolling Setup
         /// </summary>
@@ -720,6 +726,7 @@ namespace SSD1331
             SetContrastForCColor(0x7D);
             SetDisplayOnOff(DisplayState.ON);
             dcPin.Write(GpioPinValue.High);
+            ClearWindow(); //Clear screen
         }
 
         public override void Stop()
