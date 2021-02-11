@@ -5,10 +5,17 @@ using Windows.Storage.Streams;
 
 namespace MHZ19B
 {
+    /// <summary>
+    /// Driver for Zhengzhou Winsen Electronics Technology Co., Ltd, Intelligent Infrared CO2 Module MH-Z19B <br/>
+    /// <a href="https://www.winsen-sensor.com/d/files/infrared-gas-sensor/mh-z19b-co2-ver1_0.pdf"/>
+    /// </summary>
     public class MHZ19B : DriverBaseUART, IAdvancedCO2Sensor, ICO2Sensor
     {
         #region Public Constructors
-
+        /// <summary>
+        /// Constructs MH-Z19B Device Driver, but does not start it, see <see cref="Start"/> to start it
+        /// </summary>
+        /// <param name="serialBusID">Serial Bus ID (COM1 for example)</param>
         public MHZ19B(string serialBusID) : base("MH-Z19B", serialBusID)
         {
         }
