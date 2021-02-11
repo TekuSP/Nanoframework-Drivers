@@ -115,7 +115,10 @@ namespace MHZ19B
         {
             return "Not Supported";
         }
-
+        /// <summary>
+        /// Sets detection range for CO2 Sensor
+        /// </summary>
+        /// <param name="ppm">Only 2000 ppm or 5000 ppm allowed!</param>
         public void SetDetectionRange(int ppm)
         {
             if (ppm != 2000 || ppm != 5000)
