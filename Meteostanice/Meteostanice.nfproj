@@ -37,8 +37,18 @@
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
+    <Reference Include="Windows.Devices.Gpio, Version=1.5.2.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.Windows.Devices.Gpio.1.5.2-preview.21\lib\Windows.Devices.Gpio.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
     <Reference Include="Windows.Devices.I2c, Version=1.4.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.Windows.Devices.I2c.1.4.1-preview.24\lib\Windows.Devices.I2c.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="Windows.Devices.Spi, Version=1.4.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.Windows.Devices.Spi.1.4.1-preview.26\lib\Windows.Devices.Spi.dll</HintPath>
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
@@ -48,8 +58,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Drivers\DriverBaseI2C\DriverBaseI2C.nfproj" />
+    <ProjectReference Include="..\Drivers\DriverBaseSPI\DriverBaseSPI.nfproj" />
+    <ProjectReference Include="..\Drivers\DriverBaseUART\DriverBaseUART.nfproj" />
     <ProjectReference Include="..\Drivers\DriverBase\DriverBase.nfproj" />
     <ProjectReference Include="..\Drivers\HDC1080\HDC1080.nfproj" />
+    <ProjectReference Include="..\Drivers\MHZ19B\MHZ19B.nfproj" />
+    <ProjectReference Include="..\Drivers\SSD1331\SSD1331.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>

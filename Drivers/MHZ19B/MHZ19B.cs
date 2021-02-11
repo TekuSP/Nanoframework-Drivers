@@ -1,5 +1,7 @@
 ﻿using DriverBase;
 using DriverBase.Interfaces;
+using System;
+using System.Diagnostics;
 using System.Threading;
 using Windows.Storage.Streams;
 
@@ -89,9 +91,8 @@ namespace MHZ19B
 
         public override long ReadData(params byte[] data)
         {
-            while (serialDevice.BytesToRead < data.Length)
-                Thread.Sleep(1); //Wait for response
-
+            var read = DataReader.Load((uint)data.Length);
+            Debug.WriteLine("Data read: " + read);
             DataReader.ReadBytes(data);
             return data.Length;
         }
@@ -142,9 +143,11 @@ namespace MHZ19B
             serialDevice.DataBits = 8;
             serialDevice.StopBits = Windows.Devices.SerialCommunication.SerialStopBitCount.One;
             serialDevice.Parity = Windows.Devices.SerialCommunication.SerialParity.None;
+            serialDevice.Handshake = Windows.Devices.SerialCommunication.SerialHandshake.None;
+            serialDevice.ReadTimeout = new TimeSpan(0, 0, 5);
             InputStream = serialDevice.InputStream;
             OutputStream = serialDevice.OutputStream;
-            DataReader = new DataReader(InputStream);
+            DataReader = new DataReader(InputStream) { InputStreamOptions = InputStreamOptions.Partial };
             DataWriter = new DataWriter(OutputStream);
         }
 
@@ -162,6 +165,8 @@ namespace MHZ19B
         public override void WriteData(byte[] data)
         {
             DataWriter.WriteBytes(data);
+            var wrote = DataWriter.Store();
+            Debug.WriteLine("Data sent: " + wrote);
         }
 
         #endregion Public Methods
@@ -175,8 +180,8 @@ namespace MHZ19B
         /// <returns>Checksum byte</returns>
         private byte CalculateCheckSum(params byte[] packet)
         {
-            byte i, checksum = 0;
-            for (i = 1; i < 8; i++)
+            byte checksum = 0;
+            for (byte i = 1; i < 8; i++)
                 checksum += packet[i];
             return (byte)((byte)(0xff - checksum) + 1);
         }
