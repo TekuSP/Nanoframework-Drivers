@@ -91,8 +91,7 @@ namespace MHZ19B
 
         public override long ReadData(params byte[] data)
         {
-            var read = DataReader.Load((uint)data.Length);
-            Debug.WriteLine("Data read: " + read);
+            DataReader.Load((uint)data.Length);
             DataReader.ReadBytes(data);
             return data.Length;
         }
@@ -165,8 +164,7 @@ namespace MHZ19B
         public override void WriteData(byte[] data)
         {
             DataWriter.WriteBytes(data);
-            var wrote = DataWriter.Store();
-            Debug.WriteLine("Data sent: " + wrote);
+            DataWriter.Store();
         }
 
         #endregion Public Methods
