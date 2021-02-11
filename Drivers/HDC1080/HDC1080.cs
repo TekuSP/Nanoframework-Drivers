@@ -41,16 +41,6 @@ namespace HDC1080
         {
         }
 
-        /// <summary>
-        /// Constructs HDC1080 Device Driver, but does not start it, see <see cref="DriverBaseI2C.Start"/> to start it
-        /// </summary>
-        /// <remarks>Recommended to set resolution <see cref="SetHumidityResolution(int)"/> and <see cref="SetTemperatureResolution(int)"/></remarks>
-        /// <param name="I2C_BUS">ESP32 I2C Bus to use</param>
-        /// <param name="deviceAddress">I2C Device Address, default 0x40</param>
-        public HDC1080(ESP32_I2C I2C_BUS = ESP32_I2C.I2C1, int deviceAddress = 0x40) : base("HDC 1080", I2C_BUS, deviceAddress)
-        {
-        }
-
         #endregion Public Constructors
 
         #region Public Methods

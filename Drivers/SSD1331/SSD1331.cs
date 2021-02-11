@@ -57,22 +57,6 @@ namespace SSD1331
             Height = 64;
             Width = 96;
         }
-        /// <summary>
-        /// Constructs SSD1331 Device Driver, but does not start it, see <see cref="Start"/> to start it
-        /// </summary>
-        /// <param name="SPI_BUS">ESP32 SPI Bus to use</param>
-        /// <param name="chipSelectPin">Digital Chip Select Pin</param>
-        /// <param name="commandDecoderPin">Digital Command Decoder Pin</param>
-        /// <param name="resetPin">Digital Reset Pin</param>
-        /// <param name="gpioController">GPIO Controller OnBoard</param>
-        public SSD1331(ESP32_SPI SPI_BUS, int chipSelectPin, int commandDecoderPin, int resetPin, GpioController gpioController) : base("SSD1331", SPI_BUS, chipSelectPin)
-        {
-            dcPinInt = commandDecoderPin;
-            rstPinInt = resetPin;
-            gpio = gpioController;
-            Height = 64;
-            Width = 96;
-        }
 
         #endregion Public Constructors
 

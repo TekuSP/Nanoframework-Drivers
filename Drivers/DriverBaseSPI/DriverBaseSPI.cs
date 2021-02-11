@@ -53,24 +53,6 @@ namespace DriverBase
             DeviceAddress = SpiConnectionSettings.ChipSelectLine;
         }
 
-        /// <summary>
-        /// Constructs SPI Driver, but does not start it, call <see cref="Start"/> for starting it
-        /// </summary>
-        /// <param name="name">Name of the device</param>
-        /// <param name="SPI_BUS">ESP32 SPI Bus to use</param>
-        /// <param name="chipSelectPin">Chip Select Pin</param>
-        public DriverBaseSPI(string name, ESP32_SPI SPI_BUS, int chipSelectPin)
-        {
-            SpiConnectionSettings = new SpiConnectionSettings(chipSelectPin)
-            {
-                SharingMode = SpiSharingMode.Shared,
-                Mode = SpiMode.Mode0
-            };
-            SPIBusID = SPI_BUS.ToString();
-            Name = name;
-            DeviceAddress = chipSelectPin;
-        }
-
         #endregion Public Constructors
 
         #region Public Properties

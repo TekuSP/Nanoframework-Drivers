@@ -17,10 +17,6 @@ namespace TSL2561
         {
         }
 
-        public TSL2561(ESP32_I2C I2C_BUS = ESP32_I2C.I2C1, int deviceAddress = 0x39) : base("TSL2561", I2C_BUS, deviceAddress)
-        {
-        }
-
         #endregion Public Constructors
 
         #region Public Methods

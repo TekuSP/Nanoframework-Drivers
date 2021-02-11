@@ -42,25 +42,6 @@ namespace DriverBase
         /// Constructs I2C Driver, but does not start it, call <see cref="Start"/> for starting it
         /// </summary>
         /// <param name="name">Name of the device</param>
-        /// <param name="I2C_BUS">ESP32 I2C Bus to use</param>
-        /// <param name="deviceAddress">I2C Device Address</param>
-        public DriverBaseI2C(string name, ESP32_I2C I2C_BUS, int deviceAddress)
-        {
-            Name = name;
-            CommunicationType = CommunicationType.I2C;
-            DeviceAddress = deviceAddress;
-            I2CConnectionSettings = new I2cConnectionSettings(deviceAddress)
-            {
-                BusSpeed = I2cBusSpeed.FastMode,
-                SharingMode = I2cSharingMode.Shared
-            };
-            I2CBusID = I2C_BUS.ToString();
-        }
-
-        /// <summary>
-        /// Constructs I2C Driver, but does not start it, call <see cref="Start"/> for starting it
-        /// </summary>
-        /// <param name="name">Name of the device</param>
         /// <param name="I2CBusID">I2C Bus ID</param>
         /// <param name="connectionSettings">I2C Custom connection settings</param>
         /// <param name="deviceAddress">I2C Device Address</param>

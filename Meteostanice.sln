@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DriverBases", "DriverBases"
 EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "DriverBaseSPI", "Drivers\DriverBaseSPI\DriverBaseSPI.nfproj", "{982F2037-BC65-4A6B-88E2-254AAF2C2EA9}"
 EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "DriverBaseUART", "Drivers\DriverBaseUART\DriverBaseUART.nfproj", "{9B7BB653-254F-403D-9A25-D40BB1008DBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,12 @@ Global
 		{982F2037-BC65-4A6B-88E2-254AAF2C2EA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{982F2037-BC65-4A6B-88E2-254AAF2C2EA9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{982F2037-BC65-4A6B-88E2-254AAF2C2EA9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9B7BB653-254F-403D-9A25-D40BB1008DBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B7BB653-254F-403D-9A25-D40BB1008DBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B7BB653-254F-403D-9A25-D40BB1008DBF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9B7BB653-254F-403D-9A25-D40BB1008DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B7BB653-254F-403D-9A25-D40BB1008DBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B7BB653-254F-403D-9A25-D40BB1008DBF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +98,7 @@ Global
 		{985EE733-C951-40B0-924F-2EE948A03C4A} = {E846D9D1-1305-49D3-8E2E-3B32D0C9C1F9}
 		{E846D9D1-1305-49D3-8E2E-3B32D0C9C1F9} = {FE469048-9F4B-4913-818A-50961AEC9A83}
 		{982F2037-BC65-4A6B-88E2-254AAF2C2EA9} = {E846D9D1-1305-49D3-8E2E-3B32D0C9C1F9}
+		{9B7BB653-254F-403D-9A25-D40BB1008DBF} = {E846D9D1-1305-49D3-8E2E-3B32D0C9C1F9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7DF9E729-B9E5-45B4-95E1-2FE94D0CE06F}
