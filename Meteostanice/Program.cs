@@ -39,8 +39,12 @@ namespace Meteostanice
 
             MHZ19B.MHZ19B mhz = new MHZ19B.MHZ19B("COM3");
             mhz.Start();
-            int ppm = mhz.ReadCO2Concentration();
-            Debug.WriteLine("Current ppm is: " + ppm);
+            while (true)
+            {
+                int ppm = mhz.ReadCO2Concentration();
+                Debug.WriteLine("Current ppm is: " + ppm);
+                Thread.Sleep(10000);
+            }
             Thread.Sleep(Timeout.Infinite);
 
             // Browse our samples repository: https://github.com/nanoframework/samples
