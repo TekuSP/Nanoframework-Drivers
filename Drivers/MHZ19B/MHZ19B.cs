@@ -71,10 +71,10 @@ namespace MHZ19B
         /// <returns>CO2 concentration in ppm</returns>
         public int ReadCO2Concentration()
         {
-            byte[] dataToSend = new byte[8] { 0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            dataToSend[7] = CalculateCheckSum(dataToSend);
+            byte[] dataToSend = new byte[9] { 0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            dataToSend[8] = CalculateCheckSum(dataToSend);
             WriteData(dataToSend); //Response EXPECTED
-            byte[] dataToRead = new byte[8];
+            byte[] dataToRead = new byte[9];
             ReadData(dataToRead); //Read Response
             return (dataToRead[2] * 256) + dataToRead[3];
         }
@@ -91,7 +91,9 @@ namespace MHZ19B
 
         public override long ReadData(params byte[] data)
         {
-            DataReader.Load((uint)data.Length);
+            var read = DataReader.Load((uint)data.Length);
+            if (read != 9)
+                return 0;
             DataReader.ReadBytes(data);
             return data.Length;
         }
@@ -130,8 +132,8 @@ namespace MHZ19B
         {
             if (ppm != 2000 || ppm != 5000)
                 return; //Allowed is only 2000 ppm or 5000 ppm
-            byte[] dataToSend = new byte[8] { 0xFF, 0x01, 0x99, (byte)(ppm / 256), (byte)(ppm % 256), 0x00, 0x00, 0x00 };
-            dataToSend[7] = CalculateCheckSum(dataToSend);
+            byte[] dataToSend = new byte[9] { 0xFF, 0x01, 0x99, (byte)(ppm / 256), (byte)(ppm % 256), 0x00, 0x00, 0x00,0x00 };
+            dataToSend[8] = CalculateCheckSum(dataToSend);
             WriteData(dataToSend); //No response expected
         }
 
@@ -143,7 +145,7 @@ namespace MHZ19B
             serialDevice.StopBits = Windows.Devices.SerialCommunication.SerialStopBitCount.One;
             serialDevice.Parity = Windows.Devices.SerialCommunication.SerialParity.None;
             serialDevice.Handshake = Windows.Devices.SerialCommunication.SerialHandshake.None;
-            serialDevice.ReadTimeout = new TimeSpan(0, 0, 5);
+            serialDevice.ReadTimeout = new TimeSpan(0, 0, 1);
             InputStream = serialDevice.InputStream;
             OutputStream = serialDevice.OutputStream;
             DataReader = new DataReader(InputStream) { InputStreamOptions = InputStreamOptions.Partial };
