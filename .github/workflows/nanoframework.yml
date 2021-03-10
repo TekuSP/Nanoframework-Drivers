@@ -40,14 +40,7 @@ jobs:
     - name: Setup NanoFramework Build Tools
       run: ./nanoframework/github-actions/install-nf-build-components.ps1
     
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration -m
+    - name: Build the NanoFramework
+      run: ./build.ps1
       env:
         Configuration: ${{ matrix.configuration }}
-
-    # Build the application
-    - name: Build the nanoframework application
-      run: msbuild $env:Solution_Name /t:Build /p:Configuration=$env:Configuration -m
-      env:
-        Configuration: ${{ matrix.configuration }}    
