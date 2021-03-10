@@ -37,4 +37,4 @@ jobs:
       run: ./build.ps1
       env:
         Configuration: ${{ matrix.configuration }}
-        Solution_Name: "$(GITHUB_WORKSPACE)/Meteostanice.sln"
+        Solution_Name: "${{ github.workspace }}/Meteostanice.sln"
