@@ -6,7 +6,7 @@ using System.Device.I2c;
 
 namespace LPS22HB
 {
-    public class LPS22HB : DriverBaseI2C, ITemperatureSensor
+    public class LPS22HB : DriverBaseI2C, ITemperatureSensor, IPressureSensor
     {
         private const int ushortMaxValuePlusOne = 65536;
 
@@ -127,10 +127,40 @@ namespace LPS22HB
                 return true;
         }
 
+        public float ReadPressure()
+        {
+            WriteData(LPS22HBCommands.LPS22HB_CTRL_REG2, 0x1);
+            if (!Status(0x1))
+                return -1;
+            byte pressOutH = ReadWrite(LPS22HBCommands.LPS22HB_PRES_OUT_H);
+            byte pressOutL = ReadWrite(LPS22HBCommands.LPS22HB_PRES_OUT_L);
+            byte pressOutXL = ReadWrite(LPS22HBCommands.LPS22HB_PRES_OUT_XL);
+            return ((((long)pressOutH << 24) | ((long)pressOutL << 16) | ((long)pressOutXL << 8)) >> 8);
+        }
+
+        public float ReadPressure(PressureType type)
+        {
+            return CalculatePressure(type, ReadPressure());
+        }
+
+        public float CalculatePressure(PressureType type, float rawPressure)
+        {
+            switch (type)
+            {
+                case PressureType.mBar:
+                    return rawPressure / 4096.0f;
+                case PressureType.Bar:
+                    return (rawPressure / 4096.0f) / 1000;
+                case PressureType.Torr:
+                    return ((rawPressure / 4096.0f) / 1000) / 750.06167382f;
+                default:
+                    throw new System.NotImplementedException();
+            }
+        }
+
         enum LPS22HBCommands
         {
             LPS22HB_WHO_AM_I = 0x0F, //Who am I
-            LPS22HB_WHO_AM_I_VALID_RESPONSE = 0xB1, // Expected return value of WHO_AM_I register
             LPS22HB_RES_CONF = 0x1A, //Normal (0) or Low current mode (1)
             LPS22HB_CTRL_REG1 = 0x10, //Output rate and filter settings
             LPS22HB_CTRL_REG2 = 0x11, //BOOT FIFO_EN STOP_ON_FTH IF_ADD_INC I2C_DIS SWRESET One_Shot
