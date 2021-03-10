@@ -38,4 +38,4 @@ jobs:
       working-directory: "."
       env:
         Configuration: ${{ matrix.configuration }}
-        Solution_Name: "Meteostanice.sln"
+        Solution_Name: "${{ github.workspace }}\\Meteostanice-CSharp\\Meteostanice.sln"
