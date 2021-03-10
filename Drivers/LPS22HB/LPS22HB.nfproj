@@ -37,6 +37,10 @@
       <SpecificVersion>True</SpecificVersion>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DriverBaseI2C\DriverBaseI2C.nfproj" />
+    <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
+  </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>
     <ProjectCapabilities>
