@@ -136,7 +136,7 @@ namespace HDC1080
 
         public override string ReadSerialNumber() => $"{ReadData(0xFB)}{ReadData(0xFC)}{ReadData(0xFD)}";
 
-        public float ReadTemperature() => ((ReadData(0x00) / 65536f) * 165) - 40;
+        public float ReadTemperature() => (ReadData(0x00) / 65536f);
 
         public float ReadTemperature(TemperatureUnit readTemperatureUnit) => CalculateTemperature(readTemperatureUnit, ReadTemperature());
 
