@@ -66,17 +66,32 @@ namespace MHZ19B
         }
 
         /// <summary>
-        /// Reads and calculates CO2 Concentration
+        /// Reads and calculates CO2 Limited Concentration
         /// </summary>
         /// <returns>CO2 concentration in ppm</returns>
         public int ReadCO2Concentration()
         {
-            byte[] dataToSend = new byte[9] { 0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            dataToSend[8] = CalculateCheckSum(dataToSend);
-            WriteData(dataToSend); //Response EXPECTED
-            byte[] dataToRead = new byte[9];
-            ReadData(dataToRead); //Read Response
-            return (dataToRead[2] * 256) + dataToRead[3];
+            var response = SendAndRead(MHZCommands.CO2LimitedTemp);
+            return GetFromHighLowByte(response[2],response[3]);
+        }
+        /// <summary>
+        /// Reads and calculates CO2 Unlimited Concentration
+        /// </summary>
+        /// <returns>CO2 concentration in ppm</returns>
+        public int ReadCO2ConcentrationUnlimited()
+        {
+            var response = SendAndRead(MHZCommands.CO2UnlimitedTemp);
+            return GetFromHighLowByte(response[4], response[5]);
+        }
+
+        /// <summary>
+        /// Reads temperature
+        /// </summary>
+        /// <returns>CO2 concentration in ppm</returns>
+        public int ReadTemperature()
+        {
+            var response = SendAndRead(MHZCommands.CO2LimitedTemp);
+            return Convert.ToInt32(response[4].ToString(), 16) - 38; //random constant???
         }
 
         /// <summary>
@@ -185,6 +200,62 @@ namespace MHZ19B
                 checksum += packet[i];
             return (byte)((byte)(0xff - checksum) + 1);
         }
+
+        private byte[] SendAndRead(MHZCommands command)
+        {
+            byte[] dataToSend = new byte[9] { 0xFF, 0x01, (byte)command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            dataToSend[8] = CalculateCheckSum(dataToSend);
+            byte[] dataToRead = new byte[9];
+            try
+            {
+                WriteData(dataToSend); //Response EXPECTED
+                ReadData(dataToRead); //Read Response
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception happened when reading/writing data: " + ex);
+            }
+            return dataToRead;
+        }
+        private byte[] SendAndRead(MHZCommands command, byte[] additionalData)
+        {
+            byte[] dataToSend = new byte[9] { 0xFF, 0x01, (byte)command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            for (int i = 0; i < 5; i++)
+                dataToSend[i + 3] = additionalData[i];
+            dataToSend[8] = CalculateCheckSum(dataToSend);
+            byte[] dataToRead = new byte[9];
+            try
+            {
+                WriteData(dataToSend); //Response EXPECTED
+                ReadData(dataToRead); //Read Response
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception happened when reading/writing data: " + ex);
+            }
+            return dataToRead;
+        }
+        private int GetFromHighLowByte(byte high, byte low)
+        {
+            return (high * 256) + low;
+        }
+        enum MHZCommands
+        {
+          RecoveryReset = 0x78,	// 0 Recovery Reset        Changes operation mode and performs MCU reset
+          ABC = 0x79,	// 1 ABC Mode ON/OFF       Turns ABC logic on or off (b[3] == 0xA0 - on, 0x00 - off)
+          GetABC = 0x7D,	// 2 Get ABC logic status  (1 - enabled, 0 - disabled)	
+          RawCO2 = 0x84,	// 3 Raw CO2
+          CO2UnlimitedTemp = 0x85,	// 4 Temp float, CO2 Unlimited
+          CO2LimitedTemp = 0x86,	// 5 Temp integer, CO2 limited
+          ZeroCalibration = 0x87,	// 6 Zero Calibration
+          SpanCalibration = 0x88,	// 7 Span Calibration
+          Range = 0x99,	// 8 Range
+          GetRange = 0x9B,	// 9 Get Range
+          GetBackgroundCO2 = 0x9C,	// 10 Get Background CO2
+          GetFirmwaveVersion = 0xA0,	// 11 Get Firmware Version
+          ResendMessage = 0xA2,	// 12 Get Last Response
+          GetTemperatureCalibration = 0xA3		// 13 Get Temp Calibration
+        };
 
         #endregion Private Methods
     }

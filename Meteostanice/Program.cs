@@ -1,7 +1,9 @@
 ﻿using nanoFramework.Hardware.Esp32;
-using System.Diagnostics;
 using System.Threading;
 using System.Device.Gpio;
+using System;
+using System.Diagnostics.Uart;
+using System.Diagnostics;
 
 namespace Meteostanice
 {
@@ -11,7 +13,6 @@ namespace Meteostanice
 
         public static void Main()
         {
-            Debug.WriteLine("Hello world!");
             //Display TEST
             //Configuration.SetPinFunction(23, DeviceFunction.SPI1_MOSI);
             //Configuration.SetPinFunction(19, DeviceFunction.SPI1_CLOCK);
@@ -33,21 +34,25 @@ namespace Meteostanice
             //hDC1080.HeatUp(10);
             //var humi = hDC1080.ReadHumidity();
             //MHZ19B TEST
-            Configuration.SetPinFunction(Gpio.IO16, DeviceFunction.COM3_RX);
-            Configuration.SetPinFunction(Gpio.IO17, DeviceFunction.COM3_TX);
-            MHZ19B.MHZ19B mhz = new MHZ19B.MHZ19B("COM3");
-            mhz.Start();
-            while (true)
-            {
-                int ppm = mhz.ReadCO2Concentration();
-                Debug.WriteLine("Current ppm is: " + ppm);
-                Thread.Sleep(10000);
-            }
-            Thread.Sleep(Timeout.Infinite);
+            //Configuration.SetPinFunction(Gpio.IO16, DeviceFunction.COM3_RX);
+            //Configuration.SetPinFunction(Gpio.IO17, DeviceFunction.COM3_TX);
+            //MHZ19B.MHZ19B mhz = new MHZ19B.MHZ19B("COM3");
+            //mhz.Start();
+            //Debug.WriteLine("MHZ Started.");
+            //while (true)
+            //{
+            //    int ppm = mhz.ReadCO2Concentration();
+            //    Debug.WriteLine("Current limited ppm is: " + ppm);
+            //    ppm = mhz.ReadCO2ConcentrationUnlimited();
+            //    Debug.WriteLine("Current unlimited ppm is: " + ppm);
+            //    int temp = mhz.ReadTemperature();
+            //    Debug.WriteLine("Current temperature is: " + temp);
+            //    Thread.Sleep(10000);
+            //}
 
-            // Browse our samples repository: https://github.com/nanoframework/samples
-            // Check our documentation online: https://docs.nanoframework.net/
-            // Join our lively Discord community: https://discord.gg/gCyBu8T
+
+            Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
+            Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
 
         }
 
