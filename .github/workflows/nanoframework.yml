@@ -35,6 +35,7 @@ jobs:
     
     - name: Build the NanoFramework
       run: ./build.ps1
+      working-directory: "."
       env:
         Configuration: ${{ matrix.configuration }}
-        Solution_Name: "${{ github.workspace }}\\Meteostanice.sln"
+        Solution_Name: "Meteostanice.sln"
