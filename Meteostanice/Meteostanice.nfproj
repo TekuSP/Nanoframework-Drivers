@@ -79,6 +79,7 @@
     <ProjectReference Include="..\Drivers\DriverBaseUART\DriverBaseUART.nfproj" />
     <ProjectReference Include="..\Drivers\DriverBase\DriverBase.nfproj" />
     <ProjectReference Include="..\Drivers\HDC1080\HDC1080.nfproj" />
+    <ProjectReference Include="..\Drivers\LPS22HB\LPS22HB.nfproj" />
     <ProjectReference Include="..\Drivers\MHZ19B\MHZ19B.nfproj" />
     <ProjectReference Include="..\Drivers\SSD1331\SSD1331.nfproj" />
   </ItemGroup>
