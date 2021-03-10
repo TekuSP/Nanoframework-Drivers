@@ -8,12 +8,16 @@ on:
 
 jobs:
 
-  build:
+  Build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+        
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      
+      Solution_Name: Meteostanice.sln
     steps:
     - name: Checkout Meteostanice
       uses: actions/checkout@v2
@@ -44,4 +48,9 @@ jobs:
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
-    
+
+    # Build the application
+    - name: Build the nanoframework application
+      run: msbuild $env:Solution_Name /t:Build /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}    
