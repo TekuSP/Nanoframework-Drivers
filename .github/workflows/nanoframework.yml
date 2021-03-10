@@ -41,7 +41,7 @@ jobs:
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
     
     - name: Setup NanoFramework Build Tools
-      run: ./nanoframework/nf-tools/github-actions/install-nf-build-components.ps1
+      run: ./nanoframework/github-actions/install-nf-build-components.ps1
     
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
