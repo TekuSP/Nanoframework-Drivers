@@ -5,9 +5,11 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+env:
+ ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
-
+  
   build:
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -41,15 +43,3 @@ jobs:
       
     - name: Build NanoFramework for ESP-32
       run: ./nanoframework/build.ps1 -Target ESP32_WROOM_32
-
-
-    # Remove the pfx
-    - name: Remove the pfx
-      run: Remove-Item -path $env:Wap_Project_Directory\$env:Signing_Certificate
-
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-artifact
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: MSIX Package
-        path: ${{ env.Wap_Project_Directory }}\AppPackages
