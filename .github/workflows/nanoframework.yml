@@ -1,41 +1,57 @@
-name: .NET Nanoframework
+# Copyright (c) .NET Foundation and Contributors
+# https://github.com/networkfusion/MBN-TinyCLR/ original build, merged with https://github.com/TekuSP/Meteostanice-CSharp/
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+name: Build Nanoframework
+
+on: [push, pull_request]
+
+defaults:
+  run:
+    shell: pwsh
+
+
 
 jobs:
-
   Build:
     strategy:
       matrix:
         configuration: [Debug, Release]
-        
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    name: Build NanoFramework SLN
+    timeout-minutes: 15
+    runs-on: windows-latest
     env:
+      solution: 'Meteostanice.sln'
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-    - name: Checkout Meteostanice
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: Checkout tools repo
+        uses: actions/checkout@v2
+        with:
+          repository: nanoframework/nf-tools
+          path: tools
+      - name: Install build components for nanoFramework
+        run: ./github-actions/install-nf-build-components.ps1
+        working-directory: tools
 
-    - name: Checkout NanoFramework Build Tools
-      uses: actions/checkout@v2
-      with:
-       repository: nanoframework/nf-tools
-       fetch-depth: 0
-       path: ./nanoframework/
-    
-    - name: Setup NanoFramework Build Tools
-      run: ./nanoframework/github-actions/install-nf-build-components.ps1
-    
-    - name: Build the NanoFramework
-      run: ./build.ps1
-      working-directory: "."
-      env:
-        Configuration: ${{ matrix.configuration }}
-        Solution_Name: "${{ github.workspace }}\\Meteostanice-CSharp\\Meteostanice.sln"
+      - name: Setup MSBuild Path
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      # https://github.com/NuGet/setup-nuget
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '5.8.0'
+
+      - name: Restore nugets
+        run: nuget restore ${{ env.solution }} -ConfigFile NuGet.Config
+        working-directory: main
+        
+
+      - name: Build NanoFramework Application
+        run: msbuild ${{ env.solution }} /p:Configuration=${{ env.buildConfiguration }}
+        working-directory: main
+        env:
+          Configuration: ${{ matrix.configuration }}
