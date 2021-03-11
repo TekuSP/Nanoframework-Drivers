@@ -53,14 +53,22 @@ namespace Meteostanice
 
             Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
             Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
-            LPS22HB.LPS22HB lPS22HB = new LPS22HB.LPS22HB(1);
+            LPS22HB.LPS22HB lPS22HB = new LPS22HB.LPS22HB(1, 0x5C);
             lPS22HB.Start();
             var manu = lPS22HB.ReadManufacturerId();
             var serial = lPS22HB.ReadSerialNumber();
             var devID = lPS22HB.ReadDeviceId();
-            var temperature = lPS22HB.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius);
-            var pressure = lPS22HB.ReadPressure(DriverBase.Enums.PressureType.mBar);
-            Console.WriteLine("");
+            float temperature;
+            float pressure;
+            Console.WriteLine($"Initialized device {manu} {devID} - {serial}");
+            while (true)
+            {
+                temperature = lPS22HB.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius);
+                pressure = lPS22HB.ReadPressure(DriverBase.Enums.PressureType.mBar);
+                Console.WriteLine($"Temperature is: {temperature} C");
+                Console.WriteLine($"Pressure is: {pressure} mBar");
+                Thread.Sleep(5000);
+            }
         }
 
         #endregion Public Methods
