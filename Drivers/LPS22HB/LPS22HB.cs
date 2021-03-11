@@ -1,14 +1,21 @@
-﻿using DriverBase;
+﻿using System;
+using System.Device.I2c;
+
+using DriverBase;
 using DriverBase.Enums;
 using DriverBase.Interfaces;
-using System;
-using System.Device.I2c;
 
 namespace LPS22HB
 {
     public class LPS22HB : DriverBaseI2C, ITemperatureSensor, IPressureSensor
     {
+        #region Private Fields
+
         private const int ushortMaxValuePlusOne = 65536;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public LPS22HB(int I2CBusID, int deviceAddress = 0x5D) : base("LPS22HB", I2CBusID, deviceAddress)
         {
@@ -16,6 +23,60 @@ namespace LPS22HB
 
         public LPS22HB(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x5D) : base("LPS22HB", I2CBusID, connectionSettings, deviceAddress)
         {
+        }
+
+        #endregion Public Constructors
+
+        #region Private Enums
+
+        private enum LPS22HBCommands
+        {
+            LPS22HB_WHO_AM_I = 0x0F, //Who am I
+            LPS22HB_RES_CONF = 0x1A, //Normal (0) or Low current mode (1)
+            LPS22HB_CTRL_REG1 = 0x10, //Output rate and filter settings
+            LPS22HB_CTRL_REG2 = 0x11, //BOOT FIFO_EN STOP_ON_FTH IF_ADD_INC I2C_DIS SWRESET One_Shot
+            LPS22HB_STATUS_REG = 0x27, //Temp or Press data available bits
+            LPS22HB_PRES_OUT_XL = 0x28, //XLSB
+            LPS22HB_PRES_OUT_L = 0x29, //LSB
+            LPS22HB_PRES_OUT_H = 0x2A, //MSB
+            LPS22HB_TEMP_OUT_L = 0x2B, //LSB
+            LPS22HB_TEMP_OUT_H = 0x2C //MSB
+        }
+
+        #endregion Private Enums
+
+        #region Public Methods
+
+        public float CalculatePressure(PressureType type, float rawPressure)
+        {
+            switch (type)
+            {
+                case PressureType.mBar:
+                    return rawPressure / 4096.0f;
+
+                case PressureType.Bar:
+                    return (rawPressure / 4096.0f) / 1000;
+
+                case PressureType.Torr:
+                    return ((rawPressure / 4096.0f) / 1000) / 750.06167382f;
+
+                default:
+                    throw new System.NotImplementedException();
+            }
+        }
+
+        public float CalculateTemperature(TemperatureUnit readTemperatureUnit, float rawTemperature)
+        {
+            switch (readTemperatureUnit)
+            {
+                case TemperatureUnit.Celsius:
+                    return rawTemperature; //Already in Celsius
+                case TemperatureUnit.Fahrenheit:
+                    return (rawTemperature * 9 / 5) + (32 * ushortMaxValuePlusOne);
+
+                default:
+                    throw new System.NotImplementedException();
+            }
         }
 
         public override long ReadData(byte pointer)
@@ -29,25 +90,12 @@ namespace LPS22HB
             data[0] = I2CDevice.ReadByte();
             return 1;
         }
-        private byte ReadWrite(LPS22HBCommands command, byte data)
-        {
-            byte[] buff = new byte[1];
-            WriteData(command, data);
-            ReadData(buff);
-            return buff[0];
-        }
-        private byte ReadWrite(LPS22HBCommands command)
-        {
-            byte[] buff = new byte[1];
-            WriteData(command);
-            ReadData(buff);
-            return buff[0];
-        }
 
         public override string ReadDeviceId()
         {
             return ReadWrite(LPS22HBCommands.LPS22HB_WHO_AM_I).ToString();
         }
+
         /// <summary>
         /// Not supported
         /// </summary>
@@ -55,84 +103,6 @@ namespace LPS22HB
         public override string ReadManufacturerId()
         {
             return "STMicroelectronics";
-        }
-
-        /// <summary>
-        /// Not Supported
-        /// </summary>
-        /// <returns>Not Supported</returns>
-        public override string ReadSerialNumber()
-        {
-            return "Not Supported";
-        }
-        public override void Start()
-        {
-            base.Start();
-            WriteData(LPS22HBCommands.LPS22HB_RES_CONF, 0x0); // resolution: temp=32, pressure=128
-            WriteData(LPS22HBCommands.LPS22HB_CTRL_REG1, 0x00); // one-shot mode
-        }
-        public override void WriteData(params byte[] data)
-        {
-            I2CDevice.Write(new SpanByte(data));
-        }
-        private void WriteData(LPS22HBCommands command, byte[] data)
-        {
-            WriteData(new byte[] { (byte)command });
-            if (data != null) //Data is also present to the command
-                WriteData(data);
-        }
-        private void WriteData(LPS22HBCommands command)
-        {
-            WriteData(new byte[] { (byte)command });
-        }
-        private void WriteData(LPS22HBCommands command, byte data)
-        {
-            WriteData(new byte[] { (byte)command, data });
-        }
-        public float CalculateTemperature(TemperatureUnit readTemperatureUnit, float rawTemperature)
-        {
-            switch (readTemperatureUnit)
-            {
-                case TemperatureUnit.Celsius:
-                    return rawTemperature; //Already in Celsius
-                case TemperatureUnit.Fahrenheit:
-                    return (rawTemperature * 9 / 5) + (32 * ushortMaxValuePlusOne);
-                default:
-                    throw new System.NotImplementedException();
-            }
-        }
-
-        public float ReadTemperature()
-        {
-            WriteData(LPS22HBCommands.LPS22HB_CTRL_REG2, 0x1);
-            if (!Status(0x2))
-                return -1;
-            byte tempOutH = ReadWrite(LPS22HBCommands.LPS22HB_TEMP_OUT_H);
-            byte tempOutL = ReadWrite(LPS22HBCommands.LPS22HB_TEMP_OUT_L);
-            return ((tempOutH << 8) | (tempOutL & 0xff)) / 100.0f;
-        }
-
-        public float ReadTemperature(TemperatureUnit readTemperatureUnit)
-        {
-            return CalculateTemperature(readTemperatureUnit, ReadTemperature());
-        }
-
-        public bool Status(byte status)
-        {
-            int count = 1000;
-            byte data;
-            do
-            {
-                data = ReadWrite(LPS22HBCommands.LPS22HB_STATUS_REG);
-                --count;
-                if (count < 0)
-                    break;
-            } while ((data & status) == 0);
-
-            if (count < 0)
-                return false;
-            else
-                return true;
         }
 
         public float ReadPressure()
@@ -154,33 +124,97 @@ namespace LPS22HB
             return CalculatePressure(type, pr);
         }
 
-        public float CalculatePressure(PressureType type, float rawPressure)
+        /// <summary>
+        /// Not Supported
+        /// </summary>
+        /// <returns>Not Supported</returns>
+        public override string ReadSerialNumber()
         {
-            switch (type)
-            {
-                case PressureType.mBar:
-                    return rawPressure / 4096.0f;
-                case PressureType.Bar:
-                    return (rawPressure / 4096.0f) / 1000;
-                case PressureType.Torr:
-                    return ((rawPressure / 4096.0f) / 1000) / 750.06167382f;
-                default:
-                    throw new System.NotImplementedException();
-            }
+            return "Not Supported";
         }
 
-        enum LPS22HBCommands
+        public float ReadTemperature()
         {
-            LPS22HB_WHO_AM_I = 0x0F, //Who am I
-            LPS22HB_RES_CONF = 0x1A, //Normal (0) or Low current mode (1)
-            LPS22HB_CTRL_REG1 = 0x10, //Output rate and filter settings
-            LPS22HB_CTRL_REG2 = 0x11, //BOOT FIFO_EN STOP_ON_FTH IF_ADD_INC I2C_DIS SWRESET One_Shot
-            LPS22HB_STATUS_REG = 0x27, //Temp or Press data available bits
-            LPS22HB_PRES_OUT_XL = 0x28, //XLSB
-            LPS22HB_PRES_OUT_L = 0x29, //LSB
-            LPS22HB_PRES_OUT_H = 0x2A, //MSB
-            LPS22HB_TEMP_OUT_L = 0x2B, //LSB
-            LPS22HB_TEMP_OUT_H = 0x2C //MSB
+            WriteData(LPS22HBCommands.LPS22HB_CTRL_REG2, 0x1);
+            if (!Status(0x2))
+                return -1;
+            byte tempOutH = ReadWrite(LPS22HBCommands.LPS22HB_TEMP_OUT_H);
+            byte tempOutL = ReadWrite(LPS22HBCommands.LPS22HB_TEMP_OUT_L);
+            return ((tempOutH << 8) | (tempOutL & 0xff)) / 100.0f;
         }
+
+        public float ReadTemperature(TemperatureUnit readTemperatureUnit)
+        {
+            return CalculateTemperature(readTemperatureUnit, ReadTemperature());
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            WriteData(LPS22HBCommands.LPS22HB_RES_CONF, 0x0); // resolution: temp=32, pressure=128
+            WriteData(LPS22HBCommands.LPS22HB_CTRL_REG1, 0x00); // one-shot mode
+        }
+
+        public bool Status(byte status)
+        {
+            int count = 1000;
+            byte data;
+            do
+            {
+                data = ReadWrite(LPS22HBCommands.LPS22HB_STATUS_REG);
+                --count;
+                if (count < 0)
+                    break;
+            } while ((data & status) == 0);
+
+            if (count < 0)
+                return false;
+            else
+                return true;
+        }
+
+        public override void WriteData(params byte[] data)
+        {
+            I2CDevice.Write(new SpanByte(data));
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private byte ReadWrite(LPS22HBCommands command, byte data)
+        {
+            byte[] buff = new byte[1];
+            WriteData(command, data);
+            ReadData(buff);
+            return buff[0];
+        }
+
+        private byte ReadWrite(LPS22HBCommands command)
+        {
+            byte[] buff = new byte[1];
+            WriteData(command);
+            ReadData(buff);
+            return buff[0];
+        }
+
+        private void WriteData(LPS22HBCommands command, byte[] data)
+        {
+            WriteData(new byte[] { (byte)command });
+            if (data != null) //Data is also present to the command
+                WriteData(data);
+        }
+
+        private void WriteData(LPS22HBCommands command)
+        {
+            WriteData(new byte[] { (byte)command });
+        }
+
+        private void WriteData(LPS22HBCommands command, byte data)
+        {
+            WriteData(new byte[] { (byte)command, data });
+        }
+
+        #endregion Private Methods
     }
 }

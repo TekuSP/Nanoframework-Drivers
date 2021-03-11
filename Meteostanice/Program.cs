@@ -51,23 +51,40 @@ namespace Meteostanice
             //}
 
 
+            //Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
+            //Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
+            //LPS22HB.LPS22HB lPS22HB = new LPS22HB.LPS22HB(1);
+            //lPS22HB.Start();
+            //var manu = lPS22HB.ReadManufacturerId();
+            //var serial = lPS22HB.ReadSerialNumber();
+            //var devID = lPS22HB.ReadDeviceId();
+            //float temperature;
+            //float pressure;
+            //Debug.WriteLine($"Initialized device {manu} {devID} - {serial}");
+            //while (true)
+            //{
+            //    temperature = lPS22HB.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius);
+            //    pressure = lPS22HB.ReadPressure(DriverBase.Enums.PressureType.mBar);
+            //    Debug.WriteLine($"Temperature is: {temperature} C");
+            //    Debug.WriteLine($"Pressure is: {pressure} mBar");
+            //    Thread.Sleep(5000);
+            //}
             Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
             Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
-            LPS22HB.LPS22HB lPS22HB = new LPS22HB.LPS22HB(1, 0x5C);
-            lPS22HB.Start();
-            var manu = lPS22HB.ReadManufacturerId();
-            var serial = lPS22HB.ReadSerialNumber();
-            var devID = lPS22HB.ReadDeviceId();
-            float temperature;
-            float pressure;
-            Console.WriteLine($"Initialized device {manu} {devID} - {serial}");
+            ICM20948.ICM20948 icm = new ICM20948.ICM20948(1);
+            icm.Start();
+
             while (true)
             {
-                temperature = lPS22HB.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius);
-                pressure = lPS22HB.ReadPressure(DriverBase.Enums.PressureType.mBar);
-                Console.WriteLine($"Temperature is: {temperature} C");
-                Console.WriteLine($"Pressure is: {pressure} mBar");
-                Thread.Sleep(5000);
+                icm.GyroscopeAccelerationRead(out int[] Accel, out int[] Gyro);
+                icm.MagneticFieldRead(out int[] Mag);
+                icm.UpdatePitchRollYaw(Accel, Gyro, Mag);
+                Debug.WriteLine("/-------------------------------------------------------------/");
+                Debug.WriteLine(string.Format("Roll = {0} , Pitch = {1} , Yaw = {2}", icm.Roll, icm.Pitch, icm.Yaw));
+                Debug.WriteLine(string.Format("Acceleration:  X = {0} , Y = {1} , Z = {2}", Accel[0], Accel[1], Accel[2]));
+                Debug.WriteLine(string.Format("Gyroscope:     X = {0} , Y = {1} , Z = {2}", Gyro[0], Gyro[1], Gyro[2]));
+                Debug.WriteLine(string.Format("Magnetic:      X = {0} , Y = {1} , Z = {2}", Mag[0], Mag[1], Mag[2]));
+                Thread.Sleep(1000);
             }
         }
 
