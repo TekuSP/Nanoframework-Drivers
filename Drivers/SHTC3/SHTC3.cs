@@ -71,7 +71,7 @@ namespace SHTC3
                 return "BAD CRC";
             if ((ID & 0b0000100000111111) != 0b0000100000000111)
             {
-                throw new SystemException("Wrong driver for this device! This is not SHTC3!");
+                return $"Unknown device {ID}";
             }
             return ID.ToString();
         }
@@ -112,7 +112,7 @@ namespace SHTC3
                 default:
                     return -1;
             }
-            ushort RH = (ushort)(((ushort)RHhb << 8) | ((ushort)RHlb << 0));
+            ushort RH = (ushort)((RHhb << 8) | RHlb);
             if (!CheckCRC(RH, RHcs))
                 return -1; //BAD CRC
             return RH;
@@ -172,7 +172,7 @@ namespace SHTC3
                 default:
                     return -1;
             }
-            ushort T = (ushort)(((ushort)Thb << 8) | ((ushort)Tlb << 0));
+            ushort T = (ushort)((Thb << 8) | Tlb);
             if (!CheckCRC(T, Tcs))
                 return -1; //BAD CRC
             return T;
@@ -206,10 +206,10 @@ namespace SHTC3
         public override void Start()
         {
             base.Start();
-            SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSE_RHF_NPM);
-            IsSleeping = true; // Assume the sensor is asleep to begin (there won't be any harm in waking it up if it is already awake)
             WakeUp();
             ReadDeviceId();
+            SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSE_RHF_NPM);
+            IsSleeping = true; // Assume the sensor is asleep to begin (there won't be any harm in waking it up if it is already awake)
         }
         public override void Stop()
         {
