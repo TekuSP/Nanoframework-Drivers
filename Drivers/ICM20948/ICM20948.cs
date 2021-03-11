@@ -22,14 +22,14 @@ namespace ICM20948
         protected I2cDevice SecondaryI2CDevice;
         protected I2cDevice ReadI2CDevice;
         protected I2cDevice WriteI2CDevice;
-        public ICM20948(int I2CBusID, int deviceAddress, int secondaryAddress, int deviceReadAddress, int deviceWriteAddress) : base("ICM20948", I2CBusID, deviceAddress)
+        public ICM20948(int I2CBusID, int deviceAddress = 0x68, int secondaryAddress = 0x0C, int deviceReadAddress = 0x80, int deviceWriteAddress = 0x00) : base("ICM20948", I2CBusID, deviceAddress)
         {
             SecondaryDeviceAddress = secondaryAddress;
             ReadDeviceAddress = deviceReadAddress;
             WriteDeviceAddress = deviceWriteAddress;
         }
 
-        public ICM20948(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress, int secondaryAddress, int deviceReadAddress, int deviceWriteAddress) : base("ICM20948", I2CBusID, connectionSettings, deviceAddress)
+        public ICM20948(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x68, int secondaryAddress = 0x0C, int deviceReadAddress = 0x80, int deviceWriteAddress = 0x00) : base("ICM20948", I2CBusID, connectionSettings, deviceAddress)
         {
             SecondaryDeviceAddress = secondaryAddress;
             ReadDeviceAddress = deviceReadAddress;
