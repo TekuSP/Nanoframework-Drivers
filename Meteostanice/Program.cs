@@ -58,9 +58,17 @@ namespace Meteostanice
             var manu = lPS22HB.ReadManufacturerId();
             var serial = lPS22HB.ReadSerialNumber();
             var devID = lPS22HB.ReadDeviceId();
-            var temperature = lPS22HB.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius);
-            var pressure = lPS22HB.ReadPressure(DriverBase.Enums.PressureType.mBar);
-            Console.WriteLine("");
+            float temperature;
+            float pressure;
+            Debug.WriteLine($"Initialized device {manu} {devID} - {serial}");
+            while (true)
+            {
+                temperature = lPS22HB.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius);
+                pressure = lPS22HB.ReadPressure(DriverBase.Enums.PressureType.mBar);
+                Debug.WriteLine($"Temperature is: {temperature} C");
+                Debug.WriteLine($"Pressure is: {pressure} mBar");
+                Thread.Sleep(5000);
+            }
         }
 
         #endregion Public Methods
