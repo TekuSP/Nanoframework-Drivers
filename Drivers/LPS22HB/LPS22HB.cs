@@ -39,7 +39,7 @@ namespace LPS22HB
         private byte ReadWrite(LPS22HBCommands command)
         {
             byte[] buff = new byte[1];
-            WriteData(command, null);
+            WriteData(command);
             ReadData(buff);
             return buff[0];
         }
@@ -75,12 +75,20 @@ namespace LPS22HB
         {
             I2CDevice.Write(new SpanByte(data));
         }
-        private void WriteData(LPS22HBCommands command, params byte[] data)
+        private void WriteData(LPS22HBCommands command, byte[] data)
         {
             WriteData(new byte[] { (byte)command });
-            WriteData(data);
+            if (data != null) //Data is also present to the command
+                WriteData(data);
         }
-
+        private void WriteData(LPS22HBCommands command)
+        {
+            WriteData(new byte[] { (byte)command });
+        }
+        private void WriteData(LPS22HBCommands command, byte data)
+        {
+            WriteData(new byte[] { (byte)command, data });
+        }
         public float CalculateTemperature(TemperatureUnit readTemperatureUnit, float rawTemperature)
         {
             switch (readTemperatureUnit)
@@ -140,7 +148,10 @@ namespace LPS22HB
 
         public float ReadPressure(PressureType type)
         {
-            return CalculatePressure(type, ReadPressure());
+            float pr = ReadPressure();
+            if (pr == -1)
+                return pr;
+            return CalculatePressure(type, pr);
         }
 
         public float CalculatePressure(PressureType type, float rawPressure)
