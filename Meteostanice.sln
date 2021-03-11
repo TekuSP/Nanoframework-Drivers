@@ -27,11 +27,6 @@ Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "MHZ19B", "Drivers\MHZ19B\MH
 EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "LPS22HB", "Drivers\LPS22HB\LPS22HB.nfproj", "{DD6ACC29-725B-45CA-A90D-D4342B4E764B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0FD62DF2-CBA4-466D-AF1D-0497D68F1E5E}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "ICM20948", "Drivers\ICM20948\ICM20948.nfproj", "{B94E2D1A-458D-4A34-98CB-852BFAC83B72}"
 EndProject
 Global
