@@ -16,11 +16,11 @@ namespace ADS1015
     {
         #region Public Constructors
 
-        public ADS1015(int I2CBusID, int deviceAddress) : base("ADS1015", I2CBusID, deviceAddress)
+        public ADS1015(int I2CBusID, int deviceAddress = 0x48) : base("ADS1015", I2CBusID, deviceAddress)
         {
         }
 
-        public ADS1015(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress) : base("ADS1015", I2CBusID, connectionSettings, deviceAddress)
+        public ADS1015(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x48) : base("ADS1015", I2CBusID, connectionSettings, deviceAddress)
         {
         }
 
