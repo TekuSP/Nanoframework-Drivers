@@ -19,6 +19,12 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="ADS1015.cs" />
+    <Compile Include="Enums\MultiplexerSetting.cs" />
+    <Compile Include="Enums\GainSetting.cs" />
+    <Compile Include="Enums\ModeSetting.cs" />
+    <Compile Include="Enums\DataRateSetting.cs" />
+    <Compile Include="Enums\ComparatorEnums.cs" />
+    <Compile Include="Enums\OSCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
