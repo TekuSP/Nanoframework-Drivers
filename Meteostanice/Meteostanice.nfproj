@@ -82,6 +82,7 @@
     <ProjectReference Include="..\Drivers\ICM20948\ICM20948.nfproj" />
     <ProjectReference Include="..\Drivers\LPS22HB\LPS22HB.nfproj" />
     <ProjectReference Include="..\Drivers\MHZ19B\MHZ19B.nfproj" />
+    <ProjectReference Include="..\Drivers\SHTC3\SHTC3.nfproj" />
     <ProjectReference Include="..\Drivers\SSD1331\SSD1331.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
