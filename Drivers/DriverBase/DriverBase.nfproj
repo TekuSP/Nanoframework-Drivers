@@ -23,6 +23,7 @@
     <Compile Include="Enums\PressureType.cs" />
     <Compile Include="Enums\TemperatureUnit.cs" />
     <Compile Include="Helpers\BitHelper.cs" />
+    <Compile Include="Interfaces\IADCModule.cs" />
     <Compile Include="Interfaces\IAdvancedCO2Sensor.cs" />
     <Compile Include="Interfaces\IAdvancedHumiditySensor.cs" />
     <Compile Include="Interfaces\IAdvancedTemperatureSensor.cs" />
