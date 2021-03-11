@@ -1,6 +1,5 @@
-# Meteostanice-CSharp
+# Meteostanice + Libraries
 [![Build Nanoframework](https://github.com/TekuSP/Meteostanice-CSharp/actions/workflows/nanoframework_build.yml/badge.svg)](https://github.com/TekuSP/Meteostanice-CSharp/actions/workflows/nanoframework_build.yml)
-Meteostanice + Libraries
 
 1) Flash Firmware ( https://bintray.com/nfbot/nanoframework-images-dev/ESP32_WROOM_32/1.4.0-preview.68 ) using nanoFlasher ( https://github.com/nanoframework/nanoFirmwareFlasher )
 2) Add addon to VS 2019 ( https://marketplace.visualstudio.com/items?itemName=nanoframework.nanoFramework-VS2019-Extension )
