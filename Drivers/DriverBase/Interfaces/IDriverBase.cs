@@ -40,7 +40,7 @@ namespace DriverBase.Interfaces
         /// <summary>
         /// Read data from device, if not supported, calls <see cref="WriteData(byte[])"/> and returns -1
         /// </summary>
-        /// <param name="data">Data which to send to device</param>
+        /// <param name="data">Data which to read from device</param>
         /// <returns>Lenght of data from device and fills <paramref name="data"/> with data or -1 if not supported</returns>
         long ReadData(byte[] data);
 

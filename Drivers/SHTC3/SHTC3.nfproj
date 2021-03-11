@@ -18,6 +18,9 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="Enums\Status.cs" />
+    <Compile Include="Enums\MeasurementModes.cs" />
+    <Compile Include="Enums\Commands.cs" />
     <Compile Include="SHTC3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

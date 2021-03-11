@@ -34,6 +34,7 @@
     <Compile Include="Interfaces\IPressureSensor.cs" />
     <Compile Include="Interfaces\IRegister.cs" />
     <Compile Include="Interfaces\IRegisterSensor.cs" />
+    <Compile Include="Interfaces\ISleepSupport.cs" />
     <Compile Include="Interfaces\ITemperatureSensor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
