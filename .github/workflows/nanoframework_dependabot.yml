@@ -3,7 +3,6 @@
 name: Daily update dependencies
 
 on: 
-  push:
   schedule:
   # At 00:00 UTC every day.
   - cron:  '0 0 * * *'
