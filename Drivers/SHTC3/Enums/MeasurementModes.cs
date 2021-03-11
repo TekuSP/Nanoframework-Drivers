@@ -1,4 +1,5 @@
-﻿namespace SHTC3.Enums
+﻿using System;
+namespace SHTC3.Enums
 {
 	/// <summary>
 	/// Measurment mode for SHTC3
@@ -23,20 +24,24 @@
 		SHTC3_CMD_CSE_TF_LPM = 0x6458,
 
 		/// <summary>
-		/// Polling, RH first, Normal power mode
+		/// Polling, RH first, Normal power mode <br></br> <b>Not supported yet</b>
 		/// </summary>
-		SHTC3_CMD_CSD_RHF_NPM = 0x58E0, 
+		[Obsolete("Not supported yet")]
+		SHTC3_CMD_CSD_RHF_NPM = 0x58E0,
 		/// <summary>
-		/// Polling, RH first, Low power mode
+		/// Polling, RH first, Low power mode <br></br> <b>Not supported yet</b>
 		/// </summary>
+		[Obsolete("Not supported yet")]
 		SHTC3_CMD_CSD_RHF_LPM = 0x401A,
 		/// <summary>
-		/// Polling, T first, Normal power mode
-		/// </summary>		
+		/// Polling, T first, Normal power mode <br></br> <b>Not supported yet</b>
+		/// </summary>	
+		[Obsolete("Not supported yet")]
 		SHTC3_CMD_CSD_TF_NPM = 0x7866,
 		/// <summary>
-		/// Polling, T first, Low power mode
+		/// Polling, T first, Low power mode <br></br> <b>Not supported yet</b>
 		/// </summary>
+		[Obsolete("Not supported yet")]
 		SHTC3_CMD_CSD_TF_LPM = 0x609C 
 	}
 }

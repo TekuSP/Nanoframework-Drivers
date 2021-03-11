@@ -4,6 +4,8 @@ using System.Device.I2c;
 using DriverBase;
 using DriverBase.Enums;
 using DriverBase.Interfaces;
+
+using SHTC3.Enums;
 namespace SHTC3
 {
     public class SHTC3 : DriverBaseI2C, ISleepSupport, ITemperatureSensor, IHumiditySensor
@@ -16,18 +18,36 @@ namespace SHTC3
         {
         }
 
-        public bool IsSleeping => throw new NotImplementedException();
+        public bool IsSleeping { get; private set; }
 
         public float CalculateHumidity(HumidityType readHumidityType, float rawHumidity)
         {
-            throw new NotImplementedException();
+            switch (readHumidityType)
+            {
+                case HumidityType.Relative:
+                    return 100f * ((float)rawHumidity / 65535f);
+                default:
+                    throw new ArgumentException("Only Relative humidity is supported in this sensor!");
+            }
         }
 
         public float CalculateTemperature(TemperatureUnit readTemperatureUnit, float rawTemperature)
         {
-            throw new NotImplementedException();
+            switch (readTemperatureUnit)
+            {
+                case TemperatureUnit.Celsius:
+                    return -45f + 175f * ((float)rawTemperature / 65535f);
+                case TemperatureUnit.Fahrenheit:
+                    return (-45f + 175f * ((float)rawTemperature / 65535f)) * (9.0f / 5f) + 32.0f;
+                default:
+                    throw new ArgumentException("Only Celsius and Fahrenheit is supported in this sensor!");
+            }
         }
-
+        /// <summary>
+        /// Not supported
+        /// </summary>
+        /// <param name="pointer">Data to write</param>
+        /// <returns>-1</returns>
         public override long ReadData(byte pointer)
         {
             WriteData(new byte[] { pointer });
@@ -41,52 +61,212 @@ namespace SHTC3
 
         public override string ReadDeviceId()
         {
-            throw new NotImplementedException();
+            WakeUp();
+            WriteCommand(Commands.SHTC3_CMD_READ_ID);
+            byte IDhb = I2CDevice.ReadByte();
+            byte IDlb = I2CDevice.ReadByte();
+            byte IDcs = I2CDevice.ReadByte();
+            ushort ID = (ushort)((IDhb << 8) | IDlb);
+            if (!CheckCRC(ID, IDcs))
+                return "BAD CRC";
+            if ((ID & 0b0000100000111111) != 0b0000100000000111)
+            {
+                throw new SystemException("Wrong driver for this device! This is not SHTC3!");
+            }
+            return ID.ToString();
         }
 
         public float ReadHumidity()
         {
-            throw new NotImplementedException();
+            WakeUp();
+            SetMeasurmentMode(MeasurementMode);
+            byte RHhb;
+            byte RHlb;
+            byte RHcs;
+            switch (MeasurementMode) // Switch for the order of the returned results
+            {
+                case MeasurementModes.SHTC3_CMD_CSE_RHF_NPM:
+                case MeasurementModes.SHTC3_CMD_CSE_RHF_LPM:
+                    // RH First
+                    RHhb = I2CDevice.ReadByte();
+                    RHlb = I2CDevice.ReadByte();
+                    RHcs = I2CDevice.ReadByte();
+
+                    I2CDevice.ReadByte();
+                    I2CDevice.ReadByte();
+                    I2CDevice.ReadByte();
+                    break;
+
+                case MeasurementModes.SHTC3_CMD_CSE_TF_NPM:
+                case MeasurementModes.SHTC3_CMD_CSE_TF_LPM:
+                    // T First
+                    I2CDevice.ReadByte();
+                    I2CDevice.ReadByte();
+                    I2CDevice.ReadByte();
+
+                    RHhb = I2CDevice.ReadByte();
+                    RHlb = I2CDevice.ReadByte();
+                    RHcs = I2CDevice.ReadByte();
+                    break;
+
+                default:
+                    return -1;
+            }
+            ushort RH = (ushort)(((ushort)RHhb << 8) | ((ushort)RHlb << 0));
+            if (!CheckCRC(RH, RHcs))
+                return -1; //BAD CRC
+            return RH;
         }
 
         public float ReadHumidity(HumidityType readHumidityType)
         {
-            throw new NotImplementedException();
+            return CalculateHumidity(readHumidityType, ReadHumidity());
         }
 
         public override string ReadManufacturerId()
         {
-            throw new NotImplementedException();
+            return "Sensirion";
         }
-
+        /// <summary>
+        /// Not supported
+        /// </summary>
+        /// <returns>Not supported</returns>
         public override string ReadSerialNumber()
         {
-            throw new NotImplementedException();
+            return "Not supported";
         }
 
         public float ReadTemperature()
         {
-            throw new NotImplementedException();
+            WakeUp();
+            SetMeasurmentMode(MeasurementMode);
+            byte Thb;
+            byte Tlb;
+            byte Tcs;
+            switch (MeasurementMode) // Switch for the order of the returned results
+            {
+                case MeasurementModes.SHTC3_CMD_CSE_RHF_NPM:
+                case MeasurementModes.SHTC3_CMD_CSE_RHF_LPM:
+                    // RH First
+                    I2CDevice.ReadByte();
+                    I2CDevice.ReadByte();
+                    I2CDevice.ReadByte();
+
+                    Thb = I2CDevice.ReadByte();
+                    Tlb = I2CDevice.ReadByte();
+                    Tcs = I2CDevice.ReadByte();
+                    break;
+
+                case MeasurementModes.SHTC3_CMD_CSE_TF_NPM:
+                case MeasurementModes.SHTC3_CMD_CSE_TF_LPM:
+                    // T First
+                    Thb = I2CDevice.ReadByte();
+                    Tlb = I2CDevice.ReadByte();
+                    Tcs = I2CDevice.ReadByte();
+
+                    I2CDevice.ReadByte();
+                    I2CDevice.ReadByte();
+                    I2CDevice.ReadByte();
+                    break;
+
+                default:
+                    return -1;
+            }
+            ushort T = (ushort)(((ushort)Thb << 8) | ((ushort)Tlb << 0));
+            if (!CheckCRC(T, Tcs))
+                return -1; //BAD CRC
+            return T;
         }
 
         public float ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
-            throw new NotImplementedException();
+            return CalculateTemperature(readTemperatureUnit, ReadTemperature());
         }
 
         public void Sleep()
         {
-            throw new NotImplementedException();
+            if (IsSleeping) //We are already asleep
+                return;
+            if (WriteCommand(Commands.SHTC3_CMD_SLEEP) == Status.SHTC3_Status_Nominal)
+                IsSleeping = true;
         }
 
         public void WakeUp()
         {
-            throw new NotImplementedException();
+            if (!IsSleeping) //We are already awake
+                return;
+            if (WriteCommand(Commands.SHTC3_CMD_WAKE) == Status.SHTC3_Status_Nominal)
+                IsSleeping = false;
         }
 
         public override void WriteData(params byte[] data)
         {
             I2CDevice.Write(data);
+        }
+        public override void Start()
+        {
+            base.Start();
+            SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSE_RHF_NPM);
+            IsSleeping = true; // Assume the sensor is asleep to begin (there won't be any harm in waking it up if it is already awake)
+            WakeUp();
+            ReadDeviceId();
+        }
+        public override void Stop()
+        {
+            WakeUp();
+            WriteCommand(Commands.SHTC3_CMD_SFT_RST);
+            base.Stop();
+        }
+        public bool CheckCRC(ushort packet, byte cs)
+        {
+            byte upper = (byte)(packet >> 8);
+            byte lower = (byte)(packet & 0x00FF);
+            byte[] data = new byte[] { upper, lower };
+            byte crc = 0xFF;
+            byte poly = 0x31;
+
+            for (byte indi = 0; indi < 2; indi++)
+            {
+                crc ^= data[indi];
+
+                for (byte indj = 0; indj < 8; indj++)
+                {
+                    if ((crc & 0x80) == 1)
+                        crc = (byte)((crc << 1) ^ poly);
+                    else
+                        crc <<= 1;
+                }
+            }
+
+            if ((cs ^ crc) == 1)
+                return false;
+            return true;
+
+        }
+        public Status WriteCommand(Commands command)
+        {
+            var result = I2CDevice.Write(new SpanByte(new byte[] { (byte)(((ushort)command) >> 8), (byte)(((ushort)command) & 0x00FF) }));
+            if (result.Status == I2cTransferStatus.FullTransfer)
+                return Status.SHTC3_Status_Nominal;
+            return Status.SHTC3_Status_Error;
+        }
+        public MeasurementModes MeasurementMode { get; private set; }
+        public Status SetMeasurmentMode(MeasurementModes measurementMode)
+        {
+#pragma warning disable CS0618 // Type or member is obsolete
+            if (measurementMode == MeasurementModes.SHTC3_CMD_CSD_RHF_NPM || measurementMode == MeasurementModes.SHTC3_CMD_CSD_RHF_LPM || measurementMode == MeasurementModes.SHTC3_CMD_CSD_TF_NPM || measurementMode == MeasurementModes.SHTC3_CMD_CSD_TF_LPM)
+#pragma warning restore CS0618 // Type or member is obsolete
+            {
+                //TODO: Support these modes
+                return Status.SHTC3_Status_Error;
+            }
+            var result = I2CDevice.Write(new SpanByte(new byte[] { (byte)(((ushort)measurementMode) >> 8), (byte)(((ushort)measurementMode) & 0x00FF) }));
+            if (result.Status == I2cTransferStatus.FullTransfer)
+            {
+                MeasurementMode = measurementMode;
+                return Status.SHTC3_Status_Nominal;
+            }
+            return Status.SHTC3_Status_Error;
         }
     }
 }
