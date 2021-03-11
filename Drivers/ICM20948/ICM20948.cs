@@ -134,8 +134,10 @@ namespace ICM20948
         /// <param name="gyroscope">Returns gyroscopes - Array of three</param>
         /// <param name="gyroscopeOffset">Requires gyroscope offset calibration - Array of three, <see cref="GyroscopeCalibrationOffset"/> and <see cref="ReGenerateGyroscopeOffset"/></param>
         //TODO: Should this be interface? This is crazy method right now
-        public void GyroscopeAccelerationRead(out int[] acceleration, out int[] gyroscope, in int[] gyroscopeOffset)
+        public void GyroscopeAccelerationRead(out int[] acceleration, out int[] gyroscope, int[] gyroscopeOffset = null)
         {
+            if (gyroscopeOffset == null)
+                gyroscopeOffset = GyroscopeCalibrationOffset;
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
             var data = ReadWritePrimary((byte)ICM20948_BANK0.REG_ADD_ACCEL_XOUT_H, 12);
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_2);
