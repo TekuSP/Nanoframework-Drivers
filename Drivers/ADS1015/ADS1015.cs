@@ -4,8 +4,13 @@ namespace ADS1015
 {
     public class ADS1015
     {
-        // Browse our samples repository: https://github.com/nanoframework/samples
-        // Check our documentation online: https://docs.nanoframework.net/
-        // Join our lively Discord community: https://discord.gg/gCyBu8T
+        
+        private enum PointerRegister
+        {
+            ADS_POINTER_CONVERT = 0x00,
+            ADS_POINTER_CONFIG = 0x01,
+            ADS_POINTER_LOWTHRESH = 0x02,
+            ADS_POINTER_HIGHTHRESH = 0x03
+        }
     }
 }
