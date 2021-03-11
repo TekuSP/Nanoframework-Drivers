@@ -51,7 +51,7 @@ jobs:
         
 
       - name: Build NanoFramework Application
-        run: msbuild ${{ env.solution }} /p:Configuration=${{ env.buildConfiguration }}
+        run: msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
         working-directory: main
         env:
           Configuration: ${{ matrix.configuration }}
