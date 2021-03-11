@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Device.I2c;
+using System.Threading;
 
 using DriverBase;
 
@@ -7,81 +8,183 @@ namespace ICM20948
 {
     public class ICM20948 : DriverBaseI2C
     {
-        /// <summary>
-        /// AK09916 I2C address on the bus
-        /// </summary>
-        public int SecondaryDeviceAddress { get; }
-        /// <summary>
-        /// Read I2C address on the bus
-        /// </summary>
-        public int ReadDeviceAddress { get; }
-        /// <summary>
-        /// Write I2C address on the bus
-        /// </summary>
-        public int WriteDeviceAddress { get; }
-        protected I2cDevice SecondaryI2CDevice;
-        protected I2cDevice ReadI2CDevice;
-        protected I2cDevice WriteI2CDevice;
-        public ICM20948(int I2CBusID, int deviceAddress = 0x68, int secondaryAddress = 0x0C, int deviceReadAddress = 0x80, int deviceWriteAddress = 0x00) : base("ICM20948", I2CBusID, deviceAddress)
+        private const byte I2C_ADD_ICM20948_AK09916 = 0x0C;
+        private const byte I2C_ADD_ICM20948_AK09916_READ = 0x80;
+        private const byte I2C_ADD_ICM20948_AK09916_WRITE = 0x00;
+
+        public ICM20948(int I2CBusID, int deviceAddress = 0x68) : base("ICM20948", I2CBusID, deviceAddress)
         {
-            SecondaryDeviceAddress = secondaryAddress;
-            ReadDeviceAddress = deviceReadAddress;
-            WriteDeviceAddress = deviceWriteAddress;
         }
 
-        public ICM20948(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x68, int secondaryAddress = 0x0C, int deviceReadAddress = 0x80, int deviceWriteAddress = 0x00) : base("ICM20948", I2CBusID, connectionSettings, deviceAddress)
+        public ICM20948(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x68) : base("ICM20948", I2CBusID, connectionSettings, deviceAddress)
         {
-            SecondaryDeviceAddress = secondaryAddress;
-            ReadDeviceAddress = deviceReadAddress;
-            WriteDeviceAddress = deviceWriteAddress;
         }
 
         public override long ReadData(byte pointer)
         {
-            throw new NotImplementedException();
+            WriteData(new byte[] { pointer });
+            return -1;
         }
-
+        /// <summary>
+        /// Not supported, calls <see cref="ReadPrimary(byte[])"/>
+        /// </summary>
+        /// <param name="data">Data which should be returned</param>
+        /// <returns>Number of read bytes</returns>
         public override long ReadData(byte[] data)
         {
-            throw new NotImplementedException();
+            data[0] = ReadPrimary();
+            return data.Length;
         }
+        public byte ReadPrimary()
+        {
+            return I2CDevice.ReadByte();
+        }
+        public byte[] ReadSecondary(byte I2CAddr, byte registerAddr, byte length)
+        {
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_ADDR, I2CAddr);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_REG, registerAddr);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_CTRL, (byte)(((byte)ICM20948_BANK3.REG_VAL_BIT_SLV0_EN) | length));
 
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
+            var temp = ReadWritePrimary((byte)ICM20948_BANK0.REG_ADD_USER_CTRL);
+            temp = (byte)(temp | (byte)ICM20948_BANK0.REG_VAL_BIT_I2C_MST_EN);
+            WritePrimary((byte)ICM20948_BANK0.REG_ADD_USER_CTRL, temp);
+            Thread.Sleep(10);
+            temp = (byte)(temp & (~(byte)ICM20948_BANK0.REG_VAL_BIT_I2C_MST_EN));
+            WritePrimary((byte)ICM20948_BANK0.REG_ADD_USER_CTRL, temp);
+
+            byte[] returnValue = new byte[length];
+            for (byte i = 0; i < length; i++)
+                returnValue[i] = ReadWritePrimary((byte)(((byte)ICM20948_BANK0.REG_VAL_REG_BANK_0) + i));
+
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
+            temp = ReadWritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV0_CTRL);
+            temp = (byte)(temp & ~(((byte)ICM20948_BANK0.REG_VAL_BIT_I2C_MST_EN) & ((byte)ICM20948_BANK3.REG_VAL_BIT_MASK_LEN)));
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV0_CTRL, temp);
+
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
+            return returnValue;
+        }
+        private byte ReadWritePrimary(byte command)
+        {
+            WritePrimary(command);
+            return ReadPrimary();
+        }
+        private byte[] ReadWriteSecondary(byte I2Caddress, byte registerAddress, byte command)
+        {
+            WriteSecondary(I2Caddress,registerAddress,command);
+            return ReadSecondary(I2Caddress, registerAddress, command);
+        }
+        public override void Start()
+        {
+            base.Start();
+            if (!SelfTest())
+            {
+                Stop();
+                throw new SystemException("ICM20948 Self-Test routine failed!");
+            }
+            Thread.Sleep(500);
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
+            WritePrimary((byte)ICM20948_BANK0.REG_ADD_PWR_MIGMT_1, (byte)ICM20948_BANK0.REG_VAL_ALL_RGE_RESET); //Reset
+            Thread.Sleep(100);
+            WritePrimary((byte)ICM20948_BANK0.REG_ADD_PWR_MIGMT_1, (byte)ICM20948_BANK0.REG_VAL_RUN_MODE); //Power-ON
+
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_2);
+            //INIT GYRO
+            WritePrimary((byte)ICM20948_BANK2.REG_ADD_GYRO_SMPLRT_DIV, 0x07);
+            WritePrimary((byte)ICM20948_BANK2.REG_ADD_GYRO_CONFIG_1, (byte)ICM20948_BANK2.REG_VAL_BIT_GYRO_DLPCFG_6 | (byte)ICM20948_BANK2.REG_VAL_BIT_GYRO_FS_1000DPS | (byte)ICM20948_BANK2.REG_VAL_BIT_GYRO_DLPF);
+            WritePrimary((byte)ICM20948_BANK2.REG_ADD_ACCEL_SMPLRT_DIV_2, 0x07);
+            WritePrimary((byte)ICM20948_BANK2.REG_ADD_ACCEL_CONFIG, (byte)ICM20948_BANK2.REG_VAL_BIT_ACCEL_DLPCFG_6 | (byte)ICM20948_BANK2.REG_VAL_BIT_ACCEL_FS_2g | (byte)ICM20948_BANK2.REG_VAL_BIT_ACCEL_DLPF);
+
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
+            Thread.Sleep(100);
+
+            //TODO Gyro Offset here
+
+            if (!MagSelfTest()) //Magnetic field Self Test
+            {
+                Stop();
+                throw new SystemException("ICM20948 Magnetic Self-Test routine failed!");
+            }
+            WriteSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_WRITE, (byte)ICM20948_MAG.REG_ADD_MAG_CNTL2, (byte)ICM20948_MAG.REG_VAL_MAG_MODE_20HZ); //20 HZ mode
+        }
+        public override void Stop()
+        {
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
+            WritePrimary((byte)ICM20948_BANK0.REG_ADD_PWR_MIGMT_1, (byte)ICM20948_BANK0.REG_VAL_ALL_RGE_RESET); //Reset
+            base.Stop();
+        }
         public override string ReadDeviceId()
         {
-            throw new NotImplementedException();
+            return "Not supported";
         }
 
         public override string ReadManufacturerId()
         {
-            throw new NotImplementedException();
+            return "TDK InvenSense";
         }
 
         public override string ReadSerialNumber()
         {
-            throw new NotImplementedException();
+            return "Not supported";
         }
 
+        private bool SelfTest()
+        {
+            return ReadWritePrimary((byte)ICM20948_BANK0.REG_ADD_WIA) == ((byte)ICM20948_BANK0.REG_VAL_WIA);
+        }
+        private bool MagSelfTest()
+        {
+            var result = ReadSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_WIA1, 2);
+            return (result[0] == (byte)ICM20948_MAG.REG_VAL_MAG_WIA1 && result[1] == (byte)ICM20948_MAG.REG_VAL_MAG_WIA2);
+        }
+        /// <summary>
+        /// Not Supported, automatically calls <see cref="WritePrimary(byte[])"/>
+        /// </summary>
+        /// <param name="data">Data to write</param>
         public override void WriteData(byte[] data)
         {
-            throw new NotImplementedException();
+            WritePrimary(data);
         }
-        public override bool IsRunning => I2CDevice != null && SecondaryI2CDevice != null && ReadI2CDevice != null && WriteI2CDevice != null;
-        public override void Start()
+        public void WritePrimary(params byte[] data)
         {
-            base.Start();
-            SecondaryI2CDevice = new I2cDevice(new I2cConnectionSettings(I2CConnectionSettings.BusId, SecondaryDeviceAddress, I2CConnectionSettings.BusSpeed));
-            ReadI2CDevice = new I2cDevice(new I2cConnectionSettings(I2CConnectionSettings.BusId, ReadDeviceAddress, I2CConnectionSettings.BusSpeed));
-            WriteI2CDevice = new I2cDevice(new I2cConnectionSettings(I2CConnectionSettings.BusId, WriteDeviceAddress, I2CConnectionSettings.BusSpeed));
+            I2CDevice.Write(data);
         }
-        public override void Stop()
+        public void WriteSecondary(byte I2CAddr, byte registerAddr, byte data)
         {
-            base.Stop();
-            SecondaryI2CDevice?.Dispose();
-            SecondaryI2CDevice = null;
-            ReadI2CDevice?.Dispose();
-            ReadI2CDevice = null;
-            WriteI2CDevice?.Dispose();
-            WriteI2CDevice = null;
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_ADDR, I2CAddr);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_REG, registerAddr);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_DO, data);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_CTRL, ((byte)ICM20948_BANK3.REG_VAL_BIT_SLV0_EN) | 1);
+
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
+            var temp = ReadWritePrimary((byte)ICM20948_BANK0.REG_ADD_USER_CTRL);
+            temp = (byte)(temp | (byte)ICM20948_BANK0.REG_VAL_BIT_I2C_MST_EN);
+            WritePrimary((byte)ICM20948_BANK0.REG_ADD_USER_CTRL, temp);
+            Thread.Sleep(10);
+            temp = (byte)(temp & (~(byte)ICM20948_BANK0.REG_VAL_BIT_I2C_MST_EN));
+            WritePrimary((byte)ICM20948_BANK0.REG_ADD_USER_CTRL, temp);
+
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
+            temp = ReadWritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV0_CTRL);
+            temp = (byte)(temp & ~(((byte)ICM20948_BANK0.REG_VAL_BIT_I2C_MST_EN) & ((byte)ICM20948_BANK3.REG_VAL_BIT_MASK_LEN)));
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV0_CTRL, temp);
+
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
+        }
+        /// <summary>
+        /// Switches banks
+        /// </summary>
+        /// <param name="targetBank">
+        /// Bank to switch to, accepts: <see cref="ICM20948_BANK0.REG_VAL_REG_BANK_0"/>, <see cref="ICM20948_BANK0.REG_VAL_REG_BANK_1"/>, <see cref="ICM20948_BANK0.REG_VAL_REG_BANK_2"/>, <see cref="ICM20948_BANK0.REG_VAL_REG_BANK_3"/>
+        /// </param>
+        private void SwitchBanks(ICM20948_BANK0 targetBank)
+        {
+            if (targetBank != ICM20948_BANK0.REG_VAL_REG_BANK_0 && targetBank != ICM20948_BANK0.REG_VAL_REG_BANK_1 && targetBank != ICM20948_BANK0.REG_VAL_REG_BANK_2 && targetBank != ICM20948_BANK0.REG_VAL_REG_BANK_3) //Switch only banks
+                return;
+            WritePrimary((byte)ICM20948_BANK0.REG_ADD_REG_BANK_SEL, (byte)targetBank);
         }
         #region Registers
         private enum ICM20948_BANK0
