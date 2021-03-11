@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Device.I2c;
+using System.Threading;
+
+using ADS1015.Enums;
 
 using DriverBase;
 using DriverBase.Interfaces;
-using ADS1015.Enums;
-using System.Threading;
 
 namespace ADS1015
 {
@@ -13,6 +14,8 @@ namespace ADS1015
     /// </summary>
     public class ADS1015 : DriverBaseI2C, IADCModule
     {
+        #region Public Constructors
+
         public ADS1015(int I2CBusID, int deviceAddress) : base("ADS1015", I2CBusID, deviceAddress)
         {
         }
@@ -21,11 +24,28 @@ namespace ADS1015
         {
         }
 
+        #endregion Public Constructors
+
+        #region Private Enums
+
+        private enum PointerRegister
+        {
+            ADS_POINTER_CONVERT = 0x00,
+            ADS_POINTER_CONFIG = 0x01,
+            ADS_POINTER_LOWTHRESH = 0x02,
+            ADS_POINTER_HIGHTHRESH = 0x03
+        }
+
+        #endregion Private Enums
+
+        #region Public Methods
+
         public short DifferentialRead(int channelOne, int channelTwo)
         {
             return DifferentialRead(channelOne, channelTwo, modeSetting: ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS);
         }
-        public short DifferentialRead(int channelOne, int channelTwo, ModeSetting modeSetting = ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS,  GainSetting gain = GainSetting.ADS_CONFIG_PGA_2048, ComparatorLatching comparatorLatching = ComparatorLatching.ADS_CONFIG_COMP_NONLAT, ComparatorPolarity comparatorPolarity = ComparatorPolarity.ADS_CONFIG_COMP_POL_LOW, ComparatorAssert comparatorAssert = ComparatorAssert.ADS_CONFIG_COMP_QUE_NON, ComparatorMode comparatorMode = ComparatorMode.ADS_CONFIG_COMP_MODE_TRADITIONAL, DataRateSetting dataRate = DataRateSetting.ADS_CONFIG_DR_RATE_1600)
+
+        public short DifferentialRead(int channelOne, int channelTwo, ModeSetting modeSetting = ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS, GainSetting gain = GainSetting.ADS_CONFIG_PGA_2048, ComparatorLatching comparatorLatching = ComparatorLatching.ADS_CONFIG_COMP_NONLAT, ComparatorPolarity comparatorPolarity = ComparatorPolarity.ADS_CONFIG_COMP_POL_LOW, ComparatorAssert comparatorAssert = ComparatorAssert.ADS_CONFIG_COMP_QUE_NON, ComparatorMode comparatorMode = ComparatorMode.ADS_CONFIG_COMP_MODE_TRADITIONAL, DataRateSetting dataRate = DataRateSetting.ADS_CONFIG_DR_RATE_1600)
         {
             ushort configuration = (ushort)((ushort)modeSetting | (ushort)gain | (ushort)comparatorAssert | (ushort)comparatorLatching | (ushort)comparatorPolarity | (ushort)comparatorMode | (ushort)dataRate);
             if (channelOne == 2 && channelTwo == 3)
@@ -63,6 +83,7 @@ namespace ADS1015
             data = read.ToArray();
             return data.Length;
         }
+
         /// <summary>
         /// Not Supported
         /// </summary>
@@ -71,6 +92,7 @@ namespace ADS1015
         {
             return "Not supported";
         }
+
         /// <summary>
         /// Not Supported
         /// </summary>
@@ -79,6 +101,7 @@ namespace ADS1015
         {
             return "Texas Instruments";
         }
+
         /// <summary>
         /// Not Supported
         /// </summary>
@@ -92,6 +115,7 @@ namespace ADS1015
         {
             return SingleRead(channelNumber, modeSetting: ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS);
         }
+
         public ushort SingleRead(int channelNumber, ModeSetting modeSetting = ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS, GainSetting gain = GainSetting.ADS_CONFIG_PGA_2048, ComparatorLatching comparatorLatching = ComparatorLatching.ADS_CONFIG_COMP_NONLAT, ComparatorPolarity comparatorPolarity = ComparatorPolarity.ADS_CONFIG_COMP_POL_LOW, ComparatorAssert comparatorAssert = ComparatorAssert.ADS_CONFIG_COMP_QUE_NON, ComparatorMode comparatorMode = ComparatorMode.ADS_CONFIG_COMP_MODE_TRADITIONAL, DataRateSetting dataRate = DataRateSetting.ADS_CONFIG_DR_RATE_1600)
         {
             ushort configuration = (ushort)((ushort)modeSetting | (ushort)gain | (ushort)comparatorAssert | (ushort)comparatorLatching | (ushort)comparatorPolarity | (ushort)comparatorMode | (ushort)dataRate);
@@ -100,15 +124,19 @@ namespace ADS1015
                 case 0:
                     configuration |= (ushort)MultiplexerSetting.ADS_CONFIG_MUX_SINGLE_0;
                     break;
+
                 case 1:
                     configuration |= (ushort)MultiplexerSetting.ADS_CONFIG_MUX_SINGLE_1;
                     break;
+
                 case 2:
                     configuration |= (ushort)MultiplexerSetting.ADS_CONFIG_MUX_SINGLE_2;
                     break;
+
                 case 3:
                     configuration |= (ushort)MultiplexerSetting.ADS_CONFIG_MUX_SINGLE_3;
                     break;
+
                 default:
                     throw new ArgumentException("Only channels 0, 1, 2, 3 are supported");
             }
@@ -117,14 +145,21 @@ namespace ADS1015
             Thread.Sleep(1);
             return (ushort)(ReadRegister((byte)PointerRegister.ADS_POINTER_CONVERT) >> 4);
         }
+
         public override void WriteData(params byte[] data)
         {
             I2CDevice.Write(new SpanByte(data));
         }
+
         public void WriteRegister(byte reg, ushort value)
         {
             I2CDevice.Write(new SpanByte(new byte[] { reg, (byte)(value >> 8), (byte)(value & 0xFF) }));
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
         private ushort ReadRegister(byte reg)
         {
             byte[] readBuffer = new byte[2];
@@ -133,12 +168,6 @@ namespace ADS1015
             return (ushort)((readBuffer[0] << 8) | readBuffer[1]);
         }
 
-        private enum PointerRegister
-        {
-            ADS_POINTER_CONVERT = 0x00,
-            ADS_POINTER_CONFIG = 0x01,
-            ADS_POINTER_LOWTHRESH = 0x02,
-            ADS_POINTER_HIGHTHRESH = 0x03
-        }
+        #endregion Private Methods
     }
 }

@@ -1,9 +1,7 @@
-﻿using nanoFramework.Hardware.Esp32;
+﻿using System.Diagnostics;
 using System.Threading;
-using System.Device.Gpio;
-using System;
-using System.Diagnostics.Uart;
-using System.Diagnostics;
+
+using nanoFramework.Hardware.Esp32;
 
 namespace Meteostanice
 {
@@ -49,7 +47,6 @@ namespace Meteostanice
             //    Debug.WriteLine("Current temperature is: " + temp);
             //    Thread.Sleep(10000);
             //}
-
 
             //Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
             //Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
