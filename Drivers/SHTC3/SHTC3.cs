@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Device.I2c;
+using System.Threading;
 
 using DriverBase;
 using DriverBase.Enums;
@@ -36,9 +37,9 @@ namespace SHTC3
             switch (readTemperatureUnit)
             {
                 case TemperatureUnit.Celsius:
-                    return -45f + 175f * ((float)rawTemperature / 65535f);
+                    return -45f + (175f * ((float)rawTemperature / 65535f));
                 case TemperatureUnit.Fahrenheit:
-                    return (-45f + 175f * ((float)rawTemperature / 65535f)) * (9.0f / 5f) + 32.0f;
+                    return (-45f + (175f * ((float)rawTemperature / 65535f))) * (9.0f / 5f) + 32.0f;
                 default:
                     throw new ArgumentException("Only Celsius and Fahrenheit is supported in this sensor!");
             }
@@ -59,7 +60,7 @@ namespace SHTC3
             return I2CDevice.Read(data).BytesTransferred;
         }
 
-        public override string ReadDeviceId()
+        public override string ReadDeviceId() //TODO: This has some wrong results
         {
             WakeUp();
             WriteCommand(Commands.SHTC3_CMD_READ_ID);
@@ -79,7 +80,12 @@ namespace SHTC3
         public float ReadHumidity()
         {
             WakeUp();
-            SetMeasurmentMode(MeasurementMode);
+            if (MeasurementMode == MeasurementModes.SHTC3_CMD_CSD_TF_LPM)
+                SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSD_RHF_LPM);
+            else if (MeasurementMode == MeasurementModes.SHTC3_CMD_CSD_TF_NPM)
+                SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSD_RHF_NPM);
+            else
+                SetMeasurmentMode(MeasurementMode);
             byte RHhb;
             byte RHlb;
             byte RHcs;
@@ -108,13 +114,20 @@ namespace SHTC3
                     RHlb = I2CDevice.ReadByte();
                     RHcs = I2CDevice.ReadByte();
                     break;
-
+                case MeasurementModes.SHTC3_CMD_CSD_RHF_LPM:
+                case MeasurementModes.SHTC3_CMD_CSD_RHF_NPM:
+                    Thread.Sleep(20);
+                    RHhb = I2CDevice.ReadByte();
+                    RHlb = I2CDevice.ReadByte();
+                    RHcs = I2CDevice.ReadByte();
+                    break;
                 default:
                     return -1;
             }
             ushort RH = (ushort)((RHhb << 8) | RHlb);
             if (!CheckCRC(RH, RHcs))
                 return -1; //BAD CRC
+            Thread.Sleep(100);
             return RH;
         }
 
@@ -136,10 +149,15 @@ namespace SHTC3
             return "Not supported";
         }
 
-        public float ReadTemperature()
+        public float ReadTemperature() //TODO: This requires some major refactoring, wtf is going on
         {
             WakeUp();
-            SetMeasurmentMode(MeasurementMode);
+            if (MeasurementMode == MeasurementModes.SHTC3_CMD_CSD_RHF_LPM)
+                SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSD_TF_LPM);
+            else if (MeasurementMode == MeasurementModes.SHTC3_CMD_CSD_RHF_NPM)
+                SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSD_TF_NPM);
+            else
+                SetMeasurmentMode(MeasurementMode);
             byte Thb;
             byte Tlb;
             byte Tcs;
@@ -168,16 +186,22 @@ namespace SHTC3
                     I2CDevice.ReadByte();
                     I2CDevice.ReadByte();
                     break;
-
+                case MeasurementModes.SHTC3_CMD_CSD_TF_LPM:
+                case MeasurementModes.SHTC3_CMD_CSD_TF_NPM:
+                    Thread.Sleep(20);
+                    Thb = I2CDevice.ReadByte();
+                    Tlb = I2CDevice.ReadByte();
+                    Tcs = I2CDevice.ReadByte();
+                    break;
                 default:
                     return -1;
             }
             ushort T = (ushort)((Thb << 8) | Tlb);
             if (!CheckCRC(T, Tcs))
                 return -1; //BAD CRC
+            Thread.Sleep(100);
             return T;
         }
-
         public float ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
             return CalculateTemperature(readTemperatureUnit, ReadTemperature());
@@ -253,13 +277,6 @@ namespace SHTC3
         public MeasurementModes MeasurementMode { get; private set; }
         public Status SetMeasurmentMode(MeasurementModes measurementMode)
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            if (measurementMode == MeasurementModes.SHTC3_CMD_CSD_RHF_NPM || measurementMode == MeasurementModes.SHTC3_CMD_CSD_RHF_LPM || measurementMode == MeasurementModes.SHTC3_CMD_CSD_TF_NPM || measurementMode == MeasurementModes.SHTC3_CMD_CSD_TF_LPM)
-#pragma warning restore CS0618 // Type or member is obsolete
-            {
-                //TODO: Support these modes
-                return Status.SHTC3_Status_Error;
-            }
             var result = I2CDevice.Write(new SpanByte(new byte[] { (byte)(((ushort)measurementMode) >> 8), (byte)(((ushort)measurementMode) & 0x00FF) }));
             if (result.Status == I2cTransferStatus.FullTransfer)
             {

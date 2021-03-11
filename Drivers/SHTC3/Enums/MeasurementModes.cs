@@ -24,24 +24,20 @@ namespace SHTC3.Enums
 		SHTC3_CMD_CSE_TF_LPM = 0x6458,
 
 		/// <summary>
-		/// Polling, RH first, Normal power mode <br></br> <b>Not supported yet</b>
+		/// Polling, RH first, Normal power mode
 		/// </summary>
-		[Obsolete("Not supported yet")]
 		SHTC3_CMD_CSD_RHF_NPM = 0x58E0,
 		/// <summary>
-		/// Polling, RH first, Low power mode <br></br> <b>Not supported yet</b>
+		/// Polling, RH first, Low power mode
 		/// </summary>
-		[Obsolete("Not supported yet")]
 		SHTC3_CMD_CSD_RHF_LPM = 0x401A,
 		/// <summary>
-		/// Polling, T first, Normal power mode <br></br> <b>Not supported yet</b>
+		/// Polling, T first, Normal power mode
 		/// </summary>	
-		[Obsolete("Not supported yet")]
 		SHTC3_CMD_CSD_TF_NPM = 0x7866,
 		/// <summary>
-		/// Polling, T first, Low power mode <br></br> <b>Not supported yet</b>
+		/// Polling, T first, Low power mode
 		/// </summary>
-		[Obsolete("Not supported yet")]
 		SHTC3_CMD_CSD_TF_LPM = 0x609C 
 	}
 }
