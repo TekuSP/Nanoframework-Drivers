@@ -39,6 +39,12 @@ namespace ICM20948
         {
             return I2CDevice.ReadByte();
         }
+        public byte[] ReadPrimary(byte length)
+        {
+            SpanByte buffer = new SpanByte(new byte[length]);
+            I2CDevice.Read(buffer);
+            return buffer.ToArray();
+        }
         public byte[] ReadSecondary(byte I2CAddr, byte registerAddr, byte length)
         {
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
@@ -71,9 +77,14 @@ namespace ICM20948
             WritePrimary(command);
             return ReadPrimary();
         }
+        private byte[] ReadWritePrimary(byte command, byte length)
+        {
+            WritePrimary(command);
+            return ReadPrimary(length);
+        }
         private byte[] ReadWriteSecondary(byte I2Caddress, byte registerAddress, byte command)
         {
-            WriteSecondary(I2Caddress,registerAddress,command);
+            WriteSecondary(I2Caddress, registerAddress, command);
             return ReadSecondary(I2Caddress, registerAddress, command);
         }
         public override void Start()
@@ -100,7 +111,7 @@ namespace ICM20948
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
             Thread.Sleep(100);
 
-            //TODO Gyro Offset here
+            ReGenerateGyroscopeOffset();
 
             if (!MagSelfTest()) //Magnetic field Self Test
             {
@@ -115,6 +126,238 @@ namespace ICM20948
             WritePrimary((byte)ICM20948_BANK0.REG_ADD_PWR_MIGMT_1, (byte)ICM20948_BANK0.REG_VAL_ALL_RGE_RESET); //Reset
             base.Stop();
         }
+
+        /// <summary>
+        /// Gyroscope with acceleration reading from device
+        /// </summary>
+        /// <param name="acceleration">Returns accelerations - Array of three</param>
+        /// <param name="gyroscope">Returns gyroscopes - Array of three</param>
+        /// <param name="gyroscopeOffset">Requires gyroscope offset calibration - Array of three, <see cref="GyroscopeCalibrationOffset"/> and <see cref="ReGenerateGyroscopeOffset"/></param>
+        //TODO: Should this be interface? This is crazy method right now
+        public void GyroscopeAccelerationRead(out int[] acceleration, out int[] gyroscope, in int[] gyroscopeOffset)
+        {
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
+            var data = ReadWritePrimary((byte)ICM20948_BANK0.REG_ADD_ACCEL_XOUT_H, 12);
+            SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_2);
+
+            acceleration = new int[3];
+            gyroscope = new int[3];
+
+            acceleration[0] = (data[0] << 8) | data[1];
+            acceleration[1] = (data[2] << 8) | data[3];
+            acceleration[2] = (data[4] << 8) | data[5];
+            gyroscope[0] = ((data[6] << 8) | data[7]) - gyroscopeOffset[0];
+            gyroscope[1] = ((data[8] << 8) | data[9]) - gyroscopeOffset[1];
+            gyroscope[2] = ((data[10] << 8) | data[11]) - gyroscopeOffset[2];
+
+            if (acceleration[0] >= 32767)
+                acceleration[0] = acceleration[0] - 65535;
+            else if (acceleration[0] <= -32767)
+                acceleration[0] = acceleration[0] + 65535;
+            if (acceleration[1] >= 32767)
+                acceleration[1] = acceleration[1] - 65535;
+            else if (acceleration[1] <= -32767)
+                acceleration[1] = acceleration[1] + 65535;
+            if (acceleration[2] >= 32767)
+                acceleration[2] = acceleration[2] - 65535;
+            else if (acceleration[2] <= -32767)
+                acceleration[2] = acceleration[2] + 65535;
+            if (gyroscope[0] >= 32767)
+                gyroscope[0] = gyroscope[0] - 65535;
+            else if (gyroscope[0] <= -32767)
+                gyroscope[0] = gyroscope[0] + 65535;
+            if (gyroscope[1] >= 32767)
+                gyroscope[1] = gyroscope[1] - 65535;
+            else if (gyroscope[1] <= -32767)
+                gyroscope[1] = gyroscope[1] + 65535;
+            if (gyroscope[2] >= 32767)
+                gyroscope[2] = gyroscope[2] - 65535;
+            else if (gyroscope[2] <= -32767)
+                gyroscope[2] = gyroscope[2] + 65535;
+        }
+        /// <summary>
+        /// Magnetic field rading from device
+        /// </summary>
+        /// <param name="magneticField">Returns magnetic field - Array of three</param>
+        public void MagneticFieldRead(out int[] magneticField)
+        {
+            byte counter = 20;
+            int[] tempX = new int[8];
+            int[] tempY = new int[8];
+            int[] tempZ = new int[8];
+            magneticField = new int[3];
+            while (counter > 0)
+            {
+                Thread.Sleep(10);
+                byte result = ReadSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_ST2, 1)[0];
+                if ((result & 0x01) != 0)
+                    break;
+                counter -= 1;
+            }
+            if (counter != 0)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    var readData = ReadSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_DATA, 6);
+                    tempX[i] = (readData[1] << 8) | readData[0];
+                    tempY[i] = (readData[3] << 8) | readData[2];
+                    tempZ[i] = (readData[5] << 8) | readData[4];
+                }
+                magneticField[0] = (tempX[0] + tempX[1] + tempX[2] + tempX[3] + tempX[4] + tempX[5] + tempX[6] + tempX[7]) / 8;
+                magneticField[1] = -(tempY[0] + tempY[1] + tempY[2] + tempY[3] + tempY[4] + tempY[5] + tempY[6] + tempY[7]) / 8;
+                magneticField[2] = -(tempZ[0] + tempZ[1] + tempZ[2] + tempZ[3] + tempZ[4] + tempZ[5] + tempZ[6] + tempZ[7]) / 8;
+            }
+            if (magneticField[0] >= 32767)
+                magneticField[0] = magneticField[0] - 65535;
+            else if (magneticField[0] <= -32767)
+                magneticField[0] = magneticField[0] + 65535;
+            if (magneticField[1] >= 32767)
+                magneticField[1] = magneticField[1] - 65535;
+            else if (magneticField[1] <= -32767)
+                magneticField[1] = magneticField[1] + 65535;
+            if (magneticField[2] >= 32767)
+                magneticField[2] = magneticField[2] - 65535;
+            else if (magneticField[2] <= -32767)
+                magneticField[2] = magneticField[2] + 65535;
+        }
+
+        public float Pitch { get; private set; }
+        public float Roll { get; private set; }
+        public float Yaw { get; private set; }
+        /// <summary>
+        /// Updates <see cref="Pitch"/> and <see cref="Roll"/> and <see cref="Yaw"/> <br></br>
+        /// <b>WARNING:</b> This method can take some time to calculate!
+        /// </summary>
+        /// <param name="acceleration">Measured acceleration - Array of three</param>
+        /// <param name="gyroscope">Measured gyroscope - Array of three</param>
+        /// <param name="magneticField">Measured magnetic field - Array of three</param>
+        public void UpdatePitchRollYaw(in int[] acceleration, in int[] gyroscope, in int[] magneticField)
+        {
+            ImuAHRSUpdate(acceleration, gyroscope, magneticField);
+        }
+        private void ImuAHRSUpdate(in int[] acceleration, in int[] gyroscope, in int[] magneticField)
+        {
+            float[] realGyro = new float[3];
+            float[] realAccl = new float[3];
+            float[] realMgnt = new float[3];
+            realGyro[0] = (gyroscope[0] / 32.8f) * 0.0175f;
+            realGyro[1] = (gyroscope[1] / 32.8f) * 0.0175f;
+            realGyro[2] = (gyroscope[2] / 32.8f) * 0.0175f;
+            realAccl[0] = acceleration[0];
+            realAccl[1] = acceleration[1];
+            realAccl[2] = acceleration[2];
+            realMgnt[0] = magneticField[0];
+            realMgnt[1] = magneticField[1];
+            realMgnt[2] = magneticField[2];
+            float gx = realGyro[0];
+            float gy = realGyro[1];
+            float gz = realGyro[2];
+            float ax = realAccl[0];
+            float ay = realAccl[1];
+            float az = realAccl[2];
+            float mx = realMgnt[0];
+            float my = realMgnt[1];
+            float mz = realMgnt[2];
+            float exInt = 0f, eyInt = 0f, ezInt = 0f;
+            float q1 = 0f, q2 = 0f, q3 = 0f;
+            float q0 = 1.0f;
+            float halfT = 0.024f;
+            float Ki = 1.0f;
+            float Kp = 4.50f;
+            float q0q0 = q0 * q0;
+            float q0q1 = q0 * q1;
+            float q0q2 = q0 * q2;
+            float q0q3 = q0 * q3;
+            float q1q1 = q1 * q1;
+            float q1q2 = q1 * q2;
+            float q1q3 = q1 * q3;
+            float q2q2 = q2 * q2;
+            float q2q3 = q2 * q3;
+            float q3q3 = q3 * q3;
+
+            float norm = 1 / Math.Sqrt(ax * ax + ay * ay + az * az);
+            ax *= norm;
+            ay *= norm;
+            az *= norm;
+
+            norm = 1 / Math.Sqrt(mx * mx + my * my + mz * mz); //Normalize magnetometer
+            mx *= norm;
+            my *= norm;
+            mz *= norm;
+
+            // compute reference direction of flux
+            float hx = 2f * mx * (0.5f - q2q2 - q3q3) + 2f * my * (q1q2 - q0q3) + 2f * mz * (q1q3 + q0q2);
+            float hy = 2f * mx * (q1q2 + q0q3) + 2f * my * (0.5f - q1q1 - q3q3) + 2f * mz * (q2q3 - q0q1);
+            float hz = 2f * mx * (q1q3 - q0q2) + 2f * my * (q2q3 + q0q1) + 2 * mz * (0.5f - q1q1 - q2q2);
+            float bx = Math.Sqrt(hx * hx + hy * hy);
+            float bz = hz;
+
+            // estimated direction of gravity and flux (v and w)
+            float vx = 2f * (q1q3 - q0q2);
+            float vy = 2f * (q0q1 + q2q3);
+            float vz = q0q0 - q1q1 - q2q2 + q3q3;
+            float wx = 2f * bx * (0.5f - q2q2 - q3q3) + 2f * bz * (q1q3 - q0q2);
+            float wy = 2f * bx * (q1q2 - q0q3) + 2f * bz * (q0q1 + q2q3);
+            float wz = 2f * bx * (q0q2 + q1q3) + 2f * bz * (0.5f - q1q1 - q2q2);
+
+            //error is sum of cross product between reference direction of fields and direction measured by sensors
+            float ex = ay * vz - az * vy + (my * wz - mz * wy);
+            float ey = az * vx - ax * vz + (mz * wx - mx * wz);
+            float ez = ax * vy - ay * vx + (mx * wy - my * wx);
+
+            if (ex != 0.0 && ey != 0.0 && ez != 0.0)
+            {
+                exInt += ex * Ki * halfT;
+                eyInt += ey * Ki * halfT;
+                ezInt += ez * Ki * halfT;
+
+                gx = gx + Kp * ex + exInt;
+                gy = gy + Kp * ey + eyInt;
+                gz = gz + Kp * ez + ezInt;
+            }
+
+            q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+            q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+            q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+            q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+
+            norm = (1 / Math.Sqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3));
+            q0 *= norm;
+            q1 *= norm;
+            q2 *= norm;
+            q3 *= norm;
+
+            Pitch = Math.Asin(-2 * q1 * q3 + 2 * q0 * q2) * 57.3f;
+            Roll = Math.Atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2 * q2 + 1) * 57.3f;
+            Yaw = Math.Atan2(-2 * q1 * q2 - 2 * q0 * q3, 2 * q2 * q2 + 2 * q3 * q3 - 1) * 57.3f;
+        }
+
+        /// <summary>
+        /// Gyroscope calibration offset, calculated by <see cref="ReGenerateGyroscopeOffset"/>
+        /// </summary>
+        public int[] GyroscopeCalibrationOffset { get; set; }
+        /// <summary>
+        /// Calibrates new Gyroscope Offset for <see cref="GyroscopeCalibrationOffset"/>
+        /// </summary>
+        public void ReGenerateGyroscopeOffset()
+        {
+            int tempGx = 0;
+            int tempGy = 0;
+            int tempGz = 0;
+            GyroscopeCalibrationOffset = new int[3];
+            for (int i = 0; i < 32; i++)
+            {
+                GyroscopeAccelerationRead(out _, out int[] gyro, GyroscopeCalibrationOffset);
+                tempGx += gyro[0];
+                tempGy += gyro[1];
+                tempGz += gyro[2];
+                Thread.Sleep(10);
+            }
+            GyroscopeCalibrationOffset[0] = tempGx >> 5;
+            GyroscopeCalibrationOffset[1] = tempGy >> 5;
+            GyroscopeCalibrationOffset[2] = tempGz >> 5;
+        }
+
         public override string ReadDeviceId()
         {
             return "Not supported";
@@ -275,7 +518,7 @@ namespace ICM20948
             REG_VAL_MAG_MODE_50HZ = 0x05,
             REG_VAL_MAG_MODE_100HZ = 0x08,
             REG_VAL_MAG_MODE_ST = 0x10
-        } 
+        }
         #endregion
     }
 }
