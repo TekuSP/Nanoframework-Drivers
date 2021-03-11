@@ -7,10 +7,13 @@ using DriverBase.Enums;
 using DriverBase.Interfaces;
 
 using SHTC3.Enums;
+
 namespace SHTC3
 {
     public class SHTC3 : DriverBaseI2C, ISleepSupport, ITemperatureSensor, IHumiditySensor
     {
+        #region Public Constructors
+
         public SHTC3(int I2CBusID, int deviceAddress = 0x70) : base("SHTC3", I2CBusID, deviceAddress)
         {
         }
@@ -19,7 +22,17 @@ namespace SHTC3
         {
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public bool IsSleeping { get; private set; }
+
+        public MeasurementModes MeasurementMode { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
 
         public float CalculateHumidity(HumidityType readHumidityType, float rawHumidity)
         {
@@ -27,6 +40,7 @@ namespace SHTC3
             {
                 case HumidityType.Relative:
                     return 100f * ((float)rawHumidity / 65535f);
+
                 default:
                     throw new ArgumentException("Only Relative humidity is supported in this sensor!");
             }
@@ -38,12 +52,41 @@ namespace SHTC3
             {
                 case TemperatureUnit.Celsius:
                     return -45f + (175f * ((float)rawTemperature / 65535f));
+
                 case TemperatureUnit.Fahrenheit:
                     return (-45f + (175f * ((float)rawTemperature / 65535f))) * (9.0f / 5f) + 32.0f;
+
                 default:
                     throw new ArgumentException("Only Celsius and Fahrenheit is supported in this sensor!");
             }
         }
+
+        public bool CheckCRC(ushort packet, byte cs)
+        {
+            byte upper = (byte)(packet >> 8);
+            byte lower = (byte)(packet & 0x00FF);
+            byte[] data = new byte[] { upper, lower };
+            byte crc = 0xFF;
+            byte poly = 0x31;
+
+            for (byte indi = 0; indi < 2; indi++)
+            {
+                crc ^= data[indi];
+
+                for (byte indj = 0; indj < 8; indj++)
+                {
+                    if ((crc & 0x80) == 1)
+                        crc = (byte)((crc << 1) ^ poly);
+                    else
+                        crc <<= 1;
+                }
+            }
+
+            if ((cs ^ crc) == 1)
+                return false;
+            return true;
+        }
+
         /// <summary>
         /// Not supported
         /// </summary>
@@ -114,6 +157,7 @@ namespace SHTC3
                     RHlb = I2CDevice.ReadByte();
                     RHcs = I2CDevice.ReadByte();
                     break;
+
                 case MeasurementModes.SHTC3_CMD_CSD_RHF_LPM:
                 case MeasurementModes.SHTC3_CMD_CSD_RHF_NPM:
                     Thread.Sleep(20);
@@ -121,6 +165,7 @@ namespace SHTC3
                     RHlb = I2CDevice.ReadByte();
                     RHcs = I2CDevice.ReadByte();
                     break;
+
                 default:
                     return -1;
             }
@@ -140,6 +185,7 @@ namespace SHTC3
         {
             return "Sensirion";
         }
+
         /// <summary>
         /// Not supported
         /// </summary>
@@ -186,6 +232,7 @@ namespace SHTC3
                     I2CDevice.ReadByte();
                     I2CDevice.ReadByte();
                     break;
+
                 case MeasurementModes.SHTC3_CMD_CSD_TF_LPM:
                 case MeasurementModes.SHTC3_CMD_CSD_TF_NPM:
                     Thread.Sleep(20);
@@ -193,6 +240,7 @@ namespace SHTC3
                     Tlb = I2CDevice.ReadByte();
                     Tcs = I2CDevice.ReadByte();
                     break;
+
                 default:
                     return -1;
             }
@@ -202,79 +250,12 @@ namespace SHTC3
             Thread.Sleep(100);
             return T;
         }
+
         public float ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
             return CalculateTemperature(readTemperatureUnit, ReadTemperature());
         }
 
-        public void Sleep()
-        {
-            if (IsSleeping) //We are already asleep
-                return;
-            if (WriteCommand(Commands.SHTC3_CMD_SLEEP) == Status.SHTC3_Status_Nominal)
-                IsSleeping = true;
-        }
-
-        public void WakeUp()
-        {
-            if (!IsSleeping) //We are already awake
-                return;
-            if (WriteCommand(Commands.SHTC3_CMD_WAKE) == Status.SHTC3_Status_Nominal)
-                IsSleeping = false;
-        }
-
-        public override void WriteData(params byte[] data)
-        {
-            I2CDevice.Write(data);
-        }
-        public override void Start()
-        {
-            base.Start();
-            WakeUp();
-            ReadDeviceId();
-            SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSE_RHF_NPM);
-            IsSleeping = true; // Assume the sensor is asleep to begin (there won't be any harm in waking it up if it is already awake)
-        }
-        public override void Stop()
-        {
-            WakeUp();
-            WriteCommand(Commands.SHTC3_CMD_SFT_RST);
-            base.Stop();
-        }
-        public bool CheckCRC(ushort packet, byte cs)
-        {
-            byte upper = (byte)(packet >> 8);
-            byte lower = (byte)(packet & 0x00FF);
-            byte[] data = new byte[] { upper, lower };
-            byte crc = 0xFF;
-            byte poly = 0x31;
-
-            for (byte indi = 0; indi < 2; indi++)
-            {
-                crc ^= data[indi];
-
-                for (byte indj = 0; indj < 8; indj++)
-                {
-                    if ((crc & 0x80) == 1)
-                        crc = (byte)((crc << 1) ^ poly);
-                    else
-                        crc <<= 1;
-                }
-            }
-
-            if ((cs ^ crc) == 1)
-                return false;
-            return true;
-
-        }
-        public Status WriteCommand(Commands command)
-        {
-            var result = I2CDevice.Write(new SpanByte(new byte[] { (byte)(((ushort)command) >> 8), (byte)(((ushort)command) & 0x00FF) }));
-            if (result.Status == I2cTransferStatus.FullTransfer)
-                return Status.SHTC3_Status_Nominal;
-            return Status.SHTC3_Status_Error;
-        }
-        public MeasurementModes MeasurementMode { get; private set; }
         public Status SetMeasurmentMode(MeasurementModes measurementMode)
         {
             var result = I2CDevice.Write(new SpanByte(new byte[] { (byte)(((ushort)measurementMode) >> 8), (byte)(((ushort)measurementMode) & 0x00FF) }));
@@ -285,5 +266,52 @@ namespace SHTC3
             }
             return Status.SHTC3_Status_Error;
         }
+
+        public void Sleep()
+        {
+            if (IsSleeping) //We are already asleep
+                return;
+            if (WriteCommand(Commands.SHTC3_CMD_SLEEP) == Status.SHTC3_Status_Nominal)
+                IsSleeping = true;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            WakeUp();
+            ReadDeviceId();
+            SetMeasurmentMode(MeasurementModes.SHTC3_CMD_CSE_RHF_NPM);
+            IsSleeping = true; // Assume the sensor is asleep to begin (there won't be any harm in waking it up if it is already awake)
+        }
+
+        public override void Stop()
+        {
+            WakeUp();
+            WriteCommand(Commands.SHTC3_CMD_SFT_RST);
+            base.Stop();
+        }
+
+        public void WakeUp()
+        {
+            if (!IsSleeping) //We are already awake
+                return;
+            if (WriteCommand(Commands.SHTC3_CMD_WAKE) == Status.SHTC3_Status_Nominal)
+                IsSleeping = false;
+        }
+
+        public Status WriteCommand(Commands command)
+        {
+            var result = I2CDevice.Write(new SpanByte(new byte[] { (byte)(((ushort)command) >> 8), (byte)(((ushort)command) & 0x00FF) }));
+            if (result.Status == I2cTransferStatus.FullTransfer)
+                return Status.SHTC3_Status_Nominal;
+            return Status.SHTC3_Status_Error;
+        }
+
+        public override void WriteData(params byte[] data)
+        {
+            I2CDevice.Write(data);
+        }
+
+        #endregion Public Methods
     }
 }
