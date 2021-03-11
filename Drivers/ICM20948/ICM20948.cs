@@ -48,9 +48,9 @@ namespace ICM20948
         public byte[] ReadSecondary(byte I2CAddr, byte registerAddr, byte length)
         {
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
-            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_ADDR, I2CAddr);
-            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_REG, registerAddr);
-            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV1_CTRL, (byte)(((byte)ICM20948_BANK3.REG_VAL_BIT_SLV0_EN) | length));
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV0_ADDR, I2CAddr);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV0_REG, registerAddr);
+            WritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV0_CTRL, (byte)(((byte)ICM20948_BANK3.REG_VAL_BIT_SLV0_EN) | length));
 
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
             var temp = ReadWritePrimary((byte)ICM20948_BANK0.REG_ADD_USER_CTRL);
@@ -62,7 +62,7 @@ namespace ICM20948
 
             byte[] returnValue = new byte[length];
             for (byte i = 0; i < length; i++)
-                returnValue[i] = ReadWritePrimary((byte)(((byte)ICM20948_BANK0.REG_VAL_REG_BANK_0) + i));
+                returnValue[i] = ReadWritePrimary((byte)(((byte)ICM20948_BANK0.REG_ADD_EXT_SENS_DATA_00) + i));
 
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
             temp = ReadWritePrimary((byte)ICM20948_BANK3.REG_ADD_I2C_SLV0_CTRL);
