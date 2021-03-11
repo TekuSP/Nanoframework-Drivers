@@ -116,7 +116,7 @@ namespace ICM20948
             if (!MagSelfTest()) //Magnetic field Self Test
             {
                 Stop();
-                throw new SystemException("ICM20948 Magnetic Self-Test routine failed!");
+                throw new SystemException("AK09916 Magnetic Self-Test routine failed!");
             }
             WriteSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_WRITE, (byte)ICM20948_MAG.REG_ADD_MAG_CNTL2, (byte)ICM20948_MAG.REG_VAL_MAG_MODE_20HZ); //20 HZ mode
         }
