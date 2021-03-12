@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="HDC1080.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

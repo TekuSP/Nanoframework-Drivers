@@ -53,6 +53,7 @@
     <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MHZ19B.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
