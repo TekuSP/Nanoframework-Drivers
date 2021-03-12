@@ -68,20 +68,29 @@ namespace Meteostanice
             //}
             Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
             Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
-            ICM20948.ICM20948 icm = new ICM20948.ICM20948(1);
-            icm.Start();
+            //ICM20948.ICM20948 icm = new ICM20948.ICM20948(1);
+            //icm.Start();
 
+            //while (true)
+            //{
+            //    icm.GyroscopeAccelerationRead(out int[] Accel, out int[] Gyro);
+            //    icm.MagneticFieldRead(out int[] Mag);
+            //    icm.UpdatePitchRollYaw(Accel, Gyro, Mag);
+            //    Debug.WriteLine("/-------------------------------------------------------------/");
+            //    Debug.WriteLine(string.Format("Roll = {0} , Pitch = {1} , Yaw = {2}", icm.Roll, icm.Pitch, icm.Yaw));
+            //    Debug.WriteLine(string.Format("Acceleration:  X = {0} , Y = {1} , Z = {2}", Accel[0], Accel[1], Accel[2]));
+            //    Debug.WriteLine(string.Format("Gyroscope:     X = {0} , Y = {1} , Z = {2}", Gyro[0], Gyro[1], Gyro[2]));
+            //    Debug.WriteLine(string.Format("Magnetic:      X = {0} , Y = {1} , Z = {2}", Mag[0], Mag[1], Mag[2]));
+            //    Thread.Sleep(1000);
+            //}
+            SHTC3.SHTC3 sHTC3 = new SHTC3.SHTC3(1);
+            sHTC3.Start();
+            Debug.WriteLine($"Device {sHTC3.ReadManufacturerId()} {sHTC3.ReadDeviceId()} - {sHTC3.ReadSerialNumber()}");
             while (true)
             {
-                icm.GyroscopeAccelerationRead(out int[] Accel, out int[] Gyro);
-                icm.MagneticFieldRead(out int[] Mag);
-                icm.UpdatePitchRollYaw(Accel, Gyro, Mag);
-                Debug.WriteLine("/-------------------------------------------------------------/");
-                Debug.WriteLine(string.Format("Roll = {0} , Pitch = {1} , Yaw = {2}", icm.Roll, icm.Pitch, icm.Yaw));
-                Debug.WriteLine(string.Format("Acceleration:  X = {0} , Y = {1} , Z = {2}", Accel[0], Accel[1], Accel[2]));
-                Debug.WriteLine(string.Format("Gyroscope:     X = {0} , Y = {1} , Z = {2}", Gyro[0], Gyro[1], Gyro[2]));
-                Debug.WriteLine(string.Format("Magnetic:      X = {0} , Y = {1} , Z = {2}", Mag[0], Mag[1], Mag[2]));
-                Thread.Sleep(1000);
+                Debug.WriteLine($"Temperature is: {sHTC3.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius)} C");
+                Debug.WriteLine($"Humidity is: {sHTC3.ReadHumidity(DriverBase.Enums.HumidityType.Relative)} %");
+                Thread.Sleep(5000);
             }
         }
 

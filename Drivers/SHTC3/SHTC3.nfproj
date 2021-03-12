@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <NanoFrameworkProjectSystemPath>$(MSBuildToolsPath)..\..\..\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
   </PropertyGroup>
@@ -8,34 +8,20 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{11A8DD76-328B-46DF-9F39-F559912D0360};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>392595b2-2e74-4dec-8ae8-50efbf15aa6d</ProjectGuid>
+    <ProjectGuid>1780219d-826d-44e5-8ed7-1abd5986e047</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>ESP32_DriverBase</RootNamespace>
-    <AssemblyName>ESP32_DriverBase</AssemblyName>
+    <RootNamespace>SHTC3</RootNamespace>
+    <AssemblyName>SHTC3</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Enums\CommunicationType.cs" />
-    <Compile Include="Enums\HumidityType.cs" />
-    <Compile Include="Enums\PressureType.cs" />
-    <Compile Include="Enums\TemperatureUnit.cs" />
-    <Compile Include="Helpers\BitHelper.cs" />
-    <Compile Include="Interfaces\IADCModule.cs" />
-    <Compile Include="Interfaces\IAdvancedCO2Sensor.cs" />
-    <Compile Include="Interfaces\IAdvancedHumiditySensor.cs" />
-    <Compile Include="Interfaces\IAdvancedTemperatureSensor.cs" />
-    <Compile Include="Interfaces\ICO2Sensor.cs" />
-    <Compile Include="Interfaces\IDewPointSensor.cs" />
-    <Compile Include="Interfaces\IDriverBase.cs" />
-    <Compile Include="Interfaces\IHumiditySensor.cs" />
-    <Compile Include="Interfaces\IPressureSensor.cs" />
-    <Compile Include="Interfaces\IRegister.cs" />
-    <Compile Include="Interfaces\IRegisterSensor.cs" />
-    <Compile Include="Interfaces\ISleepSupport.cs" />
-    <Compile Include="Interfaces\ITemperatureSensor.cs" />
+    <Compile Include="Enums\Status.cs" />
+    <Compile Include="Enums\MeasurementModes.cs" />
+    <Compile Include="Enums\Commands.cs" />
+    <Compile Include="SHTC3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -44,9 +30,18 @@
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
+    <Reference Include="System.Device.I2c, Version=1.0.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.System.Device.I2c.1.0.1-preview.23\lib\System.Device.I2c.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DriverBaseI2C\DriverBaseI2C.nfproj" />
+    <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>
