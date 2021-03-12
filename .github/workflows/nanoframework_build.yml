@@ -39,10 +39,10 @@ jobs:
       - name: Install NuGet client
         uses: nuget/setup-nuget@v1
         with:
-          nuget-version: '5.8.0'
+          nuget-version: 'latest'
 
       - name: Restore nugets
-        run: nuget restore ${{ env.solution }} -ConfigFile NuGet.Config
+        run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
         working-directory: main
         
       - name: Build NanoFramework Application
