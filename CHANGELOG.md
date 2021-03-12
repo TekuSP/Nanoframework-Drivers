@@ -1,11 +1,22 @@
 
-<a name="0.0.1"></a>
-## 0.0.1
+<a name="v0.2-alpha"></a>
+## v0.2-alpha
 
-> 2021-03-11
+> 2021-03-12
+
+### Reverts
+
+* Remove config file from build
+* Remove obsolete nuget.config
 
 ### Pull Requests
 
+* Merge pull request [#31](https://github.com/TekuSP/Meteostanice-CSharp/issues/31) from TekuSP/nugets
+* Merge pull request [#30](https://github.com/TekuSP/Meteostanice-CSharp/issues/30) from TekuSP/SHTC3
+* Merge pull request [#29](https://github.com/TekuSP/Meteostanice-CSharp/issues/29) from TekuSP/ADS1015
+* Merge pull request [#27](https://github.com/TekuSP/Meteostanice-CSharp/issues/27) from TekuSP/ICM_sensor
+* Merge pull request [#28](https://github.com/TekuSP/Meteostanice-CSharp/issues/28) from TekuSP/mergify/TekuSP/config-update
+* Merge pull request [#26](https://github.com/TekuSP/Meteostanice-CSharp/issues/26) from TekuSP/TestWorkFlow
 * Merge pull request [#24](https://github.com/TekuSP/Meteostanice-CSharp/issues/24) from TekuSP/dependabot/nuget/nanoFramework.Runtime.Events-1.9.0-preview.9
 * Merge pull request [#23](https://github.com/TekuSP/Meteostanice-CSharp/issues/23) from TekuSP/dependabot/nuget/nanoFramework.CoreLibrary-1.10.1-preview.9
 * Merge pull request [#21](https://github.com/TekuSP/Meteostanice-CSharp/issues/21) from TekuSP/dependabot/nuget/nanoFramework.Windows.Storage.Streams-1.10.1-preview.24
