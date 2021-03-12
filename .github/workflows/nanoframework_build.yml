@@ -57,7 +57,7 @@ jobs:
           Configuration: ${{ matrix.configuration }}
           
       - name: Pack nugets
-        run: GenerateNugets.ps1
+        run: ./GenerateNugets.ps1
         working-directory: main
         if: ${{ matrix.configuration == 'Release' }}
 
