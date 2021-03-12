@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CSharp.BlankApplication")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("TekuSP.Drivers.DriverBaseI2C")]
+[assembly: AssemblyDescription("Nuget Package for Nanoframework, used as base for all I2C Drivers from me.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CSharp.BlankApplication")]
-[assembly: AssemblyCopyright("Copyright © ")]
+[assembly: AssemblyCompany("Richard \"TekuSP\" Torhan")]
+[assembly: AssemblyProduct("TekuSP.Drivers.DriverBaseI2C")]
+[assembly: AssemblyCopyright("Copyright Richard \"TekuSP\" Torhan 2021 ")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,11 +28,10 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
-
+[assembly: AssemblyVersion("0.2.*")]
+[assembly: AssemblyFileVersion("0.2.*")]
 /////////////////////////////////////////////////////////////////
 // This attribute is mandatory when building Interop libraries //
 // update this whenever the native assembly signature changes  //
-[assembly: AssemblyNativeVersion("1.0.0.0")]
+[assembly: AssemblyNativeVersion("0.2.*")]
 /////////////////////////////////////////////////////////////////

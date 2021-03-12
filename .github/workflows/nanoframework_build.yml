@@ -8,9 +8,6 @@ on: [push, pull_request]
 defaults:
   run:
     shell: pwsh
-
-
-
 jobs:
   Build:
     strategy:
@@ -21,7 +18,6 @@ jobs:
     runs-on: windows-latest
     env:
       solution: 'Meteostanice.sln'
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -43,15 +39,33 @@ jobs:
       - name: Install NuGet client
         uses: nuget/setup-nuget@v1
         with:
-          nuget-version: '5.8.0'
+          nuget-version: 'latest'
 
       - name: Restore nugets
-        run: nuget restore ${{ env.solution }} -ConfigFile NuGet.Config
+        run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
         working-directory: main
         
-
       - name: Build NanoFramework Application
         run: msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
         working-directory: main
         env:
           Configuration: ${{ matrix.configuration }}
+          
+      - name: Pack nugets
+        run: ./GenerateNugets.ps1
+        working-directory: main
+        if: ${{ matrix.configuration == 'Release' }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ matrix.configuration == 'Release' }}
+        with:
+          name: TekuSP-Drivers
+          path: |
+            ${{ github.workspace }}\**\*.nupkg
+
+      - name: Push nugets to Github
+        if: ${{ matrix.configuration == 'Release' }}
+        run: |
+          nuget sources Add -Name github -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -UserName ${{ github.repository_owner }} -Password ${{ secrets.GITHUB_TOKEN }}
+          nuget push "**/*TekuSP*.nupkg" -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}

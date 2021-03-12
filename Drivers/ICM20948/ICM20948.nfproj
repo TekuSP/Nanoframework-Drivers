@@ -39,6 +39,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ICM20948.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

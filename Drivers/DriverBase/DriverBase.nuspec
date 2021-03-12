@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>TekuSP.Drivers.DriverBase</id>
+    <title>TekuSP DriverBase for Nanoframework</title>
+    <version>0.2</version><!--<version>$version$</version>-->
+    <authors>Richard "TekuSP" Torhan</authors>
+    <owners>Richard "TekuSP" Torhan</owners>
+    <license type="file">LICENSE.md</license>
+    <projectUrl>https://github.com/TekuSP/Meteostanice-CSharp</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <developmentDependency>false</developmentDependency>
+    <description>
+      Nuget Package for Nanoframework, used as base for all Drivers from TekuSP.
+    </description>
+    <releaseNotes>
+    </releaseNotes>
+    <repository type="git" url="https://github.com/TekuSP/Meteostanice-CSharp" commit="$commit$" />
+    <copyright>Copyright (c) Richard Torhan 2021</copyright>
+    <tags>drivers tekusp net netmf nf nanoframework</tags>
+    <dependencies>
+      <dependency id="nanoFramework.CoreLibrary" version="1.10.1-preview.11" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\DriverBase.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
+  </files>
+</package>

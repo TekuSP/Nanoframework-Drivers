@@ -12,8 +12,8 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>MHZ19</RootNamespace>
-    <AssemblyName>MHZ19</AssemblyName>
+    <RootNamespace>MHZ19B</RootNamespace>
+    <AssemblyName>MHZ19B</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
@@ -53,6 +53,7 @@
     <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MHZ19B.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
