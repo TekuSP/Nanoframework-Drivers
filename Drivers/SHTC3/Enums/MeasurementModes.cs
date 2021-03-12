@@ -1,9 +1,11 @@
-﻿namespace SHTC3.Enums
+﻿using System;
+
+namespace SHTC3.Enums
 {
     /// <summary>
     /// Measurment mode for SHTC3
     /// </summary>
-    public enum MeasurementModes
+    internal enum InternalMeasurementMode
     {
         /// <summary>
         /// Clock stretching, RH first, Normal power mode
@@ -44,5 +46,28 @@
         /// Polling, T first, Low power mode
         /// </summary>
         SHTC3_CMD_CSD_TF_LPM = 0x609C
+    }
+    public enum MeasurementMode
+    {
+        /// <summary>
+        /// Clock stretching, Normal power mode
+        /// </summary>
+        SHTC3_CMD_CSE_NPM = 1,
+
+        /// <summary>
+        /// Clock stretching, Low power mode
+        /// </summary>
+        SHTC3_CMD_CSE_LPM = 2,
+
+
+        /// <summary>
+        /// Polling, Normal power mode
+        /// </summary>
+        SHTC3_CMD_CSD_NPM = 3,
+
+        /// <summary>
+        /// Polling, Low power mode
+        /// </summary>
+        SHTC3_CMD_CSD_LPM = 4,
     }
 }

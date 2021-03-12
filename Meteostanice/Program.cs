@@ -88,9 +88,7 @@ namespace Meteostanice
             Debug.WriteLine($"Device {sHTC3.ReadManufacturerId()} {sHTC3.ReadDeviceId()} - {sHTC3.ReadSerialNumber()}");
             while (true)
             {
-                sHTC3.SetMeasurmentMode(SHTC3.Enums.MeasurementModes.SHTC3_CMD_CSD_TF_NPM);
                 Debug.WriteLine($"Temperature is: {sHTC3.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius)} C");
-                sHTC3.SetMeasurmentMode(SHTC3.Enums.MeasurementModes.SHTC3_CMD_CSD_RHF_NPM);
                 Debug.WriteLine($"Humidity is: {sHTC3.ReadHumidity(DriverBase.Enums.HumidityType.Relative)} %");
                 Thread.Sleep(5000);
             }
