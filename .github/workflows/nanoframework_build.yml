@@ -42,7 +42,7 @@ jobs:
           nuget-version: '5.8.0'
 
       - name: Restore nugets
-        run: nuget restore ${{ env.solution }}
+        run: nuget restore ${{ env.solution }} -ConfigFile NuGet.Config
         working-directory: main
         
       - name: Build NanoFramework Application
