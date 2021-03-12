@@ -25,7 +25,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\DriverBaseSPI\bin\Release\DriverBaseSPI.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\DriverBaseSPI.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

@@ -23,7 +23,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\DriverBase\bin\Release\DriverBase.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\DriverBase.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

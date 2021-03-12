@@ -28,7 +28,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\DriverBaseUART\bin\Release\DriverBaseUART.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\DriverBaseUART.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

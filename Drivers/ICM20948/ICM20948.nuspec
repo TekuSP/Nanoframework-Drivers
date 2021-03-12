@@ -27,7 +27,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\ICM20948\bin\Release\ICM20948.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\ICM20948.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

@@ -29,7 +29,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\MHZ19B\bin\Release\MHZ19B.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\MHZ19B.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

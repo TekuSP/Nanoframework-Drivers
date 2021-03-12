@@ -26,7 +26,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\ADS1015\bin\Release\ADS1015.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\ADS1015.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

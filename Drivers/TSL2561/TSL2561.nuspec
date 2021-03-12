@@ -26,7 +26,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\TSL2561\bin\Release\TSL2561.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\TSL2561.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

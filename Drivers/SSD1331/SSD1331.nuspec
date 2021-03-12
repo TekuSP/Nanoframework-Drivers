@@ -29,7 +29,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\SSD1331\bin\Release\SSD1331.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\SSD1331.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

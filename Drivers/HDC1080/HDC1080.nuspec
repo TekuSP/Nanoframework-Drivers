@@ -27,7 +27,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\HDC1080\bin\Release\HDC1080.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\HDC1080.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>

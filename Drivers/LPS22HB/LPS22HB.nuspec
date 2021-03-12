@@ -26,7 +26,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Drivers\LPS22HB\bin\Release\LPS22HB.*" target="lib" />
-    <file src="LICENSE.md" target="" />
+    <file src="bin\Release\LPS22HB.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
   </files>
 </package>
