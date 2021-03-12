@@ -46,7 +46,7 @@ jobs:
           nuget-version: '5.8.0'
 
       - name: Restore nugets
-        run: nuget restore ${{ env.solution }} -ConfigFile NuGet.Config
+        run: nuget restore ${{ env.solution }}
         working-directory: main
         
 
