@@ -62,7 +62,7 @@ jobs:
         with:
           name: TekuSP-Drivers
           path: |
-            ${{ github.workspace }}\**\*.nupkg
+            ${{ github.workspace }}\**\*TekuSP*.nupkg
 
       - name: Push nugets to Github
         if: ${{ matrix.configuration == 'Release' }}
