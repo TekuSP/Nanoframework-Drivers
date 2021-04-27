@@ -3,6 +3,6 @@ Foreach ($nuget in $nugetsToProcess)
 {
     echo "-----------------------------------";
     echo "Packing nuget file: $nuget";
-    &"nuget.exe" "pack" "$nuget" "-properties" "Configuration=Release" | Write-Host;
+    &"nuget.exe" "pack" "$nuget" "-properties" "Configuration=Release" "-IncludeReferencedProjects" | Write-Host;
     echo "Finished packing nuget file: $nuget";
 }
