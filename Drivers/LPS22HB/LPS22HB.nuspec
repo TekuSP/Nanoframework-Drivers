@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>TekuSP.Drivers.LPS22HB</id>
     <title>TekuSP I2C Driver for STMicroelectronics LPS22HB</title>
-    <version>0.2</version><!--<version>$version$</version>-->
+    <version>0.2</version>
+    <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
     <license type="file">LICENSE.md</license>
@@ -21,8 +22,8 @@
     <dependencies>
       <dependency id="TekuSP.Drivers.DriverBase" version="0.2" />
       <dependency id="TekuSP.Drivers.DriverBaseI2C" version="0.2" />
-      <dependency id="nanoFramework.CoreLibrary" version="1.10.1-preview.11" />
-      <dependency id="nanoFramework.System.Device.I2c" version="1.0.1-preview.23" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
+      <dependency id="nanoFramework.System.Device.I2c" version="1.0.1-preview.40" />
     </dependencies>
   </metadata>
   <files>

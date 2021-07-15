@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>TekuSP.Drivers.DriverBaseSPI</id>
     <title>TekuSP SPI DriverBase for Nanoframework</title>
-    <version>0.2</version><!--<version>$version$</version>-->
+    <version>0.2</version>
+    <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
     <license type="file">LICENSE.md</license>
@@ -20,8 +21,8 @@
     <tags>drivers spi tekusp net netmf nf nanoframework</tags>
     <dependencies>
       <dependency id="TekuSP.Drivers.DriverBase" version="0.2" />
-      <dependency id="nanoFramework.CoreLibrary" version="1.10.1-preview.11" />
-      <dependency id="nanoFramework.Windows.Devices.Spi" version="1.4.1-preview.31" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
+      <dependency id="nanoFramework.Windows.Devices.Spi" version="1.4.1-preview.49" />
     </dependencies>
   </metadata>
   <files>
