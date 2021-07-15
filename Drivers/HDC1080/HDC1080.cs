@@ -45,7 +45,7 @@ namespace HDC1080
 
         #region Public Methods
 
-        public float CalculateDewPoint(TemperatureUnit dewPointType, float rawTemperature, float rawHumidity)
+        public double CalculateDewPoint(TemperatureUnit dewPointType, double rawTemperature, double rawHumidity)
         {
             if (rawHumidity == 0)
                 throw new ArgumentException();
@@ -54,7 +54,7 @@ namespace HDC1080
             return 15927869 * (rawHumidity + ((1155072 * rawTemperature) / (15927869 + rawTemperature))) / (1155072 - rawHumidity - ((1155072 * rawTemperature) / (15927869 + rawTemperature)));
         }
 
-        public float CalculateHumidity(HumidityType readHumidityType, float rawHumidity)
+        public double CalculateHumidity(HumidityType readHumidityType, double rawHumidity)
         {
             switch (readHumidityType)
             {
@@ -69,7 +69,7 @@ namespace HDC1080
             }
         }
 
-        public float CalculateTemperature(TemperatureUnit readTemperatureUnit, float rawTemperature)
+        public double CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
         {
             switch (readTemperatureUnit)
             {
@@ -90,7 +90,7 @@ namespace HDC1080
             }
         }
 
-        public float GetAndCalculteDewPoint(TemperatureUnit dewPointType) => CalculateDewPoint(dewPointType, ReadTemperature(), ReadHumidity());
+        public double GetAndCalculteDewPoint(TemperatureUnit dewPointType) => CalculateDewPoint(dewPointType, ReadTemperature(), ReadHumidity());
 
         public void HeatUp(int seconds)
         {
@@ -121,9 +121,9 @@ namespace HDC1080
 
         public override string ReadDeviceId() => ReadData(0xFF).ToString();
 
-        public float ReadHumidity() => ReadData(0x01);
+        public double ReadHumidity() => ReadData(0x01);
 
-        public float ReadHumidity(HumidityType readHumidityType) => CalculateHumidity(readHumidityType, ReadHumidity());
+        public double ReadHumidity(HumidityType readHumidityType) => CalculateHumidity(readHumidityType, ReadHumidity());
 
         public override string ReadManufacturerId() => ReadData(0xFE).ToString();
 
@@ -136,9 +136,9 @@ namespace HDC1080
 
         public override string ReadSerialNumber() => $"{ReadData(0xFB)}{ReadData(0xFC)}{ReadData(0xFD)}";
 
-        public float ReadTemperature() => (ReadData(0x00) / 65536f);
+        public double ReadTemperature() => (ReadData(0x00) / 65536f);
 
-        public float ReadTemperature(TemperatureUnit readTemperatureUnit) => CalculateTemperature(readTemperatureUnit, ReadTemperature());
+        public double ReadTemperature(TemperatureUnit readTemperatureUnit) => CalculateTemperature(readTemperatureUnit, ReadTemperature());
 
         public void SetHeater(bool heaterTargetStatus)
         {

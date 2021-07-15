@@ -245,7 +245,7 @@ namespace MHZ19B
           ABC = 0x79,	// 1 ABC Mode ON/OFF       Turns ABC logic on or off (b[3] == 0xA0 - on, 0x00 - off)
           GetABC = 0x7D,	// 2 Get ABC logic status  (1 - enabled, 0 - disabled)	
           RawCO2 = 0x84,	// 3 Raw CO2
-          CO2UnlimitedTemp = 0x85,	// 4 Temp float, CO2 Unlimited
+          CO2UnlimitedTemp = 0x85,	// 4 Temp double, CO2 Unlimited
           CO2LimitedTemp = 0x86,	// 5 Temp integer, CO2 limited
           ZeroCalibration = 0x87,	// 6 Zero Calibration
           SpanCalibration = 0x88,	// 7 Span Calibration

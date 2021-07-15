@@ -55,8 +55,8 @@ namespace Meteostanice
             //var manu = lPS22HB.ReadManufacturerId();
             //var serial = lPS22HB.ReadSerialNumber();
             //var devID = lPS22HB.ReadDeviceId();
-            //float temperature;
-            //float pressure;
+            //double temperature;
+            //double pressure;
             //Debug.WriteLine($"Initialized device {manu} {devID} - {serial}");
             //while (true)
             //{
