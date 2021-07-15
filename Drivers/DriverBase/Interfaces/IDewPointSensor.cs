@@ -14,14 +14,14 @@
         /// <param name="rawTemperature">Raw data temperature</param>
         /// <param name="rawHumidity">Raw data humidity</param>
         /// <returns>Dewpoint</returns>
-        float CalculateDewPoint(Enums.TemperatureUnit dewPointType, float rawTemperature, float rawHumidity);
+        double CalculateDewPoint(Enums.TemperatureUnit dewPointType, double rawTemperature, double rawHumidity);
 
         /// <summary>
         /// Gets data from Temperature and Humidity sensors, calculates data
         /// </summary>
         /// <param name="dewPointType">Type of dewpoint</param>
         /// <returns>Dewpoint</returns>
-        float GetAndCalculteDewPoint(Enums.TemperatureUnit dewPointType);
+        double GetAndCalculteDewPoint(Enums.TemperatureUnit dewPointType);
 
         #endregion Public Methods
     }

@@ -47,7 +47,7 @@ namespace LPS22HB
 
         #region Public Methods
 
-        public float CalculatePressure(PressureType type, float rawPressure)
+        public double CalculatePressure(PressureType type, double rawPressure)
         {
             switch (type)
             {
@@ -65,7 +65,7 @@ namespace LPS22HB
             }
         }
 
-        public float CalculateTemperature(TemperatureUnit readTemperatureUnit, float rawTemperature)
+        public double CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
         {
             switch (readTemperatureUnit)
             {
@@ -105,7 +105,7 @@ namespace LPS22HB
             return "STMicroelectronics";
         }
 
-        public float ReadPressure()
+        public double ReadPressure()
         {
             WriteData(LPS22HBCommands.LPS22HB_CTRL_REG2, 0x1);
             if (!Status(0x1))
@@ -116,9 +116,9 @@ namespace LPS22HB
             return ((((long)pressOutH << 24) | ((long)pressOutL << 16) | ((long)pressOutXL << 8)) >> 8);
         }
 
-        public float ReadPressure(PressureType type)
+        public double ReadPressure(PressureType type)
         {
-            float pr = ReadPressure();
+            double pr = ReadPressure();
             if (pr == -1)
                 return pr;
             return CalculatePressure(type, pr);
@@ -133,7 +133,7 @@ namespace LPS22HB
             return "Not Supported";
         }
 
-        public float ReadTemperature()
+        public double ReadTemperature()
         {
             WriteData(LPS22HBCommands.LPS22HB_CTRL_REG2, 0x1);
             if (!Status(0x2))
@@ -143,7 +143,7 @@ namespace LPS22HB
             return ((tempOutH << 8) | (tempOutL & 0xff)) / 100.0f;
         }
 
-        public float ReadTemperature(TemperatureUnit readTemperatureUnit)
+        public double ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
             return CalculateTemperature(readTemperatureUnit, ReadTemperature());
         }

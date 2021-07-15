@@ -15,9 +15,9 @@
         /// <param name="readTemperatureUnit">Target unit to convert to</param>
         /// <param name="rawTemperature">Temperature to convert from, has to be in raw format</param>
         /// <returns>Returns temperature in target unit</returns>
-        float CalculateTemperature(Enums.TemperatureUnit readTemperatureUnit, float rawTemperature);
+        double CalculateTemperature(Enums.TemperatureUnit readTemperatureUnit, double rawTemperature);
 
-        float ReadTemperature();
+        double ReadTemperature();
 
         /// <summary>
         /// Read temperature from sensor and convert to target unit
@@ -25,7 +25,7 @@
         /// <param name="readTemperatureUnit">Target unit to convert to</param>
         /// <returns>Returns data from sensor in target unit</returns>
 
-        float ReadTemperature(Enums.TemperatureUnit readTemperatureUnit);
+        double ReadTemperature(Enums.TemperatureUnit readTemperatureUnit);
 
         #endregion Public Methods
     }

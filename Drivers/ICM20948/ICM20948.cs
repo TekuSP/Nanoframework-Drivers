@@ -132,11 +132,11 @@ namespace ICM20948
         /// </summary>
         public int[] GyroscopeCalibrationOffset { get; set; }
 
-        public float Pitch { get; private set; }
+        public double Pitch { get; private set; }
 
-        public float Roll { get; private set; }
+        public double Roll { get; private set; }
 
-        public float Yaw { get; private set; }
+        public double Yaw { get; private set; }
 
         #endregion Public Properties
 
@@ -430,9 +430,9 @@ namespace ICM20948
 
         private void ImuAHRSUpdate(in int[] acceleration, in int[] gyroscope, in int[] magneticField)
         {
-            float[] realGyro = new float[3];
-            float[] realAccl = new float[3];
-            float[] realMgnt = new float[3];
+            double[] realGyro = new double[3];
+            double[] realAccl = new double[3];
+            double[] realMgnt = new double[3];
             realGyro[0] = (gyroscope[0] / 32.8f) * 0.0175f;
             realGyro[1] = (gyroscope[1] / 32.8f) * 0.0175f;
             realGyro[2] = (gyroscope[2] / 32.8f) * 0.0175f;
@@ -442,33 +442,33 @@ namespace ICM20948
             realMgnt[0] = magneticField[0];
             realMgnt[1] = magneticField[1];
             realMgnt[2] = magneticField[2];
-            float gx = realGyro[0];
-            float gy = realGyro[1];
-            float gz = realGyro[2];
-            float ax = realAccl[0];
-            float ay = realAccl[1];
-            float az = realAccl[2];
-            float mx = realMgnt[0];
-            float my = realMgnt[1];
-            float mz = realMgnt[2];
-            float exInt = 0f, eyInt = 0f, ezInt = 0f;
-            float q1 = 0f, q2 = 0f, q3 = 0f;
-            float q0 = 1.0f;
-            float halfT = 0.024f;
-            float Ki = 1.0f;
-            float Kp = 4.50f;
-            float q0q0 = q0 * q0;
-            float q0q1 = q0 * q1;
-            float q0q2 = q0 * q2;
-            float q0q3 = q0 * q3;
-            float q1q1 = q1 * q1;
-            float q1q2 = q1 * q2;
-            float q1q3 = q1 * q3;
-            float q2q2 = q2 * q2;
-            float q2q3 = q2 * q3;
-            float q3q3 = q3 * q3;
+            double gx = realGyro[0];
+            double gy = realGyro[1];
+            double gz = realGyro[2];
+            double ax = realAccl[0];
+            double ay = realAccl[1];
+            double az = realAccl[2];
+            double mx = realMgnt[0];
+            double my = realMgnt[1];
+            double mz = realMgnt[2];
+            double exInt = 0f, eyInt = 0f, ezInt = 0f;
+            double q1 = 0f, q2 = 0f, q3 = 0f;
+            double q0 = 1.0f;
+            double halfT = 0.024f;
+            double Ki = 1.0f;
+            double Kp = 4.50f;
+            double q0q0 = q0 * q0;
+            double q0q1 = q0 * q1;
+            double q0q2 = q0 * q2;
+            double q0q3 = q0 * q3;
+            double q1q1 = q1 * q1;
+            double q1q2 = q1 * q2;
+            double q1q3 = q1 * q3;
+            double q2q2 = q2 * q2;
+            double q2q3 = q2 * q3;
+            double q3q3 = q3 * q3;
 
-            float norm = 1 / Math.Sqrt(ax * ax + ay * ay + az * az);
+            double norm = 1 / Math.Sqrt(ax * ax + ay * ay + az * az);
             ax *= norm;
             ay *= norm;
             az *= norm;
@@ -479,24 +479,24 @@ namespace ICM20948
             mz *= norm;
 
             // compute reference direction of flux
-            float hx = 2f * mx * (0.5f - q2q2 - q3q3) + 2f * my * (q1q2 - q0q3) + 2f * mz * (q1q3 + q0q2);
-            float hy = 2f * mx * (q1q2 + q0q3) + 2f * my * (0.5f - q1q1 - q3q3) + 2f * mz * (q2q3 - q0q1);
-            float hz = 2f * mx * (q1q3 - q0q2) + 2f * my * (q2q3 + q0q1) + 2 * mz * (0.5f - q1q1 - q2q2);
-            float bx = Math.Sqrt(hx * hx + hy * hy);
-            float bz = hz;
+            double hx = 2f * mx * (0.5f - q2q2 - q3q3) + 2f * my * (q1q2 - q0q3) + 2f * mz * (q1q3 + q0q2);
+            double hy = 2f * mx * (q1q2 + q0q3) + 2f * my * (0.5f - q1q1 - q3q3) + 2f * mz * (q2q3 - q0q1);
+            double hz = 2f * mx * (q1q3 - q0q2) + 2f * my * (q2q3 + q0q1) + 2 * mz * (0.5f - q1q1 - q2q2);
+            double bx = Math.Sqrt(hx * hx + hy * hy);
+            double bz = hz;
 
             // estimated direction of gravity and flux (v and w)
-            float vx = 2f * (q1q3 - q0q2);
-            float vy = 2f * (q0q1 + q2q3);
-            float vz = q0q0 - q1q1 - q2q2 + q3q3;
-            float wx = 2f * bx * (0.5f - q2q2 - q3q3) + 2f * bz * (q1q3 - q0q2);
-            float wy = 2f * bx * (q1q2 - q0q3) + 2f * bz * (q0q1 + q2q3);
-            float wz = 2f * bx * (q0q2 + q1q3) + 2f * bz * (0.5f - q1q1 - q2q2);
+            double vx = 2f * (q1q3 - q0q2);
+            double vy = 2f * (q0q1 + q2q3);
+            double vz = q0q0 - q1q1 - q2q2 + q3q3;
+            double wx = 2f * bx * (0.5f - q2q2 - q3q3) + 2f * bz * (q1q3 - q0q2);
+            double wy = 2f * bx * (q1q2 - q0q3) + 2f * bz * (q0q1 + q2q3);
+            double wz = 2f * bx * (q0q2 + q1q3) + 2f * bz * (0.5f - q1q1 - q2q2);
 
             //error is sum of cross product between reference direction of fields and direction measured by sensors
-            float ex = ay * vz - az * vy + (my * wz - mz * wy);
-            float ey = az * vx - ax * vz + (mz * wx - mx * wz);
-            float ez = ax * vy - ay * vx + (mx * wy - my * wx);
+            double ex = ay * vz - az * vy + (my * wz - mz * wy);
+            double ey = az * vx - ax * vz + (mz * wx - mx * wz);
+            double ez = ax * vy - ay * vx + (mx * wy - my * wx);
 
             if (ex != 0.0 && ey != 0.0 && ez != 0.0)
             {

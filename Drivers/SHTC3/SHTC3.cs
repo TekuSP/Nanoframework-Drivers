@@ -37,27 +37,27 @@ namespace SHTC3
 
         #region Public Methods
 
-        public float CalculateHumidity(HumidityType readHumidityType, float rawHumidity)
+        public double CalculateHumidity(HumidityType readHumidityType, double rawHumidity)
         {
             switch (readHumidityType)
             {
                 case HumidityType.Relative:
-                    return 100f * ((float)rawHumidity / 65535f);
+                    return 100f * ((double)rawHumidity / 65535f);
 
                 default:
                     throw new ArgumentException("Only Relative humidity is supported in this sensor!");
             }
         }
 
-        public float CalculateTemperature(TemperatureUnit readTemperatureUnit, float rawTemperature)
+        public double CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
         {
             switch (readTemperatureUnit)
             {
                 case TemperatureUnit.Celsius:
-                    return -45f + (175f * ((float)rawTemperature / 65535f));
+                    return -45f + (175f * ((double)rawTemperature / 65535f));
 
                 case TemperatureUnit.Fahrenheit:
-                    return (-45f + (175f * ((float)rawTemperature / 65535f))) * (9.0f / 5f) + 32.0f;
+                    return (-45f + (175f * ((double)rawTemperature / 65535f))) * (9.0f / 5f) + 32.0f;
 
                 default:
                     throw new ArgumentException("Only Celsius and Fahrenheit is supported in this sensor!");
@@ -123,7 +123,7 @@ namespace SHTC3
             return ID.ToString();
         }
 
-        public float ReadHumidity()
+        public double ReadHumidity()
         {
             WakeUp();
             byte RHhb;
@@ -154,7 +154,7 @@ namespace SHTC3
             return RH;
         }
 
-        public float ReadHumidity(HumidityType readHumidityType)
+        public double ReadHumidity(HumidityType readHumidityType)
         {
             return CalculateHumidity(readHumidityType, ReadHumidity());
         }
@@ -173,7 +173,7 @@ namespace SHTC3
             return "Not supported";
         }
 
-        public float ReadTemperature() //TODO: This requires some major refactoring, wtf is going on
+        public double ReadTemperature() //TODO: This requires some major refactoring, wtf is going on
         {
             WakeUp();
             byte Thb;
@@ -204,7 +204,7 @@ namespace SHTC3
             return T;
         }
 
-        public float ReadTemperature(TemperatureUnit readTemperatureUnit)
+        public double ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
             return CalculateTemperature(readTemperatureUnit, ReadTemperature());
         }
