@@ -1,6 +1,6 @@
 ﻿using DriverBase.Enums;
 using DriverBase.Interfaces;
-using Windows.Devices.Spi;
+using System.Device.Spi;
 
 namespace DriverBase
 {
@@ -10,8 +10,6 @@ namespace DriverBase
     public abstract class DriverBaseSPI : IDriverBase
     {
         #region Protected Fields
-
-        protected string SPIBusID;
 
         protected SpiConnectionSettings SpiConnectionSettings;
 
@@ -27,14 +25,14 @@ namespace DriverBase
         /// <param name="name">Name of the device</param>
         /// <param name="SPIBusID">SPI Bus ID</param>
         /// <param name="chipSelectPin">Chip Select Pin</param>
-        public DriverBaseSPI(string name, string SPIBusID, int chipSelectPin)
+        public DriverBaseSPI(string name, int SPIBusID, int chipSelectPin)
         {
             SpiConnectionSettings = new SpiConnectionSettings(chipSelectPin)
             {
                 SharingMode = SpiSharingMode.Shared,
-                Mode = SpiMode.Mode0
+                Mode = SpiMode.Mode0,
+                BusId = SPIBusID
             };
-            this.SPIBusID = SPIBusID;
             Name = name;
             DeviceAddress = chipSelectPin;
         }
@@ -45,10 +43,10 @@ namespace DriverBase
         /// <param name="name">Name of the device</param>
         /// <param name="SPIBusID">SPI Bus ID</param>
         /// <param name="spiConnectionSettings">SPI Custom connection settings</param>
-        public DriverBaseSPI(string name, string SPIBusID, SpiConnectionSettings spiConnectionSettings)
+        public DriverBaseSPI(string name, int SPIBusID, SpiConnectionSettings spiConnectionSettings)
         {
             SpiConnectionSettings = spiConnectionSettings;
-            this.SPIBusID = SPIBusID;
+            spiConnectionSettings.BusId = SPIBusID;
             Name = name;
             DeviceAddress = SpiConnectionSettings.ChipSelectLine;
         }
@@ -90,7 +88,7 @@ namespace DriverBase
 
         public virtual void Start()
         {
-            SpiDevice = SpiDevice.FromId(SPIBusID, SpiConnectionSettings);
+            SpiDevice = SpiDevice.Create(SpiConnectionSettings);
         }
 
         public virtual void Stop()

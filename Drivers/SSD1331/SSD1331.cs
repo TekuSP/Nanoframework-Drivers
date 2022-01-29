@@ -3,7 +3,7 @@ using DriverBase.Enums;
 using DriverBase.Helpers;
 using System.Threading;
 using System.Device.Gpio;
-using Windows.Devices.Spi;
+using System.Device.Spi;
 
 namespace SSD1331
 {
@@ -33,7 +33,7 @@ namespace SSD1331
         /// <param name="commandDecoderPin">Digital Command Decoder Pin</param>
         /// <param name="resetPin">Digital Reset Pin</param>
         /// <param name="gpioController">GPIO Controller OnBoard</param>
-        public SSD1331(string SPIBusID, int chipSelectPin, int commandDecoderPin, int resetPin, GpioController gpioController) : base("SSD1331", SPIBusID, chipSelectPin)
+        public SSD1331(int SPIBusID, int chipSelectPin, int commandDecoderPin, int resetPin, GpioController gpioController) : base("SSD1331", SPIBusID, chipSelectPin)
         {
             dcPinInt = commandDecoderPin;
             rstPinInt = resetPin;
@@ -49,7 +49,7 @@ namespace SSD1331
         /// <param name="commandDecoderPin">Digital Command Decoder Pin</param>
         /// <param name="resetPin">Digital Reset Pin</param>
         /// <param name="gpioController">GPIO Controller OnBoard</param>
-        public SSD1331(string SPIBusID, SpiConnectionSettings spiConnectionSettings, int commandDecoderPin, int resetPin, GpioController gpioController) : base("SSD1331", SPIBusID, spiConnectionSettings)
+        public SSD1331(int SPIBusID, SpiConnectionSettings spiConnectionSettings, int commandDecoderPin, int resetPin, GpioController gpioController) : base("SSD1331", SPIBusID, spiConnectionSettings)
         {
             dcPinInt = commandDecoderPin;
             rstPinInt = resetPin;
@@ -299,7 +299,7 @@ namespace SSD1331
 
         public override string ReadDeviceId()
         {
-            return SpiDevice.DeviceId;
+            return "Device does not support device id";
         }
 
         public override string ReadManufacturerId()
