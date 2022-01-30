@@ -234,5 +234,11 @@ namespace IT8951
             chipSelectPin.Write(PinValue.High); //Turn on Chip Select
             return data;
         }
+
+        public void SystemRun() => WriteLCDCode((ushort)Commands.IT8951_TCON_SYS_RUN);
+        public void StandBy() => WriteLCDCode((ushort)Commands.IT8951_TCON_STANDBY);
+        public void Sleep() => WriteLCDCode((ushort)Commands.IT8951_TCON_SLEEP);
+
+
     }
 }
