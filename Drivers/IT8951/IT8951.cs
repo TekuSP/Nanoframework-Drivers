@@ -5,6 +5,7 @@ using System.Device.Gpio;
 using System.Device.Spi;
 using System.Threading;
 
+//https://github.com/clashman/it8951/blob/master/it8951.ino
 namespace IT8951
 {
     public class IT8951 : DriverBaseSPI
@@ -113,6 +114,14 @@ namespace IT8951
 
             chipSelectPin.Write(PinValue.High); //Turn on Chip Select
         }
+        public void WriteLCDCode(ushort code, ushort[] arguments)
+        {
+            WriteLCDCode(code);
+            foreach (var item in arguments)
+            {
+                WriteLCDData(item);
+            }
+        }
         public void WriteLCDData(ushort data)
         {
             if (!IsRunning)
@@ -132,6 +141,98 @@ namespace IT8951
             SpiDevice.Write(BitConverter.GetBytes(data));
 
             chipSelectPin.Write(PinValue.High); //Turn on Chip Select
+        }
+        public void WriteLCDData(ushort[] data)
+        {
+            if (!IsRunning)
+                return; //Must be running for sending data
+            ushort wPreamble = 0x0000;
+
+            WaitForLCDReady(); //wait for ready
+
+            chipSelectPin.Write(PinValue.Low); //Turn off Chip Select
+
+            SpiDevice.Write(BitConverter.GetBytes(wPreamble >> 8)); //Send Preamble
+            SpiDevice.Write(BitConverter.GetBytes(wPreamble));
+
+            WaitForLCDReady(); //wait for ready
+
+            foreach (var item in data)
+            {
+                SpiDevice.Write(BitConverter.GetBytes(item >> 8)); //Send data
+                SpiDevice.Write(BitConverter.GetBytes(item));
+            }
+
+            chipSelectPin.Write(PinValue.High); //Turn on Chip Select
+        }
+        public ushort ReadLCDData()
+        {
+            if (!IsRunning)
+                return 0; //Must be running for sending data
+            ushort wPreamble = 0x1000;
+            WaitForLCDReady(); //wait for ready
+
+            chipSelectPin.Write(PinValue.Low); //Turn off Chip Select
+
+            SpiDevice.Write(BitConverter.GetBytes(wPreamble >> 8)); //Send Preamble
+            SpiDevice.Write(BitConverter.GetBytes(wPreamble));
+
+            WaitForLCDReady(); //wait for ready
+
+            byte[] readBuffer = new byte[2];
+
+            SpiDevice.TransferFullDuplex(BitConverter.GetBytes(0x00), readBuffer); //dummy
+            ushort data = BitConverter.ToUInt16(readBuffer, 0);
+            SpiDevice.TransferFullDuplex(BitConverter.GetBytes(0x00), readBuffer); //dummy
+            data = BitConverter.ToUInt16(readBuffer, 0);
+
+            WaitForLCDReady();
+
+            SpiDevice.TransferFullDuplex(BitConverter.GetBytes(0x00), readBuffer); //read 
+            data = (ushort)(BitConverter.ToUInt16(readBuffer, 0) << 8);
+
+            SpiDevice.TransferFullDuplex(BitConverter.GetBytes(0x00), readBuffer); //read
+            data |= BitConverter.ToUInt16(readBuffer, 0);
+
+            chipSelectPin.Write(PinValue.High); //Turn on Chip Select
+            return data;
+        }
+        public ushort[] ReadLCDData(int size)
+        {
+            if (!IsRunning)
+                return null; //Must be running for sending data
+            ushort wPreamble = 0x1000;
+
+            WaitForLCDReady(); //wait for ready
+
+            chipSelectPin.Write(PinValue.Low); //Turn off Chip Select
+
+            SpiDevice.Write(BitConverter.GetBytes(wPreamble >> 8)); //Send Preamble
+            SpiDevice.Write(BitConverter.GetBytes(wPreamble));
+
+            WaitForLCDReady(); //wait for ready
+
+            byte[] readBuffer = new byte[2];
+            ushort[] data = new ushort[size];
+
+            SpiDevice.TransferFullDuplex(BitConverter.GetBytes(0x00), readBuffer); //dummy
+            data[0] = BitConverter.ToUInt16(readBuffer, 0);
+            SpiDevice.TransferFullDuplex(BitConverter.GetBytes(0x00), readBuffer); //dummy
+            data[0] = BitConverter.ToUInt16(readBuffer, 0);
+
+            WaitForLCDReady();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                SpiDevice.TransferFullDuplex(BitConverter.GetBytes(0x00), readBuffer); //read 
+                data[i] = (ushort)(BitConverter.ToUInt16(readBuffer, 0) << 8);
+
+                SpiDevice.TransferFullDuplex(BitConverter.GetBytes(0x00), readBuffer); //read
+                data[i] |= BitConverter.ToUInt16(readBuffer, 0);
+            }
+
+            chipSelectPin.Write(PinValue.High); //Turn on Chip Select
+            return data;
         }
     }
 }
