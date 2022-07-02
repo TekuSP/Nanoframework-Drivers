@@ -27,11 +27,10 @@ namespace DriverBase
         /// <param name="chipSelectPin">Chip Select Pin</param>
         public DriverBaseSPI(string name, int SPIBusID, int chipSelectPin)
         {
-            SpiConnectionSettings = new SpiConnectionSettings(chipSelectPin)
+            SpiConnectionSettings = new SpiConnectionSettings(SPIBusID, chipSelectPin)
             {
                 SharingMode = SpiSharingMode.Shared,
-                Mode = SpiMode.Mode0,
-                BusId = SPIBusID
+                Mode = SpiMode.Mode0
             };
             Name = name;
             DeviceAddress = chipSelectPin;

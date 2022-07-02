@@ -1,6 +1,7 @@
 ﻿using DriverBase.Enums;
 using DriverBase.Interfaces;
-using Windows.Devices.SerialCommunication;
+
+using System.IO.Ports;
 
 namespace DriverBase
 {
@@ -12,7 +13,7 @@ namespace DriverBase
         #region Protected Fields
 
         protected string serialBusID;
-        protected SerialDevice serialDevice;
+        protected SerialPort serialDevice;
 
         #endregion Protected Fields
 
@@ -66,7 +67,7 @@ namespace DriverBase
 
         public virtual void Start()
         {
-            serialDevice = SerialDevice.FromId(serialBusID);
+            serialDevice = new SerialPort(serialBusID);
         }
 
         public virtual void Stop()

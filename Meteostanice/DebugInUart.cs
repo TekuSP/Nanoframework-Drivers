@@ -45,11 +45,12 @@ namespace System.Diagnostics.Uart
     //  Windows.Storage.Stream.dll
     //-------------------------------------------
     using System.Diagnostics;
-    using Windows.Devices.SerialCommunication;
+    using System.IO.Ports;
+
     using Windows.Storage.Streams;
     public class DebugWritelnToUart : IDisposable
     {
-        private SerialDevice uart;
+        private SerialPort uart;
         private DataWriter uartoutput;
 
         /// <summary>

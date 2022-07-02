@@ -2,6 +2,7 @@
 using DriverBase.Interfaces;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using Windows.Storage.Streams;
 
@@ -23,15 +24,6 @@ namespace MHZ19B
         }
 
         #endregion Public Constructors
-
-        #region Protected Properties
-
-        protected DataReader DataReader { get; set; }
-        protected DataWriter DataWriter { get; set; }
-        protected IInputStream InputStream { get; set; }
-        protected IOutputStream OutputStream { get; set; }
-
-        #endregion Protected Properties
 
         #region Public Methods
 
@@ -106,10 +98,10 @@ namespace MHZ19B
 
         public override long ReadData(params byte[] data)
         {
-            var read = DataReader.Load((uint)data.Length);
+            var read = serialDevice.BytesToRead;
             if (read != 9)
                 return 0;
-            DataReader.ReadBytes(data);
+            serialDevice.Read(data, 0, read);
             return data.Length;
         }
 
@@ -157,31 +149,20 @@ namespace MHZ19B
             base.Start();
             serialDevice.BaudRate = 9600;
             serialDevice.DataBits = 8;
-            serialDevice.StopBits = Windows.Devices.SerialCommunication.SerialStopBitCount.One;
-            serialDevice.Parity = Windows.Devices.SerialCommunication.SerialParity.None;
-            serialDevice.Handshake = Windows.Devices.SerialCommunication.SerialHandshake.None;
-            serialDevice.ReadTimeout = new TimeSpan(0, 0, 1);
-            InputStream = serialDevice.InputStream;
-            OutputStream = serialDevice.OutputStream;
-            DataReader = new DataReader(InputStream) { InputStreamOptions = InputStreamOptions.Partial };
-            DataWriter = new DataWriter(OutputStream);
+            serialDevice.StopBits = System.IO.Ports.StopBits.One;
+            serialDevice.Parity = System.IO.Ports.Parity.None;
+            serialDevice.Handshake = System.IO.Ports.Handshake.None;
+            serialDevice.ReadTimeout = 1000;
         }
 
         public override void Stop()
         {
             base.Stop();
-            DataReader.Dispose();
-            DataReader = null;
-            DataWriter.Dispose();
-            DataWriter = null;
-            InputStream = null;
-            OutputStream = null;
         }
 
         public override void WriteData(byte[] data)
         {
-            DataWriter.WriteBytes(data);
-            DataWriter.Store();
+            serialDevice.Write(data, 0, data.Length);
         }
 
         #endregion Public Methods
