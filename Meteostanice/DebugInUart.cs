@@ -45,32 +45,31 @@ namespace System.Diagnostics.Uart
     //  Windows.Storage.Stream.dll
     //-------------------------------------------
     using System.Diagnostics;
-    using Windows.Devices.SerialCommunication;
+    using System.IO.Ports;
+
     using Windows.Storage.Streams;
     public class DebugWritelnToUart : IDisposable
     {
-        private SerialDevice uart;
-        private DataWriter uartoutput;
+        private SerialPort uart;
 
         /// <summary>
         ///   Set which COM port you want to use and what baudrate
         /// </summary>
         /// <param name="Comuart"></param>
         /// <param name="BaudRate"></param>
-        public DebugWritelnToUart(string Comuart, uint BaudRate)
+        public DebugWritelnToUart(string Comuart, int BaudRate)
         {
 #if DEBUG
-            uart = SerialDevice.FromId(Comuart);
+            uart = new SerialPort(Comuart);
             uart.WatchChar = '\n';
 
             uart.BaudRate = BaudRate;
-            uart.Parity = SerialParity.None;
-            uart.StopBits = SerialStopBitCount.One;
-            uart.Handshake = SerialHandshake.None;
+            uart.Parity = Parity.None;
+            uart.StopBits = StopBits.One;
+            uart.Handshake = Handshake.None;
             uart.DataBits = 8;
 
-            uartoutput = new DataWriter(uart.OutputStream);
-            uart.WriteTimeout = new TimeSpan(0, 0, 5);
+            uart.WriteTimeout = 5000;
 #endif
         }
 
@@ -82,8 +81,7 @@ namespace System.Diagnostics.Uart
         {
             Debug.Write(message);
 #if DEBUG
-            uartoutput.WriteString(message);
-            uartoutput.Store();
+            uart.WriteLine(message);
 #endif
         }
 
@@ -95,8 +93,7 @@ namespace System.Diagnostics.Uart
         {
             Debug.WriteLine(message);
 #if DEBUG
-            uartoutput.WriteString(message + "\r\n");
-            uartoutput.Store();
+            uart.WriteLine(message + "\r\n");
 #endif
         }
 
@@ -108,8 +105,7 @@ namespace System.Diagnostics.Uart
         {
             Debug.Assert(condition);
 #if DEBUG
-            uartoutput.WriteString("Assert[" + condition.ToString() + "]" + "\r\n");
-            uartoutput.Store();
+            uart.WriteLine("Assert[" + condition.ToString() + "]" + "\r\n");
 #endif
         }
         /// <summary>
@@ -121,8 +117,7 @@ namespace System.Diagnostics.Uart
         {
             Debug.Assert(condition, message);
 #if DEBUG
-            uartoutput.WriteString("Assert[" + condition.ToString() + "], Message[" + message + "]" + "\r\n");
-            uartoutput.Store();
+            uart.WriteLine("Assert[" + condition.ToString() + "], Message[" + message + "]" + "\r\n");
 #endif
         }
 
@@ -136,8 +131,7 @@ namespace System.Diagnostics.Uart
         {
             Debug.Assert(condition, message, detailedMessage);
 #if DEBUG
-            uartoutput.WriteString("Assert[" + condition.ToString() + "], Message[" + message + "], DetailedMessage[" + detailedMessage + "]" + "\r\n");
-            uartoutput.Store();
+            uart.WriteLine("Assert[" + condition.ToString() + "], Message[" + message + "], DetailedMessage[" + detailedMessage + "]" + "\r\n");
 #endif
         }
 
