@@ -1,0 +1,23 @@
+﻿namespace TCS34725.Enums
+{
+    public enum Pers
+    {
+        TCS34725_PERS = 0x0C,
+        TCS34725_PERS_NONE = 0x00,
+        TCS34725_PERS_1_CYCLE = 0x01,
+        TCS34725_PERS_2_CYCLE = 0x02,
+        TCS34725_PERS_3_CYCLE = 0x03,
+        TCS34725_PERS_5_CYCLE = 0x04,
+        TCS34725_PERS_10_CYCLE = 0x05,
+        TCS34725_PERS_15_CYCLE = 0x06,
+        TCS34725_PERS_20_CYCLE = 0x07,
+        TCS34725_PERS_25_CYCLE = 0x08,
+        TCS34725_PERS_30_CYCLE = 0x09,
+        TCS34725_PERS_35_CYCLE = 0x0a,
+        TCS34725_PERS_40_CYCLE = 0x0b,
+        TCS34725_PERS_45_CYCLE = 0x0c,
+        TCS34725_PERS_50_CYCLE = 0x0d,
+        TCS34725_PERS_55_CYCLE = 0x0e,
+        TCS34725_PERS_60_CYCLE = 0x0f
+    }
+}
