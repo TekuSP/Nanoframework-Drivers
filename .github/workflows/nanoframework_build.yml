@@ -30,7 +30,9 @@ jobs:
           dotnet-version: 7.0.x
 
       - name: Setup MSBuild Path
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x64
 
       # https://github.com/NuGet/setup-nuget
       - name: Install NuGet client
@@ -38,9 +40,8 @@ jobs:
         with:
           nuget-version: 'latest'
           
-      - uses: nanoframework/nanobuild@v1
-        env:
-          GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
+      - name: Install Nanoframework Extension
+        uses: nanoframework/nanobuild@v1
 
       - name: Restore nugets
         run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
