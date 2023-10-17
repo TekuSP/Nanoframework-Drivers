@@ -23,16 +23,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: main
-      - name: Checkout tools repo
-        uses: actions/checkout@v2
-        with:
-          repository: nanoframework/nf-tools
-          path: tools
           
-      - name: Setup .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.x
+          dotnet-version: 7.0.0
 
       - name: Setup MSBuild Path
         uses: microsoft/setup-msbuild@v1.0.2
@@ -43,9 +38,9 @@ jobs:
         with:
           nuget-version: 'latest'
           
-      - name: Install build components for nanoFramework
-        run: ./github-actions/install-nf-build-components.ps1
-        working-directory: tools
+      - uses: nanoframework/nanobuild@v1
+        env:
+          GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
 
       - name: Restore nugets
         run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
