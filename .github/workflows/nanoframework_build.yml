@@ -14,7 +14,7 @@ jobs:
       matrix:
         configuration: [Debug, Release]
     name: Build NanoFramework SLN
-    timeout-minutes: 30
+    timeout-minutes: 15
     runs-on: windows-latest
     env:
       solution: 'Meteostanice.sln'
@@ -97,12 +97,12 @@ jobs:
             ${{ github.workspace }}\**\*TekuSP*.nupkg
 
       - name: Push nugets to Github
-        if: ${{ matrix.configuration == 'Release' }}
+        if: ${{ matrix.configuration == 'Release' }} && success() && github.ref == 'refs/heads/master'
         run: |
           nuget sources Add -Name github -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -UserName ${{ github.repository_owner }} -Password ${{ secrets.GITHUB_TOKEN }}
           nuget push "**/*TekuSP*.nupkg" -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push nugets to Nuget.org
-        if: ${{ matrix.configuration == 'Release' }}
+        if: ${{ matrix.configuration == 'Release' }} && success() && github.ref == 'refs/heads/master'
         run: |
           nuget push "**/*TekuSP*.nupkg" -Source https://api.nuget.org/v3/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.NUGET_KEY }}
