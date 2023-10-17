@@ -22,13 +22,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          path: main
           fetch-depth: 0
           
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 7.0.x
+
+     - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu' # Alternative distribution options are available.
 
       - name: Setup MSBuild Path
         uses: microsoft/setup-msbuild@v1.1
@@ -47,18 +52,6 @@ jobs:
       - name: Restore nugets
         run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
         working-directory: main
-        
-      - name: Build NanoFramework Application
-        run: msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
-        working-directory: main
-        env:
-          Configuration: ${{ matrix.configuration }}
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
@@ -82,18 +75,18 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
           
-      - name: Build and analyze
+      - name: Build Nanoframework and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          Configuration: ${{ matrix.configuration }}
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"TekuSP_Meteostanice-CSharp" /o:"tekusp" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+           msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-          
       - name: Pack nugets
         run: ./GenerateNugets.ps1
-        working-directory: main
         if: ${{ matrix.configuration == 'Release' }}
 
       - name: Upload Artifacts
@@ -109,3 +102,8 @@ jobs:
         run: |
           nuget sources Add -Name github -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -UserName ${{ github.repository_owner }} -Password ${{ secrets.GITHUB_TOKEN }}
           nuget push "**/*TekuSP*.nupkg" -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push nugets to Nuget.org
+        if: ${{ matrix.configuration == 'Release' }}
+        run: |
+          nuget push "**/*TekuSP*.nupkg" -Source https://api.nuget.org/v3/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.NUGET_KEY }}
