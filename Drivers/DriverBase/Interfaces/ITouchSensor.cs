@@ -41,5 +41,9 @@ namespace DriverBase.Interfaces
         /// If supported, returns enum of gesture used for touch
         /// </summary>
         public byte Gesture { get; }
+        /// <summary>
+        /// If supported, returns how much pressed touch screen was
+        /// </summary>
+        public int TouchPressure { get; }
     }
 }

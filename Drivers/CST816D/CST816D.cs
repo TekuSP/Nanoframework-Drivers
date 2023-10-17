@@ -80,6 +80,8 @@ namespace CST816D
                 returnData.X = 0xff;
             if (returnData.Y > Registers.MaxY || returnData.Y < Registers.MinY)
                 returnData.Y = 0xff;
+
+            returnData.TouchPressure = returnData.Pressure;
             return returnData;
         }
 
@@ -182,7 +184,7 @@ namespace CST816D
             if ((newState.X == currentState.X && newState.Y == currentState.Y) || newState.Gesture == (byte)Gesture.GEST_NONE)
                 return;
             currentState = newState;
-            OnStateChanged(this, currentState, currentState.Gesture);
+            OnStateChanged(this, currentState);
         }
 
         #endregion Private Methods

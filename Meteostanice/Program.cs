@@ -95,11 +95,12 @@ namespace Meteostanice
             //    Thread.Sleep(5000);
             //}
             CST816D.CST816D cst = new CST816D.CST816D(1, 41, 42);
-            cst.OnStateChanged += (sender, args, gesture) =>
+            cst.OnStateChanged += (sender, args) =>
             {
-                Debug.WriteLine($"Action: {gesture}");
+                Debug.WriteLine($"Action: {args.Gesture}");
                 Debug.WriteLine($"X: {args.X}");
                 Debug.WriteLine($"Y: {args.Y}");
+                Debug.WriteLine($"Pressure: {args.TouchPressure}");
             };
             cst.Start();
             Debug.WriteLine("Version: " + cst.ReadVersion());

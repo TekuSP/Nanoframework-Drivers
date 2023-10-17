@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.CST816D</id>
     <title>TekuSP I2C Driver for Touch Screen CST816D</title>
-    <version>0.3</version>
+    <version>0.3.1</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
