@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TekuSP.Drivers.LPS22HB")]
-[assembly: AssemblyDescription("Nuget Package for Nanoframework, used for: Sensor STMicroelectronics LPS22HB")]
+[assembly: AssemblyTitle("TekuSP.Drivers.CST816D")]
+[assembly: AssemblyDescription("Nuget Package for Nanoframework, used for: Touch Screen CST816D")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Richard \"TekuSP\" Torhan")]
-[assembly: AssemblyProduct("TekuSP.Drivers.LPS22HB")]
+[assembly: AssemblyProduct("TekuSP.Drivers.CST816D")]
 [assembly: AssemblyCopyright("Copyright Richard \"TekuSP\" Torhan 2023 ")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
