@@ -1,4 +1,16 @@
 
+<a name="v0.3.1-alpha"></a>
+## [v0.3.1-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3-alpha...v0.3.1-alpha)
+
+> 2023-10-17
+
+### Pull Requests
+
+* Merge pull request [#78](https://github.com/TekuSP/Meteostanice-CSharp/issues/78) from TekuSP/fix_versioning
+* Merge pull request [#76](https://github.com/TekuSP/Meteostanice-CSharp/issues/76) from TekuSP/fix_pressure_in_touchdevices
+* Merge pull request [#75](https://github.com/TekuSP/Meteostanice-CSharp/issues/75) from TekuSP/update-changelog
+
+
 <a name="v0.3-alpha"></a>
 ## [v0.3-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.2-alpha...v0.3-alpha)
 
