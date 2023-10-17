@@ -139,6 +139,8 @@ namespace CST816D
 
         public override void Start()
         {
+            if (I2CDevice != null)
+                return; //We are already running
             base.Start();
             interruptPin = new GpioController().OpenPin(interruptPinNumber, PinMode.Input);
             resetPin = new GpioController().OpenPin(resetPinNumber, PinMode.Output);
