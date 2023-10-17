@@ -13,7 +13,7 @@ namespace CST816D
     /// <summary>
     /// CST816D Touch screen, <a href="https://github.com/lupyuen/hynitron_i2c_cst0xxse/tree/master"/>
     /// </summary>
-    public class CST816D : DriverBaseI2C, ITouchSensor, IResetable, IVersionInfo, IPowerSaving
+    public class CST816D : DriverBaseI2C, ITouchSensor, IVersionInfo, IPowerSaving
     {
         #region Private Fields
 
@@ -122,17 +122,17 @@ namespace CST816D
             return $"{returnData[0]}.{returnData[1]}.{returnData[2]}";
         }
 
-        public void Reset()
+        public override void Restart()
         {
             resetPin.Toggle();
             Thread.Sleep(50);
             resetPin.Toggle();
+            Thread.Sleep(50);
         }
 
         public void Sleep()
         {
-            Reset();
-            Thread.Sleep(50);
+            Restart();
             I2CDevice.Write(new byte[] { Registers.SleepRegister, Registers.StandbyCommand });
             Stop();
         }
@@ -145,8 +145,7 @@ namespace CST816D
 
             resetPin.Write(PinValue.High);
             Thread.Sleep(50);
-            Reset();
-            Thread.Sleep(50);
+            Restart();
 
             currentState = (Register)Poll();
 
