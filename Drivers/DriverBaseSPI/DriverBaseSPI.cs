@@ -29,7 +29,6 @@ namespace DriverBase
         {
             SpiConnectionSettings = new SpiConnectionSettings(SPIBusID, chipSelectPin)
             {
-                SharingMode = SpiSharingMode.Shared,
                 Mode = SpiMode.Mode0
             };
             Name = name;
