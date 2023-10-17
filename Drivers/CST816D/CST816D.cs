@@ -135,10 +135,6 @@ namespace CST816D
                     currentState = reg;
                     OnStateChanged?.Invoke(this, currentState);
                 }
-                else
-                {
-                    currentState = null;
-                }
                 Thread.Sleep(pollingMillis);
             }
         }
