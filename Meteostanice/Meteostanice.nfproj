@@ -23,6 +23,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Drivers\CST816D\CST816D.nfproj" />
     <ProjectReference Include="..\Drivers\DriverBaseI2C\DriverBaseI2C.nfproj" />
     <ProjectReference Include="..\Drivers\DriverBaseSPI\DriverBaseSPI.nfproj" />
     <ProjectReference Include="..\Drivers\DriverBaseUART\DriverBaseUART.nfproj" />

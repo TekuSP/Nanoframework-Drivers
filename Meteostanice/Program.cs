@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 
+using CST816D;
+
 using nanoFramework.Hardware.Esp32;
 
 namespace Meteostanice
@@ -66,8 +68,8 @@ namespace Meteostanice
             //    Debug.WriteLine($"Pressure is: {pressure} mBar");
             //    Thread.Sleep(5000);
             //}
-            Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
-            Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
+            Configuration.SetPinFunction(40, DeviceFunction.I2C1_CLOCK);
+            Configuration.SetPinFunction(Gpio.IO39, DeviceFunction.I2C1_DATA);
             //ICM20948.ICM20948 icm = new ICM20948.ICM20948(1);
             //icm.Start();
 
@@ -83,14 +85,28 @@ namespace Meteostanice
             //    Debug.WriteLine(string.Format("Magnetic:      X = {0} , Y = {1} , Z = {2}", Mag[0], Mag[1], Mag[2]));
             //    Thread.Sleep(1000);
             //}
-            SHTC3.SHTC3 sHTC3 = new SHTC3.SHTC3(1);
-            sHTC3.Start();
-            Debug.WriteLine($"Device {sHTC3.ReadManufacturerId()} {sHTC3.ReadDeviceId()} - {sHTC3.ReadSerialNumber()}");
+            //SHTC3.SHTC3 sHTC3 = new SHTC3.SHTC3(1);
+            //sHTC3.Start();
+            //Debug.WriteLine($"Device {sHTC3.ReadManufacturerId()} {sHTC3.ReadDeviceId()} - {sHTC3.ReadSerialNumber()}");
+            //while (true)
+            //{
+            //    Debug.WriteLine($"Temperature is: {sHTC3.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius)} C");
+            //    Debug.WriteLine($"Humidity is: {sHTC3.ReadHumidity(DriverBase.Enums.HumidityType.Relative)} %");
+            //    Thread.Sleep(5000);
+            //}
+            CST816D.CST816D cst = new CST816D.CST816D(1);
+            cst.Start();
+            cst.OnStateChanged += (sender, args) =>
+            {
+                CST816D.Register realArgs = (CST816D.Register)args;
+                Debug.WriteLine($"Action: {realArgs.Gesture}");
+                Debug.WriteLine($"X: {realArgs.X}");
+                Debug.WriteLine($"Y: {realArgs.Y}");
+            };
+            cst.StartPolling(1000);
             while (true)
             {
-                Debug.WriteLine($"Temperature is: {sHTC3.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius)} C");
-                Debug.WriteLine($"Humidity is: {sHTC3.ReadHumidity(DriverBase.Enums.HumidityType.Relative)} %");
-                Thread.Sleep(5000);
+                Thread.Sleep(100);
             }
         }
 

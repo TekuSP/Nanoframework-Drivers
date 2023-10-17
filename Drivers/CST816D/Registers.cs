@@ -1,4 +1,6 @@
-﻿namespace CST816D
+﻿using DriverBase.Interfaces;
+
+namespace CST816D
 {
     public static class Registers
     {
@@ -27,16 +29,19 @@
         public static byte MaxY => 239;
         public static byte MinY => 0;
     }
-    public class Register
+    public class Register : ITouchData
     {
         public ushort Reserve0 { get; set; }
-        public ushort GestId { get; set; }
+        public Gesture Gesture { get; set; }
         public ushort Reserve2 { get; set; }
         public ushort XH { get; set; }
         public ushort XL { get; set; }
         public ushort YH { get; set; }
         public ushort YL { get; set; }
         public ushort Reserve7 { get; set; }
+
+        public int X { get; set; }
+        public int Y { get; set; }
     }
     public enum Gesture
     {
@@ -47,11 +52,5 @@
         GEST_MOVE_LEFT = 0x04,
         GEST_SINGLE_CLICK = 0x05,
         GEST_LONG_PRESS = 0x0c
-    }
-    public class GestureRegister
-    {
-        public uint X { get; set; }
-        public uint Y { get; set; }
-        public Gesture Gesture { get; set; }
     }
 }
