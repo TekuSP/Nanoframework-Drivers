@@ -11,7 +11,7 @@ using static DriverBase.Event_Handlers.EventHandlers;
 namespace CST816D
 {
     /// <summary>
-    /// CST816D Touch screen, <a href="https://gitee.com/LY3T/cst816d_test/blob/master/components/cst816d/src/cst816d.c"/>
+    /// CST816D Touch screen, <a href="https://github.com/lupyuen/hynitron_i2c_cst0xxse/tree/master"/>
     /// </summary>
     public class CST816D : DriverBaseI2C, ITouchSensor, IResetable, IVersionInfo, IPowerSaving
     {
