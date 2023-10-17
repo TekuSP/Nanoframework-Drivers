@@ -48,6 +48,7 @@ namespace CST816D
 
         public int X { get; set; }
         public int Y { get; set; }
+        public int TouchPressure { get; set; }
     }
     public enum Gesture
     {
