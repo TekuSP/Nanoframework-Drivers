@@ -85,7 +85,7 @@ namespace CST816D
 
         public override long ReadData(byte pointer)
         {
-            throw new NotSupportedException();
+            return ReadData(new byte[] { pointer });
         }
 
         public override long ReadData(byte[] data)
