@@ -94,16 +94,16 @@ namespace Meteostanice
             //    Debug.WriteLine($"Humidity is: {sHTC3.ReadHumidity(DriverBase.Enums.HumidityType.Relative)} %");
             //    Thread.Sleep(5000);
             //}
-            CST816D.CST816D cst = new CST816D.CST816D(1);
-            cst.Start();
-            cst.OnStateChanged += (sender, args) =>
+            CST816D.CST816D cst = new CST816D.CST816D(1, 41, 42);
+            cst.OnStateChanged += (sender, args, gesture) =>
             {
-                CST816D.Register realArgs = (CST816D.Register)args;
-                Debug.WriteLine($"Action: {realArgs.Gesture}");
-                Debug.WriteLine($"X: {realArgs.X}");
-                Debug.WriteLine($"Y: {realArgs.Y}");
+                Debug.WriteLine($"Action: {gesture}");
+                Debug.WriteLine($"X: {args.X}");
+                Debug.WriteLine($"Y: {args.Y}");
             };
-            cst.StartPolling(1000);
+            cst.Start();
+            Debug.WriteLine("Version: " + cst.ReadVersion());
+            Debug.WriteLine("Version info: " + cst.ReadVersionInfo());
             while (true)
             {
                 Thread.Sleep(100);

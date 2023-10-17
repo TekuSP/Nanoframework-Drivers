@@ -1,5 +1,7 @@
 ﻿using System;
 
+using static DriverBase.Event_Handlers.EventHandlers;
+
 namespace DriverBase.Interfaces
 {
     /// <summary>
@@ -13,15 +15,6 @@ namespace DriverBase.Interfaces
         /// <returns>Returns X, Y of a press</returns>
         public ITouchData Poll();
         /// <summary>
-        /// Starts automatically polling touch sensor in set millis, use <see cref="GetCurrentState"/> to get current state
-        /// </summary>
-        /// <param name="millis">Millis how often to poll</param>
-        public void StartPolling(int millis);
-        /// <summary>
-        /// Stops automatically polling
-        /// </summary>
-        public void StopPolling();
-        /// <summary>
         /// Gets current state when <see cref="StartPolling(int)"/> is running
         /// </summary>
         /// <returns>Returns X, Y of a press</returns>
@@ -29,7 +22,7 @@ namespace DriverBase.Interfaces
         /// <summary>
         /// Triggers when touch change happens, when <see cref="StartPolling(int)"/> is running
         /// </summary>
-        public event EventHandler<ITouchData> OnStateChanged;
+        public event ITouchDataHandler OnStateChanged;
     }
     /// <summary>
     /// XY Touch Data
@@ -44,5 +37,9 @@ namespace DriverBase.Interfaces
         /// Y of a press
         /// </summary>
         public int Y { get; }
+        /// <summary>
+        /// If supported, returns enum of gesture used for touch
+        /// </summary>
+        public byte Gesture { get; }
     }
 }

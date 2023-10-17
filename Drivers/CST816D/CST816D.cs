@@ -2,45 +2,50 @@
 using DriverBase.Interfaces;
 
 using System;
+using System.Device.Gpio;
 using System.Device.I2c;
 using System.Threading;
+
+using static DriverBase.Event_Handlers.EventHandlers;
 
 namespace CST816D
 {
     /// <summary>
     /// CST816D Touch screen, <a href="https://gitee.com/LY3T/cst816d_test/blob/master/components/cst816d/src/cst816d.c"/>
     /// </summary>
-    public class CST816D : DriverBaseI2C, ITouchSensor
+    public class CST816D : DriverBaseI2C, ITouchSensor, IResetable, IVersionInfo, IPowerSaving
     {
         #region Private Fields
 
         private Register currentState = null;
 
-        private Thread currentThread = null;
+        private GpioPin interruptPin;
+        private int interruptPinNumber;
 
-        private Gesture lastGesture = Gesture.GEST_NONE;
-
-        private int pollingMillis = 0;
-
-        private bool pollingRunning = false;
+        private GpioPin resetPin;
+        private int resetPinNumber;
 
         #endregion Private Fields
 
         #region Public Constructors
 
-        public CST816D(int I2CBusID, int deviceAddress = 0x15) : base("CST816D", I2CBusID, deviceAddress)
+        public CST816D(int I2CBusID, int interruptPin, int resetPin, int deviceAddress = 0x15) : base("CST816D", I2CBusID, deviceAddress)
         {
+            interruptPinNumber = interruptPin;
+            resetPinNumber = resetPin;
         }
 
-        public CST816D(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x15) : base("CST816D", I2CBusID, connectionSettings, deviceAddress)
+        public CST816D(int I2CBusID, I2cConnectionSettings connectionSettings, int interruptPin, int resetPin, int deviceAddress = 0x15) : base("CST816D", I2CBusID, connectionSettings, deviceAddress)
         {
+            interruptPinNumber = interruptPin;
+            resetPinNumber = resetPin;
         }
 
         #endregion Public Constructors
 
         #region Public Events
 
-        public event EventHandler<ITouchData> OnStateChanged;
+        public event ITouchDataHandler OnStateChanged;
 
         #endregion Public Events
 
@@ -58,13 +63,15 @@ namespace CST816D
             I2CDevice.WriteRead(new byte[] { Registers.ScanRegisterAddress }, scanRegisterData);
 
             returnData.Reserve0 = scanRegisterData[0];
-            returnData.Gesture = (Gesture)scanRegisterData[1];
-            returnData.Reserve2 = scanRegisterData[2];
+            returnData.Gesture = scanRegisterData[1];
+            returnData.TouchPoints = scanRegisterData[2];
             returnData.XH = scanRegisterData[3];
             returnData.XL = scanRegisterData[4];
             returnData.YH = scanRegisterData[5];
             returnData.YL = scanRegisterData[6];
-            returnData.Reserve7 = scanRegisterData[7];
+            returnData.Pressure = scanRegisterData[7];
+            returnData.Miscellaneous = scanRegisterData[8];
+            //TODO, add more data
 
             returnData.X = (ushort)(((returnData.XH & Registers.MSBMask) << 8) | ((returnData.XL & Registers.LSBMask)));
             returnData.Y = (ushort)(((returnData.YH & Registers.MSBMask) << 8) | ((returnData.YL & Registers.LSBMask)));
@@ -88,12 +95,12 @@ namespace CST816D
 
         public override string ReadDeviceId()
         {
-            return "Not supported";
+            return "CST816D";
         }
 
         public override string ReadManufacturerId()
         {
-            return "Not supported";
+            return "Hynitron Microelectronics Co., Ltd.";
         }
 
         public override string ReadSerialNumber()
@@ -101,17 +108,62 @@ namespace CST816D
             return "Not supported";
         }
 
-        public void StartPolling(int millis)
+        public int ReadVersion()
         {
-            if (pollingRunning) //We are already running
-                return;
-            currentThread = new Thread(new ThreadStart(WorkTask));
-            currentThread.Start();
+            byte[] returnData = new byte[1];
+            I2CDevice.WriteRead(new byte[] { Registers.VersionAddress }, returnData);
+            return returnData[0];
         }
 
-        public void StopPolling()
+        public string ReadVersionInfo()
         {
-            pollingRunning = false;
+            byte[] returnData = new byte[3];
+            I2CDevice.WriteRead(new byte[] { Registers.VersionInfoAddress }, returnData);
+            return $"{returnData[0]}.{returnData[1]}.{returnData[2]}";
+        }
+
+        public void Reset()
+        {
+            resetPin.Toggle();
+            Thread.Sleep(50);
+            resetPin.Toggle();
+        }
+
+        public void Sleep()
+        {
+            Reset();
+            Thread.Sleep(50);
+            I2CDevice.Write(new byte[] { Registers.SleepRegister, Registers.StandbyCommand });
+            Stop();
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            interruptPin = new GpioController().OpenPin(interruptPinNumber, PinMode.Input);
+            resetPin = new GpioController().OpenPin(resetPinNumber, PinMode.Output);
+
+            resetPin.Write(PinValue.High);
+            Thread.Sleep(50);
+            Reset();
+            Thread.Sleep(50);
+
+            currentState = (Register)Poll();
+
+            interruptPin.ValueChanged += InterruptPin_ValueChanged;
+        }
+
+        public override void Stop()
+        {
+            interruptPin.ValueChanged -= InterruptPin_ValueChanged;
+            interruptPin.Dispose();
+            resetPin.Dispose();
+            base.Stop();
+        }
+
+        public void Wakeup()
+        {
+            Start();
         }
 
         public override void WriteData(byte[] data)
@@ -123,20 +175,13 @@ namespace CST816D
 
         #region Private Methods
 
-        private void WorkTask()
+        private void InterruptPin_ValueChanged(object sender, PinValueChangedEventArgs e)
         {
-            Register reg = (Register)Poll();
-            currentState = reg;
-            while (pollingRunning)
-            {
-                reg = (Register)Poll();
-                if (reg.Gesture != lastGesture)
-                {
-                    currentState = reg;
-                    OnStateChanged?.Invoke(this, currentState);
-                }
-                Thread.Sleep(pollingMillis);
-            }
+            var newState = (Register)Poll();
+            if ((newState.X == currentState.X && newState.Y == currentState.Y) || newState.Gesture == (byte)Gesture.GEST_NONE)
+                return;
+            currentState = newState;
+            OnStateChanged(this, currentState, currentState.Gesture);
         }
 
         #endregion Private Methods

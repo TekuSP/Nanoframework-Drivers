@@ -8,8 +8,10 @@ namespace CST816D
         public static byte StartRegisterAddress => 0x00;
         public static byte AllRegistersByte => 20;
 
-        public static byte ScanRegisterByte => 8;
+        public static byte ScanRegisterByte => 9;
         public static byte ScanRegisterAddress => 0x00;
+        public static byte VersionAddress => 0x15;
+        public static byte VersionInfoAddress => 0xA7;
 
         public static byte GestureIDRegister => 0x01;
         public static byte XYRegister => 0x03;
@@ -18,6 +20,9 @@ namespace CST816D
         public static byte XLRegister => 0x04;
         public static byte YHRegister => 0x05;
         public static byte YLRegister => 0x06;
+
+        public static byte SleepRegister => 0xA5;
+        public static byte StandbyCommand => 0x03;
 
         public static byte MSBMask => 0x0F;
         public static byte MSBShift => 0;
@@ -32,13 +37,14 @@ namespace CST816D
     public class Register : ITouchData
     {
         public ushort Reserve0 { get; set; }
-        public Gesture Gesture { get; set; }
-        public ushort Reserve2 { get; set; }
+        public byte Gesture { get; set; }
+        public ushort TouchPoints { get; set; }
         public ushort XH { get; set; }
         public ushort XL { get; set; }
         public ushort YH { get; set; }
         public ushort YL { get; set; }
-        public ushort Reserve7 { get; set; }
+        public ushort Pressure { get; set; }
+        public ushort Miscellaneous { get; set; }
 
         public int X { get; set; }
         public int Y { get; set; }
