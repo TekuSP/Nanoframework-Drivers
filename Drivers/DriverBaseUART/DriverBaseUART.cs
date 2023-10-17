@@ -67,6 +67,8 @@ namespace DriverBase
 
         public virtual void Start()
         {
+            if (serialDevice != null)
+                return; //We are already running
             serialDevice = new SerialPort(serialBusID);
         }
 

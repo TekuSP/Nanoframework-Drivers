@@ -86,6 +86,8 @@ namespace DriverBase
 
         public virtual void Start()
         {
+            if (SpiDevice != null)
+                return; //We are already running
             SpiDevice = SpiDevice.Create(SpiConnectionSettings);
         }
 
