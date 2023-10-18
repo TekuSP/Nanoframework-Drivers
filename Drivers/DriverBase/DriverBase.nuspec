@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.DriverBase</id>
     <title>TekuSP DriverBase for Nanoframework</title>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
@@ -24,7 +24,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\DriverBase.*" target="lib" />
+    <file src="bin\Release\TekuSP.Drivers.DriverBase.*" target="lib" />
     <file src="../../LICENSE.md" target="" />
   </files>
 </package>
