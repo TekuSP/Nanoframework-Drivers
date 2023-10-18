@@ -12,12 +12,17 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>TSL2561</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.TSL2561</RootNamespace>
     <AssemblyName>TekuSP.Drivers.TSL2561</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="Commands.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="TSL2561.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -27,7 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="TSL2561.nuspec" />
+    <None Include="TSL2561.cancelnuspec" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib">
