@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>TCS34725</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.TCS34725</RootNamespace>
     <AssemblyName>TekuSP.Drivers.TCS34725</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>ADS1015</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.ADS1015</RootNamespace>
     <AssemblyName>TekuSP.Drivers.ADS1015</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

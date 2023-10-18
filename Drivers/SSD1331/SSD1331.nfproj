@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>SSD1331</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.SSD1331</RootNamespace>
     <AssemblyName>TekuSP.Drivers.SSD1331</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

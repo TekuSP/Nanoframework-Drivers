@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>LPS22HB</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.LPS22HB</RootNamespace>
     <AssemblyName>TekuSP.Drivers.LPS22HB</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

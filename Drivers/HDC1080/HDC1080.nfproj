@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>HDC1080</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.HDC1080</RootNamespace>
     <AssemblyName>TekuSP.Drivers.HDC1080</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>CST816D</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.CST816D</RootNamespace>
     <AssemblyName>TekuSP.Drivers.CST816D</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

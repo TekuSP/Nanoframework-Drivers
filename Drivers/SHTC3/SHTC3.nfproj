@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>SHTC3</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.SHTC3</RootNamespace>
     <AssemblyName>TekuSP.Drivers.SHTC3</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

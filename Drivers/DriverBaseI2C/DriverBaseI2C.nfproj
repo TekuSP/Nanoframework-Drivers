@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>DriverBaseI2C</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.DriverBaseI2C</RootNamespace>
     <AssemblyName>TekuSP.Drivers.DriverBaseI2C</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

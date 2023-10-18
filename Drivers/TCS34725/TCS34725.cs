@@ -6,6 +6,7 @@ using System.Device.Gpio;
 using System.Threading;
 
 using TekuSP.Drivers.TCS34725.Enums;
+using System.Device.I2c;
 
 namespace TekuSP.Drivers.TCS34725
 {
@@ -25,6 +26,12 @@ namespace TekuSP.Drivers.TCS34725
         #region Public Constructors
 
         public TCS34725(int I2CBusID, IntegrationTime integrationTime, Gain gain, int deviceAddress = 0x29) : base("TCS34725", I2CBusID, deviceAddress)
+        {
+            tcs34725IntegrationTime = integrationTime;
+            tcs34725Gain = gain;
+        }
+
+        public TCS34725(string name, int I2CBusID, I2cConnectionSettings connectionSettings, IntegrationTime integrationTime, Gain gain, int deviceAddress) : base(name, I2CBusID, connectionSettings, deviceAddress)
         {
             tcs34725IntegrationTime = integrationTime;
             tcs34725Gain = gain;

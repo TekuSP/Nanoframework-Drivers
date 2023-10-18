@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>MHZ19B</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.MHZ19B</RootNamespace>
     <AssemblyName>TekuSP.Drivers.MHZ19B</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

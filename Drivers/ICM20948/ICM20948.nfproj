@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>ICM20948</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.ICM20948</RootNamespace>
     <AssemblyName>TekuSP.Drivers.ICM20948</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>

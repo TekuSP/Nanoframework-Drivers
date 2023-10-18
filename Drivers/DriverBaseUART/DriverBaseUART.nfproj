@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>DriverBaseUART</RootNamespace>
+    <RootNamespace>TekuSP.Drivers.DriverBaseUART</RootNamespace>
     <AssemblyName>TekuSP.Drivers.DriverBaseUART</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
