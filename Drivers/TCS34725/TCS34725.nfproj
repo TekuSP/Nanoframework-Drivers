@@ -18,12 +18,14 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="CRGBData.cs" />
     <Compile Include="Enums\AI.cs" />
     <Compile Include="Enums\Commands.cs" />
     <Compile Include="Enums\Config.cs" />
     <Compile Include="Enums\Data.cs" />
     <Compile Include="Enums\Enable.cs" />
     <Compile Include="Enums\Gain.cs" />
+    <Compile Include="Enums\GainControl.cs" />
     <Compile Include="Enums\IntegrationTime.cs" />
     <Compile Include="Offsets.cs" />
     <Compile Include="Enums\Pers.cs" />
@@ -36,10 +38,11 @@
     <Reference Include="mscorlib">
       <HintPath>..\..\packages\nanoFramework.CoreLibrary.1.14.2\lib\mscorlib.dll</HintPath>
     </Reference>
-    <Reference Include="mscorlib, Version=1.12.0.4, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\..\packages\nanoFramework.CoreLibrary.1.12.0\lib\mscorlib.dll</HintPath>
-      <Private>True</Private>
-      <SpecificVersion>True</SpecificVersion>
+    <Reference Include="nanoFramework.Runtime.Events">
+      <HintPath>..\..\packages\nanoFramework.Runtime.Events.1.11.6\lib\nanoFramework.Runtime.Events.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Device.Gpio">
+      <HintPath>..\..\packages\nanoFramework.System.Device.Gpio.1.1.28\lib\System.Device.Gpio.dll</HintPath>
     </Reference>
     <Reference Include="System.Device.I2c">
       <HintPath>..\..\packages\nanoFramework.System.Device.I2c.1.1.11\lib\System.Device.I2c.dll</HintPath>
@@ -51,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="TCS34725.nuspec" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>

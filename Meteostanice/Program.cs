@@ -68,8 +68,10 @@ namespace Meteostanice
             //    Debug.WriteLine($"Pressure is: {pressure} mBar");
             //    Thread.Sleep(5000);
             //}
-            Configuration.SetPinFunction(40, DeviceFunction.I2C1_CLOCK);
-            Configuration.SetPinFunction(Gpio.IO39, DeviceFunction.I2C1_DATA);
+            //Configuration.SetPinFunction(40, DeviceFunction.I2C1_CLOCK);
+            //Configuration.SetPinFunction(Gpio.IO39, DeviceFunction.I2C1_DATA);
+            Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
+            Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
             //ICM20948.ICM20948 icm = new ICM20948.ICM20948(1);
             //icm.Start();
 
@@ -94,20 +96,29 @@ namespace Meteostanice
             //    Debug.WriteLine($"Humidity is: {sHTC3.ReadHumidity(DriverBase.Enums.HumidityType.Relative)} %");
             //    Thread.Sleep(5000);
             //}
-            CST816D.CST816D cst = new CST816D.CST816D(1, 41, 42);
-            cst.OnStateChanged += (sender, args) =>
-            {
-                Debug.WriteLine($"Action: {args.Gesture}");
-                Debug.WriteLine($"X: {args.X}");
-                Debug.WriteLine($"Y: {args.Y}");
-                Debug.WriteLine($"Pressure: {args.TouchPressure}");
-            };
-            cst.Start();
-            Debug.WriteLine("Version: " + cst.ReadVersion());
-            Debug.WriteLine("Version info: " + cst.ReadVersionInfo());
+            //CST816D.CST816D cst = new CST816D.CST816D(1, 41, 42);
+            //cst.OnStateChanged += (sender, args) =>
+            //{
+            //    Debug.WriteLine($"Action: {args.Gesture}");
+            //    Debug.WriteLine($"X: {args.X}");
+            //    Debug.WriteLine($"Y: {args.Y}");
+            //    Debug.WriteLine($"Pressure: {args.TouchPressure}");
+            //};
+            //cst.Start();
+            //Debug.WriteLine("Version: " + cst.ReadVersion());
+            //Debug.WriteLine("Version info: " + cst.ReadVersionInfo());
+            TCS34725.TCS34725 colorSensor = new TCS34725.TCS34725(1, TCS34725.Enums.IntegrationTime.TCS34725_INTEGRATIONTIME_101MS, TCS34725.Enums.Gain.TCS34725_GAIN_4X);
+            colorSensor.Start();
+            Debug.WriteLine(colorSensor.ReadDeviceId());
             while (true)
             {
-                Thread.Sleep(100);
+                var colors = colorSensor.GetRGB();
+                var kelvin = colorSensor.GetColorTemperature();
+                var lux = colorSensor.GetLux();
+                Debug.WriteLine($"Colors, R: {colors.R} G: {colors.G} B: {colors.B}");
+                Debug.WriteLine($"Kelvins: {kelvin}");
+                Debug.WriteLine($"Lux: {lux}");
+                Thread.Sleep(1000);
             }
         }
 
