@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.DriverBase</id>
     <title>TekuSP DriverBase for Nanoframework</title>
-    <version>0.2</version>
+    <version>0.3.1</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
@@ -17,10 +17,10 @@
     <releaseNotes>
     </releaseNotes>
     <repository type="git" url="https://github.com/TekuSP/Meteostanice-CSharp" commit="$commit$" />
-    <copyright>Copyright (c) Richard Torhan 2021</copyright>
+    <copyright>Copyright (c) Richard Torhan 2023</copyright>
     <tags>drivers tekusp net netmf nf nanoframework</tags>
     <dependencies>
-      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
     </dependencies>
   </metadata>
   <files>

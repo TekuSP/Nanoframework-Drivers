@@ -1,12 +1,5 @@
 # Meteostanice + Libraries
 [![Build Nanoframework](https://github.com/TekuSP/Meteostanice-CSharp/actions/workflows/nanoframework_build.yml/badge.svg)](https://github.com/TekuSP/Meteostanice-CSharp/actions/workflows/nanoframework_build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=TekuSP_Meteostanice-CSharp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TekuSP_Meteostanice-CSharp)
 
-1) Flash latest prerelease Firmware using nanoFlasher ( https://github.com/nanoframework/nanoFirmwareFlasher ) => "nanoff --update --target ESP32_WROOM_32 --serialport COM31"
-2) Add addon to VS 2019 ( https://marketplace.visualstudio.com/items?itemName=nanoframework.nanoFramework-VS2019-Extension )
-3) Nuget add feed ( https://pkgs.dev.azure.com/nanoframework/feed/_packaging/sandbox/nuget/v3/index.json ) like ( https://docs.microsoft.com/en-us/azure/devops/artifacts/nuget/consume?view=azure-devops )
-4) Download solution
-5) Open solution
-6) View => Other Windows => Device Explorer
-7) Connect and select your ESP-32
-8) Develop, build and enjoy
-9) Feel free to commit
+Drivers and more.

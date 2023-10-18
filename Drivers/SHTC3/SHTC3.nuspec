@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.SHTC3</id>
     <title>TekuSP I2C Driver for Sensirion SHTC3</title>
-    <version>0.2</version>
+    <version>0.3.1</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
@@ -17,13 +17,13 @@
     <releaseNotes>
     </releaseNotes>
     <repository type="git" url="https://github.com/TekuSP/Meteostanice-CSharp" commit="$commit$" />
-    <copyright>Copyright (c) Richard Torhan 2021</copyright>
+    <copyright>Copyright (c) Richard Torhan 2023</copyright>
     <tags>drivers i2c tekusp net netmf nf nanoframework Sensirion SHTC3</tags>
     <dependencies>
-      <dependency id="TekuSP.Drivers.DriverBase" version="0.2" />
-      <dependency id="TekuSP.Drivers.DriverBaseI2C" version="0.2" />
-      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
-      <dependency id="nanoFramework.System.Device.I2c" version="1.0.1" />
+      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.1" />
+      <dependency id="TekuSP.Drivers.DriverBaseI2C" version="0.3.1" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
+      <dependency id="nanoFramework.System.Device.I2c" version="1.1.11" />
     </dependencies>
   </metadata>
   <files>

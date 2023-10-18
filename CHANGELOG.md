@@ -1,4 +1,40 @@
 
+<a name="v0.3.1-alpha"></a>
+## [v0.3.1-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3-alpha...v0.3.1-alpha)
+
+> 2023-10-17
+
+### Pull Requests
+
+* Merge pull request [#78](https://github.com/TekuSP/Meteostanice-CSharp/issues/78) from TekuSP/fix_versioning
+* Merge pull request [#76](https://github.com/TekuSP/Meteostanice-CSharp/issues/76) from TekuSP/fix_pressure_in_touchdevices
+* Merge pull request [#75](https://github.com/TekuSP/Meteostanice-CSharp/issues/75) from TekuSP/update-changelog
+
+
+<a name="v0.3-alpha"></a>
+## [v0.3-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.2-alpha...v0.3-alpha)
+
+> 2023-10-17
+
+### Reverts
+
+* Update 10 nuget dependencies
+
+### Pull Requests
+
+* Merge pull request [#74](https://github.com/TekuSP/Meteostanice-CSharp/issues/74) from TekuSP/CST816D
+* Merge pull request [#73](https://github.com/TekuSP/Meteostanice-CSharp/issues/73) from TekuSP/update_nugets
+* Merge pull request [#72](https://github.com/TekuSP/Meteostanice-CSharp/issues/72) from TekuSP/update_nugets
+* Merge pull request [#71](https://github.com/TekuSP/Meteostanice-CSharp/issues/71) from TekuSP/nfbot/update-dependencies/349c549f-edd1-4954-b676-bf16581f20b4
+* Merge pull request [#59](https://github.com/TekuSP/Meteostanice-CSharp/issues/59) from TekuSP/nfbot/update-dependencies/c29b5db7-f2cb-4f66-9f7b-71eb05520363
+* Merge pull request [#54](https://github.com/TekuSP/Meteostanice-CSharp/issues/54) from TekuSP/nfbot/update-dependencies/4dfe672d-14d0-4d7b-9e01-99b2834b2bf9
+* Merge pull request [#53](https://github.com/TekuSP/Meteostanice-CSharp/issues/53) from TekuSP/update-dependencies
+* Merge pull request [#44](https://github.com/TekuSP/Meteostanice-CSharp/issues/44) from TekuSP/revert-43-nfbot/update-dependencies/af66b780-84f9-42ea-8652-0278941b380a
+* Merge pull request [#43](https://github.com/TekuSP/Meteostanice-CSharp/issues/43) from TekuSP/nfbot/update-dependencies/af66b780-84f9-42ea-8652-0278941b380a
+* Merge pull request [#41](https://github.com/TekuSP/Meteostanice-CSharp/issues/41) from TekuSP/TekuSP-Nuget-Update-Dependency
+* Merge pull request [#32](https://github.com/TekuSP/Meteostanice-CSharp/issues/32) from TekuSP/update-changelog
+
+
 <a name="v0.2-alpha"></a>
 ## v0.2-alpha
 
