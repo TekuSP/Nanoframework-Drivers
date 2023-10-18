@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
     <RootNamespace>DriverBaseUART</RootNamespace>
-    <AssemblyName>DriverBaseUART</AssemblyName>
+    <AssemblyName>TekuSP.Drivers.DriverBaseUART</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
@@ -25,7 +25,6 @@
     <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="DriverBaseUART.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace DriverBase.Event_Handlers
 {
-    public static class EventHandlers
+    public static partial class EventHandlers
     {
         public delegate void ITouchDataHandler(object sender, ITouchData data);
     }

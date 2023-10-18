@@ -23,6 +23,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Drivers\ADS1015\ADS1015.nfproj" />
     <ProjectReference Include="..\Drivers\CST816D\CST816D.nfproj" />
     <ProjectReference Include="..\Drivers\DriverBaseI2C\DriverBaseI2C.nfproj" />
     <ProjectReference Include="..\Drivers\DriverBaseSPI\DriverBaseSPI.nfproj" />
@@ -34,6 +35,8 @@
     <ProjectReference Include="..\Drivers\MHZ19B\MHZ19B.nfproj" />
     <ProjectReference Include="..\Drivers\SHTC3\SHTC3.nfproj" />
     <ProjectReference Include="..\Drivers\SSD1331\SSD1331.nfproj" />
+    <ProjectReference Include="..\Drivers\TCS34725\TCS34725.nfproj" />
+    <ProjectReference Include="..\Drivers\TSL2561\TSL2561.nfproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib">
