@@ -48,7 +48,9 @@ jobs:
           
       - name: Install Nanoframework Extension
         uses: nanoframework/nanobuild@v1
-
+        env:
+          GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
+          
       - name: Restore nugets
         run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
         
