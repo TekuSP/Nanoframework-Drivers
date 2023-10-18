@@ -1,4 +1,23 @@
 
+<a name="v0.3.3-alpha"></a>
+## [v0.3.3-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.2-alpha...v0.3.3-alpha)
+
+> 2023-10-18
+
+
+<a name="v0.3.2-alpha"></a>
+## [v0.3.2-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.1-alpha...v0.3.2-alpha)
+
+> 2023-10-18
+
+### Pull Requests
+
+* Merge pull request [#83](https://github.com/TekuSP/Meteostanice-CSharp/issues/83) from TekuSP/TCS34725_add_sensor
+* Merge pull request [#80](https://github.com/TekuSP/Meteostanice-CSharp/issues/80) from TekuSP/Master-Branch-Nugets
+* Merge pull request [#79](https://github.com/TekuSP/Meteostanice-CSharp/issues/79) from TekuSP/TekuSP-SonarCloud
+* Merge pull request [#77](https://github.com/TekuSP/Meteostanice-CSharp/issues/77) from TekuSP/update-changelog
+
+
 <a name="v0.3.1-alpha"></a>
 ## [v0.3.1-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3-alpha...v0.3.1-alpha)
 
