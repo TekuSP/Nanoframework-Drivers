@@ -2,12 +2,12 @@
 using System.Device.I2c;
 using System.Threading;
 
-using ADS1015.Enums;
+using TekuSP.Drivers.ADS1015.Enums;
 
-using DriverBase;
-using DriverBase.Interfaces;
+using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.DriverBase.Interfaces;
 
-namespace ADS1015
+namespace TekuSP.Drivers.ADS1015
 {
     /// <summary>
     /// 12 bit ADC Texas Instruments ADS1015, <a href="https://www.ti.com/lit/ds/symlink/ads1015.pdf"/>

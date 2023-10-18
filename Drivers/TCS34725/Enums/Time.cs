@@ -1,4 +1,4 @@
-﻿namespace TCS34725.Enums
+﻿namespace TekuSP.Drivers.TCS34725.Enums
 {
     public enum Time
     {

@@ -1,6 +1,6 @@
-﻿using static DriverBase.Event_Handlers.EventHandlers;
+﻿using static TekuSP.Drivers.DriverBase.Event_Handlers.EventHandlers;
 
-namespace DriverBase.Interfaces
+namespace TekuSP.Drivers.DriverBase.Interfaces
 {
     /// <summary>
     /// Advanced color sensor with interrupt polling

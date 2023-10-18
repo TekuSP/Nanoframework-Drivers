@@ -1,6 +1,6 @@
-﻿using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase.Interfaces;
 
-namespace DriverBase.Event_Handlers
+namespace TekuSP.Drivers.DriverBase.Event_Handlers
 {
     public static partial class EventHandlers
     {

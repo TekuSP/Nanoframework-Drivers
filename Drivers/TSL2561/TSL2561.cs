@@ -1,9 +1,9 @@
-﻿using DriverBase;
-using DriverBase.Enums;
-using DriverBase.Helpers;
+﻿using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.DriverBase.Enums;
+using TekuSP.Drivers.DriverBase.Helpers;
 using System.Device.I2c;
 
-namespace TSL2561
+namespace TekuSP.Drivers.TSL2561
 {
     public class TSL2561 : DriverBaseI2C
     {

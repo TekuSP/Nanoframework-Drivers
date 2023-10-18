@@ -1,4 +1,4 @@
-﻿namespace ADS1015.Enums
+﻿namespace TekuSP.Drivers.ADS1015.Enums
 {
     /// <summary>
     /// Data rate setting for ADS1015

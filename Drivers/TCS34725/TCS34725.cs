@@ -1,13 +1,13 @@
-﻿using DriverBase;
-using DriverBase.Event_Handlers;
-using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.DriverBase.Event_Handlers;
+using TekuSP.Drivers.DriverBase.Interfaces;
 
 using System.Device.Gpio;
 using System.Threading;
 
-using TCS34725.Enums;
+using TekuSP.Drivers.TCS34725.Enums;
 
-namespace TCS34725
+namespace TekuSP.Drivers.TCS34725
 {
     /// <summary>
     /// TAOS TCS34725 Color sensor <a href="https://cdn-shop.adafruit.com/datasheets/TCS34725.pdf"/>

@@ -1,4 +1,4 @@
-﻿namespace DriverBase.Enums
+﻿namespace TekuSP.Drivers.DriverBase.Enums
 {
     public enum HumidityType
     {

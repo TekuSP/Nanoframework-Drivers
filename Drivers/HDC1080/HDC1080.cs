@@ -1,11 +1,11 @@
-﻿using DriverBase;
-using DriverBase.Enums;
-using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.DriverBase.Enums;
+using TekuSP.Drivers.DriverBase.Interfaces;
 using System;
 using System.Threading;
 using System.Device.I2c;
 
-namespace HDC1080
+namespace TekuSP.Drivers.HDC1080
 {
     /// <summary>
     /// Driver for Texas Instruments HDC1080, <a href="https://www.ti.com/lit/ds/symlink/hdc1080.pdf"/>

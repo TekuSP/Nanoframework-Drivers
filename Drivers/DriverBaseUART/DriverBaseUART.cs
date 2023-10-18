@@ -1,9 +1,9 @@
-﻿using DriverBase.Enums;
-using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase.Enums;
+using TekuSP.Drivers.DriverBase.Interfaces;
 
 using System.IO.Ports;
 
-namespace DriverBase
+namespace TekuSP.Drivers.DriverBase
 {
     /// <summary>
     /// Base driver for UART (Serial) devices
