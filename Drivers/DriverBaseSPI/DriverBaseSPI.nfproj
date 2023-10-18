@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
     <RootNamespace>DriverBaseSPI</RootNamespace>
-    <AssemblyName>DriverBaseSPI</AssemblyName>
+    <AssemblyName>TekuSP.Drivers.DriverBaseSPI</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
@@ -25,7 +25,6 @@
     <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="DriverBaseSPI.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
