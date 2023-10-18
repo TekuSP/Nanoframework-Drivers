@@ -78,6 +78,8 @@ namespace DriverBase
 
         public virtual void Start()
         {
+            if (I2CDevice != null)
+                return; //We are already running
             I2CDevice = new I2cDevice(I2CConnectionSettings);
         }
 

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Richard \"TekuSP\" Torhan")]
 [assembly: AssemblyProduct("TekuSP.Drivers.SSD1331")]
-[assembly: AssemblyCopyright("Copyright Richard \"TekuSP\" Torhan 2021 ")]
+[assembly: AssemblyCopyright("Copyright Richard \"TekuSP\" Torhan 2023 ")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,10 +28,10 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.2.*")]
-[assembly: AssemblyFileVersion("0.2.*")]
+[assembly: AssemblyVersion("0.3.1")]
+[assembly: AssemblyFileVersion("0.3.1")]
 /////////////////////////////////////////////////////////////////
 // This attribute is mandatory when building Interop libraries //
 // update this whenever the native assembly signature changes  //
-[assembly: AssemblyNativeVersion("0.2.*")]
+[assembly: AssemblyNativeVersion("0.3.1")]
 /////////////////////////////////////////////////////////////////
