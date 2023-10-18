@@ -1,4 +1,4 @@
-﻿namespace TCS34725
+﻿namespace TekuSP.Drivers.TCS34725
 {
     public static class Offsets
     {

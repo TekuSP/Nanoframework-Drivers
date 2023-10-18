@@ -1,4 +1,4 @@
-﻿namespace DriverBase.Interfaces
+﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
     /// <summary>
     /// Defines support of setting sensitivity to light or color

@@ -1,6 +1,6 @@
-﻿using DriverBase.Enums;
+﻿using TekuSP.Drivers.DriverBase.Enums;
 
-namespace DriverBase.Interfaces
+namespace TekuSP.Drivers.DriverBase.Interfaces
 {
     public interface IDriverBase
     {

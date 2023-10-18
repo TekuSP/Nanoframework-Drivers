@@ -1,6 +1,6 @@
-﻿using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase.Interfaces;
 
-namespace TCS34725
+namespace TekuSP.Drivers.TCS34725
 {
     public class CRGBData : IColorData
     {

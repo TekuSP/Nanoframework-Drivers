@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 
-using CST816D;
+using TekuSP.Drivers.CST816D;
 
 using nanoFramework.Hardware.Esp32;
+using TekuSP.Drivers.TCS34725;
 
 namespace Meteostanice
 {
@@ -107,7 +108,7 @@ namespace Meteostanice
             //cst.Start();
             //Debug.WriteLine("Version: " + cst.ReadVersion());
             //Debug.WriteLine("Version info: " + cst.ReadVersionInfo());
-            TCS34725.TCS34725 colorSensor = new TCS34725.TCS34725(1, TCS34725.Enums.IntegrationTime.TCS34725_INTEGRATIONTIME_101MS, TCS34725.Enums.Gain.TCS34725_GAIN_4X);
+            TCS34725 colorSensor = new TCS34725(1, TekuSP.Drivers.TCS34725.Enums.IntegrationTime.TCS34725_INTEGRATIONTIME_101MS, TekuSP.Drivers.TCS34725.Enums.Gain.TCS34725_GAIN_4X);
             colorSensor.Start();
             Debug.WriteLine(colorSensor.ReadDeviceId());
             while (true)

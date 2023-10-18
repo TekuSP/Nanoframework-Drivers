@@ -2,9 +2,9 @@
 using System.Device.I2c;
 using System.Threading;
 
-using DriverBase;
+using TekuSP.Drivers.DriverBase;
 
-namespace ICM20948
+namespace TekuSP.Drivers.ICM20948
 {
     public class ICM20948 : DriverBaseI2C
     {
