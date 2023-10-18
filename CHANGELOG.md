@@ -1,4 +1,15 @@
 
+<a name="v0.3.5-alpha"></a>
+## [v0.3.5-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.4-alpha...v0.3.5-alpha)
+
+> 2023-10-18
+
+### Pull Requests
+
+* Merge pull request [#87](https://github.com/TekuSP/Meteostanice-CSharp/issues/87) from TekuSP/add_documentation_to_nugets
+* Merge pull request [#86](https://github.com/TekuSP/Meteostanice-CSharp/issues/86) from TekuSP/update-changelog
+
+
 <a name="v0.3.4-alpha"></a>
 ## [v0.3.4-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.3-alpha...v0.3.4-alpha)
 
