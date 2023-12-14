@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.DriverBaseSPI</id>
     <title>TekuSP SPI DriverBase for Nanoframework</title>
-    <version>0.3.5</version>
+    <version>0.3.6</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
@@ -20,7 +20,7 @@
     <copyright>Copyright (c) Richard Torhan 2023</copyright>
     <tags>drivers spi tekusp net netmf nf nanoframework</tags>
     <dependencies>
-      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.5" />
+      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.6" />
       <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
       <dependency id="nanoFramework.Runtime.Events" version="1.11.6" />
       <dependency id="nanoFramework.System.Device.Gpio" version="1.1.28" />
