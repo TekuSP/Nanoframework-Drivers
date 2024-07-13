@@ -18,6 +18,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm
     /// </summary>
     public class OpenTherm : IDriverBase
     {
+        private int RawInPin
+        {
+            get; 
+        }
+        private int RawOutPin
+        {
+            get;
+        }
         private GpioPin InPin
         {
             get; set;
@@ -46,31 +54,61 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         {
             get; set;
         }
-        public ulong Response
+        public ulong RawResponse
         {
             get; set;
         }
-        private event EventHandler<IOpenThermData> DataReceived = (_, _) => { };
-        private event EventHandler<IOpenThermData> DataInvalid = (_, _) => { };
-        private event EventHandler<IOpenThermData> DataTimeout = (_, _) => { };
+        /// <summary>
+        /// Happens when data is sent, and <see cref="Request"/> is attached to it
+        /// </summary>
+        public event EventHandler<IOpenThermData> DataSent = (_, _) => { };
+        /// <summary>
+        /// Happens when data is received the <see cref="IOpenThermData"/> is either: <code>Request</code> We have received valid OpenTherm <see cref="Request"/>, <code>Response</code> We have received valid OpenTherm <see cref="Response"/>
+        /// </summary>
+        public event EventHandler<IOpenThermData> DataReceived = (_, _) => { };
+        /// <summary>
+        /// Happens when data is received invalid the <see cref="IOpenThermData"/> is either: <code>Request</code> We have received invalid OpenTherm <see cref="Request"/>, <code>Response</code> We have received invalid OpenTherm <see cref="Response"/>
+        /// <br/><br/> It is not safe to access data from this event, they can malformed or invalid
+        /// </summary>
+        public event EventHandler<IOpenThermData> DataInvalid = (_, _) => { };
+        /// <summary>
+        /// Happens when request timeout is reached <code>Slave</code>20000ms<code>Master</code>100000ms 
+        /// <br/> <br/> Attached is <see cref="Request"/> which was timeout
+        /// </summary>
+        public event EventHandler<IOpenThermData> DataTimeout = (_, _) => { };
 
-        private ManualResetEvent dataProcessedEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent dataProcessedEvent = new ManualResetEvent(false);
         private IOpenThermData LastReceivedDataFromSend { get; set; }
 
         private Timer TimeoutTimer
         {
             get; set;
         }
+        /// <summary>
+        /// OpenTherm driver constructor
+        /// </summary>
+        /// <param name="inPin">IN Pin for OpenTherm</param>
+        /// <param name="outPin">OUT Pin for OpenTherm</param>
+        /// <param name="slave">Is this device slave?
+        /// <code>Slave</code>
+        /// Can be used as Boiler simulator/or real Boiler
+        /// <br/>Can be used as Thermostat input for passthrough
+        /// <br/><see cref="https://diyless.com/product/slave-opentherm-shield"/>
+        /// <code>Master</code>
+        /// Can be used as Thermostat simulator/or real Thermostat
+        /// <br/>Can be used as Boiler input for passthrough
+        /// <br/><see cref="https://diyless.com/product/master-opentherm-shield"/>
+        /// </param>
+
         public OpenTherm(int inPin, int outPin, bool slave)
         {
-            using GpioController controller = new GpioController();
-            InPin = controller.OpenPin(inPin, PinMode.Input);
-            OutPin = controller.OpenPin(outPin, PinMode.Output);
+            RawInPin = inPin;
+            RawOutPin = outPin;
             Slave = slave;
         }
         public CommunicationType CommunicationType => CommunicationType.Other;
 
-        public int DeviceAddress => 0;
+        public int DeviceAddress => RawInPin + RawOutPin;
 
         public bool IsRunning
         {
@@ -137,6 +175,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             }
             WriteData(true);
 
+            DataSent.Invoke(this, request);
+
             DataReceived += SendDataFinished;
             DataInvalid += SendDataFinished;
             TimeoutTimer = new Timer((_) =>
@@ -190,10 +230,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         public void Restart()
         {
             Stop();
+            Thread.Sleep(1000);
             Start();
         }
         public void Start()
         {
+            using GpioController controller = new GpioController();
+            if (controller.IsPinOpen(RawInPin))
+                throw new ArgumentException($"Pin Input {RawInPin} is already opened elsewhere. Please close it first.");
+            InPin = controller.OpenPin(RawInPin, PinMode.Input);
+            if (controller.IsPinOpen(RawOutPin))
+                throw new ArgumentException($"Pin Output {RawOutPin} is already opened elsewhere. Please close it first.");
+            OutPin = controller.OpenPin(RawOutPin, PinMode.Output);
+
             InPin.ValueChanged += InPin_DataRecieved;
             OutPin.Write(PinValue.High); //Confirm that we are ready to communicate
             Thread.Sleep(1000);
@@ -204,12 +253,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm
 
         public void Stop()
         {
+            using GpioController controller = new GpioController();
             InPin.ValueChanged -= InPin_DataRecieved;
             OutPin.Write(PinValue.Low); //Stop communication
-            Thread.Sleep(1000);
+
+            if (controller.IsPinOpen(RawInPin))
+                controller.ClosePin(RawInPin);
+            if (controller.IsPinOpen(RawOutPin))
+                controller.ClosePin(RawOutPin);
+
+            InPin.Dispose();
+            OutPin.Dispose();
+
             IsRunning = false;
             InternalReceiveStatus = Enums.DataStatus.NOT_INITIALIZED;
             InternalSendStatus = Enums.DataStatus.NOT_INITIALIZED;
+
+            //Reset all data and currently running stuff
+            LastReceivedDataFromSend = null;
+            if (dataProcessedEvent != null)
+            {
+                dataProcessedEvent.Set(); //Stop soft locking threads and reset event
+                dataProcessedEvent.Reset();
+            }
+            TimeoutTimer.Dispose();
+            DataReceiveIndex = 0;
+
+            Thread.Sleep(1000);
         }
         /// <summary>
         /// Not supported
@@ -270,7 +340,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 }
                 else
                 {
-                    DataInvalid.Invoke(this, Slave ? new ReceivedRequest(Response) : new Response(Response)); //Invalid initial bit
+                    DataInvalid.Invoke(this, Slave ? new ReceivedRequest(RawResponse) : new Response(RawResponse)); //Invalid initial bit
                     DataReceiveTimer.Reset();
                 }
             }
@@ -284,7 +354,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 }
                 else
                 {
-                    DataInvalid.Invoke(this, Slave ? new ReceivedRequest(Response) : new Response(Response)); //Invalid end of initial bit
+                    DataInvalid.Invoke(this, Slave ? new ReceivedRequest(RawResponse) : new Response(RawResponse)); //Invalid end of initial bit
                     DataReceiveTimer.Reset();
                 }
             }
@@ -294,7 +364,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 {
                     if (DataReceiveIndex < 32) //Data have 32 indexes
                     {
-                        Response = (Response << 1) | (e.ChangeType == PinEventTypes.Rising ? (uint)0 : (uint)1); //Read bit and add it to data
+                        RawResponse = (RawResponse << 1) | (e.ChangeType == PinEventTypes.Rising ? (uint)0 : (uint)1); //Read bit and add it to data
                         DataReceiveIndex++; //Move index
                         DataReceiveTimer.Restart();
                     }
@@ -302,7 +372,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                     {
                         if (Slave)
                         {
-                            var req = new ReceivedRequest(Response);
+                            var req = new ReceivedRequest(RawResponse);
                             if (req.IsValidRequest())
                             {
                                 DataReceived.Invoke(this, req);
@@ -314,7 +384,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                         }
                         else
                         {
-                            var res = new Response(Response);
+                            var res = new Response(RawResponse);
                             if (res.IsValidResponse())
                             {
                                 DataReceived.Invoke(this, res);
