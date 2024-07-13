@@ -1,4 +1,26 @@
 
+<a name="v0.3.7-alpha"></a>
+## [v0.3.7-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.6-alpha...v0.3.7-alpha)
+
+> 2024-07-13
+
+### Pull Requests
+
+* Merge pull request [#115](https://github.com/TekuSP/Meteostanice-CSharp/issues/115) from TekuSP/update_nugets_raise
+* Merge pull request [#114](https://github.com/TekuSP/Meteostanice-CSharp/issues/114) from TekuSP/gh-actions-update-1720743583
+* Merge pull request [#110](https://github.com/TekuSP/Meteostanice-CSharp/issues/110) from TekuSP/gh-actions-update-1718324338
+* Merge pull request [#104](https://github.com/TekuSP/Meteostanice-CSharp/issues/104) from TekuSP/gh-actions-update-1714090695
+* Merge pull request [#102](https://github.com/TekuSP/Meteostanice-CSharp/issues/102) from TekuSP/gh-actions-update-1711066646
+* Merge pull request [#100](https://github.com/TekuSP/Meteostanice-CSharp/issues/100) from TekuSP/gh-actions-update-1709252379
+* Merge pull request [#99](https://github.com/TekuSP/Meteostanice-CSharp/issues/99) from TekuSP/gh-actions-update-1708647420
+* Merge pull request [#96](https://github.com/TekuSP/Meteostanice-CSharp/issues/96) from TekuSP/gh-actions-update-1706833032
+* Merge pull request [#95](https://github.com/TekuSP/Meteostanice-CSharp/issues/95) from TekuSP/gh-actions-update-1706228274
+* Merge pull request [#93](https://github.com/TekuSP/Meteostanice-CSharp/issues/93) from TekuSP/gh-actions-update-1705105025
+* Merge pull request [#92](https://github.com/TekuSP/Meteostanice-CSharp/issues/92) from TekuSP/gh-actions-update-1705018646
+* Merge pull request [#91](https://github.com/TekuSP/Meteostanice-CSharp/issues/91) from TekuSP/gh-actions-update-1704932256
+* Merge pull request [#90](https://github.com/TekuSP/Meteostanice-CSharp/issues/90) from TekuSP/update-changelog
+
+
 <a name="v0.3.6-alpha"></a>
 ## [v0.3.6-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.5-alpha...v0.3.6-alpha)
 
