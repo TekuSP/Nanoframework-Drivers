@@ -17,7 +17,7 @@
     <releaseNotes>
     </releaseNotes>
     <repository type="git" url="https://github.com/TekuSP/Meteostanice-CSharp" commit="$commit$" />
-    <copyright>Copyright (c) Richard Torhan 2023</copyright>
+    <copyright>Copyright (c) Richard Torhan 2024</copyright>
     <tags>drivers tekusp net netmf nf nanoframework</tags>
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
