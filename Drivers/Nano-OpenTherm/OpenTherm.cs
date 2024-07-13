@@ -106,7 +106,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             RawOutPin = outPin;
             Slave = slave;
         }
-        public CommunicationType CommunicationType => CommunicationType.Other;
+        public CommunicationType CommunicationType => CommunicationType.OpenTherm;
 
         public int DeviceAddress => RawInPin + RawOutPin;
 
@@ -138,6 +138,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         }
         public string ReadDeviceId()
         {
+            if (!IsRunning)
+                return "Must be running first!";
             var manu = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerRequest());
             var ver = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerVersionRequest());
             var ser = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetSerialRequest());
@@ -146,11 +148,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         }
         public string ReadManufacturerId()
         {
+            if (!IsRunning)
+                return "Must be running first!";
             var response = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerRequest());
             return response.GetUInt().ToString();
         }
         public string ReadSerialNumber()
         {
+            if (!IsRunning)
+                return "Must be running first!";
             var response = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetSerialRequest());
             return response.GetUInt().ToString();
         }
@@ -235,6 +241,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         }
         public void Start()
         {
+            if (IsRunning)
+                return;
+            IsRunning = true;
             using GpioController controller = new GpioController();
             if (controller.IsPinOpen(RawInPin))
                 throw new ArgumentException($"Pin Input {RawInPin} is already opened elsewhere. Please close it first.");
@@ -246,13 +255,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             InPin.ValueChanged += InPin_DataRecieved;
             OutPin.Write(PinValue.High); //Confirm that we are ready to communicate
             Thread.Sleep(1000);
-            IsRunning = true;
             InternalReceiveStatus = Enums.DataStatus.READY;
             InternalSendStatus = Enums.DataStatus.READY;
         }
 
         public void Stop()
         {
+            if (!IsRunning)
+                return;
+            IsRunning = false;
+
             using GpioController controller = new GpioController();
             InPin.ValueChanged -= InPin_DataRecieved;
             OutPin.Write(PinValue.Low); //Stop communication
@@ -265,7 +277,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             InPin.Dispose();
             OutPin.Dispose();
 
-            IsRunning = false;
             InternalReceiveStatus = Enums.DataStatus.NOT_INITIALIZED;
             InternalSendStatus = Enums.DataStatus.NOT_INITIALIZED;
 
@@ -282,7 +293,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             Thread.Sleep(1000);
         }
         /// <summary>
-        /// Not supported
+        /// Not supported,see <see cref="SendRequest(Request)"/> to send data"/>
         /// </summary>
         /// <param name="data"></param>
         public void WriteData(byte[] data)
