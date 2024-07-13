@@ -20,14 +20,14 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
         with:
           path: main
       - name: Install NuGet client
-        uses: nuget/setup-nuget@v1.2.0
+        uses: nuget/setup-nuget@v2.0.0
         with:
           nuget-version: '5.x'
-      - uses: nanoframework/nanodu@v1.0.19
+      - uses: nanoframework/nanodu@v1.0.24
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
