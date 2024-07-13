@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.ADS1015</id>
     <title>TekuSP I2C Driver for Texas Instruments ADS1015</title>
-    <version>0.3.7</version>
+    <version>$version$</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
@@ -20,10 +20,8 @@
     <copyright>Copyright (c) Richard Torhan 2024</copyright>
     <tags>drivers i2c tekusp net netmf nf nanoframework ADS1015 ti texasinstruments</tags>
     <dependencies>
-      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.7" />
-      <dependency id="TekuSP.Drivers.DriverBaseI2C" version="0.3.7" />
-      <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
-      <dependency id="nanoFramework.System.Device.I2c" version="1.1.11" />
+      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.71" />
+      <dependency id="TekuSP.Drivers.DriverBaseI2C" version="0.3.71" />
     </dependencies>
   </metadata>
   <files>
