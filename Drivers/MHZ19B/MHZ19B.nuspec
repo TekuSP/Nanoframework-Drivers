@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.MHZ19B</id>
     <title>TekuSP UART Driver for Zhengzhou Winsen Electronics Technology Co., Ltd, Intelligent Infrared CO2 Module MH-Z19B</title>
-    <version>0.3.7</version>
+    <version>0.3.71</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
