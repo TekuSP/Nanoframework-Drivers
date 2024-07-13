@@ -1,4 +1,20 @@
 
+<a name="v0.3.71-alpha"></a>
+## [v0.3.71-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.7-alpha...v0.3.71-alpha)
+
+> 2024-07-13
+
+### Reverts
+
+* fix version
+
+### Pull Requests
+
+* Merge pull request [#118](https://github.com/TekuSP/Meteostanice-CSharp/issues/118) from TekuSP/fix_nuget_dependencies
+* Merge pull request [#117](https://github.com/TekuSP/Meteostanice-CSharp/issues/117) from TekuSP/update_year_changelog
+* Merge pull request [#116](https://github.com/TekuSP/Meteostanice-CSharp/issues/116) from TekuSP/update-changelog
+
+
 <a name="v0.3.7-alpha"></a>
 ## [v0.3.7-alpha](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.6-alpha...v0.3.7-alpha)
 
