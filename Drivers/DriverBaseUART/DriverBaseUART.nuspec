@@ -20,13 +20,13 @@
     <copyright>Copyright (c) Richard Torhan 2024</copyright>
     <tags>drivers uart tekusp net netmf nf nanoframework</tags>
     <dependencies>
-      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.7" />
-      <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
-      <dependency id="nanoFramework.Runtime.Events" version="1.11.6" />
-      <dependency id="nanoFramework.System.IO.Ports" version="1.1.60" />
-      <dependency id="nanoFramework.System.IO.Streams" version="1.1.38" />
-      <dependency id="nanoFramework.System.Text" version="1.2.37" />
-      <dependency id="nanoFramework.Windows.Storage.Streams" version="1.14.24" />
+      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.71" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.15.5" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.11.18" />
+      <dependency id="nanoFramework.System.IO.Ports" version="1.1.86" />
+      <dependency id="nanoFramework.System.IO.Streams" version="1.1.59" />
+      <dependency id="nanoFramework.System.Text" version="1.2.54" />
+      <dependency id="nanoFramework.Windows.Storage.Streams" version="1.14.32" />
     </dependencies>
   </metadata>
   <files>

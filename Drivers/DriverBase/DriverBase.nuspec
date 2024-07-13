@@ -20,7 +20,7 @@
     <copyright>Copyright (c) Richard Torhan 2024</copyright>
     <tags>drivers tekusp net netmf nf nanoframework</tags>
     <dependencies>
-      <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.15.5" />
     </dependencies>
   </metadata>
   <files>
