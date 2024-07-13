@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.MHZ19B</id>
     <title>TekuSP UART Driver for Zhengzhou Winsen Electronics Technology Co., Ltd, Intelligent Infrared CO2 Module MH-Z19B</title>
-    <version>0.3.6</version>
+    <version>0.3.7</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
@@ -20,8 +20,8 @@
     <copyright>Copyright (c) Richard Torhan 2023</copyright>
     <tags>drivers uart tekusp net netmf nf nanoframework MH-Z19B MHZ19B MHZ</tags>
     <dependencies>
-      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.6" />
-      <dependency id="TekuSP.Drivers.DriverBaseUART" version="0.3.6" />
+      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.7" />
+      <dependency id="TekuSP.Drivers.DriverBaseUART" version="0.3.7" />
       <dependency id="nanoFramework.CoreLibrary" version="1.14.2" />
       <dependency id="nanoFramework.Runtime.Events" version="1.11.6" />
       <dependency id="nanoFramework.System.IO.Ports" version="1.1.60" />
