@@ -41,6 +41,7 @@
     <Compile Include="Interfaces\IHumiditySensor.cs" />
     <Compile Include="Interfaces\IIRSensor.cs" />
     <Compile Include="Interfaces\ILightSensor.cs" />
+    <Compile Include="Interfaces\IOpenThermData.cs" />
     <Compile Include="Interfaces\IPowerSaving.cs" />
     <Compile Include="Interfaces\IPressureSensor.cs" />
     <Compile Include="Interfaces\IRegister.cs" />

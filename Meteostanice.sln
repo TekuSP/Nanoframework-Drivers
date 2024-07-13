@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
@@ -37,12 +36,20 @@ Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "CST816D", "Drivers\CST816D\
 EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "TCS34725", "Drivers\TCS34725\TCS34725.nfproj", "{D3DFD81A-6D48-48AA-9210-55969B0632AF}"
 EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "Nano-OpenTherm", "Drivers\Nano-OpenTherm\Nano-OpenTherm.nfproj", "{803ABA87-2920-40C4-90DC-CB14DC7DA763}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{803ABA87-2920-40C4-90DC-CB14DC7DA763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{803ABA87-2920-40C4-90DC-CB14DC7DA763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{803ABA87-2920-40C4-90DC-CB14DC7DA763}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{803ABA87-2920-40C4-90DC-CB14DC7DA763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{803ABA87-2920-40C4-90DC-CB14DC7DA763}.Release|Any CPU.Build.0 = Release|Any CPU
+		{803ABA87-2920-40C4-90DC-CB14DC7DA763}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAAE16C7-8DF2-4C76-AE01-209F162B0908}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -138,6 +145,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{803ABA87-2920-40C4-90DC-CB14DC7DA763} = {FE469048-9F4B-4913-818A-50961AEC9A83}
 		{97D42F12-92D6-4CD3-8027-896C663A700D} = {FE469048-9F4B-4913-818A-50961AEC9A83}
 		{BD7A8399-5541-43FD-9EA1-4CFEC8EA9ACE} = {FE469048-9F4B-4913-818A-50961AEC9A83}
 		{B1965B4A-F69E-4581-991E-B064D71DB622} = {FE469048-9F4B-4913-818A-50961AEC9A83}

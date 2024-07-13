@@ -8,7 +8,14 @@
         {
             return (b & (1 << bitNumber - 1)) != 0;
         }
-
+        public static bool GetBit(this uint b, int bitNumber)
+        {
+            return (b & (1 << bitNumber - 1)) != 0;
+        }
+        public static bool GetBit(this ulong b, int bitNumber)
+        {
+            return (b & ((ulong)1 << bitNumber - 1)) != 0;
+        }
         public static uint HighWord(this uint number) => number & 0xFFFF0000;
 
         public static uint HighWord(this uint number, uint newValue) => (number & 0x0000FFFF) + (newValue << 16);

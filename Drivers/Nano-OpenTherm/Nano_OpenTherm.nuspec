@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>TekuSP.Drivers.Nano_OpenTherm</id>
+    <title>TekuSP OpenTherm Driver</title>
+    <version>0.3.71</version>
+    <!--<version>$version$</version>-->
+    <authors>Richard "TekuSP" Torhan</authors>
+    <owners>Richard "TekuSP" Torhan</owners>
+    <license type="file">LICENSE.md</license>
+    <projectUrl>https://github.com/TekuSP/Meteostanice-CSharp</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <developmentDependency>false</developmentDependency>
+    <description>
+      Nuget Package for Nanoframework, used for: OpenTherm communication
+    </description>
+    <releaseNotes>
+    </releaseNotes>
+    <repository type="git" url="https://github.com/TekuSP/Meteostanice-CSharp" commit="$commit$" />
+    <copyright>Copyright (c) Richard Torhan 2024</copyright>
+    <tags>drivers tekusp net netmf nf nanoframework OpenTherm OT Thermostat</tags>
+    <dependencies>
+      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.71" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.15.5" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.11.18" />
+      <dependency id="nanoFramework.Runtime.Native" version="1.6.12" />
+      <dependency id="nanoFramework.System.Device.Gpio" version="1.1.41" />
+      <dependency id="nanoFramework.System.Diagnostics.Stopwatch" version="1.2.586" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\TekuSP.Drivers.Nano_OpenTherm.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
+  </files>
+</package>
