@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.TSL2561</id>
     <title>TekuSP I2C Driver for TAOS TSL2561</title>
-    <version>0.3.71</version>
+    <version>$version$</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>

@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.DriverBaseSPI</id>
     <title>TekuSP SPI DriverBase for Nanoframework</title>
-    <version>0.3.71</version>
+    <version>$version$</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
