@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.TCS34725</id>
     <title>TekuSP I2C Driver for TAOS TCS34725</title>
-    <version>$version$</version>
+    <version>0.3.71</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>

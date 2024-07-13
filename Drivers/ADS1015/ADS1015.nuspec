@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.ADS1015</id>
     <title>TekuSP I2C Driver for Texas Instruments ADS1015</title>
-    <version>$version$</version>
+    <version>0.3.71</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>

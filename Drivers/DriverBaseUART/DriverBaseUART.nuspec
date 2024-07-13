@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.DriverBaseUART</id>
     <title>TekuSP UART DriverBase for Nanoframework</title>
-    <version>$version$</version>
+    <version>0.3.71</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
