@@ -36,16 +36,16 @@
       <HintPath>..\..\packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.Runtime.Events">
-      <HintPath>..\..\packages\nanoFramework.Runtime.Events.1.11.15\lib\nanoFramework.Runtime.Events.dll</HintPath>
+      <HintPath>..\..\packages\nanoFramework.Runtime.Events.1.11.18\lib\nanoFramework.Runtime.Events.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.System.Text">
       <HintPath>..\..\packages\nanoFramework.System.Text.1.2.54\lib\nanoFramework.System.Text.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Ports">
-      <HintPath>..\..\packages\nanoFramework.System.IO.Ports.1.1.78\lib\System.IO.Ports.dll</HintPath>
+      <HintPath>..\..\packages\nanoFramework.System.IO.Ports.1.1.86\lib\System.IO.Ports.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Streams">
-      <HintPath>..\..\packages\nanoFramework.System.IO.Streams.1.1.52\lib\System.IO.Streams.dll</HintPath>
+      <HintPath>..\..\packages\nanoFramework.System.IO.Streams.1.1.59\lib\System.IO.Streams.dll</HintPath>
     </Reference>
     <Reference Include="Windows.Storage.Streams">
       <HintPath>..\..\packages\nanoFramework.Windows.Storage.Streams.1.14.32\lib\Windows.Storage.Streams.dll</HintPath>
