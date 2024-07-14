@@ -1,5 +1,8 @@
-﻿namespace TekuSP.Drivers.Nano_OpenTherm.Enums
+﻿namespace TekuSP.Drivers.DriverBase.Enums.OpenTherm
 {
+    /// <summary>
+    /// Message operation type for OpenTherm
+    /// </summary>
     public enum MessageType : byte
     {
         /*  Master to Slave */

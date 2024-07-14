@@ -8,6 +8,7 @@ using TekuSP.Drivers.Nano_OpenTherm.Requests;
 using TekuSP.Drivers.DriverBase.Enums;
 using TekuSP.Drivers.DriverBase.Helpers;
 using TekuSP.Drivers.DriverBase.Interfaces;
+using TekuSP.Drivers.Nano_OpenTherm.Responses;
 
 namespace TekuSP.Drivers.Nano_OpenTherm
 {
@@ -140,25 +141,25 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         {
             if (!IsRunning)
                 return "Must be running first!";
-            var manu = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerRequest());
-            var ver = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerVersionRequest());
-            var ser = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetSerialRequest());
+            var manu = (Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerRequest());
+            var ver = (Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerVersionRequest());
+            var ser = (Response)SendRequestAndWaitForResponse(new Requests.GetSerialRequest());
 
-            return $"{manu.GetUInt()}-{ver.GetUInt()}-{ser.GetUInt()}";
+            return "";//$"{manu.GetUInt()}-{ver.GetUInt()}-{ser.GetUInt()}";
         }
         public string ReadManufacturerId()
         {
             if (!IsRunning)
                 return "Must be running first!";
-            var response = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerRequest());
-            return response.GetUInt().ToString();
+            var response = (Response)SendRequestAndWaitForResponse(new Requests.GetManufacturerRequest());
+            return "";// response.GetUInt().ToString();
         }
         public string ReadSerialNumber()
         {
             if (!IsRunning)
                 return "Must be running first!";
-            var response = (TekuSP.Drivers.Nano_OpenTherm.Response)SendRequestAndWaitForResponse(new Requests.GetSerialRequest());
-            return response.GetUInt().ToString();
+            var response = (Response)SendRequestAndWaitForResponse(new Requests.GetSerialRequest());
+            return "";// response.GetUInt().ToString();
         }
         /// <summary>
         /// Sends and processes request
@@ -351,7 +352,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 }
                 else
                 {
-                    DataInvalid.Invoke(this, Slave ? new ReceivedRequest(RawResponse) : new Response(RawResponse)); //Invalid initial bit
+                    DataInvalid.Invoke(this, Slave ? new ReceivedRequest(RawResponse) : new ReceivedResponse(RawResponse)); //Invalid initial bit
                     DataReceiveTimer.Reset();
                 }
             }
@@ -365,7 +366,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 }
                 else
                 {
-                    DataInvalid.Invoke(this, Slave ? new ReceivedRequest(RawResponse) : new Response(RawResponse)); //Invalid end of initial bit
+                    DataInvalid.Invoke(this, Slave ? new ReceivedRequest(RawResponse) : new ReceivedResponse(RawResponse)); //Invalid end of initial bit
                     DataReceiveTimer.Reset();
                 }
             }
@@ -395,7 +396,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                         }
                         else
                         {
-                            var res = new Response(RawResponse);
+                            var res = new ReceivedResponse(RawResponse);
                             if (res.IsValidResponse())
                             {
                                 DataReceived.Invoke(this, res);

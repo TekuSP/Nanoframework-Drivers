@@ -1,4 +1,4 @@
-﻿using TekuSP.Drivers.Nano_OpenTherm.Enums;
+﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {

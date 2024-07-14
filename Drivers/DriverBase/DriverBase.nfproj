@@ -23,6 +23,8 @@
   <ItemGroup>
     <Compile Include="Enums\CommunicationType.cs" />
     <Compile Include="Enums\HumidityType.cs" />
+    <Compile Include="Enums\OpenTherm\MessageID.cs" />
+    <Compile Include="Enums\OpenTherm\MessageType.cs" />
     <Compile Include="Enums\PressureType.cs" />
     <Compile Include="Enums\TemperatureUnit.cs" />
     <Compile Include="Event Handlers\IColorDataEventHandler.cs" />

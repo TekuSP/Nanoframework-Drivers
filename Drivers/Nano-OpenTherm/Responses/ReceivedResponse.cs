@@ -1,15 +1,19 @@
 ﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
-namespace TekuSP.Drivers.Nano_OpenTherm.Requests
+namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
-    public class ReceivedRequest : Request
+    public class ReceivedResponse : Response
     {
-        public ReceivedRequest(ulong rawData)
+        /// <summary>
+        /// Initializes RawResponse
+        /// </summary>
+        public ReceivedResponse(ulong rawData)
         {
             RawData = rawData;
-            MessageType = (MessageType)((rawData >> 28) & 7);
-            MessageID = (MessageID)((rawData >> 16) & 0xFF);
+            MessageType = (MessageType)(rawData >> 28 & 7);
+            MessageID = (MessageID)(rawData >> 16 & 0xFF);
         }
+
         public override ulong RawData
         {
             get;
