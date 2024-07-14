@@ -19,7 +19,14 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Enums\ResponseStatus.cs" />
+    <Compile Include="Enums\ApplicationSpecificFaultFlags.cs" />
+    <Compile Include="Enums\RemoteOverrideFunction.cs" />
+    <Compile Include="Enums\RemoteParameterTransferReadWrite.cs" />
+    <Compile Include="Enums\RemoteParameterTransferEnable.cs" />
+    <Compile Include="Enums\SlaveConfiguration.cs" />
+    <Compile Include="Enums\MasterConfiguration.cs" />
+    <Compile Include="Enums\SlaveStatus.cs" />
+    <Compile Include="Enums\MasterStatus.cs" />
     <Compile Include="Enums\Status.cs" />
     <Compile Include="OpenTherm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

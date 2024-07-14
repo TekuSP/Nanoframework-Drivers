@@ -1,5 +1,7 @@
 ﻿using System;
 
+using TekuSP.Drivers.Nano_OpenTherm.Enums;
+
 namespace TekuSP.Drivers.Nano_OpenTherm
 {
     public static class Utilities
@@ -138,6 +140,86 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             var hour = (byte)(date & 0x1F);
             time = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, hour, minutes, DateTime.UtcNow.Second);
             dayOfWeek = (DayOfWeek)dayofweek;
+        }
+        /// <summary>
+        /// Gets Master Status from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>MasterStatus</returns>
+        public static MasterStatus GetMasterStatus(ulong rawData)
+        {
+            var data = GetLowByte(rawData);
+            return (MasterStatus)data;
+        }
+        /// <summary>
+        /// Gets Slave Status from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>SlaveStatus</returns>
+        public static SlaveStatus GetSlaveStatus(ulong rawData)
+        {
+            var data = GetHighByte(rawData);
+            return (SlaveStatus)data;
+        }
+        /// <summary>
+        /// Gets Master Configuration from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>MasterConfiguration</returns>
+        public static MasterConfiguration GetMasterConfiguration(ulong rawData)
+        {
+            var data = GetLowByte(rawData);
+            return (MasterConfiguration)data;
+        }
+        /// <summary>
+        /// Gets Slave Configuration from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>SlaveConfiguration</returns>
+        public static SlaveConfiguration GetSlaveConfiguration(ulong rawData)
+        {
+            var data = GetLowByte(rawData);
+            return (SlaveConfiguration)data;
+        }
+        /// <summary>
+        /// Gets Application Specific Fault Flags from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>ApplicationSpecificFaultFlags</returns>
+        public static ApplicationSpecificFaultFlags GetApplicationSpecificFaultFlags(ulong rawData)
+        {
+            var data = GetLowByte(rawData);
+            return (ApplicationSpecificFaultFlags)data;
+        }
+        /// <summary>
+        /// Gets Remote Parameter Transfer Enable from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>RemoteParameterTransferEnable</returns>
+        public static RemoteParameterTransferEnable GetRemoteParameterTransferEnable(ulong rawData)
+        {
+            var data = GetLowByte(rawData);
+            return (RemoteParameterTransferEnable)data;
+        }
+        /// <summary>
+        /// Gets Remote Parameter Transfer Read Write from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>RemoteParameterTransferReadWrite</returns>
+        public static RemoteParameterTransferReadWrite GetRemoteParameterTransferReadWrite(ulong rawData)
+        {
+            var data = GetHighByte(rawData);
+            return (RemoteParameterTransferReadWrite)data;
+        }
+        /// <summary>
+        /// Gets Remote Override Function from raw data
+        /// </summary>
+        /// <param name="rawData">Raw data</param>
+        /// <returns>RemoteOverrideFunction</returns>
+        public static RemoteOverrideFunction GetRemoteOverrideFunction(ulong rawData)
+        {
+            var data = GetLowByte(rawData);
+            return (RemoteOverrideFunction)data;
         }
     }
 }
