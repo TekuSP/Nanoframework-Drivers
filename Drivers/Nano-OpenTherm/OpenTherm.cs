@@ -164,9 +164,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// <summary>
         /// Sends and processes request
         /// </summary>
-        /// <param name="request">Request to send</param>
+        /// <param name="data">Request or response to send</param>
         /// <returns>Success sending</returns>
-        public bool SendRequest(Requests.Request request)
+        public bool SendRequest(IOpenThermData data)
         {
             if (!IsRunning)
                 return false;
@@ -178,11 +178,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             WriteData(true);
             for (int i = 31; i >= 0; i--)
             {
-                WriteData(BitHelper.GetBit(request.RawData, i));
+                WriteData(BitHelper.GetBit(data.RawData, i));
             }
             WriteData(true);
 
-            DataSent.Invoke(this, request);
+            DataSent.Invoke(this, data);
 
             DataReceived += SendDataFinished;
             DataInvalid += SendDataFinished;
@@ -191,7 +191,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 DataReceived -= SendDataFinished;
                 DataInvalid -= SendDataFinished;
                 //Timeout
-                DataTimeout.Invoke(this, request);
+                DataTimeout.Invoke(this, data);
                 dataProcessedEvent.Set();
                 InternalSendStatus = Enums.DataStatus.READY;
             }, null, Slave ? 20000 : 100000, Timeout.Infinite);

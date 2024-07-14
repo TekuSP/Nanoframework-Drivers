@@ -20,6 +20,8 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Enums\ApplicationSpecificFaultFlags.cs" />
+    <Compile Include="Enums\CommandCode.cs" />
+    <Compile Include="Enums\CommandCodeResponse.cs" />
     <Compile Include="Enums\RemoteOverrideFunction.cs" />
     <Compile Include="Enums\RemoteParameterTransferReadWrite.cs" />
     <Compile Include="Enums\RemoteParameterTransferEnable.cs" />
@@ -45,9 +47,13 @@
     <Compile Include="Requests\SetBoilerStatusRequest.cs" />
     <Compile Include="Requests\SetDWHSetPointRequest.cs" />
     <Compile Include="Requests\SetBoilerTemperatureRequest.cs" />
+    <Compile Include="Responses\ApplicationFaultCodesResponse.cs" />
+    <Compile Include="Responses\RemoteBoilerParameterResponse.cs" />
+    <Compile Include="Responses\RemoteOverrideRoomSetPointResponse.cs" />
+    <Compile Include="Responses\SlaveConfigResponse.cs" />
+    <Compile Include="Responses\StatusResponse.cs" />
     <Compile Include="Responses\ReceivedResponse.cs" />
     <Compile Include="Responses\Response.cs" />
-    <Compile Include="Responses\ResponseTODO.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
