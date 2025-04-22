@@ -1,9 +1,8 @@
-# Copyright (c) .NET Foundation and Contributors
-# https://github.com/networkfusion/MBN-TinyCLR/ original build, merged with https://github.com/TekuSP/Meteostanice-CSharp/
-
 name: Build Nanoframework
 
-on: [push, pull_request]
+on:
+  release:
+    types: [published]
 
 defaults:
   run:
@@ -12,7 +11,7 @@ jobs:
   Build:
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Release]
     name: Build NanoFramework SLN
     timeout-minutes: 15
     runs-on: windows-latest
@@ -97,3 +96,12 @@ jobs:
           name: TekuSP-Drivers
           path: |
             ${{ github.workspace }}\**\*TekuSP*.nupkg
+
+      - name: Push nugets to Github
+        run: |
+          nuget sources Add -Name github -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -UserName ${{ github.repository_owner }} -Password ${{ secrets.GITHUB_TOKEN }}
+          nuget push "**/*TekuSP*.nupkg" -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push nugets to Nuget.org
+        run: |
+          nuget push "**/*TekuSP*.nupkg" -Source https://api.nuget.org/v3/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.NUGET_KEY }}
