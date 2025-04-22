@@ -33,3 +33,4 @@ jobs:
         with:
           previewPackages: false
           solutionsToCheck: 'Meteostanice.sln'
+          nugetConfig: 'nuget.config'
