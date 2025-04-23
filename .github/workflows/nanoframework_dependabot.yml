@@ -24,7 +24,7 @@ jobs:
         with:
           path: main
       - name: Install NuGet client
-        uses: nuget/setup-nuget@v2.0.0
+        uses: nuget/setup-nuget@v2.0.1
         with:
           nuget-version: 'latest'
       - uses: nanoframework/nanodu@v1.0.25
