@@ -17,7 +17,7 @@ jobs:
         uses: bdashrad/git-chglog-action@v2.0.3
       
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7.0.5
+        uses: peter-evans/create-pull-request@v7.0.8
         with:
           commit-message: update changelog
           title: Update Changelog
