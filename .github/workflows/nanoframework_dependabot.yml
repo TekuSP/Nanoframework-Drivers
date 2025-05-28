@@ -32,9 +32,9 @@ jobs:
           nuget-version: 'latest'
       - uses: nanoframework/nanodu@v1.0.26
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PR_SECRET }}
         with:
           previewPackages: false
           solutionsToCheck: 'Meteostanice.sln'
           nugetConfig: 'nuget.config'
-          gitHubAuth: '${{ secrets.GITHUB_TOKEN }}'
+          gitHubAuth: '${{ secrets.PR_SECRET }}'
