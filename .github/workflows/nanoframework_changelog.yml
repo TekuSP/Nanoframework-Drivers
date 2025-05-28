@@ -14,6 +14,8 @@ jobs:
     name: Update Changelog
     timeout-minutes: 15
     steps:
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "${{ github.workspace }}"
       - uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
