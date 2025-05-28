@@ -86,17 +86,30 @@ jobs:
            msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       
-      - name: Prepare nuget version from Github Release Tag
+      - name: Set version environment variable
         run: |
-          TAG=${{ github.event.release.tag_name }}
-          echo "VERSION=${TAG#v}" >> $GITHUB_ENV
+          $tagName = "${{ github.event.release.tag_name }}"
+          # Check if the tag starts with 'v' and remove it
+          if ($tagName.StartsWith("v")) {
+              $version = $tagName.Substring(1)
+          } else {
+              $version = $tagName
+          }
+          
+          Write-Host "The original tag name was: $tagName"
+          Write-Host "The processed version is: $version"
+          
+          # Set the environment variable for subsequent steps in the same job
+          echo "version=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
+
       
-      - name: Prepare nuget version ${VERSION}
+      - name: Prepare nuget version ${{ env.version }}
         uses: richardrigutins/replace-in-files@v2
         with:
           files: '**/*.nuspec'
           search-text: '$version$'
-          replacement-text: '${VERSION}'
+          replacement-text: '${{ env.version }}'
           encoding: 'utf8'
           max-parallelism: 10
       
