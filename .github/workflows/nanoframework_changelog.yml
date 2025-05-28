@@ -22,7 +22,7 @@ jobs:
       - name: Set version environment variable
         run: |
           $tagName = "${{ github.event.release.tag_name }}"
-          if (!([string]::IsNullOrEmpty($tagName))
+          if (!([string]::IsNullOrEmpty($tagName)))
           {
             # Check if the tag starts with 'v' and remove it
             if ($tagName.StartsWith("v")) {
