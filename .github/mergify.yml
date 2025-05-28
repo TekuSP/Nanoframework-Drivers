@@ -2,6 +2,7 @@ pull_request_rules:
     - name: Automatically merge PRs
       conditions:   
       - "#approved-reviews-by>=1"
+      - "check-success=Build Nanoframework"
       actions:
         merge:
           method: merge
@@ -19,6 +20,7 @@ pull_request_rules:
     - name: Automatically Dependenabot bot's PRs
       conditions:
       - author=dependabot[bot]
+      - "check-success=Build Nanoframework"
       actions:
         merge:
           method: merge
@@ -28,10 +30,38 @@ pull_request_rules:
             {{ title }} (#{{ number }})
             
             {{ body }}
-          
+
+    - name: Automatically Nanodu Dependenabot bot's PRs
+      conditions:
+      - author=TekuSP
+      - "check-success=Build Nanoframework"
+      - "head-repo-full-name~=*nfbot/update-dependencies/*"
+      actions:
+        merge:
+          method: merge
+          commit_message_template: |
+            Automerge from {{ head }}
+            
+            {{ title }} (#{{ number }})
+            
+            {{ body }}
+
+    - name: Automatically approve Nanodu Dependenabot bot's PRs
+      conditions:
+      - author=TekuSP
+      - "head-repo-full-name~=*nfbot/update-dependencies/*"
+      - "check-success=Build Nanoframework"
+      actions:
+        review:
+          type: APPROVE
+        label:
+            toggle:
+              - approved
+            
     - name: Automatically approve Dependenabot bot's PRs
       conditions:
       - author=dependabot[bot]
+      - "check-success=Build Nanoframework"
       actions:
         review:
           type: APPROVE
