@@ -24,3 +24,4 @@ jobs:
           body: Update changelog to reflect release changes
           branch: update-changelog
           base: master
+          token: ${{ secrets.PR_SECRET }}
