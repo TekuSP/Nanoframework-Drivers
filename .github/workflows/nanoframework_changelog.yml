@@ -18,7 +18,10 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
-  
+          
+      - name: Fix Git Safe Directories
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        
       - name: Set version environment variable
         run: |
           $tagName = "${{ github.event.release.tag_name }}"
