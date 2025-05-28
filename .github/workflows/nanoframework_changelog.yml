@@ -22,22 +22,19 @@ jobs:
       - name: Set version environment variable
         run: |
           $tagName = "${{ github.event.release.tag_name }}"
-          if (!([string]::IsNullOrEmpty($tagName)))
+          if (([string]::IsNullOrEmpty($tagName)))
           {
-            # Check if the tag starts with 'v' and remove it
-            if ($tagName.StartsWith("v")) {
-                $version = $tagName.Substring(1)
-            } else {
-                $version = $tagName
-            }
+             $tagName = "${{ inputs.version }}"
           }
-          else
-          {
-             $version = "${{ inputs.version }}"
+          # Check if the tag starts with 'v' and remove it
+          if ($tagName.StartsWith("v")) {
+              $version = $tagName.Substring(1)
+          } else {
+              $version = $tagName
           }
+          
           Write-Host "The original tag name was: $tagName"
           Write-Host "The processed version is: $version"
-          Write-Host "The parsed version is: ${{ env.version }}"    
           
           # Set the environment variable for subsequent steps in the same job
            echo "version=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
