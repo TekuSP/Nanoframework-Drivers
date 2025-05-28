@@ -10,6 +10,10 @@ on:
     types: update-dependencies
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 defaults:
   run:
     shell: pwsh
@@ -28,9 +32,9 @@ jobs:
           nuget-version: 'latest'
       - uses: nanoframework/nanodu@v1.0.26
         env:
-          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           previewPackages: false
           solutionsToCheck: 'Meteostanice.sln'
           nugetConfig: 'nuget.config'
-          gitHubAuth: '${{ secrets.WORKFLOW_SECRET }}'
+          gitHubAuth: '${{ secrets.GITHUB_TOKEN }}'
