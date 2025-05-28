@@ -31,6 +31,9 @@ pull_request_rules:
             {{ title }} (#{{ number }})
             
             {{ body }}
+        label:
+          toggle:
+             - cleanup
 
     - name: Automatically Nanodu Dependenabot bot's PRs
       conditions:
@@ -47,6 +50,9 @@ pull_request_rules:
             {{ title }} (#{{ number }})
             
             {{ body }}
+        label:
+          toggle:
+             - cleanup
 
     - name: Automatically approve Nanodu Dependenabot bot's PRs
       conditions:
@@ -119,4 +125,10 @@ pull_request_rules:
         label:
           toggle:
             - "In Review"
-                
+            
+    - name: Delete head branch after merge if the label "cleanup" is present
+      conditions:
+        - merged
+        - label = cleanup
+      actions:
+        delete_head_branch:
