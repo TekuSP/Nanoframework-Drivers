@@ -3,7 +3,7 @@
 
 name: Build Nanoframework
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 defaults:
   run:
