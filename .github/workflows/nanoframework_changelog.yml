@@ -31,14 +31,12 @@ jobs:
           echo "tagVersion=$tagName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
 
-      - name: Check git
-        run:  git for-each-ref refs/tags
+      - name: Download git-chglog
+        uses: actions/install-git-chglog@v1
         
-      - name: Generate changelog
-        uses: bdashrad/git-chglog-action@v2.0.3
-        with:
-          git_chglog_version: 0.15.1
-          tag: ..${{ env.tagVersion }}
+      - name: Update Changelog
+        run: git-chglog -o CHANGELOG.md ..${{ env.tagName }}
+      
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.8
         with:
