@@ -3,7 +3,7 @@
 
 name: Build Nanoframework
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 defaults:
   run:
@@ -18,6 +18,8 @@ jobs:
     runs-on: windows-latest
     env:
       solution: 'Meteostanice.sln'
+      major: '0'
+      minor: '4'
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -86,6 +88,16 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"TekuSP_Meteostanice-CSharp" /o:"tekusp" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
            msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      
+      - name: Prepare nuget version ${{ env.major }}.${{ env.minor }}.${{ github.run_number }}
+        uses: richardrigutins/replace-in-files@v2
+        with:
+          files: '**/*.nuspec'
+          search-text: '$version$'
+          replacement-text: '${{ env.major }}.${{ env.minor }}.${{ github.run_number }}'
+          encoding: 'utf8'
+          max-parallelism: 10
+      
       - name: Pack nugets
         run: ./GenerateNugets.ps1
         if: ${{ matrix.configuration == 'Release' }}
