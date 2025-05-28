@@ -1,22 +1,4 @@
-pull_request_rules:
-    - name: Automatically merge PRs
-      conditions:   
-      - "#approved-reviews-by>=1"
-      - "check-success = Build NanoFramework SLN (Release)"
-      actions:
-        merge:
-          method: merge
-          commit_message_template: |
-            Merge from {{ head }}
-                        
-            {{ title }} (#{{ number }})
-                        
-            {{ body }}
-                        
-            {% for user in approved_reviews_by %}
-            Approved-By: {{user}}
-            {% endfor %}
-          
+pull_request_rules:          
     - name: Automatically Dependenabot bot's PRs
       conditions:
       - author=dependabot[bot]
