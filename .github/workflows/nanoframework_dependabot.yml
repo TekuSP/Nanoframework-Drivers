@@ -39,3 +39,4 @@ jobs:
           solutionsToCheck: 'Meteostanice.sln'
           nugetConfig: 'nuget.config'
           gitHubAuth: '${{ env.GITHUB_AUTH }}'
+          branchToPr: 'master'
