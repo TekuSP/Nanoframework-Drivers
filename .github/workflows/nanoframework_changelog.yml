@@ -3,6 +3,10 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
   
 jobs:
   updateChangelog:
@@ -14,11 +18,36 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
-
+  
+      - name: Set version environment variable
+        run: |
+          $tagName = "${{ github.event.release.tag_name }}"
+          if (!([string]::IsNullOrEmpty($tagName))
+          {
+            # Check if the tag starts with 'v' and remove it
+            if ($tagName.StartsWith("v")) {
+                $version = $tagName.Substring(1)
+            } else {
+                $version = $tagName
+            }
+          }
+          else
+          {
+             $version = "${{ env.version }}"
+          }
+          Write-Host "The original tag name was: $tagName"
+          Write-Host "The processed version is: $version"
+          Write-Host "The parsed version is: ${{ env.version }}"    
+          
+          # Set the environment variable for subsequent steps in the same job
+           echo "version=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
+        
       - name: Generate changelog
-        id: gen_changelog
         uses: bdashrad/git-chglog-action@v2.0.3
-      
+        with:
+          git_chglog_version: 0.15.4
+          next_version: ${{ inputs.version }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.8
         with:
