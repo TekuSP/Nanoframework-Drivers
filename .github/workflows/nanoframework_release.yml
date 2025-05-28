@@ -1,4 +1,4 @@
-name: Build Nanoframework
+name: Release Nanoframework
 
 on:
   release:
