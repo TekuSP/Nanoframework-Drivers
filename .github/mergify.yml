@@ -2,7 +2,7 @@ pull_request_rules:
     - name: Automatically merge PRs
       conditions:   
       - "#approved-reviews-by>=1"
-      - "check-success=Build Nanoframework"
+      - "check-success = Build NanoFramework SLN (Release)"
       actions:
         merge:
           method: merge
@@ -20,7 +20,7 @@ pull_request_rules:
     - name: Automatically Dependenabot bot's PRs
       conditions:
       - author=dependabot[bot]
-      - "check-success=Build Nanoframework"
+      - "check-success = Build NanoFramework SLN (Release)"
       actions:
         merge:
           method: merge
@@ -34,8 +34,8 @@ pull_request_rules:
     - name: Automatically Nanodu Dependenabot bot's PRs
       conditions:
       - author=TekuSP
-      - "check-success=Build Nanoframework"
-      - "head-repo-full-name~=*nfbot/update-dependencies/*"
+      - "head ~=nfbot/update-dependencies/"
+      - "check-success = Build NanoFramework SLN (Release)"
       actions:
         merge:
           method: merge
@@ -49,8 +49,8 @@ pull_request_rules:
     - name: Automatically approve Nanodu Dependenabot bot's PRs
       conditions:
       - author=TekuSP
-      - "head-repo-full-name~=*nfbot/update-dependencies/*"
-      - "check-success=Build Nanoframework"
+      - "head ~=nfbot/update-dependencies/"
+      - "check-success = Build NanoFramework SLN (Release)"
       actions:
         review:
           type: APPROVE
@@ -61,7 +61,7 @@ pull_request_rules:
     - name: Automatically approve Dependenabot bot's PRs
       conditions:
       - author=dependabot[bot]
-      - "check-success=Build Nanoframework"
+      - "check-success = Build NanoFramework SLN (Release)"
       actions:
         review:
           type: APPROVE
@@ -72,7 +72,15 @@ pull_request_rules:
     - name: Automatic update Depenedabot pull requests if they are commits behind
       conditions:
       - author=dependabot[bot]
-      - "#commits-behind > 1"
+      - "#commits-behind > 0"
+      actions:
+         update:
+
+    - name: Automatic update Nanodu Depenedabot pull requests if they are commits behind
+      conditions:
+      - author=TekuSP
+      - "head ~=nfbot/update-dependencies/"
+      - "#commits-behind > 0"
       actions:
          update:
       
