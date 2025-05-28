@@ -8,6 +8,7 @@ on:
   - cron:  '0 0 * * *'
   repository_dispatch:
     types: update-dependencies
+  workflow_dispatch:
 
 defaults:
   run:
@@ -32,3 +33,4 @@ jobs:
           previewPackages: false
           solutionsToCheck: 'Meteostanice.sln'
           nugetConfig: 'nuget.config'
+          gitHubAuth: '${{ github.token }}'
