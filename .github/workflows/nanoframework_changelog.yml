@@ -33,7 +33,7 @@ jobs:
           }
           else
           {
-             $version = "${{ env.version }}"
+             $version = "${{ inputs.version }}"
           }
           Write-Host "The original tag name was: $tagName"
           Write-Host "The processed version is: $version"
