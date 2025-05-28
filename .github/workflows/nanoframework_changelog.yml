@@ -35,7 +35,7 @@ jobs:
         uses: craicoverflow/install-git-chglog@v1.0.0
         
       - name: Update Changelog
-        run: git-chglog -o CHANGELOG.md ..${{ env.tagName }}
+        run: git-chglog -o CHANGELOG.md ..${{ env.tagVersion }}
       
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.8
