@@ -1,5 +1,6 @@
 # Copyright (c) .NET Foundation and Contributors
-# https://github.com/networkfusion/MBN-TinyCLR/ original build
+# https://github.com/networkfusion/MBN-TinyCLR/ original build, merged with https://github.com/TekuSP/Meteostanice-CSharp/
+
 name: Daily update dependencies
 
 on: 
