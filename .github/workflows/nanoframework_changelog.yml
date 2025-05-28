@@ -1,7 +1,7 @@
 name: Update Changelog
 on:
   release:
-    types: [published]
+    types: [published, workflow_dispatch]
 jobs:
   updateChangelog:
     runs-on: ubuntu-latest
@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Generate changelog
         id: gen_changelog
