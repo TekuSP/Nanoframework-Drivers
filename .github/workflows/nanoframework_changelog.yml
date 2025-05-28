@@ -19,8 +19,8 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
           
-      - name: Fix Git Safe Directories
-        run: git config --global --add safe.directory "${{ github.workspace }}"
+      - name: Fix Git Prune Tags
+        run: git fetch origin --prune --tags
         
       - name: Set version environment variable
         run: |
