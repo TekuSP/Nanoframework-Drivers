@@ -132,6 +132,9 @@ pull_request_rules:
     - name: Comment when is merged
       conditions:
       - merged
+      - "-head ~=update-changelog"
+      - "-head ~=nfbot/update-dependencies/"
+      - "author!=dependabot[bot]"
       actions:
         comment:
            message: Thank you for your contribution @{{author}}! Your pull request has been merged.
