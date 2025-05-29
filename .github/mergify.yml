@@ -35,6 +35,38 @@ pull_request_rules:
         label:
           toggle:
              - cleanup
+             
+    - name: Automatically Changelog PRs
+      conditions:
+      - author=TekuSP
+      - "head ~=update-changelog"
+      - "check-success = Build NanoFramework SLN (Release)"
+      - "#commits-behind = 0"
+      actions:
+        merge:
+          method: merge
+          commit_message_template: |
+            Automerge from {{ head }}
+            
+            {{ title }} (#{{ number }})
+            
+            {{ body }}
+        label:
+          toggle:
+             - cleanup
+             
+    - name: Automatically approve Changelog PRs
+      conditions:
+      - author=TekuSP
+      - "head ~=update-changelog"
+      - "check-success = Build NanoFramework SLN (Release)"
+      - "#commits-behind = 0"
+      actions:
+        review:
+          type: APPROVE
+        label:
+            toggle:
+              - approved
 
     - name: Automatically approve Nanodu Dependenabot bot's PRs
       conditions:
@@ -72,6 +104,14 @@ pull_request_rules:
       conditions:
       - author=TekuSP
       - "head ~=nfbot/update-dependencies/"
+      - "#commits-behind > 0"
+      actions:
+         update:
+    
+    - name: Automatic update ChangeRequest pull requests if they are commits behind
+      conditions:
+      - author=TekuSP
+      - "head ~=update-changelog"
       - "#commits-behind > 0"
       actions:
          update:
