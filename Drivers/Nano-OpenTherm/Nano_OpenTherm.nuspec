@@ -3,7 +3,7 @@
   <metadata>
     <id>TekuSP.Drivers.Nano_OpenTherm</id>
     <title>TekuSP OpenTherm Driver</title>
-    <version>0.3.71</version>
+    <version>$version$</version>
     <!--<version>$version$</version>-->
     <authors>Richard "TekuSP" Torhan</authors>
     <owners>Richard "TekuSP" Torhan</owners>
@@ -17,10 +17,10 @@
     <releaseNotes>
     </releaseNotes>
     <repository type="git" url="https://github.com/TekuSP/Meteostanice-CSharp" commit="$commit$" />
-    <copyright>Copyright (c) Richard Torhan 2024</copyright>
+    <copyright>Copyright (c) Richard Torhan 2025</copyright>
     <tags>drivers tekusp net netmf nf nanoframework OpenTherm OT Thermostat</tags>
     <dependencies>
-      <dependency id="TekuSP.Drivers.DriverBase" version="0.3.71" />
+      <dependency id="TekuSP.Drivers.DriverBase" version="$version$" />
       <dependency id="nanoFramework.CoreLibrary" version="1.15.5" />
       <dependency id="nanoFramework.Runtime.Events" version="1.11.18" />
       <dependency id="nanoFramework.Runtime.Native" version="1.6.12" />
