@@ -55,7 +55,7 @@ pull_request_rules:
           toggle:
              - cleanup
              
-   - name: Automatically approve Changelog PRs
+    - name: Automatically approve Changelog PRs
       conditions:
       - author=TekuSP
       - "head ~=update-changelog"
