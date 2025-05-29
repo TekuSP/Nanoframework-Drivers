@@ -1,9 +1,8 @@
-# Copyright (c) .NET Foundation and Contributors
-# https://github.com/networkfusion/MBN-TinyCLR/ original build, merged with https://github.com/TekuSP/Meteostanice-CSharp/
+name: Release Nanoframework
 
-name: Build Nanoframework
-
-on: [push, pull_request, workflow_dispatch]
+on:
+  release:
+    types: [published]
 
 defaults:
   run:
@@ -12,14 +11,12 @@ jobs:
   Build:
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Release]
     name: Build NanoFramework SLN
     timeout-minutes: 15
     runs-on: windows-latest
     env:
       solution: 'Meteostanice.sln'
-      major: '0'
-      minor: '4'
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -89,12 +86,30 @@ jobs:
            msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       
-      - name: Prepare nuget version ${{ env.major }}.${{ env.minor }}.${{ github.run_number }}
+      - name: Set version environment variable
+        run: |
+          $tagName = "${{ github.event.release.tag_name }}"
+          # Check if the tag starts with 'v' and remove it
+          if ($tagName.StartsWith("v")) {
+              $version = $tagName.Substring(1)
+          } else {
+              $version = $tagName
+          }
+          
+          Write-Host "The original tag name was: $tagName"
+          Write-Host "The processed version is: $version"
+          
+          # Set the environment variable for subsequent steps in the same job
+          echo "version=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
+
+      
+      - name: Prepare nuget version ${{ env.version }}
         uses: richardrigutins/replace-in-files@v2
         with:
           files: '**/*.nuspec'
           search-text: '$version$'
-          replacement-text: '${{ env.major }}.${{ env.minor }}.${{ github.run_number }}'
+          replacement-text: '${{ env.version }}'
           encoding: 'utf8'
           max-parallelism: 10
       
@@ -109,3 +124,12 @@ jobs:
           name: TekuSP-Drivers
           path: |
             ${{ github.workspace }}\**\*TekuSP*.nupkg
+
+      - name: Push nugets to Github
+        run: |
+          nuget sources Add -Name github -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -UserName ${{ github.repository_owner }} -Password ${{ secrets.GITHUB_TOKEN }}
+          nuget push "**/*TekuSP*.nupkg" -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push nugets to Nuget.org
+        run: |
+          nuget push "**/*TekuSP*.nupkg" -Source https://api.nuget.org/v3/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.NUGET_KEY }}
