@@ -10,6 +10,11 @@ on:
   repository_dispatch:
     types: update-dependencies
   workflow_dispatch:
+    inputs:
+        branch:
+          required: true
+          type: string
+          default: master
 
 defaults:
   run:
@@ -27,6 +32,17 @@ jobs:
         uses: nuget/setup-nuget@v2.0.1
         with:
           nuget-version: 'latest'
+          
+      - name: Set branch environment variable
+        run: |
+          $tagName = "${{ inputs.branch }}"
+          if (([string]::IsNullOrEmpty($tagName)))
+          {
+             $tagName = "master"
+          }
+          echo "targetBranch=$tagName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
+
       - uses: nanoframework/nanodu@v1.0.26
         env:
           GITHUB_TOKEN: ${{ secrets.PR_SECRET }}
@@ -36,4 +52,4 @@ jobs:
           solutionsToCheck: 'Meteostanice.sln'
           nugetConfig: 'nuget.config'
           gitHubAuth: '${{ env.GITHUB_AUTH }}'
-          branchToPr: 'master'
+          branchToPr: '${{ env.targetBranch }}'
