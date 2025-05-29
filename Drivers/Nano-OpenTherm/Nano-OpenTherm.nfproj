@@ -77,8 +77,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Nano-OpenTherm.nuspec" />
     <None Include="packages.config" />
-    <None Include="Nano_OpenTherm.nuspec" />
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>
