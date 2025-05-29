@@ -1,6 +1,6 @@
-﻿using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase.Interfaces;
 
-namespace CST816D
+namespace TekuSP.Drivers.CST816D
 {
     public static class Registers
     {

@@ -1,7 +1,7 @@
-﻿using DriverBase.Helpers;
-using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase.Helpers;
+using TekuSP.Drivers.DriverBase.Interfaces;
 
-namespace HDC1080
+namespace TekuSP.Drivers.HDC1080
 {
     public class HDC1080_Register : IRegister
     {

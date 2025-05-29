@@ -1,8 +1,8 @@
-﻿using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase.Interfaces;
 
-namespace DriverBase.Event_Handlers
+namespace TekuSP.Drivers.DriverBase.Event_Handlers
 {
-    public static class EventHandlers
+    public static partial class EventHandlers
     {
         public delegate void ITouchDataHandler(object sender, ITouchData data);
     }

@@ -1,4 +1,4 @@
-﻿namespace DriverBase.Helpers
+﻿namespace TekuSP.Drivers.DriverBase.Helpers
 {
     public static class BitHelper
     {

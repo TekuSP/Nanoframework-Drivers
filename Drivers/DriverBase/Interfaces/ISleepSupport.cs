@@ -1,4 +1,4 @@
-﻿namespace DriverBase.Interfaces
+﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
     /// <summary>
     /// Devices has sleeping capability

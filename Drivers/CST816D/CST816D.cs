@@ -1,14 +1,14 @@
-﻿using DriverBase;
-using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.DriverBase.Interfaces;
 
 using System;
 using System.Device.Gpio;
 using System.Device.I2c;
 using System.Threading;
 
-using static DriverBase.Event_Handlers.EventHandlers;
+using static TekuSP.Drivers.DriverBase.Event_Handlers.EventHandlers;
 
-namespace CST816D
+namespace TekuSP.Drivers.CST816D
 {
     /// <summary>
     /// CST816D Touch screen, <a href="https://github.com/lupyuen/hynitron_i2c_cst0xxse/tree/master"/>

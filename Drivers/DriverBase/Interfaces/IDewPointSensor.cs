@@ -1,4 +1,4 @@
-﻿namespace DriverBase.Interfaces
+﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
     /// <summary>
     /// This interfaces requires sensors having both ITemperatureSensor and IHumiditySensor

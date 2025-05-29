@@ -1,4 +1,4 @@
-﻿namespace SHTC3.Enums
+﻿namespace TekuSP.Drivers.SHTC3.Enums
 {
     /// <summary>
     /// Status messages for SHTC3

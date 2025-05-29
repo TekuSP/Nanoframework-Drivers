@@ -1,11 +1,11 @@
-﻿using DriverBase;
-using DriverBase.Enums;
-using DriverBase.Helpers;
+﻿using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.DriverBase.Enums;
+using TekuSP.Drivers.DriverBase.Helpers;
 using System.Threading;
 using System.Device.Gpio;
 using System.Device.Spi;
 
-namespace SSD1331
+namespace TekuSP.Drivers.SSD1331
 {
     /// <summary>
     /// Driver for Solomon Systech (Adafruit) SSD 1331, <a href="https://cdn-shop.adafruit.com/datasheets/SSD1331_1.2.pdf"/>

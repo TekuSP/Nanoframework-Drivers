@@ -1,8 +1,8 @@
-﻿using DriverBase.Enums;
-using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase.Enums;
+using TekuSP.Drivers.DriverBase.Interfaces;
 using System.Device.Spi;
 
-namespace DriverBase
+namespace TekuSP.Drivers.DriverBase
 {
     /// <summary>
     /// Base driver class for SPI devices

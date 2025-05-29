@@ -1,12 +1,12 @@
-﻿using DriverBase;
-using DriverBase.Interfaces;
+﻿using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.DriverBase.Interfaces;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using Windows.Storage.Streams;
 
-namespace MHZ19B
+namespace TekuSP.Drivers.MHZ19B
 {
     /// <summary>
     /// Driver for Zhengzhou Winsen Electronics Technology Co., Ltd, Intelligent Infrared CO2 Module MH-Z19B <br/>

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Device.I2c;
 
-using DriverBase;
-using DriverBase.Enums;
-using DriverBase.Interfaces;
+using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.DriverBase.Enums;
+using TekuSP.Drivers.DriverBase.Interfaces;
 
-namespace LPS22HB
+namespace TekuSP.Drivers.LPS22HB
 {
     public class LPS22HB : DriverBaseI2C, ITemperatureSensor, IPressureSensor
     {
