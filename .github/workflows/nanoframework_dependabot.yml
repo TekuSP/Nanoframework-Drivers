@@ -10,11 +10,6 @@ on:
   repository_dispatch:
     types: update-dependencies
   workflow_dispatch:
-    inputs:
-        branch:
-          required: true
-          type: string
-          default: master
 
 defaults:
   run:
@@ -35,7 +30,7 @@ jobs:
           
       - name: Set branch environment variable
         run: |
-          $tagName = "${{ inputs.branch }}"
+          $tagName = "${{ github.ref_name }}"
           if (([string]::IsNullOrEmpty($tagName)))
           {
              $tagName = "master"
