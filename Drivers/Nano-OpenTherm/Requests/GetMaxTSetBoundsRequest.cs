@@ -10,10 +10,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetMaxTSetBoundsRequest() : base() { }
         public GetMaxTSetBoundsRequest(Request baseReq) : base(baseReq) { }
 
-        public byte UpperBound { get; private set; }
-        public byte LowerBound { get; private set; }
+        public byte UpperBound { get; set; }
+        public byte LowerBound { get; set; }
 
-        protected override ulong GetRawDataCore() => ProcessRequest(0);
+        protected override ulong GetRawDataCore()
+        {
+            uint raw = (uint)((UpperBound << 8) | LowerBound);
+            return ProcessRequest(raw);
+        }
         protected override void SetRawDataCore(ulong value)
         {
             UpperBound = Utilities.GetHighByte(value);
