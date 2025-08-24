@@ -10,20 +10,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public abstract class Request : IOpenThermData
     {
-        protected Request()
-        {
-            
-        }
-        protected Request(Request baseReq)
-        {
-            SetRawDataCore(baseReq.GetRawDataCore());
-        }
+        protected Request() { }
+        protected Request(Request baseReq) { SetRawDataCore(baseReq.GetRawDataCore()); }
+
         // Explicit IOpenThermData implementation to allow public accessor shape to vary in derived classes
-        ulong IOpenThermData.RawData
-        {
-            get => GetRawDataCore();
-            set => SetRawDataCore(value);
-        }
+        ulong IOpenThermData.RawData { get => GetRawDataCore(); set => SetRawDataCore(value); }
 
         /// <summary>
         /// Derived classes must provide core getters/setters. Use NotSupportedException in the accessor you don't support.
@@ -31,18 +22,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         protected abstract ulong GetRawDataCore();
         protected abstract void SetRawDataCore(ulong value);
 
-        /// <summary>
-        /// Message Type
-        /// </summary>
+        /// <summary>Message Type</summary>
         public abstract MessageType MessageType { get; }
-        /// <summary>
-        /// Message ID
-        /// </summary>
+        /// <summary>Message ID</summary>
         public abstract MessageID MessageID { get; }
 
-        /// <summary>
-        /// Returns the encoded 32-bit OpenTherm frame for this request.
-        /// </summary>
+        /// <summary>Returns the encoded 32-bit OpenTherm frame for this request.</summary>
         public ulong BuildFrame() => GetRawDataCore();
 
         /// <summary>
@@ -53,26 +38,27 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
             switch (MessageID)
             {
-                case MessageID.Status:
-                    return new SetBoilerStatusRequest(this);
-                case MessageID.TSet:
-                    return new SetBoilerTemperatureRequest(this);
+                // Status and core control
+                case MessageID.Status: return new SetBoilerStatusRequest(this);
+                case MessageID.TSet: return new SetBoilerTemperatureRequest(this);
                 case MessageID.MConfigMMemberIDcode:
                     break;
                 case MessageID.SConfigSMemberIDcode:
                     break;
                 case MessageID.RemoteRequest:
                     break;
-                case MessageID.ASFflags:
-                    return new GetFaultRequest(this);
+
+                // Faults / flags
+                case MessageID.ASFflags: return new GetFaultRequest(this);
                 case MessageID.RBPflags:
                     break;
-                case MessageID.CoolingControl:
-                    return new SetCoolingControlRequest(this);
-                case MessageID.TsetCH2:
-                    return new SetCH2SetpointRequest(this);
-                case MessageID.TrOverride:
-                    return new SetRoomOverrideRequest(this);
+
+                // Cooling and CH2 setpoint
+                case MessageID.CoolingControl: return new SetCoolingControlRequest(this);
+                case MessageID.TsetCH2: return new SetCH2SetpointRequest(this);
+                case MessageID.TrOverride: return new SetRoomOverrideRequest(this);
+
+                // Transparent slave parameters and fault history buffer
                 case MessageID.TSP:
                     break;
                 case MessageID.TSPindexTSPvalue:
@@ -81,70 +67,62 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
                 case MessageID.FHBindexFHBvalue:
                     break;
-                case MessageID.MaxRelModLevelSetting:
-                    return new SetMaxRelModulationRequest(this);
+
+                // Capacity / modulation
+                case MessageID.MaxRelModLevelSetting: return new SetMaxRelModulationRequest(this);
                 case MessageID.MaxCapacityMinModLevel:
                     break;
-                case MessageID.TrSet:
-                    return new SetRoomSetpointRequest(this);
-                case MessageID.RelModLevel:
-                    return new GetModulationRequest(this);
-                case MessageID.CHPressure:
-                    return new GetPressureRequest(this);
-                case MessageID.DHWFlowRate:
-                    break;
-                case MessageID.DayTime:
-                    return new SetDayTimeRequest(this);
-                case MessageID.Date:
-                    return new SetDateRequest(this);
-                case MessageID.Year:
-                    return new SetYearRequest(this);
-                case MessageID.TrSetCH2:
-                    return new SetRoomSetpointCH2Request(this);
-                case MessageID.Tr:
-                    break;
-                case MessageID.Tboiler:
-                    return new GetBoilerTemperatureRequest(this);
-                case MessageID.Tdhw:
-                    return new GetDWHSetPointRequest(this);
-                case MessageID.Toutside:
-                    break;
-                case MessageID.Tret:
-                    return new GetReturnTemperatureRequest(this);
-                case MessageID.Tstorage:
-                    break;
-                case MessageID.Tcollector:
-                    break;
-                case MessageID.TflowCH2:
-                    break;
-                case MessageID.Tdhw2:
-                    break;
-                case MessageID.Texhaust:
-                    break;
-                case MessageID.TboilerHeatExchanger:
-                    break;
-                case MessageID.BoilerFanSpeedSetpointAndActual:
-                    break;
-                case MessageID.FlameCurrent:
-                    break;
-                case MessageID.TrCH2:
-                    break;
-                case MessageID.RelativeHumidity:
-                    break;
+
+                // Room setpoints and levels
+                case MessageID.TrSet: return new SetRoomSetpointRequest(this);
+                case MessageID.RelModLevel: return new GetModulationRequest(this);
+
+                // Pressure / flow
+                case MessageID.CHPressure: return new GetPressureRequest(this);
+                case MessageID.DHWFlowRate: return new GetDHWFlowRateRequest(this);
+
+                // Time / calendar
+                case MessageID.DayTime: return new SetDayTimeRequest(this);
+                case MessageID.Date: return new SetDateRequest(this);
+                case MessageID.Year: return new SetYearRequest(this);
+
+                // CH2 room setpoint
+                case MessageID.TrSetCH2: return new SetRoomSetpointCH2Request(this);
+
+                // Temperatures
+                case MessageID.Tr: return new GetRoomTemperatureRequest(this);
+                case MessageID.Tboiler: return new GetBoilerTemperatureRequest(this);
+                case MessageID.Tdhw: return new GetDWHSetPointRequest(this);
+                case MessageID.Toutside: return new GetOutsideTemperatureRequest(this);
+                case MessageID.Tret: return new GetReturnTemperatureRequest(this);
+                case MessageID.Tstorage: return new GetStorageTemperatureRequest(this);
+                case MessageID.Tcollector: return new GetCollectorTemperatureRequest(this);
+                case MessageID.TflowCH2: return new GetCH2FlowTemperatureRequest(this);
+                case MessageID.Tdhw2: return new GetDHW2TemperatureRequest(this);
+                case MessageID.Texhaust: return new GetExhaustTemperatureRequest(this);
+                case MessageID.TboilerHeatExchanger: return new GetBoilerHeatExchangerTemperatureRequest(this);
+
+                // Fan speed / flame / humidity
+                case MessageID.BoilerFanSpeedSetpointAndActual: return new GetBoilerFanSpeedRequest(this);
+                case MessageID.FlameCurrent: return new GetFlameCurrentRequest(this);
+                case MessageID.TrCH2: return new GetRoomTemperatureCH2Request(this);
+                case MessageID.RelativeHumidity: return new GetRelativeHumidityRequest(this);
                 case MessageID.TrOverride2:
                     break;
+
+                // Bounds and max setpoints
                 case MessageID.TdhwSetUBTdhwSetLB:
                     break;
                 case MessageID.MaxTSetUBMaxTSetLB:
                     break;
                 case MessageID.TdhwSet:
                     break;
-                case MessageID.MaxTSet:
-                    break;
+                case MessageID.MaxTSet: return new SetMaxCHSetpointRequest(this);
+
+                // Ventilation / heat recovery
                 case MessageID.StatusVentilationHeatRecovery:
                     break;
-                case MessageID.Vset:
-                    break;
+                case MessageID.Vset: return new SetVentilationPositionRequest(this);
                 case MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery:
                     break;
                 case MessageID.OEMDiagnosticCodeVentilationHeatRecovery:
@@ -175,8 +153,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
                 case MessageID.RBPflagsVentilationHeatRecovery:
                     break;
-                case MessageID.NominalVentilationValue:
-                    break;
+                case MessageID.NominalVentilationValue: return new SetNominalVentilationValueRequest(this);
                 case MessageID.TSPventilationHeatRecovery:
                     break;
                 case MessageID.TSPindexTSPvalueVentilationHeatRecovery:
@@ -185,22 +162,23 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
                 case MessageID.FHBindexFHBvalueVentilationHeatRecovery:
                     break;
-                case MessageID.Brand:
-                    return new GetManufacturerRequest(this);
-                case MessageID.BrandVersion:
-                    return new GetManufacturerVersionRequest(this);
-                case MessageID.BrandSerialNumber:
-                    return new GetSerialRequest(this);
+
+                // Branding and product info
+                case MessageID.Brand: return new GetManufacturerRequest(this);
+                case MessageID.BrandVersion: return new GetManufacturerVersionRequest(this);
+                case MessageID.BrandSerialNumber: return new GetSerialRequest(this);
+
+                // Counters & diagnostics
                 case MessageID.CoolingOperationHours:
                     break;
                 case MessageID.PowerCycles:
                     break;
                 case MessageID.RFsensorStatusInformation:
                     break;
-                case MessageID.RemoteOverrideOperatingModeHeatingDHW:
-                    return new SetRemoteOverrideOperatingModeRequest(this);
-                case MessageID.RemoteOverrideFunction:
-                    break;
+                case MessageID.RemoteOverrideOperatingModeHeatingDHW: return new SetRemoteOverrideOperatingModeRequest(this);
+                case MessageID.RemoteOverrideFunction: return new SetRemoteOverrideFunctionRequest(this);
+
+                // Solar storage
                 case MessageID.StatusSolarStorage:
                     break;
                 case MessageID.ASFflagsOEMfaultCodeSolarStorage:
@@ -217,6 +195,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
                 case MessageID.FHBindexFHBvalueSolarStorage:
                     break;
+
+                // Electricity producer stats
                 case MessageID.ElectricityProducerStarts:
                     break;
                 case MessageID.ElectricityProducerHours:
@@ -247,6 +227,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
                 case MessageID.DHWBurnerOperationHours:
                     break;
+
+                // Versions
                 case MessageID.OpenThermVersionMaster:
                     break;
                 case MessageID.OpenThermVersionSlave:
@@ -255,42 +237,32 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
                 case MessageID.SlaveVersion:
                     break;
+
                 default:
                     return this;
             }
-            return this; // TODO keep until specific mappings are implemented
+            return this; // placeholders kept for visibility of missing mappings
         }
 
-        /// <summary>
-        /// Processes request
-        /// </summary>
-        /// <param name="data">Input data</param>
-        /// <returns>Returns Raw Request</returns>
+        /// <summary>Processes request</summary>
         protected ulong ProcessRequest(ulong data)
         {
-            // Write full 3-bit message type (bits 30..28)
             data |= (((ulong)MessageType) & 0x7) << 28;
-            // Write message id (bits 23..16)
             data |= ((ulong)MessageID) << 16;
-            // Ensure overall frame has odd parity (bit count over 32 bits is odd)
             if (!Utilities.Parity(data))
                 data |= (1ul << 31);
             return data;
         }
-        /// <summary>
-        /// Is Valid Request?
-        /// </summary>
-        /// <returns>Validity</returns>
+
+        /// <summary>Is Valid Request?</summary>
         public bool IsValidRequest()
         {
-            // Parity over full 32-bit frame must be odd
             var raw = GetRawDataCore();
             if (!Utilities.Parity(raw))
                 return false;
             var msgType = (MessageType)((raw >> 28) & 0x7);
             if (msgType != MessageType.READ_DATA && msgType != MessageType.WRITE_DATA)
                 return false;
-            // Validate ID capability vs requested operation
             return OpenThermAccess.IsOperationAllowed(MessageID, msgType);
         }
     }
