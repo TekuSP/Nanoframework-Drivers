@@ -1,21 +1,33 @@
-﻿using System;
-using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class SetBoilerStatusRequest : WriteRequest
     {
+        public SetBoilerStatusRequest() : base() { }
+        public SetBoilerStatusRequest(Request baseReq) : base(baseReq) { }
+
         protected override ulong GetRawDataCore()
         {
-            uint data = (uint)((EnableCentralHeating ? 1 : 0)
-                | ((EnableHotWater ? 1 : 0) << 1)
-                | ((EnableCooling ? 1 : 0) << 2)
-                | ((EnableOutsideTemperatureCompensation ? 1 : 0) << 3)
-                | ((EnableCentralHeating2 ? 1 : 0) << 4));
-            data <<= 8;
+            uint data = 0;
+            // Bits 15..8 encode master status flags
+            if (EnableCentralHeating) data |= 1u << 8;                 // CH enable
+            if (EnableHotWater) data |= 1u << 9;                       // DHW enable
+            if (EnableCooling) data |= 1u << 10;                       // Cooling enable
+            if (EnableOutsideTemperatureCompensation) data |= 1u << 11; // OTC enable
+            if (EnableCentralHeating2) data |= 1u << 12;               // CH2 enable
             return ProcessRequest(data);
         }
-        protected override void SetRawDataCore(ulong value) { /* allow raw override if needed */ }
+        protected override void SetRawDataCore(ulong value)
+        {
+            // Decode flags from the high byte of the 16-bit data field (bits 15..8)
+            var b = Utilities.GetHighByte(value);
+            EnableCentralHeating = (b & 0x01) != 0;
+            EnableHotWater = (b & 0x02) != 0;
+            EnableCooling = (b & 0x04) != 0;
+            EnableOutsideTemperatureCompensation = (b & 0x08) != 0;
+            EnableCentralHeating2 = (b & 0x10) != 0;
+        }
 
         public override MessageType MessageType => MessageType.WRITE_DATA;
         public override MessageID MessageID => MessageID.Status;

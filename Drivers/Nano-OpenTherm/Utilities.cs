@@ -132,6 +132,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             }
         }
         /// <summary>
+        /// If under 0 returns 0, if over 100 returns 100, else returns input
+        /// </summary>
+        /// <param name="input">Float to normalize</param>
+        /// <returns>Normalized float</returns>
+        public static float Normalize(this float input)
+        {
+            return input < 0 ? 0 : (input > 100 ? 100 : input);
+        }
+        /// <summary>
         /// Gets Special DateTime from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>

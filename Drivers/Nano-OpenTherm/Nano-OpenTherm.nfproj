@@ -19,6 +19,7 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="Enums\AccessMode.cs" />
     <Compile Include="Enums\ApplicationSpecificFaultFlags.cs" />
     <Compile Include="Enums\CommandCode.cs" />
     <Compile Include="Enums\CommandCodeResponse.cs" />
@@ -47,8 +48,18 @@
     <Compile Include="Requests\Request.cs" />
     <Compile Include="Requests\RequestKinds.cs" />
     <Compile Include="Requests\SetBoilerStatusRequest.cs" />
+    <Compile Include="Requests\SetCH2SetpointRequest.cs" />
+    <Compile Include="Requests\SetCoolingControlRequest.cs" />
+    <Compile Include="Requests\SetDateRequest.cs" />
+    <Compile Include="Requests\SetDayTimeRequest.cs" />
     <Compile Include="Requests\SetDWHSetPointRequest.cs" />
     <Compile Include="Requests\SetBoilerTemperatureRequest.cs" />
+    <Compile Include="Requests\SetMaxRelModulationRequest.cs" />
+    <Compile Include="Requests\SetRemoteOverrideOperatingModeRequest.cs" />
+    <Compile Include="Requests\SetRoomOverrideRequest.cs" />
+    <Compile Include="Requests\SetRoomSetpointCH2Request.cs" />
+    <Compile Include="Requests\SetRoomSetpointRequest.cs" />
+    <Compile Include="Requests\SetYearRequest.cs" />
     <Compile Include="Responses\ApplicationFaultCodesResponse.cs" />
     <Compile Include="Responses\RemoteBoilerParameterResponse.cs" />
     <Compile Include="Responses\RemoteOverrideRoomSetPointResponse.cs" />

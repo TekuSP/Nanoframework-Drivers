@@ -4,7 +4,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class GetManufacturerRequest : ReadRequest
     {
-        protected override ulong GetRawDataCore() => ProcessRequest(0);
+        public GetManufacturerRequest() : base() { }
+        public GetManufacturerRequest(Request baseReq) : base(baseReq) { }
+
+        /// <summary>
+        /// Index of character to read from brand text (per OpenTherm spec)
+        /// </summary>
+        public byte Index { get; set; }
+
+        protected override ulong GetRawDataCore() => ProcessRequest(Index);
         public override MessageType MessageType => MessageType.READ_DATA;
         public override MessageID MessageID => MessageID.Brand;
     }

@@ -1,19 +1,31 @@
 ﻿using System;
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+using TekuSP.Drivers.Nano_OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class SetBoilerTemperatureRequest : WriteRequest
     {
-        protected override ulong GetRawDataCore() => ProcessRequest(Utilities.GetRawTemperature(Temperature));
-        protected override void SetRawDataCore(ulong value) { /* allow raw override if ever needed */ }
+        public SetBoilerTemperatureRequest() : base() { }
+        public SetBoilerTemperatureRequest(Request baseReq) : base(baseReq) { }
+
+        private float _temperature;
+        public float Temperature
+        {
+            get => _temperature;
+            set => _temperature = value.Normalize();
+        }
+
+        protected override ulong GetRawDataCore()
+        {
+            return ProcessRequest(Utilities.GetRawTemperature(Temperature));
+        }
+        protected override void SetRawDataCore(ulong value)
+        {
+            Temperature = Utilities.GetFloat(value);
+        }
 
         public override MessageType MessageType => MessageType.WRITE_DATA;
         public override MessageID MessageID => MessageID.TSet;
-
-        /// <summary>
-        /// Temperature to set
-        /// </summary>
-        public float Temperature { get; set; }
     }
 }
