@@ -1,4 +1,5 @@
-﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+﻿using System;
+using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 using TekuSP.Drivers.DriverBase.Interfaces;
 
@@ -9,27 +10,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public abstract class Request : IOpenThermData
     {
-        /// <summary>
-        /// Request raw result
-        /// </summary>
-        public abstract ulong RawData
+        // Explicit IOpenThermData implementation to allow public accessor shape to vary in derived classes
+        ulong IOpenThermData.RawData
         {
-            get; set;
+            get => GetRawDataCore();
+            set => SetRawDataCore(value);
         }
+
+        /// <summary>
+        /// Derived classes must provide core getters/setters. Use NotSupportedException in the accessor you don't support.
+        /// </summary>
+        protected abstract ulong GetRawDataCore();
+        protected abstract void SetRawDataCore(ulong value);
+
         /// <summary>
         /// Message Type
         /// </summary>
-        public abstract MessageType MessageType
-        {
-            get; 
-        }
+        public abstract MessageType MessageType { get; }
         /// <summary>
         /// Message ID
         /// </summary>
-        public abstract MessageID MessageID
-        {
-            get; 
-        }
+        public abstract MessageID MessageID { get; }
+
+        /// <summary>
+        /// Returns the encoded 32-bit OpenTherm frame for this request.
+        /// </summary>
+        public ulong BuildFrame() => GetRawDataCore();
+
         /// <summary>
         /// Processes request
         /// </summary>
@@ -53,9 +60,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public bool IsValidRequest()
         {
             // Parity over full 32-bit frame must be odd
-            if (!Utilities.Parity(RawData))
+            var raw = GetRawDataCore();
+            if (!Utilities.Parity(raw))
                 return false;
-            byte msgType = (byte)((RawData >> 28) & 0x7);
+            byte msgType = (byte)((raw >> 28) & 0x7);
             // Only master request types are valid here
             return msgType == (byte)MessageType.READ_DATA || msgType == (byte)MessageType.WRITE_DATA;
         }

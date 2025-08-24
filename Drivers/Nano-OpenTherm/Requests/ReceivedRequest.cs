@@ -2,29 +2,22 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class ReceivedRequest : Request
+    public class ReceivedRequest : ReadWriteRequest
     {
+        private ulong _raw;
+
         public ReceivedRequest(ulong rawData)
         {
-            RawData = rawData;
+            _raw = rawData;
             MessageType = (MessageType)((rawData >> 28) & 7);
             MessageID = (MessageID)((rawData >> 16) & 0xFF);
         }
-        public override ulong RawData
-        {
-            get;
-            set;
-        }
 
-        public override MessageType MessageType
-        {
-            get;
-        }
+        protected override ulong GetRawDataCore() => _raw;
+        protected override void SetRawDataCore(ulong value) { _raw = value; }
 
-        public override MessageID MessageID
-        {
-            get;
-        }
+        public override MessageType MessageType { get; }
+        public override MessageID MessageID { get; }
 
         /// <summary>
         /// Automatically selects a strongly-typed Request from a received frame

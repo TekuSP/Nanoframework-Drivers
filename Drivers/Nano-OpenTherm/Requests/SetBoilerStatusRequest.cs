@@ -1,24 +1,25 @@
-﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+﻿using System;
+using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class SetBoilerStatusRequest : Request
+    public class SetBoilerStatusRequest : WriteRequest
     {
-        public override ulong RawData
+        protected override ulong GetRawDataCore()
         {
-            get
-            {
-                uint data = (uint)((EnableCentralHeating ? 1 : 0) | ((EnableHotWater ? 1 : 0) << 1) | ((EnableCooling ? 1 : 0) << 2) | ((EnableOutsideTemperatureCompensation ? 1 : 0) << 3) | ((EnableCentralHeating2 ? 1 : 0) << 4));
-                data <<= 8;
-                return ProcessRequest(data);
-            }
-            set
-            {
-            
-            }
+            uint data = (uint)((EnableCentralHeating ? 1 : 0)
+                | ((EnableHotWater ? 1 : 0) << 1)
+                | ((EnableCooling ? 1 : 0) << 2)
+                | ((EnableOutsideTemperatureCompensation ? 1 : 0) << 3)
+                | ((EnableCentralHeating2 ? 1 : 0) << 4));
+            data <<= 8;
+            return ProcessRequest(data);
         }
-        public override MessageType MessageType => MessageType.READ_DATA;
+        protected override void SetRawDataCore(ulong value) { /* allow raw override if needed */ }
+
+        public override MessageType MessageType => MessageType.WRITE_DATA;
         public override MessageID MessageID => MessageID.Status;
+
         /// <summary>
         /// Enable Central Heating
         /// </summary>

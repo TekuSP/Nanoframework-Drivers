@@ -2,22 +2,10 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class GetPressureRequest : Request
+    public class GetPressureRequest : ReadRequest
     {
-        public override ulong RawData
-        {
-            get
-            {
-                return ProcessRequest(0);
-            }
-            set
-            {
-            
-            }
-        }
-
+        protected override ulong GetRawDataCore() => ProcessRequest(0);
         public override MessageType MessageType => MessageType.READ_DATA;
-
-        public override MessageID MessageID => MessageID.CHPressure; 
+        public override MessageID MessageID => MessageID.CHPressure;
     }
 }

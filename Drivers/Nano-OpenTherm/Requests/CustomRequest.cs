@@ -2,7 +2,7 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class CustomRequest : Request
+    public class CustomRequest : ReadWriteRequest
     {
         private ulong data;
         public CustomRequest(MessageType messageType, MessageID messageID, ulong data = 0)
@@ -11,26 +11,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             MessageType = messageType;
             MessageID = messageID;
         }
-        public override ulong RawData
-        {
-            get
-            {
-                return ProcessRequest(data);
-            }
-            set
-            {
-            
-            }
-        }
 
-        public override MessageType MessageType
-        {
-            get;
-        }
+        protected override ulong GetRawDataCore() => ProcessRequest(data);
+        protected override void SetRawDataCore(ulong value) { data = value; }
 
-        public override MessageID MessageID
-        {
-            get;
-        }
+        public override MessageType MessageType { get; }
+        public override MessageID MessageID { get; }
     }
 }

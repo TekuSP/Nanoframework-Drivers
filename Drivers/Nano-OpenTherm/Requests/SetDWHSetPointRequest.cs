@@ -1,23 +1,14 @@
-﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+﻿using System;
+using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class SetDWHSetPointRequest : Request
+    public class SetDWHSetPointRequest : WriteRequest
     {
-        public override ulong RawData
-        {
-            get
-            {
-                return ProcessRequest(Utilities.GetRawTemperature(Temperature));
-            }
-            set
-            {
-
-            }
-        }
+        protected override ulong GetRawDataCore() => ProcessRequest(Utilities.GetRawTemperature(Temperature));
+        protected override void SetRawDataCore(ulong value) { /* allow raw override if ever needed */ }
 
         public override MessageType MessageType => MessageType.WRITE_DATA;
-
         public override MessageID MessageID => MessageID.TdhwSet;
 
         /// <summary>
