@@ -218,6 +218,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 default:
                     return this;
             }
+            return this; //TODO REMOVE
         }
 
         /// <summary>
