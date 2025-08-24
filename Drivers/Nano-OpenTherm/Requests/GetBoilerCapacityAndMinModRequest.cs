@@ -2,14 +2,15 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class GetCH2FlowTemperatureRequest : ReadRequest
+    public class GetBoilerCapacityAndMinModRequest : ReadRequest
     {
-        public GetCH2FlowTemperatureRequest() : base() { }
-        public GetCH2FlowTemperatureRequest(Request baseReq) : base(baseReq) { }
+        public GetBoilerCapacityAndMinModRequest() : base() { }
+        public GetBoilerCapacityAndMinModRequest(Request baseReq) : base(baseReq) { }
 
         protected override ulong GetRawDataCore() => ProcessRequest(0);
         protected override void SetRawDataCore(ulong value) { }
+
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.TflowCH2;
+        public override MessageID MessageID => MessageID.MaxCapacityMinModLevel;
     }
 }

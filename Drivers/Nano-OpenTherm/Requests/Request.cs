@@ -41,17 +41,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 // Status and core control
                 case MessageID.Status: return new SetBoilerStatusRequest(this);
                 case MessageID.TSet: return new SetBoilerTemperatureRequest(this);
-                case MessageID.MConfigMMemberIDcode:
-                    break;
-                case MessageID.SConfigSMemberIDcode:
-                    break;
-                case MessageID.RemoteRequest:
-                    break;
+                case MessageID.MConfigMMemberIDcode: return new GetMasterConfigurationRequest(this);
+                case MessageID.SConfigSMemberIDcode: return new GetSlaveConfigurationRequest(this);
+                case MessageID.RemoteRequest: return new GetRemoteRequestRequest(this);
 
                 // Faults / flags
                 case MessageID.ASFflags: return new GetFaultRequest(this);
-                case MessageID.RBPflags:
-                    break;
+                case MessageID.RBPflags: return new GetRemoteBoilerParameterFlagsRequest(this);
 
                 // Cooling and CH2 setpoint
                 case MessageID.CoolingControl: return new SetCoolingControlRequest(this);
@@ -59,19 +55,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 case MessageID.TrOverride: return new SetRoomOverrideRequest(this);
 
                 // Transparent slave parameters and fault history buffer
-                case MessageID.TSP:
-                    break;
-                case MessageID.TSPindexTSPvalue:
-                    break;
-                case MessageID.FHBsize:
-                    break;
-                case MessageID.FHBindexFHBvalue:
-                    break;
+                case MessageID.TSP: return new GetTransparentSlaveParametersCountRequest(this);
+                case MessageID.TSPindexTSPvalue: return new GetTransparentSlaveParameterRequest(this);
+                case MessageID.FHBsize: return new GetFaultHistoryBufferSizeRequest(this);
+                case MessageID.FHBindexFHBvalue: return new GetFaultHistoryBufferEntryRequest(this);
 
                 // Capacity / modulation
                 case MessageID.MaxRelModLevelSetting: return new SetMaxRelModulationRequest(this);
-                case MessageID.MaxCapacityMinModLevel:
-                    break;
+                case MessageID.MaxCapacityMinModLevel: return new GetBoilerCapacityAndMinModRequest(this);
 
                 // Room setpoints and levels
                 case MessageID.TrSet: return new SetRoomSetpointRequest(this);
@@ -111,10 +102,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
 
                 // Bounds and max setpoints
-                case MessageID.TdhwSetUBTdhwSetLB:
-                    break;
-                case MessageID.MaxTSetUBMaxTSetLB:
-                    break;
+                case MessageID.TdhwSetUBTdhwSetLB: return new GetDhwSetpointBoundsRequest(this);
+                case MessageID.MaxTSetUBMaxTSetLB: return new GetMaxTSetBoundsRequest(this);
                 case MessageID.TdhwSet:
                     break;
                 case MessageID.MaxTSet: return new SetMaxCHSetpointRequest(this);
@@ -169,10 +158,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 case MessageID.BrandSerialNumber: return new GetSerialRequest(this);
 
                 // Counters & diagnostics
-                case MessageID.CoolingOperationHours:
-                    break;
-                case MessageID.PowerCycles:
-                    break;
+                case MessageID.CoolingOperationHours: return new GetCoolingOperationHoursRequest(this);
+                case MessageID.PowerCycles: return new GetPowerCyclesRequest(this);
                 case MessageID.RFsensorStatusInformation:
                     break;
                 case MessageID.RemoteOverrideOperatingModeHeatingDHW: return new SetRemoteOverrideOperatingModeRequest(this);
@@ -229,10 +216,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
 
                 // Versions
-                case MessageID.OpenThermVersionMaster:
-                    break;
-                case MessageID.OpenThermVersionSlave:
-                    break;
+                case MessageID.OpenThermVersionMaster: return new GetOpenThermVersionMasterRequest(this);
+                case MessageID.OpenThermVersionSlave: return new GetOpenThermVersionSlaveRequest(this);
                 case MessageID.MasterVersion:
                     break;
                 case MessageID.SlaveVersion:

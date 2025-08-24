@@ -1,14 +1,14 @@
-﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class GetManufacturerVersionRequest : ReadRequest
+    public class GetFaultHistoryBufferEntryRequest : ReadRequest
     {
-        public GetManufacturerVersionRequest() : base() { }
-        public GetManufacturerVersionRequest(Request baseReq) : base(baseReq) { }
+        public GetFaultHistoryBufferEntryRequest() : base() { }
+        public GetFaultHistoryBufferEntryRequest(Request baseReq) : base(baseReq) { }
 
         /// <summary>
-        /// Index of character to read from brand version string
+        /// Index number of fault-history buffer entry to read
         /// </summary>
         public byte Index { get; set; }
 
@@ -19,6 +19,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         }
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.BrandVersion;
+        public override MessageID MessageID => MessageID.FHBindexFHBvalue;
     }
 }

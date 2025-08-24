@@ -15,9 +15,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         protected ReadRequest(Request baseReq) : base(baseReq)
         {
         }
-
-        public ulong RawData => GetRawDataCore();
-        protected override void SetRawDataCore(ulong value) => throw new NotSupportedException("This request is read-only.");
+        public ulong RawData
+        {
+            get => GetRawDataCore();
+            protected set => SetRawDataCore(value);
+        }
     }
 
     /// <summary>
@@ -32,8 +34,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
-        public ulong RawData { set => SetRawDataCore(value); }
-        // Derived classes must implement GetRawDataCore to let the driver read the frame via the explicit interface getter
+        public ulong RawData
+        {
+            protected get => GetRawDataCore();
+            set => SetRawDataCore(value);
+        }
     }
 
     /// <summary>
