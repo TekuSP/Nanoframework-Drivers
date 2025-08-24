@@ -245,11 +245,18 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             if (!Utilities.Parity(RawData))
                 return false;
             var msgType = (byte)((RawData >> 28) & 0x7);
-            return msgType == (byte)MessageType.READ_ACK
+            bool typeOk = msgType == (byte)MessageType.READ_ACK
                 || msgType == (byte)MessageType.WRITE_ACK
                 || msgType == (byte)MessageType.DATA_INVALID
                 || msgType == (byte)MessageType.UNKNOWN_DATA_ID;
+            if (!typeOk) return false;
 
+            // Enforce access mode for ACKs
+            if (msgType == (byte)MessageType.READ_ACK && !OpenThermAccess.IsOperationAllowed(MessageID, MessageType.READ_DATA))
+                return false;
+            if (msgType == (byte)MessageType.WRITE_ACK && !OpenThermAccess.IsOperationAllowed(MessageID, MessageType.WRITE_DATA))
+                return false;
+            return true;
         }
     }
 }

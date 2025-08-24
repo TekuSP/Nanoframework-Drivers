@@ -31,6 +31,7 @@
     <Compile Include="Enums\MasterStatus.cs" />
     <Compile Include="Enums\Status.cs" />
     <Compile Include="OpenTherm.cs" />
+    <Compile Include="OpenThermAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\CustomRequest.cs" />
     <Compile Include="Requests\GetFaultRequest.cs" />

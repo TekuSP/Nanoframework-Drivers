@@ -63,9 +63,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             var raw = GetRawDataCore();
             if (!Utilities.Parity(raw))
                 return false;
-            byte msgType = (byte)((raw >> 28) & 0x7);
-            // Only master request types are valid here
-            return msgType == (byte)MessageType.READ_DATA || msgType == (byte)MessageType.WRITE_DATA;
+            var msgType = (MessageType)((raw >> 28) & 0x7);
+            if (msgType != MessageType.READ_DATA && msgType != MessageType.WRITE_DATA)
+                return false;
+            // Validate ID capability vs requested operation
+            return OpenThermAccess.IsOperationAllowed(MessageID, msgType);
         }
     }
 }
