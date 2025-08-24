@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.DriverBase.Interfaces;
 
@@ -230,7 +230,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         {
             data |= (ulong)MessageType << 28;
             data |= (ulong)MessageID << 16;
-            if (Utilities.Parity(data))
+            // Ensure overall frame has odd parity (bit count over 32 bits is odd)
+            if (!Utilities.Parity(data))
                 data |= 1ul << 31;
             return data;
         }
@@ -240,10 +241,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// <returns>Validity</returns>
         public bool IsValidResponse()
         {
-            if (Utilities.Parity(RawData))
+            // Parity over full 32-bit frame must be odd
+            if (!Utilities.Parity(RawData))
                 return false;
-            var msgType = (byte)(RawData << 1 >> 29);
-            return msgType == (byte)MessageType.READ_ACK || msgType == (byte)MessageType.WRITE_ACK;
+            var msgType = (byte)((RawData >> 28) & 0x7);
+            return msgType == (byte)MessageType.READ_ACK
+                || msgType == (byte)MessageType.WRITE_ACK
+                || msgType == (byte)MessageType.DATA_INVALID
+                || msgType == (byte)MessageType.UNKNOWN_DATA_ID;
 
         }
     }

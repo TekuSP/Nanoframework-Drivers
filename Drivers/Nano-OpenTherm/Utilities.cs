@@ -23,7 +23,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// Parity check for a frame
         /// </summary>
         /// <param name="frame">Frame to check on</param>
-        /// <returns>Parity</returns>
+        /// <returns>Parity (true when number of 1 bits is odd)</returns>
         public static bool Parity(ulong frame)
         {
             byte p = 0;
@@ -37,12 +37,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         }
         //TODO: Move to base solution
         /// <summary>
-        /// Get Uint from raw data
+        /// Get Uint from raw data (low 16-bits data field)
         /// </summary>
         /// <returns>Uint Response</returns>
         public static uint GetUInt(ulong rawData) => (uint)(rawData & 0xffff);
         /// <summary>
-        /// Gets Int from raw data
+        /// Gets Int from raw data (low 32-bits)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>Int Response</returns>
@@ -68,37 +68,34 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             return (short)(temp & 0xFFFF);
         }
         /// <summary>
-        /// Gets high part of UShort from raw data
+        /// Gets high part of UShort from raw data (bits 31..16)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>High of uint</returns>
         public static ushort GetHighUShort(ulong rawData)
         {
-            var temp = GetUInt(rawData);
-            return (ushort)(temp >> 16);
+            return (ushort)((rawData >> 16) & 0xFFFF);
         }
         /// <summary>
-        /// Gets high part of UShort from raw data where low part is byte
+        /// Gets high part of UShort from raw data where low part is byte (bits 23..8)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>High part of int, minus byte</returns>
         public static ushort GetHighUShortWithLowByte(ulong rawData)
         {
-            var temp = GetUInt(rawData);
-            return (ushort)((temp >> 8) & 0xFFFF);
+            return (ushort)((rawData >> 8) & 0xFFFF);
         }
         /// <summary>
-        /// Gets low part of UShort from raw data
+        /// Gets low part of UShort from raw data (bits 15..0)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>Low part of uint</returns>
         public static ushort GetLowUShort(ulong rawData)
         {
-            var temp = GetUInt(rawData);
-            return (ushort)(temp & 0xFFFF);
+            return (ushort)(rawData & 0xFFFF);
         }
         /// <summary>
-        /// Gets High part of Byte from raw data
+        /// Gets High part of Byte from raw data (bits 15..8 of 16-bit data field)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>High part of uint</returns>
@@ -108,7 +105,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             return (byte)(temp >> 8);
         }
         /// <summary>
-        /// Gets Low part of Byte from raw data
+        /// Gets Low part of Byte from raw data (bits 7..0 of 16-bit data field)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>Low part of uint</returns>
@@ -118,13 +115,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             return (byte)(temp & 0xFF);
         }
         /// <summary>
-        /// Get Float from raw data
+        /// Get Float from raw data (signed 16-bit fixed point 8.8)
         /// </summary>
         /// <returns>Float Response</returns>
         public static float GetFloat(ulong rawData)
         {
             var temp = GetUInt(rawData);
-            return (temp & 0x8000) == 1 ? -(0x10000L - temp) / 256.0f : temp / 256.0f;
+            if ((temp & 0x8000) != 0)
+            {
+                // negative
+                return -((0x10000 - (temp & 0xFFFF)) / 256.0f);
+            }
+            else
+            {
+                return (temp & 0xFFFF) / 256.0f;
+            }
         }
         /// <summary>
         /// Gets Special DateTime from raw data
