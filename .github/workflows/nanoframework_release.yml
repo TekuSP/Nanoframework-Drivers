@@ -19,7 +19,7 @@ jobs:
       solution: 'Meteostanice.sln'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
         with:
           fetch-depth: 0
           
@@ -29,7 +29,7 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4.7.1
+        uses: actions/setup-java@v5.0.0
         with:
           java-version: 17
           distribution: 'zulu' # Alternative distribution options are available.
@@ -54,7 +54,7 @@ jobs:
         run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
         
       - name: Cache SonarCloud packages
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.2.4
         with:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
@@ -62,7 +62,7 @@ jobs:
 
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.2.4
         with:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
@@ -82,7 +82,7 @@ jobs:
           Configuration: ${{ matrix.configuration }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"TekuSP_Meteostanice-CSharp" /o:"tekusp" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"TekuSP_Meteostanice-CSharp" /o:"tekusp" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.scanner.scanAll=false /d:sonar.host.url="https://sonarcloud.io"
            msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       
