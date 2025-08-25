@@ -67,6 +67,7 @@
     <Compile Include="Requests\GetFlameSignalTooLowNumberRequest.cs" />
     <Compile Include="Requests\GetManufacturerVersionRequest.cs" />
     <Compile Include="Requests\GetMasterConfigurationRequest.cs" />
+    <Compile Include="Requests\GetMasterVersionRequest.cs" />
     <Compile Include="Requests\GetMaxTSetBoundsRequest.cs" />
     <Compile Include="Requests\GetOEMDiagnosticCodeRequest.cs" />
     <Compile Include="Requests\GetOpenThermVersionMasterRequest.cs" />
@@ -91,6 +92,8 @@
     <Compile Include="Requests\GetReturnTemperatureRequest.cs" />
     <Compile Include="Requests\GetBoilerTemperatureRequest.cs" />
     <Compile Include="Requests\GetSlaveConfigurationRequest.cs" />
+    <Compile Include="Requests\GetSlaveVersionRequest.cs" />
+    <Compile Include="Requests\GetSolarStorageFaultRequest.cs" />
     <Compile Include="Requests\GetSolarStorageFHBEntryRequest.cs" />
     <Compile Include="Requests\GetSolarStorageFHBSizeRequest.cs" />
     <Compile Include="Requests\GetSolarStorageSConfigRequest.cs" />
@@ -107,9 +110,13 @@
     <Compile Include="Requests\GetTransparentSlaveParametersCountRequest.cs" />
     <Compile Include="Requests\GetUnsuccessfulBurnerStartsRequest.cs" />
     <Compile Include="Requests\GetVentilationFaultRequest.cs" />
+    <Compile Include="Requests\GetVentilationFHBEntryRequest.cs" />
+    <Compile Include="Requests\GetVentilationFHBSizeRequest.cs" />
     <Compile Include="Requests\GetVentilationOEMDiagnosticCodeRequest.cs" />
     <Compile Include="Requests\GetVentilationSConfigRequest.cs" />
     <Compile Include="Requests\GetVentilationStatusRequest.cs" />
+    <Compile Include="Requests\GetVentilationTSPCountRequest.cs" />
+    <Compile Include="Requests\GetVentilationTSPRequest.cs" />
     <Compile Include="Requests\GetVentilationVersionRequest.cs" />
     <Compile Include="Requests\ReceivedRequest.cs" />
     <Compile Include="Requests\Request.cs" />

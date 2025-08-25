@@ -36,153 +36,129 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// <returns>Request instance matching the MessageID when available, otherwise this</returns>
         public Request SelectRequest()
         {
-            switch (MessageID)
+            return MessageID switch
             {
                 // Status and core control
-                case MessageID.Status: return new SetBoilerStatusRequest(this);
-                case MessageID.TSet: return new SetBoilerTemperatureRequest(this);
-                case MessageID.MConfigMMemberIDcode: return new GetMasterConfigurationRequest(this);
-                case MessageID.SConfigSMemberIDcode: return new GetSlaveConfigurationRequest(this);
-                case MessageID.RemoteRequest: return new GetRemoteRequestRequest(this);
-
+                MessageID.Status => new SetBoilerStatusRequest(this),
+                MessageID.TSet => new SetBoilerTemperatureRequest(this),
+                MessageID.MConfigMMemberIDcode => new GetMasterConfigurationRequest(this),
+                MessageID.SConfigSMemberIDcode => new GetSlaveConfigurationRequest(this),
+                MessageID.RemoteRequest => new GetRemoteRequestRequest(this),
                 // Faults / flags
-                case MessageID.ASFflags: return new GetFaultRequest(this);
-                case MessageID.RBPflags: return new GetRemoteBoilerParameterFlagsRequest(this);
-
+                MessageID.ASFflags => new GetFaultRequest(this),
+                MessageID.RBPflags => new GetRemoteBoilerParameterFlagsRequest(this),
                 // Cooling and CH2 setpoint
-                case MessageID.CoolingControl: return new SetCoolingControlRequest(this);
-                case MessageID.TsetCH2: return new SetCH2SetpointRequest(this);
-                case MessageID.TrOverride: return new SetRoomOverrideRequest(this);
-                case MessageID.TrOverride2: return new SetRoomOverride2Request(this);
-
+                MessageID.CoolingControl => new SetCoolingControlRequest(this),
+                MessageID.TsetCH2 => new SetCH2SetpointRequest(this),
+                MessageID.TrOverride => new SetRoomOverrideRequest(this),
+                MessageID.TrOverride2 => new SetRoomOverride2Request(this),
                 // Transparent slave parameters and fault history buffer
-                case MessageID.TSP: return new GetTransparentSlaveParametersCountRequest(this);
-                case MessageID.TSPindexTSPvalue: return new GetTransparentSlaveParameterRequest(this);
-                case MessageID.FHBsize: return new GetFaultHistoryBufferSizeRequest(this);
-                case MessageID.FHBindexFHBvalue: return new GetFaultHistoryBufferEntryRequest(this);
-
+                MessageID.TSP => new GetTransparentSlaveParametersCountRequest(this),
+                MessageID.TSPindexTSPvalue => new GetTransparentSlaveParameterRequest(this),
+                MessageID.FHBsize => new GetFaultHistoryBufferSizeRequest(this),
+                MessageID.FHBindexFHBvalue => new GetFaultHistoryBufferEntryRequest(this),
                 // Capacity / modulation
-                case MessageID.MaxRelModLevelSetting: return new SetMaxRelModulationRequest(this);
-                case MessageID.MaxCapacityMinModLevel: return new GetBoilerCapacityAndMinModRequest(this);
-
+                MessageID.MaxRelModLevelSetting => new SetMaxRelModulationRequest(this),
+                MessageID.MaxCapacityMinModLevel => new GetBoilerCapacityAndMinModRequest(this),
                 // Room setpoints and levels
-                case MessageID.TrSet: return new SetRoomSetpointRequest(this);
-                case MessageID.RelModLevel: return new GetModulationRequest(this);
-
+                MessageID.TrSet => new SetRoomSetpointRequest(this),
+                MessageID.RelModLevel => new GetModulationRequest(this),
                 // Pressure / flow
-                case MessageID.CHPressure: return new GetPressureRequest(this);
-                case MessageID.DHWFlowRate: return new GetDHWFlowRateRequest(this);
-
+                MessageID.CHPressure => new GetPressureRequest(this),
+                MessageID.DHWFlowRate => new GetDHWFlowRateRequest(this),
                 // Time / calendar
-                case MessageID.DayTime: return new SetDayTimeRequest(this);
-                case MessageID.Date: return new SetDateRequest(this);
-                case MessageID.Year: return new SetYearRequest(this);
-
+                MessageID.DayTime => new SetDayTimeRequest(this),
+                MessageID.Date => new SetDateRequest(this),
+                MessageID.Year => new SetYearRequest(this),
                 // CH2 room setpoint
-                case MessageID.TrSetCH2: return new SetRoomSetpointCH2Request(this);
-
+                MessageID.TrSetCH2 => new SetRoomSetpointCH2Request(this),
                 // Temperatures
-                case MessageID.Tr: return new GetRoomTemperatureRequest(this);
-                case MessageID.Tboiler: return new GetBoilerTemperatureRequest(this);
-                case MessageID.Tdhw: return new GetDWHSetPointRequest(this);
-                case MessageID.Toutside: return new GetOutsideTemperatureRequest(this);
-                case MessageID.Tret: return new GetReturnTemperatureRequest(this);
-                case MessageID.Tstorage: return new GetStorageTemperatureRequest(this);
-                case MessageID.Tcollector: return new GetCollectorTemperatureRequest(this);
-                case MessageID.TflowCH2: return new GetCH2FlowTemperatureRequest(this);
-                case MessageID.Tdhw2: return new GetDHW2TemperatureRequest(this);
-                case MessageID.Texhaust: return new GetExhaustTemperatureRequest(this);
-                case MessageID.TboilerHeatExchanger: return new GetBoilerHeatExchangerTemperatureRequest(this);
-
+                MessageID.Tr => new GetRoomTemperatureRequest(this),
+                MessageID.Tboiler => new GetBoilerTemperatureRequest(this),
+                MessageID.Tdhw => new GetDWHSetPointRequest(this),
+                MessageID.Toutside => new GetOutsideTemperatureRequest(this),
+                MessageID.Tret => new GetReturnTemperatureRequest(this),
+                MessageID.Tstorage => new GetStorageTemperatureRequest(this),
+                MessageID.Tcollector => new GetCollectorTemperatureRequest(this),
+                MessageID.TflowCH2 => new GetCH2FlowTemperatureRequest(this),
+                MessageID.Tdhw2 => new GetDHW2TemperatureRequest(this),
+                MessageID.Texhaust => new GetExhaustTemperatureRequest(this),
+                MessageID.TboilerHeatExchanger => new GetBoilerHeatExchangerTemperatureRequest(this),
                 // Fan speed / flame / humidity
-                case MessageID.BoilerFanSpeedSetpointAndActual: return new GetBoilerFanSpeedRequest(this);
-                case MessageID.FlameCurrent: return new GetFlameCurrentRequest(this);
-                case MessageID.TrCH2: return new GetRoomTemperatureCH2Request(this);
-                case MessageID.RelativeHumidity: return new GetRelativeHumidityRequest(this);
-
+                MessageID.BoilerFanSpeedSetpointAndActual => new GetBoilerFanSpeedRequest(this),
+                MessageID.FlameCurrent => new GetFlameCurrentRequest(this),
+                MessageID.TrCH2 => new GetRoomTemperatureCH2Request(this),
+                MessageID.RelativeHumidity => new GetRelativeHumidityRequest(this),
                 // Bounds and max setpoints
-                case MessageID.TdhwSetUBTdhwSetLB: return new GetDhwSetpointBoundsRequest(this);
-                case MessageID.MaxTSetUBMaxTSetLB: return new GetMaxTSetBoundsRequest(this);
-                case MessageID.TdhwSet:
-                    break;
-                case MessageID.MaxTSet: return new SetMaxCHSetpointRequest(this);
-
+                MessageID.TdhwSetUBTdhwSetLB => new GetDhwSetpointBoundsRequest(this),
+                MessageID.MaxTSetUBMaxTSetLB => new GetMaxTSetBoundsRequest(this),
+                MessageID.TdhwSet => new SetDWHSetPointRequest(this),
+                MessageID.MaxTSet => new SetMaxCHSetpointRequest(this),
                 // Ventilation / heat recovery
-                case MessageID.StatusVentilationHeatRecovery: return new GetVentilationStatusRequest(this);
-                case MessageID.Vset: return new SetVentilationPositionRequest(this);
-                case MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery: return new GetVentilationFaultRequest(this);
-                case MessageID.OEMDiagnosticCodeVentilationHeatRecovery: return new GetVentilationOEMDiagnosticCodeRequest(this);
-                case MessageID.SConfigSMemberIDCodeVentilationHeatRecovery: return new GetVentilationSConfigRequest(this);
-                case MessageID.OpenThermVersionVentilationHeatRecovery: return new GetOpenThermVersionVentilationRequest(this);
-                case MessageID.VentilationHeatRecoveryVersion: return new GetVentilationVersionRequest(this);
-                case MessageID.RelVentLevel: return new GetRelativeVentilationLevelRequest(this);
-                case MessageID.RHexhaust: return new GetRelativeHumidityExhaustRequest(this);
-                case MessageID.CO2exhaust: return new GetCO2ExhaustRequest(this);
-                case MessageID.Tsi: return new GetSupplyInletTemperatureRequest(this);
-                case MessageID.Tso: return new GetSupplyOutletTemperatureRequest(this);
-                case MessageID.Tei: return new GetExhaustInletTemperatureRequest(this);
-                case MessageID.Teo: return new GetExhaustOutletTemperatureRequest(this);
-                case MessageID.RPMexhaust: return new GetExhaustFanSpeedRequest(this);
-                case MessageID.RPMsupply: return new GetSupplyFanSpeedRequest(this);
-                case MessageID.RBPflagsVentilationHeatRecovery: return new GetRemoteVentilationParameterFlagsRequest(this);
-                case MessageID.NominalVentilationValue: return new SetNominalVentilationValueRequest(this);
-                case MessageID.TSPventilationHeatRecovery: return new GetSolarStorageTSPCountRequest(this);
-                case MessageID.TSPindexTSPvalueVentilationHeatRecovery: return new GetSolarStorageTSPRequest(this);
-                case MessageID.FHBsizeVentilationHeatRecovery: return new GetSolarStorageFHBSizeRequest(this);
-                case MessageID.FHBindexFHBvalueVentilationHeatRecovery: return new GetSolarStorageFHBEntryRequest(this);
-
+                MessageID.StatusVentilationHeatRecovery => new GetVentilationStatusRequest(this),
+                MessageID.Vset => new SetVentilationPositionRequest(this),
+                MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery => new GetVentilationFaultRequest(this),
+                MessageID.OEMDiagnosticCodeVentilationHeatRecovery => new GetVentilationOEMDiagnosticCodeRequest(this),
+                MessageID.SConfigSMemberIDCodeVentilationHeatRecovery => new GetVentilationSConfigRequest(this),
+                MessageID.OpenThermVersionVentilationHeatRecovery => new GetOpenThermVersionVentilationRequest(this),
+                MessageID.VentilationHeatRecoveryVersion => new GetVentilationVersionRequest(this),
+                MessageID.RelVentLevel => new GetRelativeVentilationLevelRequest(this),
+                MessageID.RHexhaust => new GetRelativeHumidityExhaustRequest(this),
+                MessageID.CO2exhaust => new GetCO2ExhaustRequest(this),
+                MessageID.Tsi => new GetSupplyInletTemperatureRequest(this),
+                MessageID.Tso => new GetSupplyOutletTemperatureRequest(this),
+                MessageID.Tei => new GetExhaustInletTemperatureRequest(this),
+                MessageID.Teo => new GetExhaustOutletTemperatureRequest(this),
+                MessageID.RPMexhaust => new GetExhaustFanSpeedRequest(this),
+                MessageID.RPMsupply => new GetSupplyFanSpeedRequest(this),
+                MessageID.RBPflagsVentilationHeatRecovery => new GetRemoteVentilationParameterFlagsRequest(this),
+                MessageID.NominalVentilationValue => new SetNominalVentilationValueRequest(this),
+                MessageID.TSPventilationHeatRecovery => new GetVentilationTSPCountRequest(this),
+                MessageID.TSPindexTSPvalueVentilationHeatRecovery => new GetVentilationTSPRequest(this),
+                MessageID.FHBsizeVentilationHeatRecovery => new GetVentilationFHBSizeRequest(this),
+                MessageID.FHBindexFHBvalueVentilationHeatRecovery => new GetVentilationFHBEntryRequest(this),
                 // Branding and product info
-                case MessageID.Brand: return new GetManufacturerRequest(this);
-                case MessageID.BrandVersion: return new GetManufacturerVersionRequest(this);
-                case MessageID.BrandSerialNumber: return new GetSerialRequest(this);
-
+                MessageID.Brand => new GetManufacturerRequest(this),
+                MessageID.BrandVersion => new GetManufacturerVersionRequest(this),
+                MessageID.BrandSerialNumber => new GetSerialRequest(this),
                 // Counters & diagnostics
-                case MessageID.CoolingOperationHours: return new GetCoolingOperationHoursRequest(this);
-                case MessageID.PowerCycles: return new GetPowerCyclesRequest(this);
-                case MessageID.RFsensorStatusInformation: return new GetRFsensorStatusInformationRequest(this);
-                case MessageID.RemoteOverrideOperatingModeHeatingDHW: return new SetRemoteOverrideOperatingModeRequest(this);
-                case MessageID.RemoteOverrideFunction: return new SetRemoteOverrideFunctionRequest(this);
-                case MessageID.OEMDiagnosticCode: return new GetOEMDiagnosticCodeRequest(this);
-                case MessageID.UnsuccessfulBurnerStarts: return new GetUnsuccessfulBurnerStartsRequest(this);
-                case MessageID.FlameSignalTooLowNumber: return new GetFlameSignalTooLowNumberRequest(this);
-                case MessageID.SuccessfulBurnerStarts: return new GetSuccessfulBurnerStartsRequest(this);
-                case MessageID.CHPumpStarts: return new GetCHPumpStartsRequest(this);
-                case MessageID.DHWPumpValveStarts: return new GetDHWPumpValveStartsRequest(this);
-                case MessageID.DHWBurnerStarts: return new GetDHWBurnerStartsRequest(this);
-                case MessageID.BurnerOperationHours: return new GetBurnerOperationHoursRequest(this);
-                case MessageID.CHPumpOperationHours: return new GetCHPumpOperationHoursRequest(this);
-                case MessageID.DHWPumpValveOperationHours: return new GetDHWPumpValveOperationHoursRequest(this);
-                case MessageID.DHWBurnerOperationHours: return new GetDHWBurnerOperationHoursRequest(this);
-
+                MessageID.CoolingOperationHours => new GetCoolingOperationHoursRequest(this),
+                MessageID.PowerCycles => new GetPowerCyclesRequest(this),
+                MessageID.RFsensorStatusInformation => new GetRFsensorStatusInformationRequest(this),
+                MessageID.RemoteOverrideOperatingModeHeatingDHW => new SetRemoteOverrideOperatingModeRequest(this),
+                MessageID.RemoteOverrideFunction => new SetRemoteOverrideFunctionRequest(this),
+                MessageID.OEMDiagnosticCode => new GetOEMDiagnosticCodeRequest(this),
+                MessageID.UnsuccessfulBurnerStarts => new GetUnsuccessfulBurnerStartsRequest(this),
+                MessageID.FlameSignalTooLowNumber => new GetFlameSignalTooLowNumberRequest(this),
+                MessageID.SuccessfulBurnerStarts => new GetSuccessfulBurnerStartsRequest(this),
+                MessageID.CHPumpStarts => new GetCHPumpStartsRequest(this),
+                MessageID.DHWPumpValveStarts => new GetDHWPumpValveStartsRequest(this),
+                MessageID.DHWBurnerStarts => new GetDHWBurnerStartsRequest(this),
+                MessageID.BurnerOperationHours => new GetBurnerOperationHoursRequest(this),
+                MessageID.CHPumpOperationHours => new GetCHPumpOperationHoursRequest(this),
+                MessageID.DHWPumpValveOperationHours => new GetDHWPumpValveOperationHoursRequest(this),
+                MessageID.DHWBurnerOperationHours => new GetDHWBurnerOperationHoursRequest(this),
                 // Electricity producer stats
-                case MessageID.ElectricityProducerStarts: return new GetElectricityProducerStartsRequest(this);
-                case MessageID.ElectricityProducerHours: return new GetElectricityProducerHoursRequest(this);
-                case MessageID.ElectricityProduction: return new GetElectricityProductionRequest(this);
-                case MessageID.CumulativElectricityProduction: return new GetCumulativeElectricityProductionRequest(this);
-
+                MessageID.ElectricityProducerStarts => new GetElectricityProducerStartsRequest(this),
+                MessageID.ElectricityProducerHours => new GetElectricityProducerHoursRequest(this),
+                MessageID.ElectricityProduction => new GetElectricityProductionRequest(this),
+                MessageID.CumulativElectricityProduction => new GetCumulativeElectricityProductionRequest(this),
                 // Versions
-                case MessageID.OpenThermVersionMaster: return new GetOpenThermVersionMasterRequest(this);
-                case MessageID.OpenThermVersionSlave: return new GetOpenThermVersionSlaveRequest(this);
-                case MessageID.MasterVersion:
-                    break;
-                case MessageID.SlaveVersion:
-                    break;
-
+                MessageID.OpenThermVersionMaster => new GetOpenThermVersionMasterRequest(this),
+                MessageID.OpenThermVersionSlave => new GetOpenThermVersionSlaveRequest(this),
+                MessageID.MasterVersion => new GetMasterVersionRequest(this),
+                MessageID.SlaveVersion => new GetSlaveVersionRequest(this),
                 // Solar storage
-                case MessageID.StatusSolarStorage: return new GetSolarStorageStatusRequest(this);
-                case MessageID.ASFflagsOEMfaultCodeSolarStorage:
-                    break;
-                case MessageID.SConfigSMemberIDcodeSolarStorage: return new GetSolarStorageSConfigRequest(this);
-                case MessageID.SolarStorageVersion: return new GetSolarStorageVersionRequest(this);
-                case MessageID.TSPSolarStorage: return new GetSolarStorageTSPCountRequest(this);
-                case MessageID.TSPindexTSPvalueSolarStorage: return new GetSolarStorageTSPRequest(this);
-                case MessageID.FHBsizeSolarStorage: return new GetSolarStorageFHBSizeRequest(this);
-                case MessageID.FHBindexFHBvalueSolarStorage: return new GetSolarStorageFHBEntryRequest(this);
-
-                default:
-                    return this;
-            }
-            return this; // placeholders kept for visibility of missing mappings
+                MessageID.StatusSolarStorage => new GetSolarStorageStatusRequest(this),
+                MessageID.ASFflagsOEMfaultCodeSolarStorage => new GetSolarStorageFaultRequest(this),
+                MessageID.SConfigSMemberIDcodeSolarStorage => new GetSolarStorageSConfigRequest(this),
+                MessageID.SolarStorageVersion => new GetSolarStorageVersionRequest(this),
+                MessageID.TSPSolarStorage => new GetSolarStorageTSPCountRequest(this),
+                MessageID.TSPindexTSPvalueSolarStorage => new GetSolarStorageTSPRequest(this),
+                MessageID.FHBsizeSolarStorage => new GetSolarStorageFHBSizeRequest(this),
+                MessageID.FHBindexFHBvalueSolarStorage => new GetSolarStorageFHBEntryRequest(this),
+                _ => this,
+            };
         }
 
         /// <summary>Processes request</summary>
