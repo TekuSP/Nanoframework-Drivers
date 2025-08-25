@@ -1,6 +1,6 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.Nano_OpenTherm.Enums;
-using MC = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterConfiguration;
+using SC = TekuSP.Drivers.Nano_OpenTherm.Enums.SlaveConfiguration;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
@@ -9,29 +9,32 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetVentilationSConfigRequest() : base() { }
         public GetVentilationSConfigRequest(Request baseReq) : base(baseReq) { }
 
-        public MC MasterConfiguration { get; set; }
+        public SC SlaveConfiguration { get; set; }
+        public MemberIdCode MemberIdCode { get; set; }
 
         protected override uint GetRawDataCore()
         {
-            uint raw = (uint)(byte)MasterConfiguration;
+            // High byte = Member ID, Low byte = Slave configuration flags
+            uint raw = (uint)(((byte)MemberIdCode << 8) | (byte)SlaveConfiguration);
             return ProcessRequest(raw);
         }
         protected override void SetRawDataCore(uint value)
         {
-            MasterConfiguration = Utilities.GetMasterConfiguration(value);
+            SlaveConfiguration = Utilities.GetSlaveConfiguration(value);
+            MemberIdCode = (MemberIdCode)Utilities.GetHighByte(value);
         }
 
         public override MessageType MessageType => MessageType.READ_DATA;
         public override MessageID MessageID => MessageID.SConfigSMemberIDCodeVentilationHeatRecovery;
 
-        // Convenience bit properties for MasterConfiguration
-        public bool Reserved0 { get => (MasterConfiguration & MC.Reserved0) != 0; set { if (value) MasterConfiguration |= MC.Reserved0; else MasterConfiguration &= ~MC.Reserved0; } }
-        public bool Reserved1 { get => (MasterConfiguration & MC.Reserved1) != 0; set { if (value) MasterConfiguration |= MC.Reserved1; else MasterConfiguration &= ~MC.Reserved1; } }
-        public bool Reserved2 { get => (MasterConfiguration & MC.Reserved2) != 0; set { if (value) MasterConfiguration |= MC.Reserved2; else MasterConfiguration &= ~MC.Reserved2; } }
-        public bool Reserved3 { get => (MasterConfiguration & MC.Reserved3) != 0; set { if (value) MasterConfiguration |= MC.Reserved3; else MasterConfiguration &= ~MC.Reserved3; } }
-        public bool Reserved4 { get => (MasterConfiguration & MC.Reserved4) != 0; set { if (value) MasterConfiguration |= MC.Reserved4; else MasterConfiguration &= ~MC.Reserved4; } }
-        public bool Reserved5 { get => (MasterConfiguration & MC.Reserved5) != 0; set { if (value) MasterConfiguration |= MC.Reserved5; else MasterConfiguration &= ~MC.Reserved5; } }
-        public bool Reserved6 { get => (MasterConfiguration & MC.Reserved6) != 0; set { if (value) MasterConfiguration |= MC.Reserved6; else MasterConfiguration &= ~MC.Reserved6; } }
-        public bool Reserved7 { get => (MasterConfiguration & MC.Reserved7) != 0; set { if (value) MasterConfiguration |= MC.Reserved7; else MasterConfiguration &= ~MC.Reserved7; } }
+        // Convenience bit properties for SlaveConfiguration
+        public bool DHWPresent { get => (SlaveConfiguration & SC.DHWPresent) != 0; set { if (value) SlaveConfiguration |= SC.DHWPresent; else SlaveConfiguration &= ~SC.DHWPresent; } }
+        public bool ControlType { get => (SlaveConfiguration & SC.ControlType) != 0; set { if (value) SlaveConfiguration |= SC.ControlType; else SlaveConfiguration &= ~SC.ControlType; } }
+        public bool CoolingConfig { get => (SlaveConfiguration & SC.CoolingConfig) != 0; set { if (value) SlaveConfiguration |= SC.CoolingConfig; else SlaveConfiguration &= ~SC.CoolingConfig; } }
+        public bool DHWConfig { get => (SlaveConfiguration & SC.DHWConfig) != 0; set { if (value) SlaveConfiguration |= SC.DHWConfig; else SlaveConfiguration &= ~SC.DHWConfig; } }
+        public bool MasterLowOffPumpControl { get => (SlaveConfiguration & SC.MasterLowOffPumpControl) != 0; set { if (value) SlaveConfiguration |= SC.MasterLowOffPumpControl; else SlaveConfiguration &= ~SC.MasterLowOffPumpControl; } }
+        public bool CH2Present { get => (SlaveConfiguration & SC.CH2Present) != 0; set { if (value) SlaveConfiguration |= SC.CH2Present; else SlaveConfiguration &= ~SC.CH2Present; } }
+        public bool Reserved6 { get => (SlaveConfiguration & SC.Reserved6) != 0; set { if (value) SlaveConfiguration |= SC.Reserved6; else SlaveConfiguration &= ~SC.Reserved6; } }
+        public bool Reserved7 { get => (SlaveConfiguration & SC.Reserved7) != 0; set { if (value) SlaveConfiguration |= SC.Reserved7; else SlaveConfiguration &= ~SC.Reserved7; } }
     }
 }

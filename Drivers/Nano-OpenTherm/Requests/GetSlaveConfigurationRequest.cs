@@ -10,15 +10,18 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetSlaveConfigurationRequest(Request baseReq) : base(baseReq) { }
 
         public SC SlaveConfiguration { get; set; }
+        public MemberIdCode MemberIdCode { get; set; }
 
         protected override uint GetRawDataCore()
         {
-            uint data = (uint)(byte)SlaveConfiguration;
+            // High byte = MemberIdCode, Low byte = SlaveConfiguration
+            uint data = (uint)(((byte)MemberIdCode << 8) | (byte)SlaveConfiguration);
             return ProcessRequest(data);
         }
         protected override void SetRawDataCore(uint value)
         {
             SlaveConfiguration = Utilities.GetSlaveConfiguration(value);
+            MemberIdCode = (MemberIdCode)Utilities.GetHighByte(value);
         }
 
         public override MessageType MessageType => MessageType.READ_DATA;

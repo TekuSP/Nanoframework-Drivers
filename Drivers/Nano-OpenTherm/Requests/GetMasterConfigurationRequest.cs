@@ -10,15 +10,18 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetMasterConfigurationRequest(Request baseReq) : base(baseReq) { }
 
         public MC MasterConfiguration { get; set; }
+        public MemberIdCode MemberIdCode { get; set; }
 
         protected override uint GetRawDataCore()
         {
-            uint data = (uint)(byte)MasterConfiguration;
+            // High byte = MemberIdCode, Low byte = MasterConfiguration
+            uint data = (uint)(((byte)MemberIdCode << 8) | (byte)MasterConfiguration);
             return ProcessRequest(data);
         }
         protected override void SetRawDataCore(uint value)
         {
             MasterConfiguration = Utilities.GetMasterConfiguration(value);
+            MemberIdCode = (MemberIdCode)Utilities.GetHighByte(value);
         }
 
         public override MessageType MessageType => MessageType.READ_DATA;

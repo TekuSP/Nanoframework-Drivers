@@ -23,6 +23,9 @@
     <Compile Include="Enums\ApplicationSpecificFaultFlags.cs" />
     <Compile Include="Enums\CommandCode.cs" />
     <Compile Include="Enums\CommandCodeResponse.cs" />
+    <Compile Include="Enums\MemberIdCode.cs" />
+    <Compile Include="Enums\Month.cs" />
+    <Compile Include="Enums\OperatingMode.cs" />
     <Compile Include="Enums\RemoteOverrideFunction.cs" />
     <Compile Include="Enums\RemoteParameterTransferReadWrite.cs" />
     <Compile Include="Enums\RemoteParameterTransferEnable.cs" />
@@ -31,6 +34,7 @@
     <Compile Include="Enums\SlaveStatus.cs" />
     <Compile Include="Enums\MasterStatus.cs" />
     <Compile Include="Enums\Status.cs" />
+    <Compile Include="Enums\VersionProductType.cs" />
     <Compile Include="OpenTherm.cs" />
     <Compile Include="OpenThermAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
