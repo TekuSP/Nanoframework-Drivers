@@ -7,6 +7,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetVentilationFHBEntryRequest() : base() { }
         public GetVentilationFHBEntryRequest(Request baseReq) : base(baseReq) { }
 
+        /// <summary>
+        /// Index of ventilation fault-history entry to read (low byte).
+        /// </summary>
         public byte Index { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Index);

@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Boiler fan speed Setpoint and actual value
+    /// </summary>
     public class GetBoilerFanSpeedRequest : ReadRequest
     {
         public GetBoilerFanSpeedRequest() : base() { }

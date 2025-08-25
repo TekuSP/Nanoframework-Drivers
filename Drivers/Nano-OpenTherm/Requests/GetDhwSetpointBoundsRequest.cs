@@ -10,7 +10,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetDhwSetpointBoundsRequest() : base() { }
         public GetDhwSetpointBoundsRequest(Request baseReq) : base(baseReq) { }
 
+        /// <summary>
+        /// Upper bound for DHW setpoint in degrees Celsius (encoded as integer in high byte).
+        /// </summary>
         public byte UpperBound { get; set; }
+        /// <summary>
+        /// Lower bound for DHW setpoint in degrees Celsius (encoded as integer in low byte).
+        /// </summary>
         public byte LowerBound { get; set; }
 
         protected override uint GetRawDataCore()

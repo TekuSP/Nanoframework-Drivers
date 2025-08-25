@@ -8,7 +8,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetFaultHistoryBufferEntryRequest(Request baseReq) : base(baseReq) { }
 
         /// <summary>
-        /// Index number of fault-history buffer entry to read
+        /// Index number of fault-history buffer entry to read (low byte).
         /// </summary>
         public byte Index { get; set; }
 
