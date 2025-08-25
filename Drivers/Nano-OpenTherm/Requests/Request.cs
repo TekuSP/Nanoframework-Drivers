@@ -53,6 +53,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 case MessageID.CoolingControl: return new SetCoolingControlRequest(this);
                 case MessageID.TsetCH2: return new SetCH2SetpointRequest(this);
                 case MessageID.TrOverride: return new SetRoomOverrideRequest(this);
+                case MessageID.TrOverride2: return new SetRoomOverride2Request(this);
 
                 // Transparent slave parameters and fault history buffer
                 case MessageID.TSP: return new GetTransparentSlaveParametersCountRequest(this);
@@ -98,8 +99,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 case MessageID.FlameCurrent: return new GetFlameCurrentRequest(this);
                 case MessageID.TrCH2: return new GetRoomTemperatureCH2Request(this);
                 case MessageID.RelativeHumidity: return new GetRelativeHumidityRequest(this);
-                case MessageID.TrOverride2:
-                    break;
 
                 // Bounds and max setpoints
                 case MessageID.TdhwSetUBTdhwSetLB: return new GetDhwSetpointBoundsRequest(this);
@@ -109,48 +108,28 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 case MessageID.MaxTSet: return new SetMaxCHSetpointRequest(this);
 
                 // Ventilation / heat recovery
-                case MessageID.StatusVentilationHeatRecovery:
-                    break;
+                case MessageID.StatusVentilationHeatRecovery: return new GetVentilationStatusRequest(this);
                 case MessageID.Vset: return new SetVentilationPositionRequest(this);
-                case MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery:
-                    break;
-                case MessageID.OEMDiagnosticCodeVentilationHeatRecovery:
-                    break;
-                case MessageID.SConfigSMemberIDCodeVentilationHeatRecovery:
-                    break;
-                case MessageID.OpenThermVersionVentilationHeatRecovery:
-                    break;
-                case MessageID.VentilationHeatRecoveryVersion:
-                    break;
-                case MessageID.RelVentLevel:
-                    break;
-                case MessageID.RHexhaust:
-                    break;
-                case MessageID.CO2exhaust:
-                    break;
-                case MessageID.Tsi:
-                    break;
-                case MessageID.Tso:
-                    break;
-                case MessageID.Tei:
-                    break;
-                case MessageID.Teo:
-                    break;
-                case MessageID.RPMexhaust:
-                    break;
-                case MessageID.RPMsupply:
-                    break;
-                case MessageID.RBPflagsVentilationHeatRecovery:
-                    break;
+                case MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery: return new GetVentilationFaultRequest(this);
+                case MessageID.OEMDiagnosticCodeVentilationHeatRecovery: return new GetVentilationOEMDiagnosticCodeRequest(this);
+                case MessageID.SConfigSMemberIDCodeVentilationHeatRecovery: return new GetVentilationSConfigRequest(this);
+                case MessageID.OpenThermVersionVentilationHeatRecovery: return new GetOpenThermVersionVentilationRequest(this);
+                case MessageID.VentilationHeatRecoveryVersion: return new GetVentilationVersionRequest(this);
+                case MessageID.RelVentLevel: return new GetRelativeVentilationLevelRequest(this);
+                case MessageID.RHexhaust: return new GetRelativeHumidityExhaustRequest(this);
+                case MessageID.CO2exhaust: return new GetCO2ExhaustRequest(this);
+                case MessageID.Tsi: return new GetSupplyInletTemperatureRequest(this);
+                case MessageID.Tso: return new GetSupplyOutletTemperatureRequest(this);
+                case MessageID.Tei: return new GetExhaustInletTemperatureRequest(this);
+                case MessageID.Teo: return new GetExhaustOutletTemperatureRequest(this);
+                case MessageID.RPMexhaust: return new GetExhaustFanSpeedRequest(this);
+                case MessageID.RPMsupply: return new GetSupplyFanSpeedRequest(this);
+                case MessageID.RBPflagsVentilationHeatRecovery: return new GetRemoteVentilationParameterFlagsRequest(this);
                 case MessageID.NominalVentilationValue: return new SetNominalVentilationValueRequest(this);
-                case MessageID.TSPventilationHeatRecovery:
-                    break;
-                case MessageID.TSPindexTSPvalueVentilationHeatRecovery:
-                    break;
-                case MessageID.FHBsizeVentilationHeatRecovery:
-                    break;
-                case MessageID.FHBindexFHBvalueVentilationHeatRecovery:
-                    break;
+                case MessageID.TSPventilationHeatRecovery: return new GetSolarStorageTSPCountRequest(this);
+                case MessageID.TSPindexTSPvalueVentilationHeatRecovery: return new GetSolarStorageTSPRequest(this);
+                case MessageID.FHBsizeVentilationHeatRecovery: return new GetSolarStorageFHBSizeRequest(this);
+                case MessageID.FHBindexFHBvalueVentilationHeatRecovery: return new GetSolarStorageFHBEntryRequest(this);
 
                 // Branding and product info
                 case MessageID.Brand: return new GetManufacturerRequest(this);
@@ -160,60 +139,26 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 // Counters & diagnostics
                 case MessageID.CoolingOperationHours: return new GetCoolingOperationHoursRequest(this);
                 case MessageID.PowerCycles: return new GetPowerCyclesRequest(this);
-                case MessageID.RFsensorStatusInformation:
-                    break;
+                case MessageID.RFsensorStatusInformation: return new GetRFsensorStatusInformationRequest(this);
                 case MessageID.RemoteOverrideOperatingModeHeatingDHW: return new SetRemoteOverrideOperatingModeRequest(this);
                 case MessageID.RemoteOverrideFunction: return new SetRemoteOverrideFunctionRequest(this);
-
-                // Solar storage
-                case MessageID.StatusSolarStorage:
-                    break;
-                case MessageID.ASFflagsOEMfaultCodeSolarStorage:
-                    break;
-                case MessageID.SConfigSMemberIDcodeSolarStorage:
-                    break;
-                case MessageID.SolarStorageVersion:
-                    break;
-                case MessageID.TSPSolarStorage:
-                    break;
-                case MessageID.TSPindexTSPvalueSolarStorage:
-                    break;
-                case MessageID.FHBsizeSolarStorage:
-                    break;
-                case MessageID.FHBindexFHBvalueSolarStorage:
-                    break;
+                case MessageID.OEMDiagnosticCode: return new GetOEMDiagnosticCodeRequest(this);
+                case MessageID.UnsuccessfulBurnerStarts: return new GetUnsuccessfulBurnerStartsRequest(this);
+                case MessageID.FlameSignalTooLowNumber: return new GetFlameSignalTooLowNumberRequest(this);
+                case MessageID.SuccessfulBurnerStarts: return new GetSuccessfulBurnerStartsRequest(this);
+                case MessageID.CHPumpStarts: return new GetCHPumpStartsRequest(this);
+                case MessageID.DHWPumpValveStarts: return new GetDHWPumpValveStartsRequest(this);
+                case MessageID.DHWBurnerStarts: return new GetDHWBurnerStartsRequest(this);
+                case MessageID.BurnerOperationHours: return new GetBurnerOperationHoursRequest(this);
+                case MessageID.CHPumpOperationHours: return new GetCHPumpOperationHoursRequest(this);
+                case MessageID.DHWPumpValveOperationHours: return new GetDHWPumpValveOperationHoursRequest(this);
+                case MessageID.DHWBurnerOperationHours: return new GetDHWBurnerOperationHoursRequest(this);
 
                 // Electricity producer stats
-                case MessageID.ElectricityProducerStarts:
-                    break;
-                case MessageID.ElectricityProducerHours:
-                    break;
-                case MessageID.ElectricityProduction:
-                    break;
-                case MessageID.CumulativElectricityProduction:
-                    break;
-                case MessageID.UnsuccessfulBurnerStarts:
-                    break;
-                case MessageID.FlameSignalTooLowNumber:
-                    break;
-                case MessageID.OEMDiagnosticCode:
-                    break;
-                case MessageID.SuccessfulBurnerStarts:
-                    break;
-                case MessageID.CHPumpStarts:
-                    break;
-                case MessageID.DHWPumpValveStarts:
-                    break;
-                case MessageID.DHWBurnerStarts:
-                    break;
-                case MessageID.BurnerOperationHours:
-                    break;
-                case MessageID.CHPumpOperationHours:
-                    break;
-                case MessageID.DHWPumpValveOperationHours:
-                    break;
-                case MessageID.DHWBurnerOperationHours:
-                    break;
+                case MessageID.ElectricityProducerStarts: return new GetElectricityProducerStartsRequest(this);
+                case MessageID.ElectricityProducerHours: return new GetElectricityProducerHoursRequest(this);
+                case MessageID.ElectricityProduction: return new GetElectricityProductionRequest(this);
+                case MessageID.CumulativElectricityProduction: return new GetCumulativeElectricityProductionRequest(this);
 
                 // Versions
                 case MessageID.OpenThermVersionMaster: return new GetOpenThermVersionMasterRequest(this);
@@ -222,6 +167,17 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                     break;
                 case MessageID.SlaveVersion:
                     break;
+
+                // Solar storage
+                case MessageID.StatusSolarStorage: return new GetSolarStorageStatusRequest(this);
+                case MessageID.ASFflagsOEMfaultCodeSolarStorage:
+                    break;
+                case MessageID.SConfigSMemberIDcodeSolarStorage: return new GetSolarStorageSConfigRequest(this);
+                case MessageID.SolarStorageVersion: return new GetSolarStorageVersionRequest(this);
+                case MessageID.TSPSolarStorage: return new GetSolarStorageTSPCountRequest(this);
+                case MessageID.TSPindexTSPvalueSolarStorage: return new GetSolarStorageTSPRequest(this);
+                case MessageID.FHBsizeSolarStorage: return new GetSolarStorageFHBSizeRequest(this);
+                case MessageID.FHBindexFHBvalueSolarStorage: return new GetSolarStorageFHBEntryRequest(this);
 
                 default:
                     return this;

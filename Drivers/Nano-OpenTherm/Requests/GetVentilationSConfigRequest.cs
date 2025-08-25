@@ -4,17 +4,17 @@ using MC = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterConfiguration;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class GetMasterConfigurationRequest : ReadRequest
+    public class GetVentilationSConfigRequest : ReadRequest
     {
-        public GetMasterConfigurationRequest() : base() { }
-        public GetMasterConfigurationRequest(Request baseReq) : base(baseReq) { }
+        public GetVentilationSConfigRequest() : base() { }
+        public GetVentilationSConfigRequest(Request baseReq) : base(baseReq) { }
 
         public MC MasterConfiguration { get; set; }
 
         protected override ulong GetRawDataCore()
         {
-            uint data = (uint)(byte)MasterConfiguration;
-            return ProcessRequest(data);
+            uint raw = (uint)(byte)MasterConfiguration;
+            return ProcessRequest(raw);
         }
         protected override void SetRawDataCore(ulong value)
         {
@@ -22,9 +22,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         }
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.MConfigMMemberIDcode;
+        public override MessageID MessageID => MessageID.SConfigSMemberIDCodeVentilationHeatRecovery;
 
-        // Convenience bit properties to set/clear underlying flags
+        // Convenience bit properties for MasterConfiguration
         public bool Reserved0 { get => (MasterConfiguration & MC.Reserved0) != 0; set { if (value) MasterConfiguration |= MC.Reserved0; else MasterConfiguration &= ~MC.Reserved0; } }
         public bool Reserved1 { get => (MasterConfiguration & MC.Reserved1) != 0; set { if (value) MasterConfiguration |= MC.Reserved1; else MasterConfiguration &= ~MC.Reserved1; } }
         public bool Reserved2 { get => (MasterConfiguration & MC.Reserved2) != 0; set { if (value) MasterConfiguration |= MC.Reserved2; else MasterConfiguration &= ~MC.Reserved2; } }

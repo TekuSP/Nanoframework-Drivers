@@ -1,4 +1,5 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+using TekuSP.Drivers.Nano_OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
@@ -10,17 +11,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetNominalVentilationValueRequest() : base() { }
         public SetNominalVentilationValueRequest(Request baseReq) : base(baseReq) { }
 
-        public byte Percent { get; set; }
+        private float _percent;
+        public float Percent
+        {
+            get => _percent;
+            set => _percent = value.Normalize();
+        }
 
         protected override ulong GetRawDataCore()
         {
-            // encode as 1.15 or 8.8? Use 8.8 fixed-point to be consistent with percent encodings
-            uint raw = (uint)(Percent * 256);
+            uint raw = (uint)(Percent * 256f);
             return ProcessRequest(raw);
         }
         protected override void SetRawDataCore(ulong value)
         {
-            Percent = (byte)Utilities.GetFloat(value);
+            Percent = Utilities.GetFloat(value);
         }
 
         public override MessageType MessageType => MessageType.WRITE_DATA;

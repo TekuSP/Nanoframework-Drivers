@@ -10,10 +10,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetOpenThermVersionSlaveRequest() : base() { }
         public GetOpenThermVersionSlaveRequest(Request baseReq) : base(baseReq) { }
 
-        public byte Major { get; private set; }
-        public byte Minor { get; private set; }
+        public byte Major { get; set; }
+        public byte Minor { get; set; }
 
-        protected override ulong GetRawDataCore() => ProcessRequest(0);
+        protected override ulong GetRawDataCore()
+        {
+            uint raw = (uint)((Major << 8) | Minor);
+            return ProcessRequest(raw);
+        }
         protected override void SetRawDataCore(ulong value)
         {
             Major = Utilities.GetHighByte(value);

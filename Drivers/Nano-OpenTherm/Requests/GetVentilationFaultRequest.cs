@@ -1,19 +1,18 @@
-﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.Nano_OpenTherm.Enums;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
-    public class GetFaultRequest : ReadRequest
+    public class GetVentilationFaultRequest : ReadRequest
     {
-        public GetFaultRequest() : base() { }
-        public GetFaultRequest(Request baseReq) : base(baseReq) { }
+        public GetVentilationFaultRequest() : base() { }
+        public GetVentilationFaultRequest(Request baseReq) : base(baseReq) { }
 
         public ApplicationSpecificFaultFlags FaultFlags { get; set; }
         public byte OEMFaultCode { get; set; }
 
         protected override ulong GetRawDataCore()
         {
-            // High byte = OEM fault code, low byte = ASF flags
             uint data = (uint)(((uint)OEMFaultCode << 8) | (byte)FaultFlags);
             return ProcessRequest(data);
         }
@@ -24,9 +23,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         }
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.ASFflags;
+        public override MessageID MessageID => MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery;
 
-        // Convenience flag properties
+        // Convenience flags
         public bool ServiceRequest { get => (FaultFlags & ApplicationSpecificFaultFlags.ServiceRequest) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.ServiceRequest; else FaultFlags &= ~ApplicationSpecificFaultFlags.ServiceRequest; } }
         public bool LockoutReset { get => (FaultFlags & ApplicationSpecificFaultFlags.LockoutReset) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.LockoutReset; else FaultFlags &= ~ApplicationSpecificFaultFlags.LockoutReset; } }
         public bool LowWaterPress { get => (FaultFlags & ApplicationSpecificFaultFlags.LowWaterPress) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.LowWaterPress; else FaultFlags &= ~ApplicationSpecificFaultFlags.LowWaterPress; } }

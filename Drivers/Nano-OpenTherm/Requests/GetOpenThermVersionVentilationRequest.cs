@@ -3,12 +3,12 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// The implemented version of the OpenTherm Protocol Specification in the master
+    /// OT version implemented in the ventilation / heat recovery system
     /// </summary>
-    public class GetOpenThermVersionMasterRequest : ReadRequest
+    public class GetOpenThermVersionVentilationRequest : ReadRequest
     {
-        public GetOpenThermVersionMasterRequest() : base() { }
-        public GetOpenThermVersionMasterRequest(Request baseReq) : base(baseReq) { }
+        public GetOpenThermVersionVentilationRequest() : base() { }
+        public GetOpenThermVersionVentilationRequest(Request baseReq) : base(baseReq) { }
 
         public byte Major { get; set; }
         public byte Minor { get; set; }
@@ -25,6 +25,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         }
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.OpenThermVersionMaster;
+        public override MessageID MessageID => MessageID.OpenThermVersionVentilationHeatRecovery;
     }
 }
