@@ -11,7 +11,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             MessageType = baseResponse.MessageType;
             MessageID = baseResponse.MessageID;
         }
-        public override ulong RawData
+        public override uint RawData
         {
             get;
             set;

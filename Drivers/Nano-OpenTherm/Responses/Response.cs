@@ -10,9 +10,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     public abstract class Response : IOpenThermData
     {
         /// <summary>
-        /// Raw ulong data from OpenTherm device
+        /// Raw uint data from OpenTherm device
         /// </summary>
-        public abstract ulong RawData
+        public abstract uint RawData
         {
             get;
             set;
@@ -226,13 +226,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// </summary>
         /// <param name="data">Input data</param>
         /// <returns>Returns Raw Request</returns>
-        protected ulong ProcessResponse(ulong data)
+        protected uint ProcessResponse(uint data)
         {
-            data |= (ulong)MessageType << 28;
-            data |= (ulong)MessageID << 16;
+            data |= (uint)MessageType << 28;
+            data |= (uint)MessageID << 16;
             // Ensure overall frame has odd parity (bit count over 32 bits is odd)
             if (!Utilities.Parity(data))
-                data |= 1ul << 31;
+                data |= 1u << 31;
             return data;
         }
         /// <summary>

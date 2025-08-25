@@ -8,9 +8,9 @@ namespace TekuSP.Drivers.DriverBase.Interfaces
     public interface IOpenThermData
     {
         /// <summary>
-        /// Raw data
+        /// Raw data (32-bit OpenTherm frame)
         /// </summary>
-        ulong RawData
+        uint RawData
         {
             get; set;
         }

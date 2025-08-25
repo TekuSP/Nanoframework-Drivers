@@ -13,12 +13,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public MS MasterStatus { get; set; }
         public SS SlaveStatus { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint data = (uint)(((byte)SlaveStatus << 8) | (byte)MasterStatus);
             return ProcessRequest(data);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             MasterStatus = Utilities.GetMasterStatus(value);
             SlaveStatus = Utilities.GetSlaveStatus(value);

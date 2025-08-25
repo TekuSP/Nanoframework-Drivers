@@ -9,8 +9,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public ushort Code { get; set; }
 
-        protected override ulong GetRawDataCore() => ProcessRequest(Code);
-        protected override void SetRawDataCore(ulong value) { Code = Utilities.GetLowUShort(value); }
+        protected override uint GetRawDataCore() => ProcessRequest(Code);
+        protected override void SetRawDataCore(uint value) { Code = Utilities.GetLowUShort(value); }
 
         public override MessageType MessageType => MessageType.READ_DATA;
         public override MessageID MessageID => MessageID.OEMDiagnosticCode;

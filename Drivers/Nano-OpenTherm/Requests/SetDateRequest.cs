@@ -13,13 +13,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public byte Day { get; set; }
         public byte Month { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             // low byte: day (1-31), high byte: month (1-12)
             uint raw = (uint)(((Month & 0x1F) << 8) | (Day & 0x1F));
             return ProcessRequest(raw);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             Day = (byte)(Utilities.GetLowByte(value) & 0x1F);
             Month = (byte)(Utilities.GetHighByte(value) & 0x1F);

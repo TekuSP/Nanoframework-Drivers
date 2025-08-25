@@ -9,8 +9,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public byte SensorId { get; set; }
 
-        protected override ulong GetRawDataCore() => ProcessRequest(SensorId);
-        protected override void SetRawDataCore(ulong value) { SensorId = Utilities.GetLowByte(value); }
+        protected override uint GetRawDataCore() => ProcessRequest(SensorId);
+        protected override void SetRawDataCore(uint value) { SensorId = Utilities.GetLowByte(value); }
 
         public override MessageType MessageType => MessageType.READ_DATA;
         public override MessageID MessageID => MessageID.RFsensorStatusInformation;

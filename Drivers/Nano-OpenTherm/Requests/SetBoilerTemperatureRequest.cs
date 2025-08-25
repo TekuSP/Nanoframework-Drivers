@@ -16,11 +16,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             set => _temperature = value.Normalize();
         }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             return ProcessRequest(Utilities.GetRawTemperature(Temperature));
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             Temperature = Utilities.GetFloat(value);
         }

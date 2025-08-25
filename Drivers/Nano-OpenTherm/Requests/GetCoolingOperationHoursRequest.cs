@@ -12,8 +12,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public ushort Hours { get; private set; }
 
-        protected override ulong GetRawDataCore() => ProcessRequest(0);
-        protected override void SetRawDataCore(ulong value)
+        protected override uint GetRawDataCore() => ProcessRequest(0);
+        protected override void SetRawDataCore(uint value)
         {
             Hours = Utilities.GetLowUShort(value);
         }

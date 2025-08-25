@@ -1,6 +1,5 @@
 ﻿using System;
-
-using TekuSP.Drivers.Nano_OpenTherm.Enums;
+using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm
 {
@@ -24,7 +23,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         /// <param name="frame">Frame to check on</param>
         /// <returns>Parity (true when number of 1 bits is odd)</returns>
-        public static bool Parity(ulong frame)
+        public static bool Parity(uint frame)
         {
             byte p = 0;
             while (frame > 0)
@@ -40,19 +39,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// Get Uint from raw data (low 16-bits data field)
         /// </summary>
         /// <returns>Uint Response</returns>
-        public static uint GetUInt(ulong rawData) => (uint)(rawData & 0xffff);
+        public static uint GetUInt(uint rawData) => rawData & 0xffffu;
         /// <summary>
         /// Gets Int from raw data (low 32-bits)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>Int Response</returns>
-        public static int GetInt(ulong rawData) => (int)(rawData & 0xFFFFFFFF);
+        public static int GetInt(uint rawData) => (int)(rawData & 0xFFFFFFFFu);
         /// <summary>
         /// Gets High part of Int from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>High of int</returns>
-        public static short GetHighShort(ulong rawData)
+        public static short GetHighShort(uint rawData)
         {
             var temp = GetInt(rawData);
             return (short)(temp >> 16);
@@ -62,7 +61,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>Low of int</returns>
-        public static short GetLowShort(ulong rawData)
+        public static short GetLowShort(uint rawData)
         {
             var temp = GetInt(rawData);
             return (short)(temp & 0xFFFF);
@@ -72,36 +71,27 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>High of uint</returns>
-        public static ushort GetHighUShort(ulong rawData)
-        {
-            return (ushort)((rawData >> 16) & 0xFFFF);
-        }
+        public static ushort GetHighUShort(uint rawData) => (ushort)((rawData >> 16) & 0xFFFF);
         /// <summary>
         /// Gets high part of UShort from raw data where low part is byte (bits 23..8)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>High part of int, minus byte</returns>
-        public static ushort GetHighUShortWithLowByte(ulong rawData)
-        {
-            return (ushort)((rawData >> 8) & 0xFFFF);
-        }
+        public static ushort GetHighUShortWithLowByte(uint rawData) => (ushort)((rawData >> 8) & 0xFFFF);
         /// <summary>
         /// Gets low part of UShort from raw data (bits 15..0)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>Low part of uint</returns>
-        public static ushort GetLowUShort(ulong rawData)
-        {
-            return (ushort)(rawData & 0xFFFF);
-        }
+        public static ushort GetLowUShort(uint rawData) => (ushort)(rawData & 0xFFFF);
         /// <summary>
         /// Gets High part of Byte from raw data (bits 15..8 of 16-bit data field)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>High part of uint</returns>
-        public static byte GetHighByte(ulong rawData)
+        public static byte GetHighByte(uint rawData)
         {
-            ulong temp = GetUInt(rawData);
+            uint temp = GetUInt(rawData);
             return (byte)(temp >> 8);
         }
         /// <summary>
@@ -109,7 +99,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>Low part of uint</returns>
-        public static byte GetLowByte(ulong rawData)
+        public static byte GetLowByte(uint rawData)
         {
             var temp = GetUInt(rawData);
             return (byte)(temp & 0xFF);
@@ -118,7 +108,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// Get Float from raw data (signed 16-bit fixed point 8.8)
         /// </summary>
         /// <returns>Float Response</returns>
-        public static float GetFloat(ulong rawData)
+        public static float GetFloat(uint rawData)
         {
             var temp = GetUInt(rawData);
             if ((temp & 0x8000) != 0)
@@ -146,7 +136,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// <param name="rawData">Raw Data</param>
         /// <param name="time">Time</param>
         /// <param name="dayOfWeek">Day of week</param>
-        public static void GetDateTime(ulong rawData, out DateTime time, out DayOfWeek dayOfWeek)
+        public static void GetDateTime(uint rawData, out DateTime time, out DayOfWeek dayOfWeek)
         {
             var date = GetLowByte(rawData);
             var minutes = GetHighByte(rawData);
@@ -160,80 +150,80 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>MasterStatus</returns>
-        public static MasterStatus GetMasterStatus(ulong rawData)
+        public static Enums.MasterStatus GetMasterStatus(uint rawData)
         {
             var data = GetLowByte(rawData);
-            return (MasterStatus)data;
+            return (Enums.MasterStatus)data;
         }
         /// <summary>
         /// Gets Slave Status from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>SlaveStatus</returns>
-        public static SlaveStatus GetSlaveStatus(ulong rawData)
+        public static Enums.SlaveStatus GetSlaveStatus(uint rawData)
         {
             var data = GetHighByte(rawData);
-            return (SlaveStatus)data;
+            return (Enums.SlaveStatus)data;
         }
         /// <summary>
         /// Gets Master Configuration from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>MasterConfiguration</returns>
-        public static MasterConfiguration GetMasterConfiguration(ulong rawData)
+        public static Enums.MasterConfiguration GetMasterConfiguration(uint rawData)
         {
             var data = GetLowByte(rawData);
-            return (MasterConfiguration)data;
+            return (Enums.MasterConfiguration)data;
         }
         /// <summary>
         /// Gets Slave Configuration from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>SlaveConfiguration</returns>
-        public static SlaveConfiguration GetSlaveConfiguration(ulong rawData)
+        public static Enums.SlaveConfiguration GetSlaveConfiguration(uint rawData)
         {
             var data = GetLowByte(rawData);
-            return (SlaveConfiguration)data;
+            return (Enums.SlaveConfiguration)data;
         }
         /// <summary>
         /// Gets Application Specific Fault Flags from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>ApplicationSpecificFaultFlags</returns>
-        public static ApplicationSpecificFaultFlags GetApplicationSpecificFaultFlags(ulong rawData)
+        public static Enums.ApplicationSpecificFaultFlags GetApplicationSpecificFaultFlags(uint rawData)
         {
             var data = GetLowByte(rawData);
-            return (ApplicationSpecificFaultFlags)data;
+            return (Enums.ApplicationSpecificFaultFlags)data;
         }
         /// <summary>
         /// Gets Remote Parameter Transfer Enable from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>RemoteParameterTransferEnable</returns>
-        public static RemoteParameterTransferEnable GetRemoteParameterTransferEnable(ulong rawData)
+        public static Enums.RemoteParameterTransferEnable GetRemoteParameterTransferEnable(uint rawData)
         {
             var data = GetLowByte(rawData);
-            return (RemoteParameterTransferEnable)data;
+            return (Enums.RemoteParameterTransferEnable)data;
         }
         /// <summary>
         /// Gets Remote Parameter Transfer Read Write from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
         /// <returns>RemoteParameterTransferReadWrite</returns>
-        public static RemoteParameterTransferReadWrite GetRemoteParameterTransferReadWrite(ulong rawData)
+        public static Enums.RemoteParameterTransferReadWrite GetRemoteParameterTransferReadWrite(uint rawData)
         {
             var data = GetHighByte(rawData);
-            return (RemoteParameterTransferReadWrite)data;
+            return (Enums.RemoteParameterTransferReadWrite)data;
         }
         /// <summary>
         /// Gets Remote Override Function from raw data
         /// </summary>
         /// <param name="rawData">Raw data</param>
         /// <returns>RemoteOverrideFunction</returns>
-        public static RemoteOverrideFunction GetRemoteOverrideFunction(ulong rawData)
+        public static Enums.RemoteOverrideFunction GetRemoteOverrideFunction(uint rawData)
         {
             var data = GetLowByte(rawData);
-            return (RemoteOverrideFunction)data;
+            return (Enums.RemoteOverrideFunction)data;
         }
     }
 }

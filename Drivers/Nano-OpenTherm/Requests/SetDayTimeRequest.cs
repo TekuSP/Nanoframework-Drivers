@@ -15,14 +15,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public byte Hour { get; set; }
         public byte Minute { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             // low byte: (day<<5) | hour(0-23), high byte: minutes (0-59)
             byte low = (byte)(((int)DayOfWeek & 0x07) << 5 | (Hour & 0x1F));
             uint raw = (uint)((Minute & 0x3F) << 8 | low);
             return ProcessRequest(raw);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             var low = Utilities.GetLowByte(value);
             var high = Utilities.GetHighByte(value);

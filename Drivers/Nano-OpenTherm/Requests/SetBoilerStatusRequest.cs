@@ -7,7 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetBoilerStatusRequest() : base() { }
         public SetBoilerStatusRequest(Request baseReq) : base(baseReq) { }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint data = 0;
             // Bits 15..8 encode master status flags
@@ -18,7 +18,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             if (EnableCentralHeating2) data |= 1u << 12;               // CH2 enable
             return ProcessRequest(data);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             // Decode flags from the high byte of the 16-bit data field (bits 15..8)
             var b = Utilities.GetHighByte(value);

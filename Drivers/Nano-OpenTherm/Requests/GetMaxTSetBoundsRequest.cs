@@ -13,12 +13,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public byte UpperBound { get; set; }
         public byte LowerBound { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint raw = (uint)((UpperBound << 8) | LowerBound);
             return ProcessRequest(raw);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             UpperBound = Utilities.GetHighByte(value);
             LowerBound = Utilities.GetLowByte(value);

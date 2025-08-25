@@ -18,12 +18,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             set => _percent = value.Normalize();
         }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint raw = (uint)(Percent * 256f);
             return ProcessRequest(raw);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             Percent = Utilities.GetFloat(value);
         }

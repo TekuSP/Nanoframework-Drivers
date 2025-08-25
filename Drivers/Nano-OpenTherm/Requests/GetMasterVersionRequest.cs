@@ -13,12 +13,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public byte Version { get; set; }
         public byte Type { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint raw = (uint)((Version << 8) | Type);
             return ProcessRequest(raw);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             Version = Utilities.GetHighByte(value);
             Type = Utilities.GetLowByte(value);

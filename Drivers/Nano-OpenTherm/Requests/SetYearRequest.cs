@@ -12,12 +12,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public ushort Year { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             // year in low 16 bits (spec uses 0..4095 typically), keep raw low 16
             return ProcessRequest(Year);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             Year = Utilities.GetLowUShort(value);
         }

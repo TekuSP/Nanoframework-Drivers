@@ -15,7 +15,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         protected ReadRequest(Request baseReq) : base(baseReq)
         {
         }
-        public ulong RawData
+        public uint RawData
         {
             get => GetRawDataCore();
             protected set => SetRawDataCore(value);
@@ -34,7 +34,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
-        public ulong RawData
+        public uint RawData
         {
             protected get => GetRawDataCore();
             set => SetRawDataCore(value);
@@ -53,7 +53,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
-        public ulong RawData
+        public uint RawData
         {
             get => GetRawDataCore();
             set => SetRawDataCore(value);

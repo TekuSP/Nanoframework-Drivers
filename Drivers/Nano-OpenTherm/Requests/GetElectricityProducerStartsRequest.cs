@@ -9,8 +9,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public ushort Count { get; set; }
 
-        protected override ulong GetRawDataCore() => ProcessRequest(Count);
-        protected override void SetRawDataCore(ulong value) { Count = Utilities.GetLowUShort(value); }
+        protected override uint GetRawDataCore() => ProcessRequest(Count);
+        protected override void SetRawDataCore(uint value) { Count = Utilities.GetLowUShort(value); }
 
         public override MessageType MessageType => MessageType.READ_DATA;
         public override MessageID MessageID => MessageID.ElectricityProducerStarts;

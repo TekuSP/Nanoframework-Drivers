@@ -13,12 +13,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public byte Major { get; set; }
         public byte Minor { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint raw = (uint)((Major << 8) | Minor);
             return ProcessRequest(raw);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             Major = Utilities.GetHighByte(value);
             Minor = Utilities.GetLowByte(value);

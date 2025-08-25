@@ -10,13 +10,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public Enums.RemoteParameterTransferEnable TransferEnable { get; set; }
         public Enums.RemoteParameterTransferReadWrite TransferReadWrite { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             // Spec: low byte = enable flags, high byte = read/write flags
             uint data = (uint)(((byte)TransferReadWrite << 8) | (byte)TransferEnable);
             return ProcessRequest(data);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             TransferEnable = Utilities.GetRemoteParameterTransferEnable(value);
             TransferReadWrite = Utilities.GetRemoteParameterTransferReadWrite(value);

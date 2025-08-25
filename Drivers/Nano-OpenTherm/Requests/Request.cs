@@ -14,13 +14,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         protected Request(Request baseReq) { SetRawDataCore(baseReq.GetRawDataCore()); }
 
         // Explicit IOpenThermData implementation to allow public accessor shape to vary in derived classes
-        ulong IOpenThermData.RawData { get => GetRawDataCore(); set => SetRawDataCore(value); }
+        uint IOpenThermData.RawData { get => GetRawDataCore(); set => SetRawDataCore(value); }
 
         /// <summary>
         /// Derived classes must provide core getters/setters. Use NotSupportedException in the accessor you don't support.
         /// </summary>
-        protected abstract ulong GetRawDataCore();
-        protected abstract void SetRawDataCore(ulong value);
+        protected abstract uint GetRawDataCore();
+        protected abstract void SetRawDataCore(uint value);
 
         /// <summary>Message Type</summary>
         public abstract MessageType MessageType { get; }
@@ -28,7 +28,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public abstract MessageID MessageID { get; }
 
         /// <summary>Returns the encoded 32-bit OpenTherm frame for this request.</summary>
-        public ulong BuildFrame() => GetRawDataCore();
+        public uint BuildFrame() => GetRawDataCore();
 
         /// <summary>
         /// Automatically selects a strongly-typed Request from a received frame
@@ -162,12 +162,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         }
 
         /// <summary>Processes request</summary>
-        protected ulong ProcessRequest(ulong data)
+        protected uint ProcessRequest(uint data)
         {
-            data |= (((ulong)MessageType) & 0x7) << 28;
-            data |= ((ulong)MessageID) << 16;
+            data |= (uint)(((uint)MessageType & 0x7) << 28);
+            data |= (uint)((uint)MessageID << 16);
             if (!Utilities.Parity(data))
-                data |= (1ul << 31);
+                data |= (1u << 31);
             return data;
         }
 

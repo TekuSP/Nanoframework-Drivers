@@ -7,14 +7,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// <summary>
         /// Initializes RawResponse
         /// </summary>
-        public ReceivedResponse(ulong rawData)
+        public ReceivedResponse(uint rawData)
         {
             RawData = rawData;
             MessageType = (MessageType)(rawData >> 28 & 7);
             MessageID = (MessageID)(rawData >> 16 & 0xFF);
         }
 
-        public override ulong RawData
+        public override uint RawData
         {
             get;
             set;

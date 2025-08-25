@@ -11,12 +11,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public ApplicationSpecificFaultFlags FaultFlags { get; set; }
         public byte OEMFaultCode { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint data = (uint)(((uint)OEMFaultCode << 8) | (byte)FaultFlags);
             return ProcessRequest(data);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             FaultFlags = Utilities.GetApplicationSpecificFaultFlags(value);
             OEMFaultCode = Utilities.GetHighByte(value);

@@ -21,7 +21,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         {
             get;
         }
-        public override ulong RawData
+        public override uint RawData
         {
             get;
             set;

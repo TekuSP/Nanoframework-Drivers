@@ -11,12 +11,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public MC MasterConfiguration { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint data = (uint)(byte)MasterConfiguration;
             return ProcessRequest(data);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             MasterConfiguration = Utilities.GetMasterConfiguration(value);
         }

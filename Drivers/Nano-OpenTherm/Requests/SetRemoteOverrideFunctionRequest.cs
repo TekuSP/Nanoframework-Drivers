@@ -12,12 +12,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public Enums.RemoteOverrideFunction Function { get; set; }
 
-        protected override ulong GetRawDataCore()
+        protected override uint GetRawDataCore()
         {
             uint raw = (uint)((byte)Function); // low byte
             return ProcessRequest(raw);
         }
-        protected override void SetRawDataCore(ulong value)
+        protected override void SetRawDataCore(uint value)
         {
             Function = Utilities.GetRemoteOverrideFunction(value);
         }

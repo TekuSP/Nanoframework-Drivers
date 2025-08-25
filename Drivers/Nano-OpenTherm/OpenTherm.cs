@@ -88,7 +88,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         public int DeviceAddress => RawInPin + RawOutPin;
         public bool IsRunning { get; private set; }
         public string Name => "OpenTherm Adapter";
-        public ulong RawResponse { get; set; }
+        public uint RawResponse { get; set; }
 
         #endregion Public Properties
 
@@ -370,9 +370,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         /// <param name="frame">Decoded 32-bit frame</param>
         /// <returns>True if a valid frame shape was captured, regardless of parity</returns>
-        private bool TryDecodeManchesterFrame(out ulong frame)
+        private bool TryDecodeManchesterFrame(out uint frame)
         {
-            frame = 0UL;
+            frame = 0U;
 
             // Expect start bit: Low then High with 500us half periods
             DelayHelper.DelayMicroseconds(HalfBitUs, true);
@@ -398,7 +398,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                     return false; // no transition -> invalid Manchester bit
                 }
                 bool bit = (a == PinValue.Low && b == PinValue.High); // Low->High encodes 1
-                frame = (frame << 1) | (bit ? 1UL : 0UL);
+                frame = (frame << 1) | (bit ? 1U : 0U);
             }
             RawResponse = frame;
             return true;
