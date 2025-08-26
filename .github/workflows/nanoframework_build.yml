@@ -78,17 +78,32 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
           
-      - name: Build Nanoframework and analyze
+      - name: Begin SonarCloud analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          Configuration: ${{ matrix.configuration }}
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"TekuSP_Meteostanice-CSharp" /o:"tekusp" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.scanner.scanAll=false /d:sonar.host.url="https://sonarcloud.io"
-           msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
+          
+      - name: Build and test (nanoFramework)
+        uses: nanoframework/nanobuild@v1
+        with:
+          solution: ${{ env.solution }}          # adjust if your .sln path differs
+          configuration: ${{ matrix.configuration }}
+          runTests: true
+          testProjects: |
+            **/*Tests.csproj                        # glob(s) for your test projects
+          enableCodeCoverage: true
+
+      - name: End SonarCloud analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-      
+          
       - name: Prepare nuget version ${{ env.major }}.${{ env.minor }}.${{ github.run_number }}
         uses: richardrigutins/replace-in-files@v2
         with:
