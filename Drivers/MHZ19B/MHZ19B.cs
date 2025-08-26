@@ -4,7 +4,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using Windows.Storage.Streams;
 
 namespace TekuSP.Drivers.MHZ19B
 {
