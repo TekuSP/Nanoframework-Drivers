@@ -47,7 +47,6 @@ namespace System.Diagnostics.Uart
     using System.Diagnostics;
     using System.IO.Ports;
 
-    using Windows.Storage.Streams;
     public class DebugWritelnToUart : IDisposable
     {
         private SerialPort uart;
