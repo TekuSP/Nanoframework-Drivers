@@ -7,6 +7,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetVentilationTSPRequest() : base() { }
         public GetVentilationTSPRequest(Request baseReq) : base(baseReq) { }
 
+        /// <summary>
+        /// Index number of the transparent ventilation parameter to read (low byte).
+        /// </summary>
         public byte Index { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Index);

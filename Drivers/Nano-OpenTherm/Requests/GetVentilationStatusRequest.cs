@@ -13,9 +13,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetVentilationStatusRequest() : base() { }
         public GetVentilationStatusRequest(Request baseReq) : base(baseReq) { }
 
-        // Expose enums as writable so callers can compose flags and have them encoded
-        public MS MasterStatus { get; set; }
-        public SS SlaveStatus { get; set; }
+    // Expose enums as writable so callers can compose flags and have them encoded
+    /// <summary>
+    /// Master status flags (low byte). Use convenience properties for individual bits.
+    /// </summary>
+    public MS MasterStatus { get; set; }
+    /// <summary>
+    /// Slave status flags (high byte). Use convenience properties for individual bits.
+    /// </summary>
+    public SS SlaveStatus { get; set; }
 
         protected override uint GetRawDataCore()
         {

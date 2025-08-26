@@ -9,8 +9,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetVentilationSConfigRequest() : base() { }
         public GetVentilationSConfigRequest(Request baseReq) : base(baseReq) { }
 
-        public SC SlaveConfiguration { get; set; }
-        public MemberIdCode MemberIdCode { get; set; }
+    /// <summary>
+    /// Slave configuration flags (low byte). Use convenience boolean properties to inspect individual bits.
+    /// </summary>
+    public SC SlaveConfiguration { get; set; }
+    /// <summary>
+    /// Manufacturer/member ID code (high byte).
+    /// </summary>
+    public MemberIdCode MemberIdCode { get; set; }
 
         protected override uint GetRawDataCore()
         {

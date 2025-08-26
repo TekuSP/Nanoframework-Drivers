@@ -10,7 +10,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetYearRequest() : base() { }
         public SetYearRequest(Request baseReq) : base(baseReq) { }
 
-        public ushort Year { get; set; }
+    /// <summary>
+    /// Calendar year (stored in the low 16 bits of the data field).
+    /// Valid range depends on the implementation (commonly 0..4095).
+    /// </summary>
+    public ushort Year { get; set; }
 
         protected override uint GetRawDataCore()
         {

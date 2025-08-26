@@ -10,7 +10,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetPowerCyclesRequest() : base() { }
         public GetPowerCyclesRequest(Request baseReq) : base(baseReq) { }
 
-        public ushort PowerCycles { get; private set; }
+    /// <summary>
+    /// Number of power on/off cycles recorded by the device (low 16 bits).
+    /// </summary>
+    public ushort PowerCycles { get; private set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(0);
         protected override void SetRawDataCore(uint value)

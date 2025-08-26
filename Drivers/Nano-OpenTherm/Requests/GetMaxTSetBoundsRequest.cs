@@ -10,8 +10,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetMaxTSetBoundsRequest() : base() { }
         public GetMaxTSetBoundsRequest(Request baseReq) : base(baseReq) { }
 
-        public byte UpperBound { get; set; }
-        public byte LowerBound { get; set; }
+    /// <summary>
+    /// Upper bound for the Max CH setpoint in °C (encoded in the high byte).
+    /// </summary>
+    public byte UpperBound { get; set; }
+    /// <summary>
+    /// Lower bound for the Max CH setpoint in °C (encoded in the low byte).
+    /// </summary>
+    public byte LowerBound { get; set; }
 
         protected override uint GetRawDataCore()
         {

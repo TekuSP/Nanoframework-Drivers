@@ -7,7 +7,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetElectricityProducerStartsRequest() : base() { }
         public GetElectricityProducerStartsRequest(Request baseReq) : base(baseReq) { }
 
-        public ushort Count { get; set; }
+    /// <summary>
+    /// Number of starts of the electricity producer (encoded in the low 16 bits).
+    /// </summary>
+    public ushort Count { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Count);
         protected override void SetRawDataCore(uint value) { Count = Utilities.GetLowUShort(value); }

@@ -7,7 +7,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetElectricityProducerHoursRequest() : base() { }
         public GetElectricityProducerHoursRequest(Request baseReq) : base(baseReq) { }
 
-        public ushort Hours { get; set; }
+    /// <summary>
+    /// Total operation hours of the electricity producer (encoded in the low 16 bits).
+    /// </summary>
+    public ushort Hours { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Hours);
         protected override void SetRawDataCore(uint value) { Hours = Utilities.GetLowUShort(value); }

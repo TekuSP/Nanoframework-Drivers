@@ -11,8 +11,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetMasterVersionRequest() : base() { }
         public GetMasterVersionRequest(Request baseReq) : base(baseReq) { }
 
-        public byte Version { get; set; }
-        public VersionProductType Type { get; set; }
+    /// <summary>
+    /// Product version (major) in high byte.
+    /// </summary>
+    public byte Version { get; set; }
+    /// <summary>
+    /// Product type (low byte) indicating family such as Boiler, HeatPump, Ventilation, Controller, Sensor.
+    /// </summary>
+    public VersionProductType Type { get; set; }
 
         protected override uint GetRawDataCore()
         {
@@ -28,11 +34,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public override MessageType MessageType => MessageType.READ_DATA;
         public override MessageID MessageID => MessageID.MasterVersion;
 
-        // Convenience properties for Type
-        public bool IsBoiler { get => Type == VersionProductType.Boiler; set { if (value) Type = VersionProductType.Boiler; } }
-        public bool IsHeatPump { get => Type == VersionProductType.HeatPump; set { if (value) Type = VersionProductType.HeatPump; } }
-        public bool IsVentilation { get => Type == VersionProductType.Ventilation; set { if (value) Type = VersionProductType.Ventilation; } }
-        public bool IsController { get => Type == VersionProductType.Controller; set { if (value) Type = VersionProductType.Controller; } }
-        public bool IsSensor { get => Type == VersionProductType.Sensor; set { if (value) Type = VersionProductType.Sensor; } }
+    // Convenience properties for Type
+    /// <summary>Product is a Boiler.</summary>
+    public bool IsBoiler { get => Type == VersionProductType.Boiler; set { if (value) Type = VersionProductType.Boiler; } }
+    /// <summary>Product is a Heat Pump.</summary>
+    public bool IsHeatPump { get => Type == VersionProductType.HeatPump; set { if (value) Type = VersionProductType.HeatPump; } }
+    /// <summary>Product is a Ventilation unit.</summary>
+    public bool IsVentilation { get => Type == VersionProductType.Ventilation; set { if (value) Type = VersionProductType.Ventilation; } }
+    /// <summary>Product is a Controller.</summary>
+    public bool IsController { get => Type == VersionProductType.Controller; set { if (value) Type = VersionProductType.Controller; } }
+    /// <summary>Product is a Sensor.</summary>
+    public bool IsSensor { get => Type == VersionProductType.Sensor; set { if (value) Type = VersionProductType.Sensor; } }
     }
 }

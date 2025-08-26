@@ -8,8 +8,17 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetVentilationFaultRequest() : base() { }
         public GetVentilationFaultRequest(Request baseReq) : base(baseReq) { }
 
-        public ApplicationSpecificFaultFlags FaultFlags { get; set; }
-        public byte OEMFaultCode { get; set; }
+        /// <summary>
+        /// Application-specific fault flags reported by ventilation/heat-recovery system (low byte).
+        /// </summary>
+    /// <summary>
+    /// Application-specific fault flags (low byte). See <see cref="Enums.ApplicationSpecificFaultFlags"/>.
+    /// </summary>
+    public ApplicationSpecificFaultFlags FaultFlags { get; set; }
+    /// <summary>
+    /// OEM-specific fault/diagnostic code reported by ventilation/heat-recovery (high byte).
+    /// </summary>
+    public byte OEMFaultCode { get; set; }
 
         protected override uint GetRawDataCore()
         {

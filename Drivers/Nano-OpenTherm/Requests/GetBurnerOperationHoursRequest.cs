@@ -7,10 +7,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetBurnerOperationHoursRequest() : base() { }
         public GetBurnerOperationHoursRequest(Request baseReq) : base(baseReq) { }
 
-        /// <summary>
-        /// Total burner operation hours. Encoded in low 16 bits.
-        /// </summary>
-        public ushort Hours { get; set; }
+    /// <summary>
+    /// Total burner operation hours (encoded in the low 16 bits).
+    /// Units: hours.
+    /// </summary>
+    /// <summary>
+    /// Total burner operation hours, encoded as a 16-bit unsigned integer (OpenTherm ID 116, low 16 bits).
+    /// Units: hours.
+    /// </summary>
+    public ushort Hours { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Hours);
         protected override void SetRawDataCore(uint value) { Hours = Utilities.GetLowUShort(value); }

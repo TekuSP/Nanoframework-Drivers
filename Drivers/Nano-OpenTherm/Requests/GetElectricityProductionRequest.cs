@@ -7,7 +7,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetElectricityProductionRequest() : base() { }
         public GetElectricityProductionRequest(Request baseReq) : base(baseReq) { }
 
-        public ushort Watts { get; set; }
+    /// <summary>
+    /// Current electricity production in Watts (encoded in the low 16 bits).
+    /// </summary>
+    public ushort Watts { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Watts);
         protected override void SetRawDataCore(uint value) { Watts = Utilities.GetLowUShort(value); }

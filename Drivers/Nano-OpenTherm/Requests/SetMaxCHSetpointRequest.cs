@@ -12,6 +12,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetMaxCHSetpointRequest(Request baseReq) : base(baseReq) { }
 
         private float _temperature;
+        /// <summary>
+        /// Maximum allowed CH water temperature in °C (encoded as 8.8 fixed-point in low 16 bits). Value is clamped 0..100.
+        /// </summary>
         public float Temperature
         {
             get => _temperature;

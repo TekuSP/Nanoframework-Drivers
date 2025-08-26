@@ -10,7 +10,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetCoolingOperationHoursRequest() : base() { }
         public GetCoolingOperationHoursRequest(Request baseReq) : base(baseReq) { }
 
-        public ushort Hours { get; private set; }
+    /// <summary>
+    /// Number of hours the slave has been in Cooling Mode (encoded in the low 16 bits).
+    /// </summary>
+    public ushort Hours { get; private set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(0);
         protected override void SetRawDataCore(uint value)

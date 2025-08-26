@@ -10,8 +10,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetOpenThermVersionVentilationRequest() : base() { }
         public GetOpenThermVersionVentilationRequest(Request baseReq) : base(baseReq) { }
 
-        public byte Major { get; set; }
-        public byte Minor { get; set; }
+    /// <summary>
+    /// OpenTherm major version number.
+    /// </summary>
+    public byte Major { get; set; }
+    /// <summary>
+    /// OpenTherm minor version number.
+    /// </summary>
+    public byte Minor { get; set; }
 
         protected override uint GetRawDataCore()
         {

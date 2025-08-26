@@ -7,10 +7,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetManufacturerRequest() : base() { }
         public GetManufacturerRequest(Request baseReq) : base(baseReq) { }
 
-        /// <summary>
-        /// Index of character to read from brand text (per OpenTherm spec)
-        /// </summary>
-        public byte Index { get; set; }
+    /// <summary>
+    /// Index of character to read from the brand text (0-based).
+    /// This value is placed in the low byte of the request payload.
+    /// </summary>
+    public byte Index { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Index);
         protected override void SetRawDataCore(uint value)

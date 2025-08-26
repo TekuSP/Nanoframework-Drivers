@@ -10,7 +10,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// <summary>
         /// Index of character to read from serial number string
         /// </summary>
-        public byte Index { get; set; }
+    /// <summary>
+    /// Index of the serial/brand number byte to read from the device (0-based).
+    /// </summary>
+    public byte Index { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Index);
         protected override void SetRawDataCore(uint value)

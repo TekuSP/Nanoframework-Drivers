@@ -7,6 +7,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetDHWPumpValveOperationHoursRequest() : base() { }
         public GetDHWPumpValveOperationHoursRequest(Request baseReq) : base(baseReq) { }
 
+        /// <summary>
+        /// Number of hours that DHW pump has been running or DHW valve has been opened (low 16 bits).
+        /// </summary>
         public ushort Hours { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Hours);

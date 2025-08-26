@@ -13,11 +13,17 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// <summary>
         /// Major version of the OpenTherm protocol implemented by the slave (high byte).
         /// </summary>
-        public byte Major { get; set; }
+    /// <summary>
+    /// OpenTherm major version number supported by the slave.
+    /// </summary>
+    public byte Major { get; set; }
         /// <summary>
         /// Minor version of the OpenTherm protocol implemented by the slave (low byte).
         /// </summary>
-        public byte Minor { get; set; }
+    /// <summary>
+    /// OpenTherm minor version number supported by the slave.
+    /// </summary>
+    public byte Minor { get; set; }
 
         protected override uint GetRawDataCore()
         {

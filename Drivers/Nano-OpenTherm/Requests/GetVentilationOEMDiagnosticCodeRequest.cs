@@ -7,6 +7,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetVentilationOEMDiagnosticCodeRequest() : base() { }
         public GetVentilationOEMDiagnosticCodeRequest(Request baseReq) : base(baseReq) { }
 
+        /// <summary>
+        /// OEM-specific diagnostic code (low 16 bits).
+        /// </summary>
         public ushort Code { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Code);

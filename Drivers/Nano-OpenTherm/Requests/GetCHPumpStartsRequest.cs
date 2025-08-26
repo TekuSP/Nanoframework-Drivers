@@ -7,7 +7,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetCHPumpStartsRequest() : base() { }
         public GetCHPumpStartsRequest(Request baseReq) : base(baseReq) { }
 
-        public ushort Count { get; set; }
+    /// <summary>
+    /// Number of starts of the central heating pump (encoded in the low 16 bits).
+    /// Units: count.
+    /// </summary>
+    /// <summary>
+    /// Number of central heating pump starts, encoded as a 16-bit unsigned integer (OpenTherm ID 117, low 16 bits).
+    /// Units: count.
+    /// </summary>
+    public ushort Count { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Count);
         protected override void SetRawDataCore(uint value) { Count = Utilities.GetLowUShort(value); }

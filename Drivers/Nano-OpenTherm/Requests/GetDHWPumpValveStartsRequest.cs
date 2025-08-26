@@ -7,6 +7,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetDHWPumpValveStartsRequest() : base() { }
         public GetDHWPumpValveStartsRequest(Request baseReq) : base(baseReq) { }
 
+        /// <summary>
+        /// Number of starts of the DHW pump or valve openings (low 16 bits).
+        /// </summary>
         public ushort Count { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Count);
