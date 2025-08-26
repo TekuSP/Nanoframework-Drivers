@@ -3,6 +3,9 @@ using TekuSP.Drivers.Nano_OpenTherm.Enums;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the application-specific fault flags and OEM fault/diagnostic code.
+    /// </summary>
     public class GetFaultRequest : ReadRequest
     {
         public GetFaultRequest() : base() { }

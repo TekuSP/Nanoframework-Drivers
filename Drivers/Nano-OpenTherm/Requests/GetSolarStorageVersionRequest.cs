@@ -4,19 +4,16 @@ using TekuSP.Drivers.Nano_OpenTherm.Enums;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Request to get the solar storage version.
+    /// Reads the Solar Storage product type and version bytes.
     /// </summary>
+    /// <remarks>
+    /// The high byte contains the firmware/hardware <see cref="Version"/> and the low byte the
+    /// product <see cref="Type"/>. Convenience boolean properties are provided for common types.
+    /// </remarks>
     public class GetSolarStorageVersionRequest : ReadRequest
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetSolarStorageVersionRequest"/> class.
-        /// </summary>
         public GetSolarStorageVersionRequest() : base() { }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetSolarStorageVersionRequest"/> class.
-        /// </summary>
-        /// <param name="baseReq">The base request.</param>
         public GetSolarStorageVersionRequest(Request baseReq) : base(baseReq) { }
 
         /// <summary>
@@ -29,34 +26,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public VersionProductType Type { get; set; }
 
-        /// <summary>
-        /// Retrieves the raw data for the request.
-        /// </summary>
-        /// <returns>The raw data as an unsigned integer.</returns>
         protected override uint GetRawDataCore()
         {
             uint raw = (uint)((Version << 8) | (byte)Type);
             return ProcessRequest(raw);
         }
 
-        /// <summary>
-        /// Sets the raw data for the request.
-        /// </summary>
-        /// <param name="value">The raw data as an unsigned integer.</param>
         protected override void SetRawDataCore(uint value)
         {
             Version = Utilities.GetHighByte(value);
             Type = (VersionProductType)Utilities.GetLowByte(value);
         }
 
-        /// <summary>
-        /// Gets the message type for the request.
-        /// </summary>
         public override MessageType MessageType => MessageType.READ_DATA;
-
-        /// <summary>
-        /// Gets the message ID for the request.
-        /// </summary>
         public override MessageID MessageID => MessageID.SolarStorageVersion;
     // Convenience properties for Type
     /// <summary>Product is a Boiler.</summary>

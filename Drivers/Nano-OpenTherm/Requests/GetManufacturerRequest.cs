@@ -2,14 +2,16 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads a character from the manufacturer/brand name by index.
+    /// </summary>
     public class GetManufacturerRequest : ReadRequest
     {
         public GetManufacturerRequest() : base() { }
         public GetManufacturerRequest(Request baseReq) : base(baseReq) { }
 
     /// <summary>
-    /// Index of character to read from the brand text (0-based).
-    /// This value is placed in the low byte of the request payload.
+    /// Index of the character to read from the brand text (0-based, low byte).
     /// </summary>
     public byte Index { get; set; }
 

@@ -2,6 +2,12 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the flow temperature for the second central heating circuit (CH2).
+    /// </summary>
+    /// <remarks>
+    /// Response payload: low 16 bits as 8.8 fixed-point degrees Celsius.
+    /// </remarks>
     public class GetCH2FlowTemperatureRequest : ReadRequest
     {
         public GetCH2FlowTemperatureRequest() : base() { }

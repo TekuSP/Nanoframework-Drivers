@@ -5,6 +5,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// <summary>
     /// Request class for retrieving RF sensor status information.
     /// </summary>
+    /// <remarks>
+    /// Request payload low byte selects the sensor ID to query.
+    /// </remarks>
     public class GetRFsensorStatusInformationRequest : ReadRequest
     {
         /// <summary>

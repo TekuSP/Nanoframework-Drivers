@@ -5,19 +5,26 @@ using SS = TekuSP.Drivers.Nano_OpenTherm.Enums.SlaveStatus;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads Solar Storage master and slave status flags.
+    /// </summary>
+    /// <remarks>
+    /// The low byte contains <see cref="MasterStatus"/> flags and the high byte contains
+    /// <see cref="SlaveStatus"/> flags. Convenience boolean properties expose common bits.
+    /// </remarks>
     public class GetSolarStorageStatusRequest : ReadRequest
     {
         public GetSolarStorageStatusRequest() : base() { }
         public GetSolarStorageStatusRequest(Request baseReq) : base(baseReq) { }
 
-    /// <summary>
-    /// Master status flags (low byte). Use convenience properties for individual bits.
-    /// </summary>
-    public MS MasterStatus { get; set; }
-    /// <summary>
-    /// Slave status flags (high byte). Use convenience properties for individual bits.
-    /// </summary>
-    public SS SlaveStatus { get; set; }
+        /// <summary>
+        /// Master status flags (low byte). Use convenience properties for individual bits.
+        /// </summary>
+        public MS MasterStatus { get; set; }
+        /// <summary>
+        /// Slave status flags (high byte). Use convenience properties for individual bits.
+        /// </summary>
+        public SS SlaveStatus { get; set; }
 
         protected override uint GetRawDataCore()
         {

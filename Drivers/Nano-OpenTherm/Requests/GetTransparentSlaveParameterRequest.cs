@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads a specific transparent slave parameter value by index.
+    /// </summary>
     public class GetTransparentSlaveParameterRequest : ReadRequest
     {
         public GetTransparentSlaveParameterRequest() : base() { }

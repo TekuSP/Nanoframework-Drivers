@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the OEM-specific diagnostic/service code.
+    /// </summary>
     public class GetOEMDiagnosticCodeRequest : ReadRequest
     {
         public GetOEMDiagnosticCodeRequest() : base() { }

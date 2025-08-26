@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the relative humidity (%RH) of the exhaust air stream.
+    /// </summary>
     public class GetRelativeHumidityExhaustRequest : ReadRequest
     {
         public GetRelativeHumidityExhaustRequest() : base() { }

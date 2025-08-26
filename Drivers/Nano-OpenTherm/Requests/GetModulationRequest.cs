@@ -2,6 +2,9 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the relative modulation level (%) of the slave.
+    /// </summary>
     public class GetModulationRequest : ReadRequest
     {
         public GetModulationRequest() : base() { }

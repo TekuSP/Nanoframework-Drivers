@@ -6,34 +6,65 @@ using TekuSP.Drivers.DriverBase.Interfaces;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Abstract class for all requests
+    /// Base type for all OpenTherm requests (read, write, and read/write).
+    /// Provides common helpers to build and validate the 32‑bit OpenTherm frame.
+    /// </summary>
+    /// <remarks>
+    /// OpenTherm frames are 32 bits wide. This base class helps derived request types:
+    /// - Encode payload and header: MessageType in bits 28..30, MessageID in bits 16..23, payload in low 16 bits.
+    /// - Set parity (bit 31) according to the computed frame parity.
+    /// - Validate frames against allowed operations via <see cref="OpenThermAccess"/>.
     /// </summary>
     public abstract class Request : IOpenThermData
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Request"/> class.
+        /// </summary>
         protected Request() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Request"/> class by copying the raw frame
+        /// from an existing request. Useful when routing a generic received frame to a strongly-typed request.
+        /// </summary>
+        /// <param name="baseReq">Existing request whose raw frame will be adopted.</param>
         protected Request(Request baseReq) { SetRawDataCore(baseReq.GetRawDataCore()); }
 
         // Explicit IOpenThermData implementation to allow public accessor shape to vary in derived classes
+        /// <summary>
+        /// Gets or sets the encoded 32-bit OpenTherm frame for this request.
+        /// Implemented explicitly so derived classes can expose tailored <c>RawData</c> access as needed.
+        /// </summary>
         uint IOpenThermData.RawData { get => GetRawDataCore(); set => SetRawDataCore(value); }
 
         /// <summary>
-        /// Derived classes must provide core getters/setters. Use NotSupportedException in the accessor you don't support.
+        /// Derived classes must encode/decode the 32-bit frame in these core accessors.
+        /// Implementations typically pack the payload and call <see cref="ProcessRequest(uint)"/> in the getter,
+        /// and unpack the payload in the setter.
+        /// Throw <see cref="NotSupportedException"/> in the accessor you don't support (e.g., read-only).
         /// </summary>
         protected abstract uint GetRawDataCore();
         protected abstract void SetRawDataCore(uint value);
 
-        /// <summary>Message Type</summary>
+        /// <summary>
+        /// Message Type of this request. Encoded in bits 28..30 of the frame.
+        /// </summary>
         public abstract MessageType MessageType { get; }
-        /// <summary>Message ID</summary>
+        /// <summary>
+        /// Message ID of this request. Encoded in bits 16..23 of the frame.
+        /// </summary>
         public abstract MessageID MessageID { get; }
 
-        /// <summary>Returns the encoded 32-bit OpenTherm frame for this request.</summary>
+        /// <summary>
+        /// Returns the encoded 32-bit OpenTherm frame for this request.
+        /// Equivalent to calling the core getter. Provided for readability when building frames to send.
+        /// </summary>
         public uint BuildFrame() => GetRawDataCore();
 
         /// <summary>
-        /// Automatically selects a strongly-typed Request from a received frame
+        /// Automatically selects a strongly-typed Request from a received frame based on <see cref="MessageID"/>.
         /// </summary>
-        /// <returns>Request instance matching the MessageID when available, otherwise this</returns>
+        /// <returns>
+        /// A request instance matching the <see cref="MessageID"/> when a mapping exists; otherwise, returns <c>this</c>.
+        /// </returns>
         public Request SelectRequest()
         {
             return MessageID switch
@@ -161,7 +192,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             };
         }
 
-        /// <summary>Processes request</summary>
+    /// <summary>
+    /// Packs the payload and header into an OpenTherm frame with correct parity.
+    /// </summary>
+    /// <param name="data">Payload value to place in the low 16 bits.</param>
+    /// <returns>Fully encoded 32-bit OpenTherm frame.</returns>
         protected uint ProcessRequest(uint data)
         {
             data |= (uint)(((uint)MessageType & 0x7) << 28);
@@ -171,7 +206,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             return data;
         }
 
-        /// <summary>Is Valid Request?</summary>
+    /// <summary>
+    /// Validates the current frame for parity, message type, and access permissions.
+    /// </summary>
+    /// <remarks>
+    /// This method checks:
+    /// - Parity is correct for the full 32-bit frame.
+    /// - MessageType is either READ_DATA or WRITE_DATA.
+    /// - Operation is allowed for the given MessageID/MessageType combination via <see cref="OpenThermAccess"/>.
+    /// </remarks>
+    /// <returns><c>true</c> if the frame is valid and operation is allowed; otherwise, <c>false</c>.</returns>
         public bool IsValidRequest()
         {
             var raw = GetRawDataCore();

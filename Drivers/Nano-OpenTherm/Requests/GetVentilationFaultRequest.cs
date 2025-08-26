@@ -3,14 +3,14 @@ using TekuSP.Drivers.Nano_OpenTherm.Enums;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads fault flags and OEM fault code from the ventilation/heat-recovery subsystem.
+    /// </summary>
     public class GetVentilationFaultRequest : ReadRequest
     {
         public GetVentilationFaultRequest() : base() { }
         public GetVentilationFaultRequest(Request baseReq) : base(baseReq) { }
 
-        /// <summary>
-        /// Application-specific fault flags reported by ventilation/heat-recovery system (low byte).
-        /// </summary>
     /// <summary>
     /// Application-specific fault flags (low byte). See <see cref="Enums.ApplicationSpecificFaultFlags"/>.
     /// </summary>

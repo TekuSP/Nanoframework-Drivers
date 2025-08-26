@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the number of starts of the electricity producer.
+    /// </summary>
     public class GetElectricityProducerStartsRequest : ReadRequest
     {
         public GetElectricityProducerStartsRequest() : base() { }

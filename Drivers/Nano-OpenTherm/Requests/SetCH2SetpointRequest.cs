@@ -3,7 +3,7 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Control Setpoint for 2nd CH circuit (°C)
+    /// Sets the control setpoint for the second CH circuit (°C).
     /// </summary>
     public class SetCH2SetpointRequest : WriteRequest
     {

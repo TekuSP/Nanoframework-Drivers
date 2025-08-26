@@ -4,7 +4,7 @@ using TekuSP.Drivers.Nano_OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Max CH water Setpoint (°C) (Remote parameter 2)
+    /// Sets the maximum CH water setpoint (°C). Remote parameter 2.
     /// </summary>
     public class SetMaxCHSetpointRequest : WriteRequest
     {
@@ -13,7 +13,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         private float _temperature;
         /// <summary>
-        /// Maximum allowed CH water temperature in °C (encoded as 8.8 fixed-point in low 16 bits). Value is clamped 0..100.
+        /// Maximum allowed CH water temperature in °C (encoded as 8.8 fixed-point in low 16 bits). Value is clamped to 0–100.
         /// </summary>
         public float Temperature
         {

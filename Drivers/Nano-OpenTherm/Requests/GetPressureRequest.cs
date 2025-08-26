@@ -2,6 +2,9 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the central heating circuit pressure (bar) from the slave device.
+    /// </summary>
     public class GetPressureRequest : ReadRequest
     {
         public GetPressureRequest() : base() { }

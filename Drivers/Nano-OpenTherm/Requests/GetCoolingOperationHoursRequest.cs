@@ -3,6 +3,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
+    /// Reads the number of hours the slave has operated in Cooling mode.
+    /// </summary>
+    /// <summary>
     /// Number of hours that the slave is in Cooling Mode
     /// </summary>
     public class GetCoolingOperationHoursRequest : ReadRequest
@@ -11,7 +14,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetCoolingOperationHoursRequest(Request baseReq) : base(baseReq) { }
 
     /// <summary>
-    /// Number of hours the slave has been in Cooling Mode (encoded in the low 16 bits).
+    /// Total cooling operation hours (low 16 bits, unsigned).
+    /// Units: hours.
     /// </summary>
     public ushort Hours { get; private set; }
 

@@ -5,7 +5,7 @@ using TekuSP.Drivers.Nano_OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Maximum relative modulation level setting (%)
+    /// Sets the maximum relative modulation level (%) for the burner/fans.
     /// </summary>
     public class SetMaxRelModulationRequest : WriteRequest
     {
@@ -14,7 +14,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         private float _percent;
         /// <summary>
-        /// Maximum relative modulation in % (encoded as 8.8 fixed-point in low 16 bits). Value is clamped 0..100.
+        /// Maximum relative modulation in % (encoded as 8.8 fixed-point in low 16 bits). Value is clamped to 0–100.
         /// </summary>
         public float Percent
         {

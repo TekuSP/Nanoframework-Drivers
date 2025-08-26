@@ -2,13 +2,17 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the DHW pump/valve total operation hours.
+    /// </summary>
     public class GetDHWPumpValveOperationHoursRequest : ReadRequest
     {
         public GetDHWPumpValveOperationHoursRequest() : base() { }
         public GetDHWPumpValveOperationHoursRequest(Request baseReq) : base(baseReq) { }
 
         /// <summary>
-        /// Number of hours that DHW pump has been running or DHW valve has been opened (low 16 bits).
+        /// DHW pump/valve operation hours (low 16 bits, unsigned).
+        /// Units: hours.
         /// </summary>
         public ushort Hours { get; set; }
 

@@ -2,6 +2,9 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Generic read/write request for custom OpenTherm message types and IDs.
+    /// </summary>
     public class CustomRequest : ReadWriteRequest
     {
         private uint data;

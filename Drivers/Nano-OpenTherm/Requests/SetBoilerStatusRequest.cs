@@ -2,6 +2,9 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Sets master status flags: CH/DHW/Cooling enable, OTC active, and CH2 enable.
+    /// </summary>
     public class SetBoilerStatusRequest : WriteRequest
     {
         public SetBoilerStatusRequest() : base() { }
@@ -32,25 +35,25 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public override MessageType MessageType => MessageType.WRITE_DATA;
         public override MessageID MessageID => MessageID.Status;
 
-        /// <summary>
-        /// Enable Central Heating
-        /// </summary>
+    /// <summary>
+    /// Enables Central Heating demand (sets master CH enable flag, bit 8).
+    /// </summary>
         public bool EnableCentralHeating { get; set; }
-        /// <summary>
-        /// Enable Hot Water
-        /// </summary>
+    /// <summary>
+    /// Enables Domestic Hot Water demand (sets master DHW enable flag, bit 9).
+    /// </summary>
         public bool EnableHotWater { get; set; }
-        /// <summary>
-        /// Enable Cooling
-        /// </summary>
+    /// <summary>
+    /// Enables Cooling demand (sets master Cooling enable flag, bit 10).
+    /// </summary>
         public bool EnableCooling { get; set; }
-        /// <summary>
-        /// Enable Outside Temperature Compensation
-        /// </summary>
+    /// <summary>
+    /// Enables Outside Temperature Compensation/OTC active (bit 11).
+    /// </summary>
         public bool EnableOutsideTemperatureCompensation { get; set; }
-        /// <summary>
-        /// Enable Central Heating 2
-        /// </summary>
+    /// <summary>
+    /// Enables Central Heating circuit 2 demand (bit 12).
+    /// </summary>
         public bool EnableCentralHeating2 { get; set; }
     }
 }

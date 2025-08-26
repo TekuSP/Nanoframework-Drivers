@@ -2,6 +2,12 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the secondary domestic hot water (DHW2) temperature.
+    /// </summary>
+    /// <remarks>
+    /// Response payload: low 16 bits as 8.8 fixed-point degrees Celsius.
+    /// </remarks>
     public class GetDHW2TemperatureRequest : ReadRequest
     {
         public GetDHW2TemperatureRequest() : base() { }

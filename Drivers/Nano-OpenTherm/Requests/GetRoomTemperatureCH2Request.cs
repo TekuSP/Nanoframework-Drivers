@@ -4,6 +4,12 @@ using MS = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterStatus;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the room temperature for the second heating circuit (CH2).
+    /// </summary>
+    /// <remarks>
+    /// Response payload: low 16 bits as 8.8 fixed-point degrees Celsius.
+    /// </remarks>
     public class GetRoomTemperatureCH2Request : ReadRequest
     {
         public GetRoomTemperatureCH2Request() : base() { }

@@ -2,13 +2,17 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the number of successful burner starts recorded by the slave.
+    /// </summary>
     public class GetSuccessfulBurnerStartsRequest : ReadRequest
     {
         public GetSuccessfulBurnerStartsRequest() : base() { }
         public GetSuccessfulBurnerStartsRequest(Request baseReq) : base(baseReq) { }
 
         /// <summary>
-        /// Number of successful burner starts. Encoded in low 16 bits.
+        /// Number of successful burner starts (low 16 bits, unsigned).
+        /// Units: count.
         /// </summary>
         public ushort Count { get; set; }
 

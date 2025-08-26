@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the flame ionization current from the boiler (units OEM-specific).
+    /// </summary>
     public class GetFlameCurrentRequest : ReadRequest
     {
         public GetFlameCurrentRequest() : base() { }

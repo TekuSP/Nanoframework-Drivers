@@ -10,18 +10,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetOpenThermVersionSlaveRequest() : base() { }
         public GetOpenThermVersionSlaveRequest(Request baseReq) : base(baseReq) { }
 
-        /// <summary>
-        /// Major version of the OpenTherm protocol implemented by the slave (high byte).
-        /// </summary>
     /// <summary>
-    /// OpenTherm major version number supported by the slave.
+    /// OpenTherm major version number supported by the slave (high byte).
     /// </summary>
     public byte Major { get; set; }
-        /// <summary>
-        /// Minor version of the OpenTherm protocol implemented by the slave (low byte).
-        /// </summary>
     /// <summary>
-    /// OpenTherm minor version number supported by the slave.
+    /// OpenTherm minor version number supported by the slave (low byte).
     /// </summary>
     public byte Minor { get; set; }
 

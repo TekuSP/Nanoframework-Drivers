@@ -3,25 +3,26 @@ using TekuSP.Drivers.Nano_OpenTherm.Enums;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads application-specific fault flags and OEM fault code from the Solar Storage unit.
+    /// </summary>
+    /// <remarks>
+    /// Low byte contains <see cref="FaultFlags"/> (bitfield), high byte contains <see cref="OEMFaultCode"/>.
+    /// Convenience boolean properties are provided for common <see cref="ApplicationSpecificFaultFlags"/> bits.
+    /// </remarks>
     public class GetSolarStorageFaultRequest : ReadRequest
     {
         public GetSolarStorageFaultRequest() : base() { }
         public GetSolarStorageFaultRequest(Request baseReq) : base(baseReq) { }
 
-    /// <summary>
-    /// Application-specific fault flags (low byte).
-    /// </summary>
-    /// <summary>
-    /// Application-specific fault flags (low byte).
-    /// </summary>
-    public ApplicationSpecificFaultFlags FaultFlags { get; set; }
-    /// <summary>
-    /// OEM-specific fault/diagnostic code (high byte).
-    /// </summary>
-    /// <summary>
-    /// OEM-specific fault/diagnostic code (high byte).
-    /// </summary>
-    public byte OEMFaultCode { get; set; }
+        /// <summary>
+        /// Application-specific fault flags (low byte).
+        /// </summary>
+        public ApplicationSpecificFaultFlags FaultFlags { get; set; }
+        /// <summary>
+        /// OEM-specific fault/diagnostic code (high byte).
+        /// </summary>
+        public byte OEMFaultCode { get; set; }
 
         protected override uint GetRawDataCore()
         {

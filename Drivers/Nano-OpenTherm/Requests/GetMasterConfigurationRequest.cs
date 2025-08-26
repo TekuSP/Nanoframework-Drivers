@@ -4,6 +4,9 @@ using MC = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterConfiguration;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the master configuration flags and member ID code.
+    /// </summary>
     public class GetMasterConfigurationRequest : ReadRequest
     {
         public GetMasterConfigurationRequest() : base() { }

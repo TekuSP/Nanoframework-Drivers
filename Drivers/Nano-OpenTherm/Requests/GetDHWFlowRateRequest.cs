@@ -4,6 +4,12 @@ using MS = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterStatus;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the domestic hot water (DHW) flow rate.
+    /// </summary>
+    /// <remarks>
+    /// Response payload: device-specific encoding, commonly 8.8 fixed-point liters/min.
+    /// </remarks>
     public class GetDHWFlowRateRequest : ReadRequest
     {
         public GetDHWFlowRateRequest() : base() { }

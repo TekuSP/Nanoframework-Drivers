@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the number of entries available in the slave's fault-history buffer.
+    /// </summary>
     public class GetFaultHistoryBufferSizeRequest : ReadRequest
     {
         public GetFaultHistoryBufferSizeRequest() : base() { }

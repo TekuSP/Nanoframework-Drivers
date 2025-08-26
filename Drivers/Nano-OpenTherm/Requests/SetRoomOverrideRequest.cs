@@ -10,9 +10,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetRoomOverrideRequest() : base() { }
         public SetRoomOverrideRequest(Request baseReq) : base(baseReq) { }
 
-        /// <summary>
-        /// Remote override room temperature in °C (encoded as 8.8 fixed-point in low 16 bits).
-        /// </summary>
+    /// <summary>
+    /// Remote override room temperature in °C, encoded as 8.8 fixed‑point in the low 16 bits.
+    /// </summary>
         public float Temperature { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawTemperature(Temperature));

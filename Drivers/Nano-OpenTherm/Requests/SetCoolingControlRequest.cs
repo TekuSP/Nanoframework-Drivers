@@ -13,6 +13,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetCoolingControlRequest(Request baseReq) : base(baseReq) { }
 
         private float _percent;
+    /// <summary>
+    /// Cooling control signal in % (encoded as 8.8 fixed-point in low 16 bits). Value is clamped 0..100.
+    /// </summary>
         public float Percent
         {
             get => _percent;

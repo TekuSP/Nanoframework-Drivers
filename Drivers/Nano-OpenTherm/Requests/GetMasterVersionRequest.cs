@@ -4,7 +4,7 @@ using TekuSP.Drivers.Nano_OpenTherm.Enums;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Master product version number and type
+    /// Reads the master product version and product type.
     /// </summary>
     public class GetMasterVersionRequest : ReadRequest
     {
@@ -12,11 +12,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetMasterVersionRequest(Request baseReq) : base(baseReq) { }
 
     /// <summary>
-    /// Product version (major) in high byte.
+    /// Product version (high byte).
     /// </summary>
     public byte Version { get; set; }
     /// <summary>
-    /// Product type (low byte) indicating family such as Boiler, HeatPump, Ventilation, Controller, Sensor.
+    /// Product type (low byte). Use convenience boolean selectors below.
     /// </summary>
     public VersionProductType Type { get; set; }
 

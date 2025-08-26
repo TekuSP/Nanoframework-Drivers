@@ -11,8 +11,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetDateRequest() : base() { }
         public SetDateRequest(Request baseReq) : base(baseReq) { }
 
-        public byte Day { get; set; }
-        public Month Month { get; set; }
+    /// <summary>
+    /// Day of month (1..31), encoded in the low byte (bits 0-4).
+    /// </summary>
+    public byte Day { get; set; }
+    /// <summary>
+    /// Month of year (1..12), encoded in the high byte (bits 8-12).
+    /// </summary>
+    public Month Month { get; set; }
 
         protected override uint GetRawDataCore()
         {
@@ -29,7 +35,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public override MessageType MessageType => MessageType.WRITE_DATA;
         public override MessageID MessageID => MessageID.Date;
 
-        // Convenience properties for Month
+    // Convenience selectors for Month
         public bool IsJanuary { get => Month == Month.January; set { if (value) Month = Month.January; } }
         public bool IsFebruary { get => Month == Month.February; set { if (value) Month = Month.February; } }
         public bool IsMarch { get => Month == Month.March; set { if (value) Month = Month.March; } }

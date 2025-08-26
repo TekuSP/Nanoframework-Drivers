@@ -4,21 +4,25 @@ using TekuSP.Drivers.Nano_OpenTherm.Enums;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Slave product version number and type
+    /// Reads the slave product type and version bytes.
     /// </summary>
+    /// <remarks>
+    /// The high byte contains the firmware/hardware <see cref="Version"/> and the low byte the
+    /// product <see cref="Type"/>. Convenience boolean properties are provided for common types.
+    /// </remarks>
     public class GetSlaveVersionRequest : ReadRequest
     {
         public GetSlaveVersionRequest() : base() { }
         public GetSlaveVersionRequest(Request baseReq) : base(baseReq) { }
 
-    /// <summary>
-    /// Product version number (high byte).
-    /// </summary>
-    public byte Version { get; set; }
-    /// <summary>
-    /// Product type code (low byte).
-    /// </summary>
-    public VersionProductType Type { get; set; }
+        /// <summary>
+        /// Product version number (high byte).
+        /// </summary>
+        public byte Version { get; set; }
+        /// <summary>
+        /// Product type code (low byte). OEM-specific mapping.
+        /// </summary>
+        public VersionProductType Type { get; set; }
 
         protected override uint GetRawDataCore()
         {

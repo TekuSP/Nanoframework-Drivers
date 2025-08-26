@@ -3,7 +3,7 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// DHW Setpoint upper & lower bounds for adjustment (°C)
+    /// Reads the adjustable bounds for the DHW setpoint temperature (upper/lower).
     /// </summary>
     public class GetDhwSetpointBoundsRequest : ReadRequest
     {
@@ -11,11 +11,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetDhwSetpointBoundsRequest(Request baseReq) : base(baseReq) { }
 
         /// <summary>
-        /// Upper bound for DHW setpoint in degrees Celsius (encoded as integer in high byte).
+        /// Upper bound for DHW setpoint in °C (high byte).
         /// </summary>
         public byte UpperBound { get; set; }
         /// <summary>
-        /// Lower bound for DHW setpoint in degrees Celsius (encoded as integer in low byte).
+        /// Lower bound for DHW setpoint in °C (low byte).
         /// </summary>
         public byte LowerBound { get; set; }
 

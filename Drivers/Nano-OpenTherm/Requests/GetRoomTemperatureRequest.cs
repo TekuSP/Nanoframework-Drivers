@@ -4,6 +4,12 @@ using MS = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterStatus;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the room temperature as reported over OpenTherm.
+    /// </summary>
+    /// <remarks>
+    /// Response payload: low 16 bits as 8.8 fixed-point degrees Celsius.
+    /// </remarks>
     public class GetRoomTemperatureRequest : ReadRequest
     {
         public GetRoomTemperatureRequest() : base() { }

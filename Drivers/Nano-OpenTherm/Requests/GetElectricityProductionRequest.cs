@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the instantaneous electricity production (Watts) from the device.
+    /// </summary>
     public class GetElectricityProductionRequest : ReadRequest
     {
         public GetElectricityProductionRequest() : base() { }

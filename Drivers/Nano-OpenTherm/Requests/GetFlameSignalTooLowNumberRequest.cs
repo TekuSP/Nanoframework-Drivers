@@ -8,8 +8,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetFlameSignalTooLowNumberRequest(Request baseReq) : base(baseReq) { }
 
     /// <summary>
-    /// Number of times the flame signal was too low (historical counter).
-    /// Encoded as low 16-bit unsigned integer in the payload.
+    /// Number of times the flame signal was too low (low 16 bits, unsigned).
+    /// Units: count.
     /// </summary>
     public ushort Count { get; set; }
 

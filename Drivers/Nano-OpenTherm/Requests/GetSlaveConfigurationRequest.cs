@@ -4,6 +4,9 @@ using SC = TekuSP.Drivers.Nano_OpenTherm.Enums.SlaveConfiguration;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the slave configuration flags and member ID code.
+    /// </summary>
     public class GetSlaveConfigurationRequest : ReadRequest
     {
         public GetSlaveConfigurationRequest() : base() { }

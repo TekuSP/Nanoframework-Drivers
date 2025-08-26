@@ -11,8 +11,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetYearRequest(Request baseReq) : base(baseReq) { }
 
     /// <summary>
-    /// Calendar year (stored in the low 16 bits of the data field).
-    /// Valid range depends on the implementation (commonly 0..4095).
+    /// Calendar year encoded in the low 16 bits of the payload.
+    /// Typical valid range: 0..4095 (implementation specific).
     /// </summary>
     public ushort Year { get; set; }
 

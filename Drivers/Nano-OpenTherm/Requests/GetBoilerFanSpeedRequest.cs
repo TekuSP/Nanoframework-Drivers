@@ -3,8 +3,11 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Boiler fan speed Setpoint and actual value
+    /// Reads the boiler fan speed setpoint and actual value.
     /// </summary>
+    /// <remarks>
+    /// Response payload: high/low byte mapping is device-specific (commonly setpoint in high byte and actual in low byte as RPM).
+    /// </remarks>
     public class GetBoilerFanSpeedRequest : ReadRequest
     {
         public GetBoilerFanSpeedRequest() : base() { }

@@ -10,9 +10,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetRoomSetpointRequest() : base() { }
         public SetRoomSetpointRequest(Request baseReq) : base(baseReq) { }
 
-        /// <summary>
-        /// Desired room temperature in °C (encoded as 8.8 fixed-point in low 16 bits).
-        /// </summary>
+    /// <summary>
+    /// Desired room setpoint in °C, encoded as 8.8 fixed‑point in the low 16 bits.
+    /// </summary>
         public float Temperature { get; set; }
 
         protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawTemperature(Temperature));

@@ -4,19 +4,27 @@ using SC = TekuSP.Drivers.Nano_OpenTherm.Enums.SlaveConfiguration;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the Solar Storage slave configuration and member ID code.
+    /// </summary>
+    /// <remarks>
+    /// The low byte contains <see cref="SlaveConfiguration"/> flags and the high byte contains
+    /// the <see cref="MemberIdCode"/> identifying the manufacturer/OEM. Convenience boolean
+    /// properties are provided to access individual configuration bits.
+    /// </remarks>
     public class GetSolarStorageSConfigRequest : ReadRequest
     {
         public GetSolarStorageSConfigRequest() : base() { }
         public GetSolarStorageSConfigRequest(Request baseReq) : base(baseReq) { }
 
-    /// <summary>
-    /// Slave configuration flags (low byte). Use convenience boolean properties to inspect individual bits.
-    /// </summary>
-    public SC SlaveConfiguration { get; set; }
-    /// <summary>
-    /// Manufacturer/member ID code (high byte).
-    /// </summary>
-    public MemberIdCode MemberIdCode { get; set; }
+        /// <summary>
+        /// Slave configuration flags (low byte). Use convenience properties to inspect individual bits.
+        /// </summary>
+        public SC SlaveConfiguration { get; set; }
+        /// <summary>
+        /// Manufacturer/member ID code (high byte).
+        /// </summary>
+        public MemberIdCode MemberIdCode { get; set; }
 
         protected override uint GetRawDataCore()
         {

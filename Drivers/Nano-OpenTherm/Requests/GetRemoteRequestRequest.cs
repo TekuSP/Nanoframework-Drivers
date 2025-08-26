@@ -4,6 +4,9 @@ using MS = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterStatus;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the remote request/status bits from the master.
+    /// </summary>
     public class GetRemoteRequestRequest : ReadRequest
     {
         public GetRemoteRequestRequest() : base() { }

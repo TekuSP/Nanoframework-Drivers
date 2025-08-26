@@ -2,6 +2,12 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the exhaust fan speed of the ventilation unit.
+    /// </summary>
+    /// <remarks>
+    /// Response payload: low 16 bits as unsigned RPM.
+    /// </remarks>
     public class GetExhaustFanSpeedRequest : ReadRequest
     {
         public GetExhaustFanSpeedRequest() : base() { }

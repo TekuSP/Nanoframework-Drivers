@@ -2,6 +2,12 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the return water temperature from the boiler circuit.
+    /// </summary>
+    /// <remarks>
+    /// Response payload: low 16 bits as 8.8 fixed-point degrees Celsius.
+    /// </remarks>
     public class GetReturnTemperatureRequest : ReadRequest
     {
         public GetReturnTemperatureRequest() : base() { }

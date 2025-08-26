@@ -3,6 +3,9 @@ using TekuSP.Drivers.Nano_OpenTherm.Enums;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the remote boiler parameter transfer-enable and read/write capability flags.
+    /// </summary>
     public class GetRemoteBoilerParameterFlagsRequest : ReadRequest
     {
         public GetRemoteBoilerParameterFlagsRequest() : base() { }

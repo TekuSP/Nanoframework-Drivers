@@ -12,9 +12,18 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetDayTimeRequest() : base() { }
         public SetDayTimeRequest(Request baseReq) : base(baseReq) { }
 
-        public DayOfWeek DayOfWeek { get; set; }
-        public byte Hour { get; set; }
-        public byte Minute { get; set; }
+    /// <summary>
+    /// Day of week (1..7). Packed in low byte bits 5..7.
+    /// </summary>
+    public DayOfWeek DayOfWeek { get; set; }
+    /// <summary>
+    /// Hour of day (0..23). Packed in low byte bits 0..4.
+    /// </summary>
+    public byte Hour { get; set; }
+    /// <summary>
+    /// Minute (0..59). Packed in the high byte bits 8..13.
+    /// </summary>
+    public byte Minute { get; set; }
 
         protected override uint GetRawDataCore()
         {
@@ -35,7 +44,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public override MessageType MessageType => MessageType.WRITE_DATA;
         public override MessageID MessageID => MessageID.DayTime;
 
-        // Convenience properties
+    // Convenience selectors
         public bool IsMonday { get => DayOfWeek == DayOfWeek.Monday; set { if (value) DayOfWeek = DayOfWeek.Monday; } }
         public bool IsTuesday { get => DayOfWeek == DayOfWeek.Tuesday; set { if (value) DayOfWeek = DayOfWeek.Tuesday; } }
         public bool IsWednesday { get => DayOfWeek == DayOfWeek.Wednesday; set { if (value) DayOfWeek = DayOfWeek.Wednesday; } }

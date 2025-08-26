@@ -2,6 +2,12 @@
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the current boiler water temperature.
+    /// </summary>
+    /// <remarks>
+    /// Response payload: low 16 bits as 8.8 fixed-point degrees Celsius.
+    /// </remarks>
     public class GetBoilerTemperatureRequest : ReadRequest
     {
         public GetBoilerTemperatureRequest() : base() { }

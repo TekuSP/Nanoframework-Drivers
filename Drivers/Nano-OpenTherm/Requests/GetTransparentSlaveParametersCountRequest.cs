@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the number of transparent slave parameters supported by the device.
+    /// </summary>
     public class GetTransparentSlaveParametersCountRequest : ReadRequest
     {
         public GetTransparentSlaveParametersCountRequest() : base() { }

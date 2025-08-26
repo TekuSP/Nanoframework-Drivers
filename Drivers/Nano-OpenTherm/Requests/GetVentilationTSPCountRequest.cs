@@ -2,6 +2,9 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
+    /// <summary>
+    /// Reads the number of transparent ventilation parameters supported.
+    /// </summary>
     public class GetVentilationTSPCountRequest : ReadRequest
     {
         public GetVentilationTSPCountRequest() : base() { }

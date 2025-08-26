@@ -3,7 +3,7 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Max CH water Setpoint upper & lower bounds for adjustment (°C)
+    /// Reads the adjustable bounds for the maximum CH water setpoint (upper/lower).
     /// </summary>
     public class GetMaxTSetBoundsRequest : ReadRequest
     {
@@ -11,11 +11,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetMaxTSetBoundsRequest(Request baseReq) : base(baseReq) { }
 
     /// <summary>
-    /// Upper bound for the Max CH setpoint in °C (encoded in the high byte).
+    /// Upper bound for the Max CH setpoint in °C (high byte).
     /// </summary>
     public byte UpperBound { get; set; }
     /// <summary>
-    /// Lower bound for the Max CH setpoint in °C (encoded in the low byte).
+    /// Lower bound for the Max CH setpoint in °C (low byte).
     /// </summary>
     public byte LowerBound { get; set; }
 
