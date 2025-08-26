@@ -3,7 +3,7 @@
 namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
 {
     /// <summary>
-    /// Backing property and convenience selectors for <see cref="Enums.Month"/>.
+    /// Backing property and convenience selectors for <see cref="Enums.OperatingMode"/>.
     /// </summary>
     public interface IOperatingMode
     {
