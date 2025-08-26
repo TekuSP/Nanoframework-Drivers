@@ -24,8 +24,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         protected override uint GetRawDataCore()
         {
             // High byte = MemberIdCode, Low byte = MasterConfiguration
-            uint data = (uint)(((byte)MemberIdCode << 8) | (byte)MasterConfiguration);
-            return ProcessRequest(data);
+            byte low = Utilities.SetMasterConfiguration(MasterConfiguration);
+            ushort payload = Utilities.MakeUShort((byte)MemberIdCode, low);
+            return ProcessRequest(payload);
         }
         protected override void SetRawDataCore(uint value)
         {
@@ -38,20 +39,20 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
     // Convenience bit properties to set/clear underlying flags
     /// <summary>Reserved bit 0.</summary>
-    public bool Reserved0 { get => (MasterConfiguration & MC.Reserved0) != 0; set { if (value) MasterConfiguration |= MC.Reserved0; else MasterConfiguration &= ~MC.Reserved0; } }
+    public bool Reserved0 { get => Utilities.IsSet(MasterConfiguration, MC.Reserved0); set => Utilities.SetFlag(ref MasterConfiguration, MC.Reserved0, value); }
     /// <summary>Reserved bit 1.</summary>
-    public bool Reserved1 { get => (MasterConfiguration & MC.Reserved1) != 0; set { if (value) MasterConfiguration |= MC.Reserved1; else MasterConfiguration &= ~MC.Reserved1; } }
+    public bool Reserved1 { get => Utilities.IsSet(MasterConfiguration, MC.Reserved1); set => Utilities.SetFlag(ref MasterConfiguration, MC.Reserved1, value); }
     /// <summary>Reserved bit 2.</summary>
-    public bool Reserved2 { get => (MasterConfiguration & MC.Reserved2) != 0; set { if (value) MasterConfiguration |= MC.Reserved2; else MasterConfiguration &= ~MC.Reserved2; } }
+    public bool Reserved2 { get => Utilities.IsSet(MasterConfiguration, MC.Reserved2); set => Utilities.SetFlag(ref MasterConfiguration, MC.Reserved2, value); }
     /// <summary>Reserved bit 3.</summary>
-    public bool Reserved3 { get => (MasterConfiguration & MC.Reserved3) != 0; set { if (value) MasterConfiguration |= MC.Reserved3; else MasterConfiguration &= ~MC.Reserved3; } }
+    public bool Reserved3 { get => Utilities.IsSet(MasterConfiguration, MC.Reserved3); set => Utilities.SetFlag(ref MasterConfiguration, MC.Reserved3, value); }
     /// <summary>Reserved bit 4.</summary>
-    public bool Reserved4 { get => (MasterConfiguration & MC.Reserved4) != 0; set { if (value) MasterConfiguration |= MC.Reserved4; else MasterConfiguration &= ~MC.Reserved4; } }
+    public bool Reserved4 { get => Utilities.IsSet(MasterConfiguration, MC.Reserved4); set => Utilities.SetFlag(ref MasterConfiguration, MC.Reserved4, value); }
     /// <summary>Reserved bit 5.</summary>
-    public bool Reserved5 { get => (MasterConfiguration & MC.Reserved5) != 0; set { if (value) MasterConfiguration |= MC.Reserved5; else MasterConfiguration &= ~MC.Reserved5; } }
+    public bool Reserved5 { get => Utilities.IsSet(MasterConfiguration, MC.Reserved5); set => Utilities.SetFlag(ref MasterConfiguration, MC.Reserved5, value); }
     /// <summary>Reserved bit 6.</summary>
-    public bool Reserved6 { get => (MasterConfiguration & MC.Reserved6) != 0; set { if (value) MasterConfiguration |= MC.Reserved6; else MasterConfiguration &= ~MC.Reserved6; } }
+    public bool Reserved6 { get => Utilities.IsSet(MasterConfiguration, MC.Reserved6); set => Utilities.SetFlag(ref MasterConfiguration, MC.Reserved6, value); }
     /// <summary>Reserved bit 7.</summary>
-    public bool Reserved7 { get => (MasterConfiguration & MC.Reserved7) != 0; set { if (value) MasterConfiguration |= MC.Reserved7; else MasterConfiguration &= ~MC.Reserved7; } }
+    public bool Reserved7 { get => Utilities.IsSet(MasterConfiguration, MC.Reserved7); set => Utilities.SetFlag(ref MasterConfiguration, MC.Reserved7, value); }
     }
 }

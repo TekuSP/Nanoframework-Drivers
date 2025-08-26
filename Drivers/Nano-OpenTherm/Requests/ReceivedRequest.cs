@@ -21,8 +21,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public ReceivedRequest(uint rawData)
         {
             _raw = rawData;
-            MessageType = (MessageType)((rawData >> 28) & 7);
-            MessageID = (MessageID)((rawData >> 16) & 0xFF);
+            MessageType = Utilities.GetMessageType(rawData);
+            MessageID = Utilities.GetMessageID(rawData);
         }
 
         protected override uint GetRawDataCore() => _raw;

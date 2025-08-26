@@ -11,13 +11,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetBoilerCapacityAndMinModRequest : ReadRequest
     {
-        public GetBoilerCapacityAndMinModRequest() : base() { }
-        public GetBoilerCapacityAndMinModRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-        protected override uint GetRawDataCore() => ProcessRequest(0);
-        protected override void SetRawDataCore(uint value) { }
+        public GetBoilerCapacityAndMinModRequest() : base()
+        {
+        }
+
+        public GetBoilerCapacityAndMinModRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public override MessageID MessageID => MessageID.MaxCapacityMinModLevel;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.MaxCapacityMinModLevel;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(0);
+
+        protected override void SetRawDataCore(uint value)
+        { }
+
+        #endregion Protected Methods
     }
 }

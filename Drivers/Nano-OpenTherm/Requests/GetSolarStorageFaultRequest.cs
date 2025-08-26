@@ -26,8 +26,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         protected override uint GetRawDataCore()
         {
-            uint data = (uint)(((uint)OEMFaultCode << 8) | (byte)FaultFlags);
-            return ProcessRequest(data);
+            byte low = Utilities.SetApplicationSpecificFaultFlags(FaultFlags);
+            ushort payload = Utilities.MakeUShort(OEMFaultCode, low);
+            return ProcessRequest(payload);
         }
         protected override void SetRawDataCore(uint value)
         {
@@ -40,20 +41,20 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         // Convenience flags
         /// <summary>Service request flag.</summary>
-        public bool ServiceRequest { get => (FaultFlags & ApplicationSpecificFaultFlags.ServiceRequest) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.ServiceRequest; else FaultFlags &= ~ApplicationSpecificFaultFlags.ServiceRequest; } }
+    public bool ServiceRequest { get => Utilities.IsSet(FaultFlags, ApplicationSpecificFaultFlags.ServiceRequest); set => Utilities.SetFlag(ref FaultFlags, ApplicationSpecificFaultFlags.ServiceRequest, value); }
         /// <summary>Lockout reset flag.</summary>
-        public bool LockoutReset { get => (FaultFlags & ApplicationSpecificFaultFlags.LockoutReset) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.LockoutReset; else FaultFlags &= ~ApplicationSpecificFaultFlags.LockoutReset; } }
+    public bool LockoutReset { get => Utilities.IsSet(FaultFlags, ApplicationSpecificFaultFlags.LockoutReset); set => Utilities.SetFlag(ref FaultFlags, ApplicationSpecificFaultFlags.LockoutReset, value); }
         /// <summary>Low water pressure fault flag.</summary>
-        public bool LowWaterPress { get => (FaultFlags & ApplicationSpecificFaultFlags.LowWaterPress) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.LowWaterPress; else FaultFlags &= ~ApplicationSpecificFaultFlags.LowWaterPress; } }
+    public bool LowWaterPress { get => Utilities.IsSet(FaultFlags, ApplicationSpecificFaultFlags.LowWaterPress); set => Utilities.SetFlag(ref FaultFlags, ApplicationSpecificFaultFlags.LowWaterPress, value); }
         /// <summary>Gas/flame fault flag.</summary>
-        public bool GasFlameFault { get => (FaultFlags & ApplicationSpecificFaultFlags.GasFlameFault) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.GasFlameFault; else FaultFlags &= ~ApplicationSpecificFaultFlags.GasFlameFault; } }
+    public bool GasFlameFault { get => Utilities.IsSet(FaultFlags, ApplicationSpecificFaultFlags.GasFlameFault); set => Utilities.SetFlag(ref FaultFlags, ApplicationSpecificFaultFlags.GasFlameFault, value); }
         /// <summary>Air pressure fault flag.</summary>
-        public bool AirPressFault { get => (FaultFlags & ApplicationSpecificFaultFlags.AirPressFault) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.AirPressFault; else FaultFlags &= ~ApplicationSpecificFaultFlags.AirPressFault; } }
+    public bool AirPressFault { get => Utilities.IsSet(FaultFlags, ApplicationSpecificFaultFlags.AirPressFault); set => Utilities.SetFlag(ref FaultFlags, ApplicationSpecificFaultFlags.AirPressFault, value); }
         /// <summary>Water over-temperature fault flag.</summary>
-        public bool WaterOverTemp { get => (FaultFlags & ApplicationSpecificFaultFlags.WaterOverTemp) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.WaterOverTemp; else FaultFlags &= ~ApplicationSpecificFaultFlags.WaterOverTemp; } }
+    public bool WaterOverTemp { get => Utilities.IsSet(FaultFlags, ApplicationSpecificFaultFlags.WaterOverTemp); set => Utilities.SetFlag(ref FaultFlags, ApplicationSpecificFaultFlags.WaterOverTemp, value); }
         /// <summary>Reserved bit 6.</summary>
-        public bool Reserved6 { get => (FaultFlags & ApplicationSpecificFaultFlags.Reserved6) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.Reserved6; else FaultFlags &= ~ApplicationSpecificFaultFlags.Reserved6; } }
+    public bool Reserved6 { get => Utilities.IsSet(FaultFlags, ApplicationSpecificFaultFlags.Reserved6); set => Utilities.SetFlag(ref FaultFlags, ApplicationSpecificFaultFlags.Reserved6, value); }
         /// <summary>Reserved bit 7.</summary>
-        public bool Reserved7 { get => (FaultFlags & ApplicationSpecificFaultFlags.Reserved7) != 0; set { if (value) FaultFlags |= ApplicationSpecificFaultFlags.Reserved7; else FaultFlags &= ~ApplicationSpecificFaultFlags.Reserved7; } }
+    public bool Reserved7 { get => Utilities.IsSet(FaultFlags, ApplicationSpecificFaultFlags.Reserved7); set => Utilities.SetFlag(ref FaultFlags, ApplicationSpecificFaultFlags.Reserved7, value); }
     }
 }

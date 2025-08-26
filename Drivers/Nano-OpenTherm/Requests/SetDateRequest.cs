@@ -22,9 +22,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         protected override uint GetRawDataCore()
         {
-            // low byte: day (1-31), high byte: month (1-12)
-            uint raw = (uint)(((byte)Month & 0x1F) << 8 | (Day & 0x1F));
-            return ProcessRequest(raw);
+            // low byte: day (1-31, 5 bits), high byte: month (1-12, 5 bits)
+            var day = (byte)(Day & 0x1F);
+            var month = (byte)(((byte)Month) & 0x1F);
+            ushort payload = 0;
+            payload = Utilities.SetLowByte(payload, day);
+            payload = Utilities.SetHighByte(payload, month);
+            return ProcessRequest(payload);
         }
         protected override void SetRawDataCore(uint value)
         {

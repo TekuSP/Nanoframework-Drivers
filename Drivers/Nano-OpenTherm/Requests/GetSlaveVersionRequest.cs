@@ -26,8 +26,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         protected override uint GetRawDataCore()
         {
-            uint raw = (uint)((Version << 8) | (byte)Type);
-            return ProcessRequest(raw);
+            ushort payload = Utilities.MakeUShort(Version, (byte)Type);
+            return ProcessRequest(payload);
         }
         protected override void SetRawDataCore(uint value)
         {
