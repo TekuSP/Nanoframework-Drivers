@@ -227,6 +227,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                     return this;
             }
             // Unreachable
+            return this;
         }
 
         /// <summary>

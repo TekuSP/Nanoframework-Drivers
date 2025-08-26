@@ -1,6 +1,5 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.Nano_OpenTherm.Enums;
-using SC = TekuSP.Drivers.Nano_OpenTherm.Enums.SlaveConfiguration;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
@@ -43,7 +42,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         }
 
         /// <inheritdoc />
-    public override MessageType MessageType { get; set; }
+        public override MessageType MessageType { get; set; }
 
         /// <inheritdoc />
         public override MessageID MessageID => MessageID.SConfigSMemberIDcodeSolarStorage;
@@ -51,7 +50,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// <summary>
         /// Slave configuration flags (low byte).
         /// </summary>
-        public SC SlaveConfiguration { get; set; }
+        public SlaveConfiguration SlaveConfiguration { get; set; }
         /// <summary>
         /// Manufacturer/member ID code (high byte).
         /// </summary>
@@ -59,20 +58,20 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 
         // Convenience bit properties mirroring the request type
         /// <summary>Domestic Hot Water present on slave.</summary>
-    public bool DHWPresent { get => Utilities.IsSet(SlaveConfiguration, SC.DHWPresent); set => Utilities.SetFlag(ref SlaveConfiguration, SC.DHWPresent, value); }
+        public bool DHWPresent { get => SlaveConfiguration.IsSet(SlaveConfiguration.DHWPresent); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.DHWPresent, value); }
         /// <summary>Control type flag.</summary>
-    public bool ControlType { get => Utilities.IsSet(SlaveConfiguration, SC.ControlType); set => Utilities.SetFlag(ref SlaveConfiguration, SC.ControlType, value); }
+        public bool ControlType { get => SlaveConfiguration.IsSet(SlaveConfiguration.ControlType); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.ControlType, value); }
         /// <summary>Cooling capability configured on slave.</summary>
-    public bool CoolingConfig { get => Utilities.IsSet(SlaveConfiguration, SC.CoolingConfig); set => Utilities.SetFlag(ref SlaveConfiguration, SC.CoolingConfig, value); }
+        public bool CoolingConfig { get => SlaveConfiguration.IsSet(SlaveConfiguration.CoolingConfig); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.CoolingConfig, value); }
         /// <summary>Domestic Hot Water configuration bit on slave.</summary>
-    public bool DHWConfig { get => Utilities.IsSet(SlaveConfiguration, SC.DHWConfig); set => Utilities.SetFlag(ref SlaveConfiguration, SC.DHWConfig, value); }
+        public bool DHWConfig { get => SlaveConfiguration.IsSet(SlaveConfiguration.DHWConfig); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.DHWConfig, value); }
         /// <summary>Master low/off pump control supported.</summary>
-    public bool MasterLowOffPumpControl { get => Utilities.IsSet(SlaveConfiguration, SC.MasterLowOffPumpControl); set => Utilities.SetFlag(ref SlaveConfiguration, SC.MasterLowOffPumpControl, value); }
+        public bool MasterLowOffPumpControl { get => SlaveConfiguration.IsSet(SlaveConfiguration.MasterLowOffPumpControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.MasterLowOffPumpControl, value); }
         /// <summary>Second central heating circuit present on slave.</summary>
-    public bool CH2Present { get => Utilities.IsSet(SlaveConfiguration, SC.CH2Present); set => Utilities.SetFlag(ref SlaveConfiguration, SC.CH2Present, value); }
+        public bool CH2Present { get => SlaveConfiguration.IsSet(SlaveConfiguration.CH2Present); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.CH2Present, value); }
         /// <summary>Reserved bit 6.</summary>
-    public bool Reserved6 { get => Utilities.IsSet(SlaveConfiguration, SC.Reserved6); set => Utilities.SetFlag(ref SlaveConfiguration, SC.Reserved6, value); }
+        public bool Reserved6 { get => SlaveConfiguration.IsSet(SlaveConfiguration.Reserved6); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.Reserved6, value); }
         /// <summary>Reserved bit 7.</summary>
-    public bool Reserved7 { get => Utilities.IsSet(SlaveConfiguration, SC.Reserved7); set => Utilities.SetFlag(ref SlaveConfiguration, SC.Reserved7, value); }
+        public bool Reserved7 { get => SlaveConfiguration.IsSet(SlaveConfiguration.Reserved7); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.Reserved7, value); }
     }
 }

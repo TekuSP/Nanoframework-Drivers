@@ -39,12 +39,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         // Convenience properties
         /// <summary>Enable transfer of DHW Setpoint parameter.</summary>
-    public bool EnableDhwSetpoint { get => Utilities.IsSet(TransferEnable, RemoteParameterTransferEnable.DHWSetpoint); set => Utilities.SetFlag(ref TransferEnable, RemoteParameterTransferEnable.DHWSetpoint, value); }
+        public bool EnableDhwSetpoint { get => TransferEnable.IsSet(RemoteParameterTransferEnable.DHWSetpoint); set => TransferEnable = TransferEnable.SetFlag(RemoteParameterTransferEnable.DHWSetpoint, value); }
         /// <summary>Enable transfer of Max CH Setpoint parameter.</summary>
-    public bool EnableMaxChSetpoint { get => Utilities.IsSet(TransferEnable, RemoteParameterTransferEnable.MaxCHSetpoint); set => Utilities.SetFlag(ref TransferEnable, RemoteParameterTransferEnable.MaxCHSetpoint, value); }
+        public bool EnableMaxChSetpoint { get => TransferEnable.IsSet(RemoteParameterTransferEnable.MaxCHSetpoint); set => TransferEnable = TransferEnable.SetFlag(RemoteParameterTransferEnable.MaxCHSetpoint, value); }
         /// <summary>DHw Setpoint is writable (otherwise read-only).</summary>
-    public bool RWDhwSetpoint { get => Utilities.IsSet(TransferReadWrite, RemoteParameterTransferReadWrite.DHWSetpoint); set => Utilities.SetFlag(ref TransferReadWrite, RemoteParameterTransferReadWrite.DHWSetpoint, value); }
+        public bool RWDhwSetpoint { get => TransferReadWrite.IsSet(RemoteParameterTransferReadWrite.DHWSetpoint); set => TransferReadWrite = TransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.DHWSetpoint, value); }
         /// <summary>Max CH Setpoint is writable (otherwise read-only).</summary>
-    public bool RWMaxChSetpoint { get => Utilities.IsSet(TransferReadWrite, RemoteParameterTransferReadWrite.MaxCHSetpoint); set => Utilities.SetFlag(ref TransferReadWrite, RemoteParameterTransferReadWrite.MaxCHSetpoint, value); }
+        public bool RWMaxChSetpoint { get => TransferReadWrite.IsSet(RemoteParameterTransferReadWrite.MaxCHSetpoint); set => TransferReadWrite = TransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.MaxCHSetpoint, value); }
     }
 }

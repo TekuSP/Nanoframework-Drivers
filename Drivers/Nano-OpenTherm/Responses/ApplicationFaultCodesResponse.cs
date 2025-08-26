@@ -36,60 +36,60 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             _oemFaultCodes = Utilities.GetLowByte(value);
         }
 
-    public override MessageType MessageType { get; set; }
-    public override MessageID MessageID => MessageID.ASFflags;
+        public override MessageType MessageType { get; set; }
+        public override MessageID MessageID => MessageID.ASFflags;
 
         /// <summary>
         /// Service request.
         /// </summary>
-    public bool ServiceRequest
+        public bool ServiceRequest
         {
-            get => Utilities.IsSet(_flags, ApplicationSpecificFaultFlags.ServiceRequest);
-            set => Utilities.SetFlag(ref _flags, ApplicationSpecificFaultFlags.ServiceRequest, value);
+            get => _flags.IsSet(ApplicationSpecificFaultFlags.ServiceRequest);
+            set => _flags = _flags.SetFlag(ApplicationSpecificFaultFlags.ServiceRequest, value);
         }
         /// <summary>
         /// Lockout-reset.
         /// </summary>
-    public bool LockoutReset
+        public bool LockoutReset
         {
-            get => Utilities.IsSet(_flags, ApplicationSpecificFaultFlags.LockoutReset);
-            set => Utilities.SetFlag(ref _flags, ApplicationSpecificFaultFlags.LockoutReset, value);
+            get => _flags.IsSet(ApplicationSpecificFaultFlags.LockoutReset);
+            set => _flags = _flags.SetFlag(ApplicationSpecificFaultFlags.LockoutReset, value);
         }
         /// <summary>
         /// Low water pressure.
         /// </summary>
-    public bool LowWaterPress
+        public bool LowWaterPress
         {
-            get => Utilities.IsSet(_flags, ApplicationSpecificFaultFlags.LowWaterPress);
-            set => Utilities.SetFlag(ref _flags, ApplicationSpecificFaultFlags.LowWaterPress, value);
+            get => _flags.IsSet(ApplicationSpecificFaultFlags.LowWaterPress);
+            set => _flags = _flags.SetFlag(ApplicationSpecificFaultFlags.LowWaterPress, value);
         }
         /// <summary>
         /// Gas/flame fault.
         /// </summary>
-    public bool GasFlameFault
+        public bool GasFlameFault
         {
-            get => Utilities.IsSet(_flags, ApplicationSpecificFaultFlags.GasFlameFault);
-            set => Utilities.SetFlag(ref _flags, ApplicationSpecificFaultFlags.GasFlameFault, value);
+            get => _flags.IsSet(ApplicationSpecificFaultFlags.GasFlameFault);
+            set => _flags = _flags.SetFlag(ApplicationSpecificFaultFlags.GasFlameFault, value);
         }
         /// <summary>
         /// Air pressure fault.
         /// </summary>
-    public bool AirPressFault
+        public bool AirPressFault
         {
-            get => Utilities.IsSet(_flags, ApplicationSpecificFaultFlags.AirPressFault);
-            set => Utilities.SetFlag(ref _flags, ApplicationSpecificFaultFlags.AirPressFault, value);
+            get => _flags.IsSet(ApplicationSpecificFaultFlags.AirPressFault);
+            set => _flags = _flags.SetFlag(ApplicationSpecificFaultFlags.AirPressFault, value);
         }
         /// <summary>
         /// Water over-temperature.
         /// </summary>
-    public bool WaterOverTemp
+        public bool WaterOverTemp
         {
-            get => Utilities.IsSet(_flags, ApplicationSpecificFaultFlags.WaterOverTemp);
-            set => Utilities.SetFlag(ref _flags, ApplicationSpecificFaultFlags.WaterOverTemp, value);
+            get => _flags.IsSet(ApplicationSpecificFaultFlags.WaterOverTemp);
+            set => _flags = _flags.SetFlag(ApplicationSpecificFaultFlags.WaterOverTemp, value);
         }
         /// <summary>
         /// OEM Fault Codes
         /// </summary>
-    public byte OEMFaultCodes { get => _oemFaultCodes; set => _oemFaultCodes = value; }
+        public byte OEMFaultCodes { get => _oemFaultCodes; set => _oemFaultCodes = value; }
     }
 }

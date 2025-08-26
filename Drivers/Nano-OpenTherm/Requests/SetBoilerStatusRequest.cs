@@ -12,10 +12,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetBoilerStatusRequest() : base() { }
         public SetBoilerStatusRequest(Request baseReq) : base(baseReq) { }
 
-    /// <summary>
-    /// Master status flags to write (encoded in the high byte of payload).
-    /// </summary>
-    public MS MasterStatus { get; set; }
+        /// <summary>
+        /// Master status flags to write (encoded in the high byte of payload).
+        /// </summary>
+        public MS MasterStatus { get; set; }
 
         protected override uint GetRawDataCore()
         {
@@ -32,25 +32,25 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public override MessageType MessageType => MessageType.WRITE_DATA;
         public override MessageID MessageID => MessageID.Status;
 
-    /// <summary>
-    /// Enables Central Heating demand (sets master CH enable flag, bit 8).
-    /// </summary>
-        public bool EnableCentralHeating { get => Utilities.IsSet(MasterStatus, MS.CHEnabled); set => Utilities.SetFlag(ref MasterStatus, MS.CHEnabled, value); }
-    /// <summary>
-    /// Enables Domestic Hot Water demand (sets master DHW enable flag, bit 9).
-    /// </summary>
-        public bool EnableHotWater { get => Utilities.IsSet(MasterStatus, MS.DHWEnabled); set => Utilities.SetFlag(ref MasterStatus, MS.DHWEnabled, value); }
-    /// <summary>
-    /// Enables Cooling demand (sets master Cooling enable flag, bit 10).
-    /// </summary>
-        public bool EnableCooling { get => Utilities.IsSet(MasterStatus, MS.CoolingEnabled); set => Utilities.SetFlag(ref MasterStatus, MS.CoolingEnabled, value); }
-    /// <summary>
-    /// Enables Outside Temperature Compensation/OTC active (bit 11).
-    /// </summary>
-        public bool EnableOutsideTemperatureCompensation { get => Utilities.IsSet(MasterStatus, MS.OTCActive); set => Utilities.SetFlag(ref MasterStatus, MS.OTCActive, value); }
-    /// <summary>
-    /// Enables Central Heating circuit 2 demand (bit 12).
-    /// </summary>
-        public bool EnableCentralHeating2 { get => Utilities.IsSet(MasterStatus, MS.CH2Enabled); set => Utilities.SetFlag(ref MasterStatus, MS.CH2Enabled, value); }
+        /// <summary>
+        /// Enables Central Heating demand (sets master CH enable flag, bit 8).
+        /// </summary>
+        public bool EnableCentralHeating { get => MasterStatus.IsSet(MS.CHEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.CHEnabled, value); }
+        /// <summary>
+        /// Enables Domestic Hot Water demand (sets master DHW enable flag, bit 9).
+        /// </summary>
+        public bool EnableHotWater { get => MasterStatus.IsSet(MS.DHWEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.DHWEnabled, value); }
+        /// <summary>
+        /// Enables Cooling demand (sets master Cooling enable flag, bit 10).
+        /// </summary>
+        public bool EnableCooling { get => MasterStatus.IsSet(MS.CoolingEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.CoolingEnabled, value); }
+        /// <summary>
+        /// Enables Outside Temperature Compensation/OTC active (bit 11).
+        /// </summary>
+        public bool EnableOutsideTemperatureCompensation { get => MasterStatus.IsSet(MS.OTCActive); set => MasterStatus = MasterStatus.SetFlag(MS.OTCActive, value); }
+        /// <summary>
+        /// Enables Central Heating circuit 2 demand (bit 12).
+        /// </summary>
+        public bool EnableCentralHeating2 { get => MasterStatus.IsSet(MS.CH2Enabled); set => MasterStatus = MasterStatus.SetFlag(MS.CH2Enabled, value); }
     }
 }

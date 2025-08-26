@@ -36,59 +36,59 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             _memberIdCode = Utilities.GetHighByte(value);
         }
 
-    public override MessageType MessageType { get; set; }
-    public override MessageID MessageID => MessageID.SConfigSMemberIDcode;
+        public override MessageType MessageType { get; set; }
+        public override MessageID MessageID => MessageID.SConfigSMemberIDcode;
         /// <summary>
         /// DHW (Domestic Hot Water) present.
         /// </summary>
-    public bool DHWPresent
+        public bool DHWPresent
         {
-            get => Utilities.IsSet(_slaveConfiguration, SlaveConfiguration.DHWPresent);
-            set => Utilities.SetFlag(ref _slaveConfiguration, SlaveConfiguration.DHWPresent, value);
+            get => _slaveConfiguration.IsSet(SlaveConfiguration.DHWPresent);
+            set => _slaveConfiguration = _slaveConfiguration.SetFlag(SlaveConfiguration.DHWPresent, value);
         }
         /// <summary>
         /// Control type.
         /// </summary>
-    public bool ControlType
+        public bool ControlType
         {
-            get => Utilities.IsSet(_slaveConfiguration, SlaveConfiguration.ControlType);
-            set => Utilities.SetFlag(ref _slaveConfiguration, SlaveConfiguration.ControlType, value);
+            get => _slaveConfiguration.IsSet(SlaveConfiguration.ControlType);
+            set => _slaveConfiguration = _slaveConfiguration.SetFlag(SlaveConfiguration.ControlType, value);
         }
         /// <summary>
         /// Cooling configuration.
         /// </summary>
-    public bool CoolingConfig
+        public bool CoolingConfig
         {
-            get => Utilities.IsSet(_slaveConfiguration, SlaveConfiguration.CoolingConfig);
-            set => Utilities.SetFlag(ref _slaveConfiguration, SlaveConfiguration.CoolingConfig, value);
+            get => _slaveConfiguration.IsSet(SlaveConfiguration.CoolingConfig);
+            set => _slaveConfiguration = _slaveConfiguration.SetFlag(SlaveConfiguration.CoolingConfig, value);
         }
         /// <summary>
         /// DHW configuration.
         /// </summary>
-    public bool DHWConfig
+        public bool DHWConfig
         {
-            get => Utilities.IsSet(_slaveConfiguration, SlaveConfiguration.DHWConfig);
-            set => Utilities.SetFlag(ref _slaveConfiguration, SlaveConfiguration.DHWConfig, value);
+            get => _slaveConfiguration.IsSet(SlaveConfiguration.DHWConfig);
+            set => _slaveConfiguration = _slaveConfiguration.SetFlag(SlaveConfiguration.DHWConfig, value);
         }
         /// <summary>
         /// Master low-off & pump control function.
         /// </summary>
-    public bool MasterLowOffPumpControl
+        public bool MasterLowOffPumpControl
         {
-            get => Utilities.IsSet(_slaveConfiguration, SlaveConfiguration.MasterLowOffPumpControl);
-            set => Utilities.SetFlag(ref _slaveConfiguration, SlaveConfiguration.MasterLowOffPumpControl, value);
+            get => _slaveConfiguration.IsSet(SlaveConfiguration.MasterLowOffPumpControl);
+            set => _slaveConfiguration = _slaveConfiguration.SetFlag(SlaveConfiguration.MasterLowOffPumpControl, value);
         }
         /// <summary>
         /// CH2 (Central Heating circuit 2) present.
         /// </summary>
-    public bool CH2Present
+        public bool CH2Present
         {
-            get => Utilities.IsSet(_slaveConfiguration, SlaveConfiguration.CH2Present);
-            set => Utilities.SetFlag(ref _slaveConfiguration, SlaveConfiguration.CH2Present, value);
+            get => _slaveConfiguration.IsSet(SlaveConfiguration.CH2Present);
+            set => _slaveConfiguration = _slaveConfiguration.SetFlag(SlaveConfiguration.CH2Present, value);
         }
         /// <summary>
         /// Slave MemberID Code
         /// </summary>
-    public byte MemberIDCode { get => _memberIdCode; set => _memberIdCode = value; }
+        public byte MemberIDCode { get => _memberIdCode; set => _memberIdCode = value; }
     }
 }

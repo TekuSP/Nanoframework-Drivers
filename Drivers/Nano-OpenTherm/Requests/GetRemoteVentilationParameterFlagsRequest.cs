@@ -41,12 +41,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         // Convenience flag properties
         /// <summary>Enable transfer of DHW Setpoint parameter.</summary>
-    public bool EnableDhwSetpoint { get => Utilities.IsSet(TransferEnable, Enums.RemoteParameterTransferEnable.DHWSetpoint); set => Utilities.SetFlag(ref TransferEnable, Enums.RemoteParameterTransferEnable.DHWSetpoint, value); }
+        public bool EnableDhwSetpoint { get => TransferEnable.IsSet(Enums.RemoteParameterTransferEnable.DHWSetpoint); set => TransferEnable = TransferEnable.SetFlag(Enums.RemoteParameterTransferEnable.DHWSetpoint, value); }
         /// <summary>Enable transfer of Max CH Setpoint parameter.</summary>
-    public bool EnableMaxChSetpoint { get => Utilities.IsSet(TransferEnable, Enums.RemoteParameterTransferEnable.MaxCHSetpoint); set => Utilities.SetFlag(ref TransferEnable, Enums.RemoteParameterTransferEnable.MaxCHSetpoint, value); }
+        public bool EnableMaxChSetpoint { get => TransferEnable.IsSet(Enums.RemoteParameterTransferEnable.MaxCHSetpoint); set => TransferEnable = TransferEnable.SetFlag(Enums.RemoteParameterTransferEnable.MaxCHSetpoint, value); }
         /// <summary>DHW Setpoint is writable (otherwise read-only).</summary>
-    public bool RWDhwSetpoint { get => Utilities.IsSet(TransferReadWrite, Enums.RemoteParameterTransferReadWrite.DHWSetpoint); set => Utilities.SetFlag(ref TransferReadWrite, Enums.RemoteParameterTransferReadWrite.DHWSetpoint, value); }
+        public bool RWDhwSetpoint { get => TransferReadWrite.IsSet(Enums.RemoteParameterTransferReadWrite.DHWSetpoint); set => TransferReadWrite = TransferReadWrite.SetFlag(Enums.RemoteParameterTransferReadWrite.DHWSetpoint, value); }
         /// <summary>Max CH Setpoint is writable (otherwise read-only).</summary>
-    public bool RWMaxChSetpoint { get => Utilities.IsSet(TransferReadWrite, Enums.RemoteParameterTransferReadWrite.MaxCHSetpoint); set => Utilities.SetFlag(ref TransferReadWrite, Enums.RemoteParameterTransferReadWrite.MaxCHSetpoint, value); }
+        public bool RWMaxChSetpoint { get => TransferReadWrite.IsSet(Enums.RemoteParameterTransferReadWrite.MaxCHSetpoint); set => TransferReadWrite = TransferReadWrite.SetFlag(Enums.RemoteParameterTransferReadWrite.MaxCHSetpoint, value); }
     }
 }

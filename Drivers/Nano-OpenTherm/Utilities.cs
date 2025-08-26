@@ -1,109 +1,40 @@
 ﻿using System;
+
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm
 {
     public static class Utilities
     {
+        #region Public Methods
+
         /// <summary>
-        /// Gets raw temperature from float
+        /// Gets Application Specific Fault Flags from raw data
         /// </summary>
-        /// <param name="temperature">Temperature</param>
-        /// <returns>Uint Raw Temperature</returns>
-        public static uint GetRawTemperature(float temperature)
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>ApplicationSpecificFaultFlags</returns>
+        public static Enums.ApplicationSpecificFaultFlags GetApplicationSpecificFaultFlags(uint rawData)
         {
-            if (temperature < 0)
-                temperature = 0;
-            if (temperature > 100)
-                temperature = 100;
-            return (uint)(temperature * 256);
+            var data = GetLowByte(rawData);
+            return (Enums.ApplicationSpecificFaultFlags)data;
         }
+
         /// <summary>
-        /// Parity check for a frame
+        /// Gets Special DateTime from raw data
         /// </summary>
-        /// <param name="frame">Frame to check on</param>
-        /// <returns>Parity (true when number of 1 bits is odd)</returns>
-        public static bool Parity(uint frame)
+        /// <param name="rawData">Raw Data</param>
+        /// <param name="time">Time</param>
+        /// <param name="dayOfWeek">Day of week</param>
+        public static void GetDateTime(uint rawData, out DateTime time, out DayOfWeek dayOfWeek)
         {
-            byte p = 0;
-            while (frame > 0)
-            {
-                if ((frame & 1) == 1)
-                    p++;
-                frame >>= 1;
-            }
-            return (p & 1) == 1;
+            var date = GetLowByte(rawData);
+            var minutes = GetHighByte(rawData);
+            var dayofweek = (byte)((date >> 5) & 0x07);
+            var hour = (byte)(date & 0x1F);
+            time = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, hour, minutes, DateTime.UtcNow.Second);
+            dayOfWeek = (DayOfWeek)dayofweek;
         }
-        //TODO: Move to base solution
-        /// <summary>
-        /// Get Uint from raw data (low 16-bits data field)
-        /// </summary>
-        /// <returns>Uint Response</returns>
-        public static uint GetUInt(uint rawData) => rawData & 0xffffu;
-        /// <summary>
-        /// Gets Int from raw data (low 32-bits)
-        /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>Int Response</returns>
-        public static int GetInt(uint rawData) => (int)(rawData & 0xFFFFFFFFu);
-        /// <summary>
-        /// Gets High part of Int from raw data
-        /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>High of int</returns>
-        public static short GetHighShort(uint rawData)
-        {
-            var temp = GetInt(rawData);
-            return (short)(temp >> 16);
-        }
-        /// <summary>
-        /// Gets Low part of Int from raw data
-        /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>Low of int</returns>
-        public static short GetLowShort(uint rawData)
-        {
-            var temp = GetInt(rawData);
-            return (short)(temp & 0xFFFF);
-        }
-        /// <summary>
-        /// Gets high part of UShort from raw data (bits 31..16)
-        /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>High of uint</returns>
-        public static ushort GetHighUShort(uint rawData) => (ushort)((rawData >> 16) & 0xFFFF);
-        /// <summary>
-        /// Gets high part of UShort from raw data where low part is byte (bits 23..8)
-        /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>High part of int, minus byte</returns>
-        public static ushort GetHighUShortWithLowByte(uint rawData) => (ushort)((rawData >> 8) & 0xFFFF);
-        /// <summary>
-        /// Gets low part of UShort from raw data (bits 15..0)
-        /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>Low part of uint</returns>
-        public static ushort GetLowUShort(uint rawData) => (ushort)(rawData & 0xFFFF);
-        /// <summary>
-        /// Gets High part of Byte from raw data (bits 15..8 of 16-bit data field)
-        /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>High part of uint</returns>
-        public static byte GetHighByte(uint rawData)
-        {
-            uint temp = GetUInt(rawData);
-            return (byte)(temp >> 8);
-        }
-        /// <summary>
-        /// Gets Low part of Byte from raw data (bits 7..0 of 16-bit data field)
-        /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>Low part of uint</returns>
-        public static byte GetLowByte(uint rawData)
-        {
-            var temp = GetUInt(rawData);
-            return (byte)(temp & 0xFF);
-        }
+
         /// <summary>
         /// Get Float from raw data (signed 16-bit fixed point 8.8)
         /// </summary>
@@ -121,50 +52,79 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 return (temp & 0xFFFF) / 256.0f;
             }
         }
+
         /// <summary>
-        /// If under 0 returns 0, if over 100 returns 100, else returns input
-        /// </summary>
-        /// <param name="input">Float to normalize</param>
-        /// <returns>Normalized float</returns>
-        public static float Normalize(this float input)
-        {
-            return input < 0 ? 0 : (input > 100 ? 100 : input);
-        }
-        /// <summary>
-        /// Gets Special DateTime from raw data
+        /// Gets High part of Byte from raw data (bits 15..8 of 16-bit data field)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
-        /// <param name="time">Time</param>
-        /// <param name="dayOfWeek">Day of week</param>
-        public static void GetDateTime(uint rawData, out DateTime time, out DayOfWeek dayOfWeek)
+        /// <returns>High part of uint</returns>
+        public static byte GetHighByte(uint rawData)
         {
-            var date = GetLowByte(rawData);
-            var minutes = GetHighByte(rawData);
-            var dayofweek = (byte)((date >> 5) & 0x07);
-            var hour = (byte)(date & 0x1F);
-            time = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, hour, minutes, DateTime.UtcNow.Second);
-            dayOfWeek = (DayOfWeek)dayofweek;
+            uint temp = GetUInt(rawData);
+            return (byte)(temp >> 8);
         }
+
         /// <summary>
-        /// Gets Master Status from raw data
+        /// Gets High part of Int from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
-        /// <returns>MasterStatus</returns>
-        public static Enums.MasterStatus GetMasterStatus(uint rawData)
+        /// <returns>High of int</returns>
+        public static short GetHighShort(uint rawData)
         {
-            var data = GetLowByte(rawData);
-            return (Enums.MasterStatus)data;
+            var temp = GetInt(rawData);
+            return (short)(temp >> 16);
         }
+
         /// <summary>
-        /// Gets Slave Status from raw data
+        /// Gets high part of UShort from raw data (bits 31..16)
         /// </summary>
         /// <param name="rawData">Raw Data</param>
-        /// <returns>SlaveStatus</returns>
-        public static Enums.SlaveStatus GetSlaveStatus(uint rawData)
+        /// <returns>High of uint</returns>
+        public static ushort GetHighUShort(uint rawData) => (ushort)((rawData >> 16) & 0xFFFF);
+
+        /// <summary>
+        /// Gets high part of UShort from raw data where low part is byte (bits 23..8)
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>High part of int, minus byte</returns>
+        public static ushort GetHighUShortWithLowByte(uint rawData) => (ushort)((rawData >> 8) & 0xFFFF);
+
+        /// <summary>
+        /// Gets Int from raw data (low 32-bits)
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>Int Response</returns>
+        public static int GetInt(uint rawData) => (int)(rawData & 0xFFFFFFFFu);
+
+        /// <summary>
+        /// Gets Low part of Byte from raw data (bits 7..0 of 16-bit data field)
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>Low part of uint</returns>
+        public static byte GetLowByte(uint rawData)
         {
-            var data = GetHighByte(rawData);
-            return (Enums.SlaveStatus)data;
+            var temp = GetUInt(rawData);
+            return (byte)(temp & 0xFF);
         }
+
+        /// <summary>
+        /// Gets Low part of Int from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>Low of int</returns>
+        public static short GetLowShort(uint rawData)
+        {
+            var temp = GetInt(rawData);
+            return (short)(temp & 0xFFFF);
+        }
+
+        /// <summary>
+        /// Gets low part of UShort from raw data (bits 15..0)
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>Low part of uint</returns>
+        public static ushort GetLowUShort(uint rawData) => (ushort)(rawData & 0xFFFF);
+
         /// <summary>
         /// Gets Master Configuration from raw data
         /// </summary>
@@ -175,46 +135,45 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             var data = GetLowByte(rawData);
             return (Enums.MasterConfiguration)data;
         }
+
         /// <summary>
-        /// Gets Slave Configuration from raw data
+        /// Gets Master Status from raw data
         /// </summary>
         /// <param name="rawData">Raw Data</param>
-        /// <returns>SlaveConfiguration</returns>
-        public static Enums.SlaveConfiguration GetSlaveConfiguration(uint rawData)
+        /// <returns>MasterStatus</returns>
+        public static Enums.MasterStatus GetMasterStatus(uint rawData)
         {
             var data = GetLowByte(rawData);
-            return (Enums.SlaveConfiguration)data;
+            return (Enums.MasterStatus)data;
         }
+
         /// <summary>
-        /// Gets Application Specific Fault Flags from raw data
+        /// Extracts MessageID (bits 16..23) from a 32-bit OpenTherm frame.
         /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>ApplicationSpecificFaultFlags</returns>
-        public static Enums.ApplicationSpecificFaultFlags GetApplicationSpecificFaultFlags(uint rawData)
-        {
-            var data = GetLowByte(rawData);
-            return (Enums.ApplicationSpecificFaultFlags)data;
-        }
+        public static MessageID GetMessageID(uint rawData) => (MessageID)((rawData >> 16) & 0xFF);
+
+        // ---------------------------
+        // Header helpers (type/id)
+        // ---------------------------
         /// <summary>
-        /// Gets Remote Parameter Transfer Enable from raw data
+        /// Extracts MessageType (bits 28..30) from a 32-bit OpenTherm frame.
         /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>RemoteParameterTransferEnable</returns>
-        public static Enums.RemoteParameterTransferEnable GetRemoteParameterTransferEnable(uint rawData)
-        {
-            var data = GetLowByte(rawData);
-            return (Enums.RemoteParameterTransferEnable)data;
-        }
+        public static MessageType GetMessageType(uint rawData) => (MessageType)((rawData >> 28) & 0x7);
+
         /// <summary>
-        /// Gets Remote Parameter Transfer Read Write from raw data
+        /// Gets raw temperature from float
         /// </summary>
-        /// <param name="rawData">Raw Data</param>
-        /// <returns>RemoteParameterTransferReadWrite</returns>
-        public static Enums.RemoteParameterTransferReadWrite GetRemoteParameterTransferReadWrite(uint rawData)
+        /// <param name="temperature">Temperature</param>
+        /// <returns>Uint Raw Temperature</returns>
+        public static uint GetRawTemperature(float temperature)
         {
-            var data = GetHighByte(rawData);
-            return (Enums.RemoteParameterTransferReadWrite)data;
+            if (temperature < 0)
+                temperature = 0;
+            if (temperature > 100)
+                temperature = 100;
+            return (uint)(temperature * 256);
         }
+
         /// <summary>
         /// Gets Remote Override Function from raw data
         /// </summary>
@@ -226,100 +185,182 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             return (Enums.RemoteOverrideFunction)data;
         }
 
-    // ---------------------------
-    // Header helpers (type/id)
-    // ---------------------------
-    /// <summary>
-    /// Extracts MessageType (bits 28..30) from a 32-bit OpenTherm frame.
-    /// </summary>
-    public static MessageType GetMessageType(uint rawData) => (MessageType)((rawData >> 28) & 0x7);
-    /// <summary>
-    /// Extracts MessageID (bits 16..23) from a 32-bit OpenTherm frame.
-    /// </summary>
-    public static MessageID GetMessageID(uint rawData) => (MessageID)((rawData >> 16) & 0xFF);
+        /// <summary>
+        /// Gets Remote Parameter Transfer Enable from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>RemoteParameterTransferEnable</returns>
+        public static Enums.RemoteParameterTransferEnable GetRemoteParameterTransferEnable(uint rawData)
+        {
+            var data = GetLowByte(rawData);
+            return (Enums.RemoteParameterTransferEnable)data;
+        }
 
-    // ---------------------------
-    // Set helpers (symmetric API)
-    // ---------------------------
-    /// <summary>
-    /// Compose a 16-bit payload from high and low bytes.
-    /// </summary>
-    public static ushort MakeUShort(byte high, byte low) => (ushort)((high << 8) | low);
-    /// <summary>
-    /// Replace the low byte of a 16-bit value.
-    /// </summary>
-    public static ushort SetLowByte(ushort data, byte low) => (ushort)((data & 0xFF00) | low);
-    /// <summary>
-    /// Replace the high byte of a 16-bit value.
-    /// </summary>
-    public static ushort SetHighByte(ushort data, byte high) => (ushort)((data & 0x00FF) | (high << 8));
+        /// <summary>
+        /// Gets Remote Parameter Transfer Read Write from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>RemoteParameterTransferReadWrite</returns>
+        public static Enums.RemoteParameterTransferReadWrite GetRemoteParameterTransferReadWrite(uint rawData)
+        {
+            var data = GetHighByte(rawData);
+            return (Enums.RemoteParameterTransferReadWrite)data;
+        }
 
-    /// <summary>Convert <see cref="Enums.MasterStatus"/> flags to byte.</summary>
-    public static byte SetMasterStatus(Enums.MasterStatus value) => (byte)value;
-    /// <summary>Convert <see cref="Enums.SlaveStatus"/> flags to byte.</summary>
-    public static byte SetSlaveStatus(Enums.SlaveStatus value) => (byte)value;
-    /// <summary>Convert <see cref="Enums.MasterConfiguration"/> flags to byte.</summary>
-    public static byte SetMasterConfiguration(Enums.MasterConfiguration value) => (byte)value;
-    /// <summary>Convert <see cref="Enums.SlaveConfiguration"/> flags to byte.</summary>
-    public static byte SetSlaveConfiguration(Enums.SlaveConfiguration value) => (byte)value;
-    /// <summary>Convert <see cref="Enums.ApplicationSpecificFaultFlags"/> flags to byte.</summary>
-    public static byte SetApplicationSpecificFaultFlags(Enums.ApplicationSpecificFaultFlags value) => (byte)value;
-    /// <summary>Convert <see cref="Enums.RemoteParameterTransferEnable"/> flags to byte.</summary>
-    public static byte SetRemoteParameterTransferEnable(Enums.RemoteParameterTransferEnable value) => (byte)value;
-    /// <summary>Convert <see cref="Enums.RemoteParameterTransferReadWrite"/> flags to byte.</summary>
-    public static byte SetRemoteParameterTransferReadWrite(Enums.RemoteParameterTransferReadWrite value) => (byte)value;
-    /// <summary>Convert <see cref="Enums.RemoteOverrideFunction"/> flags to byte.</summary>
-    public static byte SetRemoteOverrideFunction(Enums.RemoteOverrideFunction value) => (byte)value;
+        /// <summary>
+        /// Gets Slave Configuration from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>SlaveConfiguration</returns>
+        public static Enums.SlaveConfiguration GetSlaveConfiguration(uint rawData)
+        {
+            var data = GetLowByte(rawData);
+            return (Enums.SlaveConfiguration)data;
+        }
+
+        /// <summary>
+        /// Gets Slave Status from raw data
+        /// </summary>
+        /// <param name="rawData">Raw Data</param>
+        /// <returns>SlaveStatus</returns>
+        public static Enums.SlaveStatus GetSlaveStatus(uint rawData)
+        {
+            var data = GetHighByte(rawData);
+            return (Enums.SlaveStatus)data;
+        }
+
+        //TODO: Move to base solution
+        /// <summary>
+        /// Get Uint from raw data (low 16-bits data field)
+        /// </summary>
+        /// <returns>Uint Response</returns>
+        public static uint GetUInt(uint rawData) => rawData & 0xffffu;
 
         // ---------------------------
         // Flag helpers (set/get)
         // ---------------------------
-    /// <summary>Checks if a MasterStatus flag is set.</summary>
-    public static bool IsSet(Enums.MasterStatus value, Enums.MasterStatus flag) => (value & flag) == flag;
-    /// <summary>Sets or clears a MasterStatus flag by reference.</summary>
-    public static void SetFlag(ref Enums.MasterStatus value, Enums.MasterStatus flag, bool set)
-    { if (set) value |= flag; else value &= ~flag; }
+        /// <summary>Checks if a MasterStatus flag is set.</summary>
+        public static bool IsSet(this Enums.MasterStatus value, Enums.MasterStatus flag) => (value & flag) == flag;
 
-    /// <summary>Checks if a SlaveStatus flag is set.</summary>
-    public static bool IsSet(Enums.SlaveStatus value, Enums.SlaveStatus flag) => (value & flag) == flag;
-    /// <summary>Sets or clears a SlaveStatus flag by reference.</summary>
-    public static void SetFlag(ref Enums.SlaveStatus value, Enums.SlaveStatus flag, bool set)
-    { if (set) value |= flag; else value &= ~flag; }
+        /// <summary>Checks if a SlaveStatus flag is set.</summary>
+        public static bool IsSet(this Enums.SlaveStatus value, Enums.SlaveStatus flag) => (value & flag) == flag;
 
-    /// <summary>Checks if a MasterConfiguration flag is set.</summary>
-    public static bool IsSet(Enums.MasterConfiguration value, Enums.MasterConfiguration flag) => (value & flag) == flag;
-    /// <summary>Sets or clears a MasterConfiguration flag by reference.</summary>
-    public static void SetFlag(ref Enums.MasterConfiguration value, Enums.MasterConfiguration flag, bool set)
-    { if (set) value |= flag; else value &= ~flag; }
+        /// <summary>Checks if a MasterConfiguration flag is set.</summary>
+        public static bool IsSet(this Enums.MasterConfiguration value, Enums.MasterConfiguration flag) => (value & flag) == flag;
 
-    /// <summary>Checks if a SlaveConfiguration flag is set.</summary>
-    public static bool IsSet(Enums.SlaveConfiguration value, Enums.SlaveConfiguration flag) => (value & flag) == flag;
-    /// <summary>Sets or clears a SlaveConfiguration flag by reference.</summary>
-    public static void SetFlag(ref Enums.SlaveConfiguration value, Enums.SlaveConfiguration flag, bool set)
-    { if (set) value |= flag; else value &= ~flag; }
+        /// <summary>Checks if a SlaveConfiguration flag is set.</summary>
+        public static bool IsSet(this Enums.SlaveConfiguration value, Enums.SlaveConfiguration flag) => (value & flag) == flag;
 
-    /// <summary>Checks if an ApplicationSpecificFaultFlags flag is set.</summary>
-    public static bool IsSet(Enums.ApplicationSpecificFaultFlags value, Enums.ApplicationSpecificFaultFlags flag) => (value & flag) == flag;
-    /// <summary>Sets or clears an ApplicationSpecificFaultFlags flag by reference.</summary>
-    public static void SetFlag(ref Enums.ApplicationSpecificFaultFlags value, Enums.ApplicationSpecificFaultFlags flag, bool set)
-    { if (set) value |= flag; else value &= ~flag; }
+        /// <summary>Checks if an ApplicationSpecificFaultFlags flag is set.</summary>
+        public static bool IsSet(this Enums.ApplicationSpecificFaultFlags value, Enums.ApplicationSpecificFaultFlags flag) => (value & flag) == flag;
 
-    /// <summary>Checks if a RemoteParameterTransferEnable flag is set.</summary>
-    public static bool IsSet(Enums.RemoteParameterTransferEnable value, Enums.RemoteParameterTransferEnable flag) => (value & flag) == flag;
-    /// <summary>Sets or clears a RemoteParameterTransferEnable flag by reference.</summary>
-    public static void SetFlag(ref Enums.RemoteParameterTransferEnable value, Enums.RemoteParameterTransferEnable flag, bool set)
-    { if (set) value |= flag; else value &= ~flag; }
+        /// <summary>Checks if a RemoteParameterTransferEnable flag is set.</summary>
+        public static bool IsSet(this Enums.RemoteParameterTransferEnable value, Enums.RemoteParameterTransferEnable flag) => (value & flag) == flag;
 
-    /// <summary>Checks if a RemoteParameterTransferReadWrite flag is set.</summary>
-    public static bool IsSet(Enums.RemoteParameterTransferReadWrite value, Enums.RemoteParameterTransferReadWrite flag) => (value & flag) == flag;
-    /// <summary>Sets or clears a RemoteParameterTransferReadWrite flag by reference.</summary>
-    public static void SetFlag(ref Enums.RemoteParameterTransferReadWrite value, Enums.RemoteParameterTransferReadWrite flag, bool set)
-    { if (set) value |= flag; else value &= ~flag; }
+        /// <summary>Checks if a RemoteParameterTransferReadWrite flag is set.</summary>
+        public static bool IsSet(this Enums.RemoteParameterTransferReadWrite value, Enums.RemoteParameterTransferReadWrite flag) => (value & flag) == flag;
 
-    /// <summary>Checks if a RemoteOverrideFunction flag is set.</summary>
-    public static bool IsSet(Enums.RemoteOverrideFunction value, Enums.RemoteOverrideFunction flag) => (value & flag) == flag;
-    /// <summary>Sets or clears a RemoteOverrideFunction flag by reference.</summary>
-    public static void SetFlag(ref Enums.RemoteOverrideFunction value, Enums.RemoteOverrideFunction flag, bool set)
-    { if (set) value |= flag; else value &= ~flag; }
+        /// <summary>Checks if a RemoteOverrideFunction flag is set.</summary>
+        public static bool IsSet(this Enums.RemoteOverrideFunction value, Enums.RemoteOverrideFunction flag) => (value & flag) == flag;
+
+        /// <summary>
+        /// Compose a 16-bit payload from high and low bytes.
+        /// </summary>
+        public static ushort MakeUShort(byte high, byte low) => (ushort)((high << 8) | low);
+
+        /// <summary>
+        /// If under 0 returns 0, if over 100 returns 100, else returns input
+        /// </summary>
+        /// <param name="input">Float to normalize</param>
+        /// <returns>Normalized float</returns>
+        public static float Normalize(this float input)
+        {
+            return input < 0 ? 0 : (input > 100 ? 100 : input);
+        }
+
+        /// <summary>
+        /// Parity check for a frame
+        /// </summary>
+        /// <param name="frame">Frame to check on</param>
+        /// <returns>Parity (true when number of 1 bits is odd)</returns>
+        public static bool Parity(uint frame)
+        {
+            byte p = 0;
+            while (frame > 0)
+            {
+                if ((frame & 1) == 1)
+                    p++;
+                frame >>= 1;
+            }
+            return (p & 1) == 1;
+        }
+
+        /// <summary>Convert <see cref="Enums.ApplicationSpecificFaultFlags"/> flags to byte.</summary>
+        public static byte SetApplicationSpecificFaultFlags(Enums.ApplicationSpecificFaultFlags value) => (byte)value;
+
+        /// <summary>Sets or clears a MasterStatus flag by reference.</summary>
+        public static Enums.MasterStatus SetFlag(this Enums.MasterStatus value, Enums.MasterStatus flag, bool set)
+        { if (set) value |= flag; else value &= ~flag; return value; }
+
+        /// <summary>Sets or clears a SlaveStatus flag by reference.</summary>
+        public static Enums.SlaveStatus SetFlag(this Enums.SlaveStatus value, Enums.SlaveStatus flag, bool set)
+        { if (set) value |= flag; else value &= ~flag; return value; }
+
+        /// <summary>Sets or clears a MasterConfiguration flag by reference.</summary>
+        public static Enums.MasterConfiguration SetFlag(this Enums.MasterConfiguration value, Enums.MasterConfiguration flag, bool set)
+        { if (set) value |= flag; else value &= ~flag; return value; }
+
+        /// <summary>Sets or clears a SlaveConfiguration flag by reference.</summary>
+        public static Enums.SlaveConfiguration SetFlag(this Enums.SlaveConfiguration value, Enums.SlaveConfiguration flag, bool set)
+        { if (set) value |= flag; else value &= ~flag; return value; }
+
+        /// <summary>Sets or clears an ApplicationSpecificFaultFlags flag by reference.</summary>
+        public static Enums.ApplicationSpecificFaultFlags SetFlag(this Enums.ApplicationSpecificFaultFlags value, Enums.ApplicationSpecificFaultFlags flag, bool set)
+        { if (set) value |= flag; else value &= ~flag; return value; }
+
+        /// <summary>Sets or clears a RemoteParameterTransferEnable flag by reference.</summary>
+        public static Enums.RemoteParameterTransferEnable SetFlag(this Enums.RemoteParameterTransferEnable value, Enums.RemoteParameterTransferEnable flag, bool set)
+        { if (set) value |= flag; else value &= ~flag; return value; }
+
+        /// <summary>Sets or clears a RemoteParameterTransferReadWrite flag by reference.</summary>
+        public static Enums.RemoteParameterTransferReadWrite SetFlag(this Enums.RemoteParameterTransferReadWrite value, Enums.RemoteParameterTransferReadWrite flag, bool set)
+        { if (set) value |= flag; else value &= ~flag; return value; }
+
+        /// <summary>Sets or clears a RemoteOverrideFunction flag by reference.</summary>
+        public static Enums.RemoteOverrideFunction SetFlag(this Enums.RemoteOverrideFunction value, Enums.RemoteOverrideFunction flag, bool set)
+        { if (set) value |= flag; else value &= ~flag; return value; }
+
+        /// <summary>
+        /// Replace the high byte of a 16-bit value.
+        /// </summary>
+        public static ushort SetHighByte(ushort data, byte high) => (ushort)((data & 0x00FF) | (high << 8));
+
+        /// <summary>
+        /// Replace the low byte of a 16-bit value.
+        /// </summary>
+        public static ushort SetLowByte(ushort data, byte low) => (ushort)((data & 0xFF00) | low);
+
+        /// <summary>Convert <see cref="Enums.MasterConfiguration"/> flags to byte.</summary>
+        public static byte SetMasterConfiguration(Enums.MasterConfiguration value) => (byte)value;
+
+        /// <summary>Convert <see cref="Enums.MasterStatus"/> flags to byte.</summary>
+        public static byte SetMasterStatus(Enums.MasterStatus value) => (byte)value;
+
+        /// <summary>Convert <see cref="Enums.RemoteOverrideFunction"/> flags to byte.</summary>
+        public static byte SetRemoteOverrideFunction(Enums.RemoteOverrideFunction value) => (byte)value;
+
+        /// <summary>Convert <see cref="Enums.RemoteParameterTransferEnable"/> flags to byte.</summary>
+        public static byte SetRemoteParameterTransferEnable(Enums.RemoteParameterTransferEnable value) => (byte)value;
+
+        /// <summary>Convert <see cref="Enums.RemoteParameterTransferReadWrite"/> flags to byte.</summary>
+        public static byte SetRemoteParameterTransferReadWrite(Enums.RemoteParameterTransferReadWrite value) => (byte)value;
+
+        /// <summary>Convert <see cref="Enums.SlaveConfiguration"/> flags to byte.</summary>
+        public static byte SetSlaveConfiguration(Enums.SlaveConfiguration value) => (byte)value;
+
+        /// <summary>Convert <see cref="Enums.SlaveStatus"/> flags to byte.</summary>
+        public static byte SetSlaveStatus(Enums.SlaveStatus value) => (byte)value;
+
+        #endregion Public Methods
     }
 }

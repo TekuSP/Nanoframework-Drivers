@@ -43,16 +43,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// </summary>
     public bool DHWSetpointEnable
         {
-            get => Utilities.IsSet(_enable, RemoteParameterTransferEnable.DHWSetpoint);
-            set => Utilities.SetFlag(ref _enable, RemoteParameterTransferEnable.DHWSetpoint, value);
+            get => _enable.IsSet(RemoteParameterTransferEnable.DHWSetpoint);
+            set => _enable = _enable.SetFlag(RemoteParameterTransferEnable.DHWSetpoint, value);
         }
         /// <summary>
         /// Maximum CH (Central Heating) setpoint.
         /// </summary>
     public bool MaxCHSetpointEnable
         {
-            get => Utilities.IsSet(_enable, RemoteParameterTransferEnable.MaxCHSetpoint);
-            set => Utilities.SetFlag(ref _enable, RemoteParameterTransferEnable.MaxCHSetpoint, value);
+            get => _enable.IsSet(RemoteParameterTransferEnable.MaxCHSetpoint);
+            set => _enable = _enable.SetFlag(RemoteParameterTransferEnable.MaxCHSetpoint, value);
         }
 
         /// <summary>
@@ -60,16 +60,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// </summary>
     public bool DHWSetpointReadWrite
         {
-            get => Utilities.IsSet(_rw, RemoteParameterTransferReadWrite.DHWSetpoint);
-            set => Utilities.SetFlag(ref _rw, RemoteParameterTransferReadWrite.DHWSetpoint, value);
+            get => _rw.IsSet(RemoteParameterTransferReadWrite.DHWSetpoint);
+            set => _rw = _rw.SetFlag(RemoteParameterTransferReadWrite.DHWSetpoint, value);
         }
         /// <summary>
         /// Maximum CH (Central Heating) setpoint.
         /// </summary>
     public bool MaxCHSetpointReadWrite
         {
-            get => Utilities.IsSet(_rw, RemoteParameterTransferReadWrite.MaxCHSetpoint);
-            set => Utilities.SetFlag(ref _rw, RemoteParameterTransferReadWrite.MaxCHSetpoint, value);
+            get => _rw.IsSet(RemoteParameterTransferReadWrite.MaxCHSetpoint);
+            set => _rw = _rw.SetFlag(RemoteParameterTransferReadWrite.MaxCHSetpoint, value);
         }
     }
 }

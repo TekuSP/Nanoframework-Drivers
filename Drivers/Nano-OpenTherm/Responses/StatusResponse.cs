@@ -36,81 +36,81 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             _slaveStatus = Utilities.GetSlaveStatus(value);
         }
 
-    public override MessageType MessageType { get; set; }
-    public override MessageID MessageID => MessageID.Status;
+        public override MessageType MessageType { get; set; }
+        public override MessageID MessageID => MessageID.Status;
 
-    /// <summary>Master: Central Heating enable flag.</summary>
-    public bool MasterIsCentralHeatingActive
+        /// <summary>Master: Central Heating enable flag.</summary>
+        public bool MasterIsCentralHeatingActive
         {
-            get => Utilities.IsSet(_masterStatus, MasterStatus.CHEnabled);
-            set => Utilities.SetFlag(ref _masterStatus, MasterStatus.CHEnabled, value);
+            get => _masterStatus.IsSet(MasterStatus.CHEnabled);
+            set => _masterStatus = _masterStatus.SetFlag(MasterStatus.CHEnabled, value);
         }
-    /// <summary>Master: Domestic Hot Water enable flag.</summary>
-    public bool MasterIsHotWaterActive
+        /// <summary>Master: Domestic Hot Water enable flag.</summary>
+        public bool MasterIsHotWaterActive
         {
-            get => Utilities.IsSet(_masterStatus, MasterStatus.DHWEnabled);
-            set => Utilities.SetFlag(ref _masterStatus, MasterStatus.DHWEnabled, value);
+            get => _masterStatus.IsSet(MasterStatus.DHWEnabled);
+            set => _masterStatus = _masterStatus.SetFlag(MasterStatus.DHWEnabled, value);
         }
-    /// <summary>Master: Cooling enable flag.</summary>
-    public bool MasterIsCoolingActive
+        /// <summary>Master: Cooling enable flag.</summary>
+        public bool MasterIsCoolingActive
         {
-            get => Utilities.IsSet(_masterStatus, MasterStatus.CoolingEnabled);
-            set => Utilities.SetFlag(ref _masterStatus, MasterStatus.CoolingEnabled, value);
+            get => _masterStatus.IsSet(MasterStatus.CoolingEnabled);
+            set => _masterStatus = _masterStatus.SetFlag(MasterStatus.CoolingEnabled, value);
         }
-    /// <summary>Master: Outside Temperature Compensation active.</summary>
-    public bool MasterOTCActive
+        /// <summary>Master: Outside Temperature Compensation active.</summary>
+        public bool MasterOTCActive
         {
-            get => Utilities.IsSet(_masterStatus, MasterStatus.OTCActive);
-            set => Utilities.SetFlag(ref _masterStatus, MasterStatus.OTCActive, value);
+            get => _masterStatus.IsSet(MasterStatus.OTCActive);
+            set => _masterStatus = _masterStatus.SetFlag(MasterStatus.OTCActive, value);
         }
-    /// <summary>Master: CH2 enable flag.</summary>
-    public bool MasterIsCentralHeating2Active
+        /// <summary>Master: CH2 enable flag.</summary>
+        public bool MasterIsCentralHeating2Active
         {
-            get => Utilities.IsSet(_masterStatus, MasterStatus.CH2Enabled);
-            set => Utilities.SetFlag(ref _masterStatus, MasterStatus.CH2Enabled, value);
+            get => _masterStatus.IsSet(MasterStatus.CH2Enabled);
+            set => _masterStatus = _masterStatus.SetFlag(MasterStatus.CH2Enabled, value);
         }
 
-    /// <summary>Slave: Fault indication.</summary>
-    public bool SlaveIsFault
+        /// <summary>Slave: Fault indication.</summary>
+        public bool SlaveIsFault
         {
-            get => Utilities.IsSet(_slaveStatus, SlaveStatus.FaultIndication);
-            set => Utilities.SetFlag(ref _slaveStatus, SlaveStatus.FaultIndication, value);
+            get => _slaveStatus.IsSet(SlaveStatus.FaultIndication);
+            set => _slaveStatus = _slaveStatus.SetFlag(SlaveStatus.FaultIndication, value);
         }
-    /// <summary>Slave: Central Heating mode.</summary>
-    public bool SlaveIsCentralHeatingActive
+        /// <summary>Slave: Central Heating mode.</summary>
+        public bool SlaveIsCentralHeatingActive
         {
-            get => Utilities.IsSet(_slaveStatus, SlaveStatus.CHMode);
-            set => Utilities.SetFlag(ref _slaveStatus, SlaveStatus.CHMode, value);
+            get => _slaveStatus.IsSet(SlaveStatus.CHMode);
+            set => _slaveStatus = _slaveStatus.SetFlag(SlaveStatus.CHMode, value);
         }
-    /// <summary>Slave: Domestic Hot Water mode.</summary>
-    public bool SlaveIsHotWaterActive
+        /// <summary>Slave: Domestic Hot Water mode.</summary>
+        public bool SlaveIsHotWaterActive
         {
-            get => Utilities.IsSet(_slaveStatus, SlaveStatus.DHWMode);
-            set => Utilities.SetFlag(ref _slaveStatus, SlaveStatus.DHWMode, value);
+            get => _slaveStatus.IsSet(SlaveStatus.DHWMode);
+            set => _slaveStatus = _slaveStatus.SetFlag(SlaveStatus.DHWMode, value);
         }
-    /// <summary>Slave: Flame status.</summary>
-    public bool SlaveIsFlameOn
+        /// <summary>Slave: Flame status.</summary>
+        public bool SlaveIsFlameOn
         {
-            get => Utilities.IsSet(_slaveStatus, SlaveStatus.FlameStatus);
-            set => Utilities.SetFlag(ref _slaveStatus, SlaveStatus.FlameStatus, value);
+            get => _slaveStatus.IsSet(SlaveStatus.FlameStatus);
+            set => _slaveStatus = _slaveStatus.SetFlag(SlaveStatus.FlameStatus, value);
         }
-    /// <summary>Slave: Cooling status.</summary>
-    public bool SlaveIsCoolingActive
+        /// <summary>Slave: Cooling status.</summary>
+        public bool SlaveIsCoolingActive
         {
-            get => Utilities.IsSet(_slaveStatus, SlaveStatus.CoolingStatus);
-            set => Utilities.SetFlag(ref _slaveStatus, SlaveStatus.CoolingStatus, value);
+            get => _slaveStatus.IsSet(SlaveStatus.CoolingStatus);
+            set => _slaveStatus = _slaveStatus.SetFlag(SlaveStatus.CoolingStatus, value);
         }
-    /// <summary>Slave: CH2 mode.</summary>
-    public bool SlaveIsCentralHeating2Active
+        /// <summary>Slave: CH2 mode.</summary>
+        public bool SlaveIsCentralHeating2Active
         {
-            get => Utilities.IsSet(_slaveStatus, SlaveStatus.CH2Mode);
-            set => Utilities.SetFlag(ref _slaveStatus, SlaveStatus.CH2Mode, value);
+            get => _slaveStatus.IsSet(SlaveStatus.CH2Mode);
+            set => _slaveStatus = _slaveStatus.SetFlag(SlaveStatus.CH2Mode, value);
         }
-    /// <summary>Slave: Diagnostic indication.</summary>
-    public bool SlaveDiagnosticIndicationActive
+        /// <summary>Slave: Diagnostic indication.</summary>
+        public bool SlaveDiagnosticIndicationActive
         {
-            get => Utilities.IsSet(_slaveStatus, SlaveStatus.DiagnosticIndication);
-            set => Utilities.SetFlag(ref _slaveStatus, SlaveStatus.DiagnosticIndication, value);
+            get => _slaveStatus.IsSet(SlaveStatus.DiagnosticIndication);
+            set => _slaveStatus = _slaveStatus.SetFlag(SlaveStatus.DiagnosticIndication, value);
         }
 
     }
