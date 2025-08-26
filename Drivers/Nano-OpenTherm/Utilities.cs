@@ -225,5 +225,101 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             var data = GetLowByte(rawData);
             return (Enums.RemoteOverrideFunction)data;
         }
+
+    // ---------------------------
+    // Header helpers (type/id)
+    // ---------------------------
+    /// <summary>
+    /// Extracts MessageType (bits 28..30) from a 32-bit OpenTherm frame.
+    /// </summary>
+    public static MessageType GetMessageType(uint rawData) => (MessageType)((rawData >> 28) & 0x7);
+    /// <summary>
+    /// Extracts MessageID (bits 16..23) from a 32-bit OpenTherm frame.
+    /// </summary>
+    public static MessageID GetMessageID(uint rawData) => (MessageID)((rawData >> 16) & 0xFF);
+
+    // ---------------------------
+    // Set helpers (symmetric API)
+    // ---------------------------
+    /// <summary>
+    /// Compose a 16-bit payload from high and low bytes.
+    /// </summary>
+    public static ushort MakeUShort(byte high, byte low) => (ushort)((high << 8) | low);
+    /// <summary>
+    /// Replace the low byte of a 16-bit value.
+    /// </summary>
+    public static ushort SetLowByte(ushort data, byte low) => (ushort)((data & 0xFF00) | low);
+    /// <summary>
+    /// Replace the high byte of a 16-bit value.
+    /// </summary>
+    public static ushort SetHighByte(ushort data, byte high) => (ushort)((data & 0x00FF) | (high << 8));
+
+    /// <summary>Convert <see cref="Enums.MasterStatus"/> flags to byte.</summary>
+    public static byte SetMasterStatus(Enums.MasterStatus value) => (byte)value;
+    /// <summary>Convert <see cref="Enums.SlaveStatus"/> flags to byte.</summary>
+    public static byte SetSlaveStatus(Enums.SlaveStatus value) => (byte)value;
+    /// <summary>Convert <see cref="Enums.MasterConfiguration"/> flags to byte.</summary>
+    public static byte SetMasterConfiguration(Enums.MasterConfiguration value) => (byte)value;
+    /// <summary>Convert <see cref="Enums.SlaveConfiguration"/> flags to byte.</summary>
+    public static byte SetSlaveConfiguration(Enums.SlaveConfiguration value) => (byte)value;
+    /// <summary>Convert <see cref="Enums.ApplicationSpecificFaultFlags"/> flags to byte.</summary>
+    public static byte SetApplicationSpecificFaultFlags(Enums.ApplicationSpecificFaultFlags value) => (byte)value;
+    /// <summary>Convert <see cref="Enums.RemoteParameterTransferEnable"/> flags to byte.</summary>
+    public static byte SetRemoteParameterTransferEnable(Enums.RemoteParameterTransferEnable value) => (byte)value;
+    /// <summary>Convert <see cref="Enums.RemoteParameterTransferReadWrite"/> flags to byte.</summary>
+    public static byte SetRemoteParameterTransferReadWrite(Enums.RemoteParameterTransferReadWrite value) => (byte)value;
+    /// <summary>Convert <see cref="Enums.RemoteOverrideFunction"/> flags to byte.</summary>
+    public static byte SetRemoteOverrideFunction(Enums.RemoteOverrideFunction value) => (byte)value;
+
+        // ---------------------------
+        // Flag helpers (set/get)
+        // ---------------------------
+    /// <summary>Checks if a MasterStatus flag is set.</summary>
+    public static bool IsSet(Enums.MasterStatus value, Enums.MasterStatus flag) => (value & flag) == flag;
+    /// <summary>Sets or clears a MasterStatus flag by reference.</summary>
+    public static void SetFlag(ref Enums.MasterStatus value, Enums.MasterStatus flag, bool set)
+    { if (set) value |= flag; else value &= ~flag; }
+
+    /// <summary>Checks if a SlaveStatus flag is set.</summary>
+    public static bool IsSet(Enums.SlaveStatus value, Enums.SlaveStatus flag) => (value & flag) == flag;
+    /// <summary>Sets or clears a SlaveStatus flag by reference.</summary>
+    public static void SetFlag(ref Enums.SlaveStatus value, Enums.SlaveStatus flag, bool set)
+    { if (set) value |= flag; else value &= ~flag; }
+
+    /// <summary>Checks if a MasterConfiguration flag is set.</summary>
+    public static bool IsSet(Enums.MasterConfiguration value, Enums.MasterConfiguration flag) => (value & flag) == flag;
+    /// <summary>Sets or clears a MasterConfiguration flag by reference.</summary>
+    public static void SetFlag(ref Enums.MasterConfiguration value, Enums.MasterConfiguration flag, bool set)
+    { if (set) value |= flag; else value &= ~flag; }
+
+    /// <summary>Checks if a SlaveConfiguration flag is set.</summary>
+    public static bool IsSet(Enums.SlaveConfiguration value, Enums.SlaveConfiguration flag) => (value & flag) == flag;
+    /// <summary>Sets or clears a SlaveConfiguration flag by reference.</summary>
+    public static void SetFlag(ref Enums.SlaveConfiguration value, Enums.SlaveConfiguration flag, bool set)
+    { if (set) value |= flag; else value &= ~flag; }
+
+    /// <summary>Checks if an ApplicationSpecificFaultFlags flag is set.</summary>
+    public static bool IsSet(Enums.ApplicationSpecificFaultFlags value, Enums.ApplicationSpecificFaultFlags flag) => (value & flag) == flag;
+    /// <summary>Sets or clears an ApplicationSpecificFaultFlags flag by reference.</summary>
+    public static void SetFlag(ref Enums.ApplicationSpecificFaultFlags value, Enums.ApplicationSpecificFaultFlags flag, bool set)
+    { if (set) value |= flag; else value &= ~flag; }
+
+    /// <summary>Checks if a RemoteParameterTransferEnable flag is set.</summary>
+    public static bool IsSet(Enums.RemoteParameterTransferEnable value, Enums.RemoteParameterTransferEnable flag) => (value & flag) == flag;
+    /// <summary>Sets or clears a RemoteParameterTransferEnable flag by reference.</summary>
+    public static void SetFlag(ref Enums.RemoteParameterTransferEnable value, Enums.RemoteParameterTransferEnable flag, bool set)
+    { if (set) value |= flag; else value &= ~flag; }
+
+    /// <summary>Checks if a RemoteParameterTransferReadWrite flag is set.</summary>
+    public static bool IsSet(Enums.RemoteParameterTransferReadWrite value, Enums.RemoteParameterTransferReadWrite flag) => (value & flag) == flag;
+    /// <summary>Sets or clears a RemoteParameterTransferReadWrite flag by reference.</summary>
+    public static void SetFlag(ref Enums.RemoteParameterTransferReadWrite value, Enums.RemoteParameterTransferReadWrite flag, bool set)
+    { if (set) value |= flag; else value &= ~flag; }
+
+    /// <summary>Checks if a RemoteOverrideFunction flag is set.</summary>
+    public static bool IsSet(Enums.RemoteOverrideFunction value, Enums.RemoteOverrideFunction flag) => (value & flag) == flag;
+    /// <summary>Sets or clears a RemoteOverrideFunction flag by reference.</summary>
+    public static void SetFlag(ref Enums.RemoteOverrideFunction value, Enums.RemoteOverrideFunction flag, bool set)
+    { if (set) value |= flag; else value &= ~flag; }
     }
 }

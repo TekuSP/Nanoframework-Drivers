@@ -10,27 +10,39 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     public abstract class Response : IOpenThermData
     {
         /// <summary>
-        /// Raw uint data from OpenTherm device
+        /// Encoded 32-bit OpenTherm frame for this response.
+        /// Derived classes should pack/unpack payload in <see cref="GetRawDataCore"/>/<see cref="SetRawDataCore"/>.
         /// </summary>
-        public abstract uint RawData
+        public uint RawData
         {
-            get;
-            set;
+            get => GetRawDataCore();
+            set => SetRawDataCore(value);
         }
 
-        public abstract MessageType MessageType
-        {
-            get;
-        }
+        /// <summary>
+        /// Derived classes encode the frame here by packing current properties and calling <see cref="ProcessResponse(uint)"/>.
+        /// </summary>
+        protected abstract uint GetRawDataCore();
+        /// <summary>
+        /// Derived classes decode the provided frame here, updating their properties from the low 16-bit payload.
+        /// </summary>
+        protected abstract void SetRawDataCore(uint value);
+
+    public abstract MessageType MessageType { get; set; }
 
         public abstract MessageID MessageID
         {
             get;
         }
         /// <summary>
-        /// Automatically selects correct cast of Response
+        /// Creates a strongly-typed response wrapper based on <see cref="MessageID"/>.
         /// </summary>
-        /// <returns>Casted Response</returns>
+        /// <remarks>
+        /// Use this after parsing a raw frame (e.g., from <see cref="ReceivedResponse"/>)
+        /// to obtain a convenient model with decoded properties for the given message.
+        /// For unknown IDs, returns <c>this</c> unchanged so callers can still access <see cref="RawData"/>.
+        /// </remarks>
+        /// <returns>New typed <see cref="Response"/> instance where applicable; otherwise <c>this</c>.</returns>
         public Response SelectResponse()
         {
             switch (MessageID)
@@ -39,6 +51,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                     return new StatusResponse(this);
                 case MessageID.SConfigSMemberIDcode:
                     return new SlaveConfigResponse(this);
+                case MessageID.SConfigSMemberIDcodeSolarStorage:
+                    return new SolarStorageSConfigResponse(this);
                 case MessageID.ASFflags:
                     return new ApplicationFaultCodesResponse(this);
                 case MessageID.RBPflags:
@@ -100,10 +114,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.TdhwSetUBTdhwSetLB:
                     break;
                 case MessageID.MaxTSetUBMaxTSetLB:
-                    break;
-                case MessageID.TdhwSet:
-                    break;
-                case MessageID.MaxTSet:
                     break;
                 case MessageID.StatusVentilationHeatRecovery:
                     break;
@@ -169,26 +179,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                     break;
                 case MessageID.ASFflagsOEMfaultCodeSolarStorage:
                     break;
-                case MessageID.SConfigSMemberIDcodeSolarStorage:
-                    break;
-                case MessageID.SolarStorageVersion:
-                    break;
-                case MessageID.TSPSolarStorage:
-                    break;
-                case MessageID.TSPindexTSPvalueSolarStorage:
-                    break;
-                case MessageID.FHBsizeSolarStorage:
-                    break;
-                case MessageID.FHBindexFHBvalueSolarStorage:
-                    break;
-                case MessageID.ElectricityProducerStarts:
-                    break;
-                case MessageID.ElectricityProducerHours:
-                    break;
-                case MessageID.ElectricityProduction:
-                    break;
-                case MessageID.CumulativElectricityProduction:
-                    break;
                 case MessageID.UnsuccessfulBurnerStarts:
                     break;
                 case MessageID.FlameSignalTooLowNumber:
@@ -211,6 +201,24 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                     break;
                 case MessageID.DHWBurnerOperationHours:
                     break;
+                case MessageID.SolarStorageVersion:
+                    break;
+                case MessageID.TSPSolarStorage:
+                    break;
+                case MessageID.TSPindexTSPvalueSolarStorage:
+                    break;
+                case MessageID.FHBsizeSolarStorage:
+                    break;
+                case MessageID.FHBindexFHBvalueSolarStorage:
+                    break;
+                case MessageID.ElectricityProducerStarts:
+                    break;
+                case MessageID.ElectricityProducerHours:
+                    break;
+                case MessageID.ElectricityProduction:
+                    break;
+                case MessageID.CumulativElectricityProduction:
+                    break;
                 case MessageID.OpenThermVersionSlave:
                     break;
                 case MessageID.SlaveVersion:
@@ -218,7 +226,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 default:
                     return this;
             }
-            return this; //TODO REMOVE
+            // Unreachable
         }
 
         /// <summary>

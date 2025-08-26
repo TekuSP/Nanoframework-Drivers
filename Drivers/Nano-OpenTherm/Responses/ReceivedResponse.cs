@@ -4,30 +4,22 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     public class ReceivedResponse : Response
     {
+        private uint _raw;
+
         /// <summary>
-        /// Initializes RawResponse
+        /// Initializes from a raw OpenTherm frame, decoding type and ID.
         /// </summary>
         public ReceivedResponse(uint rawData)
         {
-            RawData = rawData;
-            MessageType = (MessageType)(rawData >> 28 & 7);
-            MessageID = (MessageID)(rawData >> 16 & 0xFF);
+            SetRawDataCore(rawData);
+            MessageType = Utilities.GetMessageType(rawData);
+            MessageID = Utilities.GetMessageID(rawData);
         }
 
-        public override uint RawData
-        {
-            get;
-            set;
-        }
+        protected override uint GetRawDataCore() => _raw;
+        protected override void SetRawDataCore(uint value) => _raw = value;
 
-        public override MessageType MessageType
-        {
-            get;
-        }
-
-        public override MessageID MessageID
-        {
-            get;
-        }
+    public override MessageType MessageType { get; set; }
+    public override MessageID MessageID { get; }
     }
 }
