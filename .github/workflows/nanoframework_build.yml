@@ -36,41 +36,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'zulu' # Alternative distribution options are available.
-
-      - name: Setup MSBuild Path
-        uses: microsoft/setup-msbuild@v2
-        with:
-          msbuild-architecture: x64
-
-      # https://github.com/NuGet/setup-nuget
-      - name: Install NuGet client
-        uses: nuget/setup-nuget@v2.0.1
-        with:
-          nuget-version: 'latest'
           
-      - name: Install Nanoframework Extension
-        uses: nanoframework/nanobuild@v1.16
-        env:
-          GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
-          
-      - name: Restore nugets
-        run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
-        
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4.2.4
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v4.2.4
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-
       - name: Install SonarCloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
@@ -112,6 +78,12 @@ jobs:
           replacement-text: '${{ env.major }}.${{ env.minor }}.${{ github.run_number }}'
           encoding: 'utf8'
           max-parallelism: 10
+
+      # https://github.com/NuGet/setup-nuget
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v2.0.1
+        with:
+          nuget-version: 'latest'
       
       - name: Pack nugets
         run: ./GenerateNugets.ps1
