@@ -1,52 +1,77 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+using TekuSP.Drivers.Nano_OpenTherm.Enums;
+using TekuSP.Drivers.Nano_OpenTherm.Interfaces;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
     /// Reads remote ventilation parameter enable and read/write capability flags.
     /// </summary>
-    /// <remarks>
-    /// Low byte contains <see cref="TransferEnable"/> flags; high byte contains <see cref="TransferReadWrite"/> flags.
-    /// </remarks>
-    public class GetRemoteVentilationParameterFlagsRequest : ReadRequest
+    public class GetRemoteVentilationParameterFlagsRequest : ReadRequest, IRemoteParameterTransferEnable, IRemoteParameterTransferReadWrite
     {
-        public GetRemoteVentilationParameterFlagsRequest() : base() { }
-        public GetRemoteVentilationParameterFlagsRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-        /// <summary>
-        /// Transfer-enable flags for remote ventilation parameters (low byte).
-        /// </summary>
-        public Enums.RemoteParameterTransferEnable TransferEnable { get; set; }
-        /// <summary>
-        /// Read/Write capability flags for remote ventilation parameters (high byte).
-        /// </summary>
-        public Enums.RemoteParameterTransferReadWrite TransferReadWrite { get; set; }
+        public GetRemoteVentilationParameterFlagsRequest() : base()
+        {
+        }
+
+        public GetRemoteVentilationParameterFlagsRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        // IRemoteParameterTransferEnable
+        public bool EnableDHWSetpoint { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.DHWSetpoint); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.DHWSetpoint, value); }
+
+        public bool EnableMaxCHSetpoint { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.MaxCHSetpoint); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.MaxCHSetpoint, value); }
+        public bool EnableReserved2 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved2); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved2, value); }
+        public bool EnableReserved3 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved3); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved3, value); }
+        public bool EnableReserved4 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved4); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved4, value); }
+        public bool EnableReserved5 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved5); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved5, value); }
+        public bool EnableReserved6 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved6); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved6, value); }
+        public bool EnableReserved7 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved7); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved7, value); }
+        public override MessageID MessageID => MessageID.RBPflagsVentilationHeatRecovery;
+        public override MessageType MessageType => MessageType.READ_DATA;
+
+        // IRemoteParameterTransferReadWrite
+        public bool RWDHWSetpoint { get => RemoteParameterTransferReadWrite.IsSet(RemoteParameterTransferReadWrite.DHWSetpoint); set => RemoteParameterTransferReadWrite = RemoteParameterTransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.DHWSetpoint, value); }
+
+        public bool RWMaxCHSetpoint { get => RemoteParameterTransferReadWrite.IsSet(RemoteParameterTransferReadWrite.MaxCHSetpoint); set => RemoteParameterTransferReadWrite = RemoteParameterTransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.MaxCHSetpoint, value); }
+        public bool RWReserved2 { get => RemoteParameterTransferReadWrite.IsSet(RemoteParameterTransferReadWrite.Reserved2); set => RemoteParameterTransferReadWrite = RemoteParameterTransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.Reserved2, value); }
+        public bool RWReserved3 { get => RemoteParameterTransferReadWrite.IsSet(RemoteParameterTransferReadWrite.Reserved3); set => RemoteParameterTransferReadWrite = RemoteParameterTransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.Reserved3, value); }
+        public bool RWReserved4 { get => RemoteParameterTransferReadWrite.IsSet(RemoteParameterTransferReadWrite.Reserved4); set => RemoteParameterTransferReadWrite = RemoteParameterTransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.Reserved4, value); }
+        public bool RWReserved5 { get => RemoteParameterTransferReadWrite.IsSet(RemoteParameterTransferReadWrite.Reserved5); set => RemoteParameterTransferReadWrite = RemoteParameterTransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.Reserved5, value); }
+        public bool RWReserved6 { get => RemoteParameterTransferReadWrite.IsSet(RemoteParameterTransferReadWrite.Reserved6); set => RemoteParameterTransferReadWrite = RemoteParameterTransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.Reserved6, value); }
+        public bool RWReserved7 { get => RemoteParameterTransferReadWrite.IsSet(RemoteParameterTransferReadWrite.Reserved7); set => RemoteParameterTransferReadWrite = RemoteParameterTransferReadWrite.SetFlag(RemoteParameterTransferReadWrite.Reserved7, value); }
+
+        #endregion Public Properties
+
+        #region Protected Properties
+
+        protected RemoteParameterTransferEnable RemoteParameterTransferEnable { get; set; }
+        protected RemoteParameterTransferReadWrite RemoteParameterTransferReadWrite { get; set; }
+
+        #endregion Protected Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore()
         {
-            // Spec: low byte = enable flags, high byte = read/write flags
-            byte low = Utilities.SetRemoteParameterTransferEnable(TransferEnable);
-            byte high = Utilities.SetRemoteParameterTransferReadWrite(TransferReadWrite);
+            byte low = Utilities.SetRemoteParameterTransferEnable(RemoteParameterTransferEnable);
+            byte high = Utilities.SetRemoteParameterTransferReadWrite(RemoteParameterTransferReadWrite);
             ushort payload = Utilities.MakeUShort(high, low);
             return ProcessRequest(payload);
         }
+
         protected override void SetRawDataCore(uint value)
         {
-            TransferEnable = Utilities.GetRemoteParameterTransferEnable(value);
-            TransferReadWrite = Utilities.GetRemoteParameterTransferReadWrite(value);
+            RemoteParameterTransferEnable = Utilities.GetRemoteParameterTransferEnable(value);
+            RemoteParameterTransferReadWrite = Utilities.GetRemoteParameterTransferReadWrite(value);
         }
 
-        public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.RBPflagsVentilationHeatRecovery;
-
-        // Convenience flag properties
-        /// <summary>Enable transfer of DHW Setpoint parameter.</summary>
-        public bool EnableDhwSetpoint { get => TransferEnable.IsSet(Enums.RemoteParameterTransferEnable.DHWSetpoint); set => TransferEnable = TransferEnable.SetFlag(Enums.RemoteParameterTransferEnable.DHWSetpoint, value); }
-        /// <summary>Enable transfer of Max CH Setpoint parameter.</summary>
-        public bool EnableMaxChSetpoint { get => TransferEnable.IsSet(Enums.RemoteParameterTransferEnable.MaxCHSetpoint); set => TransferEnable = TransferEnable.SetFlag(Enums.RemoteParameterTransferEnable.MaxCHSetpoint, value); }
-        /// <summary>DHW Setpoint is writable (otherwise read-only).</summary>
-        public bool RWDhwSetpoint { get => TransferReadWrite.IsSet(Enums.RemoteParameterTransferReadWrite.DHWSetpoint); set => TransferReadWrite = TransferReadWrite.SetFlag(Enums.RemoteParameterTransferReadWrite.DHWSetpoint, value); }
-        /// <summary>Max CH Setpoint is writable (otherwise read-only).</summary>
-        public bool RWMaxChSetpoint { get => TransferReadWrite.IsSet(Enums.RemoteParameterTransferReadWrite.MaxCHSetpoint); set => TransferReadWrite = TransferReadWrite.SetFlag(Enums.RemoteParameterTransferReadWrite.MaxCHSetpoint, value); }
+        #endregion Protected Methods
     }
 }

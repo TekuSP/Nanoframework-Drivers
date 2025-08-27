@@ -34,14 +34,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool RemoteOverrideReserved7 { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="RemoteOverrideFunction"/>.
-        /// </summary>
-        protected RemoteOverrideFunction RemoteOverrideFunction { get; set; }
-
-        #endregion Protected Properties
     }
 }

@@ -22,8 +22,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             SetRawDataCore(baseResponse.RawData);
         }
 
-        protected override uint GetRawDataCore() => ProcessResponse(_raw16);
-        protected override void SetRawDataCore(uint value) => _raw16 = (ushort)(value & 0xFFFF);
+    protected override uint GetRawDataCore() => ProcessResponse(_raw16);
+    protected override void SetRawDataCore(uint value) => _raw16 = Utilities.GetLowUShort(value);
 
     public override MessageType MessageType { get; set; }
     public override MessageID MessageID => MessageID.TrOverride;

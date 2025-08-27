@@ -7,8 +7,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetDHWPumpValveOperationHoursRequest : ReadRequest
     {
-        public GetDHWPumpValveOperationHoursRequest() : base() { }
-        public GetDHWPumpValveOperationHoursRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetDHWPumpValveOperationHoursRequest() : base()
+        {
+        }
+
+        public GetDHWPumpValveOperationHoursRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// DHW pump/valve operation hours (low 16 bits, unsigned).
@@ -16,10 +27,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public ushort Hours { get; set; }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Hours);
-        protected override void SetRawDataCore(uint value) { Hours = Utilities.GetLowUShort(value); }
+        public override MessageID MessageID => MessageID.DHWPumpValveOperationHours;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.DHWPumpValveOperationHours;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Hours);
+
+        protected override void SetRawDataCore(uint value)
+        { Hours = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

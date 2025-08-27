@@ -10,22 +10,41 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetCoolingOperationHoursRequest : ReadRequest
     {
-        public GetCoolingOperationHoursRequest() : base() { }
-        public GetCoolingOperationHoursRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// Total cooling operation hours (low 16 bits, unsigned).
-    /// Units: hours.
-    /// </summary>
-    public ushort Hours { get; private set; }
+        public GetCoolingOperationHoursRequest() : base()
+        {
+        }
+
+        public GetCoolingOperationHoursRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Total cooling operation hours (low 16 bits, unsigned).
+        /// Units: hours.
+        /// </summary>
+        public ushort Hours { get; private set; }
+
+        public override MessageID MessageID => MessageID.CoolingOperationHours;
+
+        public override MessageType MessageType => MessageType.READ_DATA;
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore() => ProcessRequest(0);
+
         protected override void SetRawDataCore(uint value)
         {
             Hours = Utilities.GetLowUShort(value);
         }
 
-        public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.CoolingOperationHours;
+        #endregion Protected Methods
     }
 }

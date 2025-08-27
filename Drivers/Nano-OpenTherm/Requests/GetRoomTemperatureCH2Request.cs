@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.Nano_OpenTherm.Enums;
+using TekuSP.Drivers.Nano_OpenTherm.Interfaces;
+
 using MS = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterStatus;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
@@ -10,38 +12,67 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// <remarks>
     /// Response payload: low 16 bits as 8.8 fixed-point degrees Celsius.
     /// </remarks>
-    public class GetRoomTemperatureCH2Request : ReadRequest
+    public class GetRoomTemperatureCH2Request : ReadRequest, IMasterStatus
     {
-        public GetRoomTemperatureCH2Request() : base() { }
-        public GetRoomTemperatureCH2Request(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetRoomTemperatureCH2Request() : base()
+        {
+        }
+
+        public GetRoomTemperatureCH2Request(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        // IMasterStatus
+        public bool MasterIsCentralHeating2Active { get => MasterStatus.IsSet(MS.CH2Enabled); set => MasterStatus = MasterStatus.SetFlag(MS.CH2Enabled, value); }
+
+        public bool MasterIsCentralHeatingActive { get => MasterStatus.IsSet(MS.CHEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.CHEnabled, value); }
+
+        public bool MasterIsCoolingActive { get => MasterStatus.IsSet(MS.CoolingEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.CoolingEnabled, value); }
+
+        public bool MasterIsHotWaterActive { get => MasterStatus.IsSet(MS.DHWEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.DHWEnabled, value); }
+
+        public bool MasterOTCActive { get => MasterStatus.IsSet(MS.OTCActive); set => MasterStatus = MasterStatus.SetFlag(MS.OTCActive, value); }
+
+        public bool MasterReserved5 { get => MasterStatus.IsSet(MS.Reserved5); set => MasterStatus = MasterStatus.SetFlag(MS.Reserved5, value); }
+
+        public bool MasterReserved6 { get => MasterStatus.IsSet(MS.Reserved6); set => MasterStatus = MasterStatus.SetFlag(MS.Reserved6, value); }
+
+        public bool MasterReserved7 { get => MasterStatus.IsSet(MS.Reserved7); set => MasterStatus = MasterStatus.SetFlag(MS.Reserved7, value); }
+
+        public override MessageID MessageID => MessageID.TrCH2;
+
+        public override MessageType MessageType => MessageType.READ_DATA;
+
+        #endregion Public Properties
+
+        #region Protected Properties
 
         /// <summary>
-        /// Master status flags (low byte). Use convenience properties to read/write individual bits.
+        /// Master status flags (low byte). Single source of truth for IMasterStatus.
         /// </summary>
-        public MS MasterStatus { get; set; }
+        protected MS MasterStatus { get; set; }
+
+        #endregion Protected Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore()
         {
             byte low = Utilities.SetMasterStatus(MasterStatus);
             return ProcessRequest(low);
         }
+
         protected override void SetRawDataCore(uint value)
         {
             MasterStatus = Utilities.GetMasterStatus(value);
         }
 
-        public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.TrCH2;
-
-        /// <summary>Central Heating enabled on Master.</summary>
-        public bool MasterIsCentralHeatingActive { get => MasterStatus.IsSet(MS.CHEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.CHEnabled, value); }
-        /// <summary>Hot Water (DHW) enabled on Master.</summary>
-        public bool MasterIsHotWaterActive { get => MasterStatus.IsSet(MS.DHWEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.DHWEnabled, value); }
-        /// <summary>Cooling enabled on Master.</summary>
-        public bool MasterIsCoolingActive { get => MasterStatus.IsSet(MS.CoolingEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.CoolingEnabled, value); }
-        /// <summary>OpenTherm Continuous modulation/OTC active on Master.</summary>
-        public bool MasterOTCActive { get => MasterStatus.IsSet(MS.OTCActive); set => MasterStatus = MasterStatus.SetFlag(MS.OTCActive, value); }
-        /// <summary>Central Heating 2 enabled on Master.</summary>
-        public bool MasterIsCentralHeating2Active { get => MasterStatus.IsSet(MS.CH2Enabled); set => MasterStatus = MasterStatus.SetFlag(MS.CH2Enabled, value); }
+        #endregion Protected Methods
     }
 }

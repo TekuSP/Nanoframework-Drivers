@@ -10,12 +10,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetReturnTemperatureRequest : ReadRequest
     {
-        public GetReturnTemperatureRequest() : base() { }
-        public GetReturnTemperatureRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetReturnTemperatureRequest() : base()
+        {
+        }
+
+        public GetReturnTemperatureRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public override MessageID MessageID => MessageID.Tret;
+
+        public override MessageType MessageType => MessageType.READ_DATA;
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore() => ProcessRequest(0);
-        protected override void SetRawDataCore(uint value) { }
-        public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.Tret;
+
+        protected override void SetRawDataCore(uint value)
+        { }
+
+        #endregion Protected Methods
     }
 }

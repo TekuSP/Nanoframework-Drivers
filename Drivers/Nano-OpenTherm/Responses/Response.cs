@@ -253,7 +253,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             // Parity over full 32-bit frame must be odd
             if (!Utilities.Parity(RawData))
                 return false;
-            var msgType = (byte)((RawData >> 28) & 0x7);
+            var msgType = (byte)Utilities.GetMessageType(RawData);
             bool typeOk = msgType == (byte)MessageType.READ_ACK
                 || msgType == (byte)MessageType.WRITE_ACK
                 || msgType == (byte)MessageType.DATA_INVALID

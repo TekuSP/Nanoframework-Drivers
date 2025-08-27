@@ -12,18 +12,38 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageFHBEntryRequest : ReadRequest
     {
-        public GetSolarStorageFHBEntryRequest() : base() { }
-        public GetSolarStorageFHBEntryRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetSolarStorageFHBEntryRequest() : base()
+        {
+        }
+
+        public GetSolarStorageFHBEntryRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// Fault history buffer index to read (0-based). Encoded in the low byte.
         /// </summary>
         public byte Index { get; set; }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Index);
-        protected override void SetRawDataCore(uint value) { Index = Utilities.GetLowByte(value); }
+        public override MessageID MessageID => MessageID.FHBindexFHBvalueSolarStorage;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.FHBindexFHBvalueSolarStorage;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Index);
+
+        protected override void SetRawDataCore(uint value)
+        { Index = Utilities.GetLowByte(value); }
+
+        #endregion Protected Methods
     }
 }

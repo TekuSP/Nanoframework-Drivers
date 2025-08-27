@@ -1,6 +1,4 @@
-using System;
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
-using TekuSP.Drivers.Nano_OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
@@ -9,31 +7,53 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class SetCoolingControlRequest : WriteRequest
     {
-        public SetCoolingControlRequest() : base() { }
-        public SetCoolingControlRequest(Request baseReq) : base(baseReq) { }
+        #region Private Fields
 
         private float _percent;
-    /// <summary>
-    /// Cooling control signal in % (encoded as 8.8 fixed-point in low 16 bits). Value is clamped 0..100.
-    /// </summary>
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public SetCoolingControlRequest() : base()
+        {
+        }
+
+        public SetCoolingControlRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public override MessageID MessageID => MessageID.CoolingControl;
+
+        public override MessageType MessageType => MessageType.WRITE_DATA;
+
+        /// <summary>
+        /// Cooling control signal in % (encoded as 8.8 fixed-point in low 16 bits). Value is clamped 0..100.
+        /// </summary>
         public float Percent
         {
             get => _percent;
             set => _percent = value.Normalize();
         }
 
+        #endregion Public Properties
+
+        #region Protected Methods
+
         protected override uint GetRawDataCore()
         {
-            var raw = (uint)(Percent * 256f);
-            return ProcessRequest(raw);
+            return ProcessRequest(Utilities.GetRawPercentage(Percent));
         }
 
         protected override void SetRawDataCore(uint value)
         {
-            Percent = Utilities.GetFloat(value);
+            Percent = Utilities.GetPercentage(value);
         }
 
-        public override MessageType MessageType => MessageType.WRITE_DATA;
-        public override MessageID MessageID => MessageID.CoolingControl;
+        #endregion Protected Methods
     }
 }

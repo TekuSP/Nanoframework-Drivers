@@ -7,19 +7,39 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetDHWBurnerStartsRequest : ReadRequest
     {
-        public GetDHWBurnerStartsRequest() : base() { }
-        public GetDHWBurnerStartsRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// Number of burner starts during domestic hot water (DHW) mode (encoded in the low 16 bits).
-    /// Units: count.
-    /// </summary>
-    public ushort Count { get; set; }
+        public GetDHWBurnerStartsRequest() : base()
+        {
+        }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Count);
-        protected override void SetRawDataCore(uint value) { Count = Utilities.GetLowUShort(value); }
+        public GetDHWBurnerStartsRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Number of burner starts during domestic hot water (DHW) mode (encoded in the low 16 bits).
+        /// Units: count.
+        /// </summary>
+        public ushort Count { get; set; }
+
+        public override MessageID MessageID => MessageID.DHWBurnerStarts;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.DHWBurnerStarts;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Count);
+
+        protected override void SetRawDataCore(uint value)
+        { Count = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

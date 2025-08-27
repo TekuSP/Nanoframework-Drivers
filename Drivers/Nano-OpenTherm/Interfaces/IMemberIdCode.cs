@@ -322,14 +322,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool IsXiamenHysenControlTechnology { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="MemberIdCode"/>.
-        /// </summary>
-        protected MemberIdCode MemberIdCode { get; set; }
-
-        #endregion Protected Properties
     }
 }

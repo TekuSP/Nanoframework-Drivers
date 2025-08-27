@@ -50,14 +50,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool FaultWaterOverTemperature { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="ApplicationSpecificFaultFlags"/>.
-        /// </summary>
-        protected ApplicationSpecificFaultFlags ApplicationSpecificFaultFlags { get; set; }
-
-        #endregion Protected Properties
     }
 }

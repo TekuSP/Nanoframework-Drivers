@@ -20,14 +20,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool CanWrite { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="AccessMode"/>.
-        /// </summary>
-        protected AccessMode AccessMode { get; set; }
-
-        #endregion Protected Properties
     }
 }

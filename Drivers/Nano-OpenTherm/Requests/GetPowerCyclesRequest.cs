@@ -10,22 +10,41 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetPowerCyclesRequest : ReadRequest
     {
-        public GetPowerCyclesRequest() : base() { }
-        public GetPowerCyclesRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// Number of power on/off cycles (low 16 bits, unsigned).
-    /// Units: count.
-    /// </summary>
-    public ushort PowerCycles { get; private set; }
+        public GetPowerCyclesRequest() : base()
+        {
+        }
+
+        public GetPowerCyclesRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public override MessageID MessageID => MessageID.PowerCycles;
+
+        public override MessageType MessageType => MessageType.READ_DATA;
+
+        /// <summary>
+        /// Number of power on/off cycles (low 16 bits, unsigned).
+        /// Units: count.
+        /// </summary>
+        public ushort PowerCycles { get; private set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore() => ProcessRequest(0);
+
         protected override void SetRawDataCore(uint value)
         {
             PowerCycles = Utilities.GetLowUShort(value);
         }
 
-        public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.PowerCycles;
+        #endregion Protected Methods
     }
 }

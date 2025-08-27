@@ -34,14 +34,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool MasterReserved7 { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="MasterStatus"/>.
-        /// </summary>
-        protected MasterStatus MasterStatus { get; set; }
-
-        #endregion Protected Properties
     }
 }

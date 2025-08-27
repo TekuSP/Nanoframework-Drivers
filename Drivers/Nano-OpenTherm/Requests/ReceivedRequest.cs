@@ -12,7 +12,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class ReceivedRequest : Request
     {
+        #region Private Fields
+
         private uint _raw;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance from a raw 32-bit OpenTherm frame.
@@ -25,12 +31,25 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             MessageID = Utilities.GetMessageID(rawData);
         }
 
-        protected override uint GetRawDataCore() => _raw;
-        protected override void SetRawDataCore(uint value) { _raw = value; }
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <inheritdoc />
+        public override MessageID MessageID { get; }
 
         /// <inheritdoc />
         public override MessageType MessageType { get; }
-        /// <inheritdoc />
-        public override MessageID MessageID { get; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => _raw;
+
+        protected override void SetRawDataCore(uint value)
+        { _raw = value; }
+
+        #endregion Protected Methods
     }
 }

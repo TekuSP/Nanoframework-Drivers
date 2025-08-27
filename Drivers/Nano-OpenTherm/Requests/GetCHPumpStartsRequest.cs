@@ -7,19 +7,39 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetCHPumpStartsRequest : ReadRequest
     {
-        public GetCHPumpStartsRequest() : base() { }
-        public GetCHPumpStartsRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// Number of starts of the central heating pump (low 16 bits, unsigned).
-    /// Units: count.
-    /// </summary>
-    public ushort Count { get; set; }
+        public GetCHPumpStartsRequest() : base()
+        {
+        }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Count);
-        protected override void SetRawDataCore(uint value) { Count = Utilities.GetLowUShort(value); }
+        public GetCHPumpStartsRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Number of starts of the central heating pump (low 16 bits, unsigned).
+        /// Units: count.
+        /// </summary>
+        public ushort Count { get; set; }
+
+        public override MessageID MessageID => MessageID.CHPumpStarts;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.CHPumpStarts;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Count);
+
+        protected override void SetRawDataCore(uint value)
+        { Count = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

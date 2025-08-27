@@ -7,17 +7,37 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetDhwSetpointBoundsRequest : ReadRequest
     {
-        public GetDhwSetpointBoundsRequest() : base() { }
-        public GetDhwSetpointBoundsRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetDhwSetpointBoundsRequest() : base()
+        {
+        }
+
+        public GetDhwSetpointBoundsRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Lower bound for DHW setpoint in °C (low byte).
+        /// </summary>
+        public byte LowerBound { get; set; }
+
+        public override MessageID MessageID => MessageID.TdhwSetUBTdhwSetLB;
+
+        public override MessageType MessageType => MessageType.READ_DATA;
 
         /// <summary>
         /// Upper bound for DHW setpoint in °C (high byte).
         /// </summary>
         public byte UpperBound { get; set; }
-        /// <summary>
-        /// Lower bound for DHW setpoint in °C (low byte).
-        /// </summary>
-        public byte LowerBound { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore()
         {
@@ -25,13 +45,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             ushort payload = Utilities.MakeUShort(UpperBound, LowerBound);
             return ProcessRequest(payload);
         }
+
         protected override void SetRawDataCore(uint value)
         {
             UpperBound = Utilities.GetHighByte(value);
             LowerBound = Utilities.GetLowByte(value);
         }
 
-        public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.TdhwSetUBTdhwSetLB;
+        #endregion Protected Methods
     }
 }

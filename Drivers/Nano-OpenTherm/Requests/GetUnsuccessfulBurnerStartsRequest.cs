@@ -7,8 +7,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetUnsuccessfulBurnerStartsRequest : ReadRequest
     {
-        public GetUnsuccessfulBurnerStartsRequest() : base() { }
-        public GetUnsuccessfulBurnerStartsRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetUnsuccessfulBurnerStartsRequest() : base()
+        {
+        }
+
+        public GetUnsuccessfulBurnerStartsRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// Number of burner start attempts that failed (low 16 bits, unsigned).
@@ -16,10 +27,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public ushort Count { get; set; }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Count);
-        protected override void SetRawDataCore(uint value) { Count = Utilities.GetLowUShort(value); }
+        public override MessageID MessageID => MessageID.UnsuccessfulBurnerStarts;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.UnsuccessfulBurnerStarts;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Count);
+
+        protected override void SetRawDataCore(uint value)
+        { Count = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

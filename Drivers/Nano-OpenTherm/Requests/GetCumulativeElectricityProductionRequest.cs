@@ -10,18 +10,38 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetCumulativeElectricityProductionRequest : ReadRequest
     {
-        public GetCumulativeElectricityProductionRequest() : base() { }
-        public GetCumulativeElectricityProductionRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetCumulativeElectricityProductionRequest() : base()
+        {
+        }
+
+        public GetCumulativeElectricityProductionRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// Cumulative electricity production in kWh (low 16 bits).
         /// </summary>
         public ushort KWh { get; set; }
 
-        protected override uint GetRawDataCore() => ProcessRequest(KWh);
-        protected override void SetRawDataCore(uint value) { KWh = Utilities.GetLowUShort(value); }
+        public override MessageID MessageID => MessageID.CumulativElectricityProduction;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.CumulativElectricityProduction;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(KWh);
+
+        protected override void SetRawDataCore(uint value)
+        { KWh = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

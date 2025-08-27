@@ -34,14 +34,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool EnableReserved7 { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="RemoteParameterTransferEnable"/>.
-        /// </summary>
-        protected RemoteParameterTransferEnable RemoteParameterTransferEnable { get; set; }
-
-        #endregion Protected Properties
     }
 }

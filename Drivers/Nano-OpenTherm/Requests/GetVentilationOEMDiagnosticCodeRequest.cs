@@ -11,18 +11,38 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetVentilationOEMDiagnosticCodeRequest : ReadRequest
     {
-        public GetVentilationOEMDiagnosticCodeRequest() : base() { }
-        public GetVentilationOEMDiagnosticCodeRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetVentilationOEMDiagnosticCodeRequest() : base()
+        {
+        }
+
+        public GetVentilationOEMDiagnosticCodeRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// OEM-specific diagnostic code (low 16 bits).
         /// </summary>
         public ushort Code { get; set; }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Code);
-        protected override void SetRawDataCore(uint value) { Code = Utilities.GetLowUShort(value); }
+        public override MessageID MessageID => MessageID.OEMDiagnosticCodeVentilationHeatRecovery;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.OEMDiagnosticCodeVentilationHeatRecovery;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Code);
+
+        protected override void SetRawDataCore(uint value)
+        { Code = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

@@ -11,18 +11,38 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageTSPRequest : ReadRequest
     {
-        public GetSolarStorageTSPRequest() : base() { }
-        public GetSolarStorageTSPRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public GetSolarStorageTSPRequest() : base()
+        {
+        }
+
+        public GetSolarStorageTSPRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// TSP index to read (0-based). Encoded in the low byte.
         /// </summary>
         public byte Index { get; set; }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Index);
-        protected override void SetRawDataCore(uint value) { Index = Utilities.GetLowByte(value); }
+        public override MessageID MessageID => MessageID.TSPindexTSPvalueSolarStorage;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.TSPindexTSPvalueSolarStorage;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Index);
+
+        protected override void SetRawDataCore(uint value)
+        { Index = Utilities.GetLowByte(value); }
+
+        #endregion Protected Methods
     }
 }

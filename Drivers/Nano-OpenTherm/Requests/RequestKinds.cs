@@ -1,6 +1,3 @@
-using System;
-using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
-
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -9,13 +6,20 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public abstract class ReadRequest : Request
     {
+        #region Protected Constructors
+
         protected ReadRequest() : base()
         {
-            
         }
+
         protected ReadRequest(Request baseReq) : base(baseReq)
         {
         }
+
+        #endregion Protected Constructors
+
+        #region Public Properties
+
         /// <summary>
         /// Encoded 32-bit OpenTherm frame. Public getter for consumers, protected setter for derived types.
         /// </summary>
@@ -24,29 +28,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             get => GetRawDataCore();
             protected set => SetRawDataCore(value);
         }
-    }
 
-    /// <summary>
-    /// Base for write-only requests. Exposes a public setter for <c>RawData</c> and a protected getter.
-    /// Use this base when the payload is sent by the master and not read back directly from the device.
-    /// </summary>
-    public abstract class WriteRequest : Request
-    {
-        protected WriteRequest() : base()
-        {       
-        }
-        protected WriteRequest(Request baseReq) : base(baseReq)
-        {
-        }
-
-        /// <summary>
-        /// Encoded 32-bit OpenTherm frame. Public setter for consumers, protected getter for derived types.
-        /// </summary>
-        public uint RawData
-        {
-            protected get => GetRawDataCore();
-            set => SetRawDataCore(value);
-        }
+        #endregion Public Properties
     }
 
     /// <summary>
@@ -55,12 +38,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public abstract class ReadWriteRequest : Request
     {
+        #region Protected Constructors
+
         protected ReadWriteRequest() : base()
-        { 
+        {
         }
+
         protected ReadWriteRequest(Request baseReq) : base(baseReq)
         {
         }
+
+        #endregion Protected Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// Encoded 32-bit OpenTherm frame with both public getter and setter.
@@ -70,5 +60,39 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             get => GetRawDataCore();
             set => SetRawDataCore(value);
         }
+
+        #endregion Public Properties
+    }
+
+    /// <summary>
+    /// Base for write-only requests. Exposes a public setter for <c>RawData</c> and a protected getter.
+    /// Use this base when the payload is sent by the master and not read back directly from the device.
+    /// </summary>
+    public abstract class WriteRequest : Request
+    {
+        #region Protected Constructors
+
+        protected WriteRequest() : base()
+        {
+        }
+
+        protected WriteRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Protected Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Encoded 32-bit OpenTherm frame. Public setter for consumers, protected getter for derived types.
+        /// </summary>
+        public uint RawData
+        {
+            protected get => GetRawDataCore();
+            set => SetRawDataCore(value);
+        }
+
+        #endregion Public Properties
     }
 }

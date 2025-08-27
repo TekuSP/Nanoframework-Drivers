@@ -4,19 +4,39 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class GetDHWBurnerOperationHoursRequest : ReadRequest
     {
-        public GetDHWBurnerOperationHoursRequest() : base() { }
-        public GetDHWBurnerOperationHoursRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// Number of hours the burner has operated during DHW mode (low 16 bits, unsigned).
-    /// Units: hours.
-    /// </summary>
-    public ushort Hours { get; set; }
+        public GetDHWBurnerOperationHoursRequest() : base()
+        {
+        }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Hours);
-        protected override void SetRawDataCore(uint value) { Hours = Utilities.GetLowUShort(value); }
+        public GetDHWBurnerOperationHoursRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Number of hours the burner has operated during DHW mode (low 16 bits, unsigned).
+        /// Units: hours.
+        /// </summary>
+        public ushort Hours { get; set; }
+
+        public override MessageID MessageID => MessageID.DHWBurnerOperationHours;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.DHWBurnerOperationHours;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Hours);
+
+        protected override void SetRawDataCore(uint value)
+        { Hours = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

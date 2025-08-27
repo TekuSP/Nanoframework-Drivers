@@ -10,13 +10,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetExhaustFanSpeedRequest : ReadRequest
     {
-        public GetExhaustFanSpeedRequest() : base() { }
-        public GetExhaustFanSpeedRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-        protected override uint GetRawDataCore() => ProcessRequest(0);
-        protected override void SetRawDataCore(uint value) { }
+        public GetExhaustFanSpeedRequest() : base()
+        {
+        }
+
+        public GetExhaustFanSpeedRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public override MessageID MessageID => MessageID.RPMexhaust;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.RPMexhaust;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(0);
+
+        protected override void SetRawDataCore(uint value)
+        { }
+
+        #endregion Protected Methods
     }
 }

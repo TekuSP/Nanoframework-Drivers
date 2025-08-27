@@ -28,14 +28,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool IsVentilation { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="VersionProductType"/>.
-        /// </summary>
-        protected VersionProductType VersionProductType { get; set; }
-
-        #endregion Protected Properties
     }
 }

@@ -12,21 +12,40 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSerialRequest : ReadRequest
     {
-        public GetSerialRequest() : base() { }
-        public GetSerialRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// Index of the serial/brand number byte to read from the device (0-based).
-    /// </summary>
-    public byte Index { get; set; }
+        public GetSerialRequest() : base()
+        {
+        }
+
+        public GetSerialRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Index of the serial/brand number byte to read from the device (0-based).
+        /// </summary>
+        public byte Index { get; set; }
+
+        public override MessageID MessageID => MessageID.BrandSerialNumber;
+
+        public override MessageType MessageType => MessageType.READ_DATA;
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore() => ProcessRequest(Index);
+
         protected override void SetRawDataCore(uint value)
         {
             Index = Utilities.GetLowByte(value);
         }
 
-        public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.BrandSerialNumber;
+        #endregion Protected Methods
     }
 }

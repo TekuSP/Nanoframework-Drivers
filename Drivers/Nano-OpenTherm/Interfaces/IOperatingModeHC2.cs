@@ -1,33 +1,33 @@
-﻿using TekuSP.Drivers.Nano_OpenTherm.Enums;
+using TekuSP.Drivers.Nano_OpenTherm.Enums;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
 {
     /// <summary>
-    /// Backing property and convenience selectors for <see cref="Enums.OperatingMode"/>.
+    /// Operating mode selectors for Heating Circuit 2 (HC2) for <see cref="Enums.OperatingMode"/>.
     /// </summary>
-    public interface IOperatingMode
+    public interface IOperatingModeHC2
     {
         #region Public Properties
 
         /// <summary>
         /// Is <see cref="OperatingMode"/> set to <see cref="OperatingMode.Auto"/>?
         /// </summary>
-        bool ModeIsAuto { get; set; }
+        bool HC2ModeIsAuto { get; set; }
 
         /// <summary>
         /// Is <see cref="OperatingMode"/> set to <see cref="OperatingMode.Manual"/>?
         /// </summary>
-        bool ModeIsManual { get; set; }
+        bool HC2ModeIsManual { get; set; }
 
         /// <summary>
         /// Is <see cref="OperatingMode"/> set to <see cref="OperatingMode.Off"/>?
         /// </summary>
-        bool ModeIsOff { get; set; }
+        bool HC2ModeIsOff { get; set; }
 
         /// <summary>
         /// Is <see cref="OperatingMode"/> set to <see cref="OperatingMode.Reserved"/>?
         /// </summary>
-        bool ModeIsReserved { get; set; }
+        bool HC2ModeIsReserved { get; set; }
 
         #endregion Public Properties
     }

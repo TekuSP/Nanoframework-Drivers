@@ -10,6 +10,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetRFsensorStatusInformationRequest : ReadRequest
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GetRFsensorStatusInformationRequest"/> class.
         /// </summary>
@@ -22,13 +24,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// <param name="baseReq">The base request.</param>
         public GetRFsensorStatusInformationRequest(Request baseReq) : base(baseReq) { }
 
-        /// <summary>
-        /// RF sensor identifier (low byte), selecting which sensor’s status to query.
-        /// </summary>
-        public byte SensorId { get; set; }
+        #endregion Public Constructors
 
-        protected override uint GetRawDataCore() => ProcessRequest(SensorId);
-        protected override void SetRawDataCore(uint value) { SensorId = Utilities.GetLowByte(value); }
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the message ID for the request.
+        /// </summary>
+        public override MessageID MessageID => MessageID.RFsensorStatusInformation;
 
         /// <summary>
         /// Gets the message type for the request.
@@ -36,8 +39,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public override MessageType MessageType => MessageType.READ_DATA;
 
         /// <summary>
-        /// Gets the message ID for the request.
+        /// RF sensor identifier (low byte), selecting which sensor’s status to query.
         /// </summary>
-        public override MessageID MessageID => MessageID.RFsensorStatusInformation;
+        public byte SensorId { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(SensorId);
+
+        protected override void SetRawDataCore(uint value)
+        { SensorId = Utilities.GetLowByte(value); }
+
+        #endregion Protected Methods
     }
 }

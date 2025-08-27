@@ -34,14 +34,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool SlaveConfigReserved7 { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="SlaveConfiguration"/>.
-        /// </summary>
-        protected SlaveConfiguration SlaveConfiguration { get; set; }
-
-        #endregion Protected Properties
     }
 }

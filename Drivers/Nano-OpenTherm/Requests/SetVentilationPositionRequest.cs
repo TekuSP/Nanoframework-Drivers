@@ -1,5 +1,4 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
-using TekuSP.Drivers.Nano_OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
@@ -8,10 +7,30 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class SetVentilationPositionRequest : WriteRequest
     {
-        public SetVentilationPositionRequest() : base() { }
-        public SetVentilationPositionRequest(Request baseReq) : base(baseReq) { }
+        #region Private Fields
 
         private float _percent;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public SetVentilationPositionRequest() : base()
+        {
+        }
+
+        public SetVentilationPositionRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public override MessageID MessageID => MessageID.Vset;
+
+        public override MessageType MessageType => MessageType.WRITE_DATA;
+
         /// <summary>
         /// Relative ventilation position in % (encoded as 8.8 fixed-point in low 16 bits). Value is clamped to 0–100.
         /// </summary>
@@ -21,17 +40,20 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             set => _percent = value.Normalize();
         }
 
+        #endregion Public Properties
+
+        #region Protected Methods
+
         protected override uint GetRawDataCore()
         {
-            uint raw = (uint)(Percent * 256f);
-            return ProcessRequest(raw);
-        }
-        protected override void SetRawDataCore(uint value)
-        {
-            Percent = Utilities.GetFloat(value);
+            return ProcessRequest(Utilities.GetRawPercentage(Percent));
         }
 
-        public override MessageType MessageType => MessageType.WRITE_DATA;
-        public override MessageID MessageID => MessageID.Vset;
+        protected override void SetRawDataCore(uint value)
+        {
+            Percent = Utilities.GetPercentage(value);
+        }
+
+        #endregion Protected Methods
     }
 }

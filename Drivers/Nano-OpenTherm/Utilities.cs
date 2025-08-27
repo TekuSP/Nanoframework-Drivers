@@ -19,6 +19,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             return (Enums.ApplicationSpecificFaultFlags)data;
         }
 
+        /// <summary>Extract day of month (1..31) from a date payload.</summary>
+        public static byte GetDateDay(uint rawData) => (byte)(GetLowByte(rawData) & 0x1F);
+
+        /// <summary>Extract month (1..12) from a date payload.</summary>
+        public static Enums.Month GetDateMonth(uint rawData) => (Enums.Month)(GetHighByte(rawData) & 0x1F);
+
         /// <summary>
         /// Gets Special DateTime from raw data
         /// </summary>
@@ -34,6 +40,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             time = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, hour, minutes, DateTime.UtcNow.Second);
             dayOfWeek = (DayOfWeek)dayofweek;
         }
+
+        /// <summary>Extract <see cref="System.DayOfWeek"/> from a day/time payload.</summary>
+        public static DayOfWeek GetDayOfWeekFromDayTime(uint rawData) => (DayOfWeek)((GetLowByte(rawData) >> 5) & 0x07);
 
         /// <summary>
         /// Get Float from raw data (signed 16-bit fixed point 8.8)
@@ -88,6 +97,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// <param name="rawData">Raw Data</param>
         /// <returns>High part of int, minus byte</returns>
         public static ushort GetHighUShortWithLowByte(uint rawData) => (ushort)((rawData >> 8) & 0xFFFF);
+
+        /// <summary>Extract hour (0..23) from a day/time payload.</summary>
+        public static byte GetHourFromDayTime(uint rawData) => (byte)(GetLowByte(rawData) & 0x1F);
 
         /// <summary>
         /// Gets Int from raw data (low 32-bits)
@@ -159,6 +171,55 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// Extracts MessageType (bits 28..30) from a 32-bit OpenTherm frame.
         /// </summary>
         public static MessageType GetMessageType(uint rawData) => (MessageType)((rawData >> 28) & 0x7);
+
+        /// <summary>Extract minute (0..59) from a day/time payload.</summary>
+        public static byte GetMinuteFromDayTime(uint rawData) => (byte)(GetHighByte(rawData) & 0x3F);
+
+        /// <summary>Get OperatingMode for Domestic Hot Water (DHW) from raw data.</summary>
+        public static Enums.OperatingMode GetOperatingModeDHW(uint rawData)
+        {
+            var b = GetLowByte(rawData);
+            return (Enums.OperatingMode)((b >> 6) & 0x03);
+        }
+
+        /// <summary>Get OperatingMode for Heating Circuit 1 (HC1) from raw data.</summary>
+        public static Enums.OperatingMode GetOperatingModeHC1(uint rawData)
+        {
+            var b = GetLowByte(rawData);
+            return (Enums.OperatingMode)(b & 0x03);
+        }
+
+        /// <summary>Get OperatingMode for Heating Circuit 2 (HC2) from raw data.</summary>
+        public static Enums.OperatingMode GetOperatingModeHC2(uint rawData)
+        {
+            var b = GetLowByte(rawData);
+            return (Enums.OperatingMode)((b >> 3) & 0x03);
+        }
+
+        /// <summary>
+        /// Unpack operating modes from the low data byte: HC1 bits 0..1, HC2 bits 3..4, DHW bits 6..7.
+        /// </summary>
+        /// <param name="rawData">Raw 32-bit frame value (only low data byte is used).</param>
+        /// <param name="hc1">Out: Operating mode for Heating Circuit 1.</param>
+        /// <param name="hc2">Out: Operating mode for Heating Circuit 2.</param>
+        /// <param name="dhw">Out: Operating mode for Domestic Hot Water.</param>
+        public static void GetOperatingModes(uint rawData, out Enums.OperatingMode hc1, out Enums.OperatingMode hc2, out Enums.OperatingMode dhw)
+        {
+            var b = GetLowByte(rawData);
+            hc1 = (Enums.OperatingMode)(b & 0x03);
+            hc2 = (Enums.OperatingMode)((b >> 3) & 0x03);
+            dhw = (Enums.OperatingMode)((b >> 6) & 0x03);
+        }
+
+        /// <summary>
+        /// Alias for percentage decoding from 8.8 fixed-point.
+        /// </summary>
+        public static float GetPercentage(uint rawData) => GetFloat(rawData);
+
+        /// <summary>
+        /// Alias for percentage encoding (8.8 fixed-point, clamped 0..100).
+        /// </summary>
+        public static uint GetRawPercentage(float percent) => GetRawTemperature(percent);
 
         /// <summary>
         /// Gets raw temperature from float
@@ -298,6 +359,26 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// <summary>Convert <see cref="Enums.ApplicationSpecificFaultFlags"/> flags to byte.</summary>
         public static byte SetApplicationSpecificFaultFlags(Enums.ApplicationSpecificFaultFlags value) => (byte)value;
 
+        /// <summary>
+        /// Compose a date payload with day (low 5 bits of low byte) and month (low 5 bits of high byte).
+        /// </summary>
+        public static ushort SetDate(byte day, Enums.Month month)
+        {
+            byte low = (byte)(day & 0x1F);
+            byte high = (byte)(((byte)month) & 0x1F);
+            return MakeUShort(high, low);
+        }
+
+        /// <summary>
+        /// Compose a day/time payload: low byte = (dayOfWeek<<5)|(hour&0x1F), high byte = (minute&0x3F).
+        /// </summary>
+        public static ushort SetDayTime(DayOfWeek dayOfWeek, byte hour, byte minute)
+        {
+            byte low = (byte)(((int)dayOfWeek & 0x07) << 5 | (hour & 0x1F));
+            byte high = (byte)(minute & 0x3F);
+            return MakeUShort(high, low);
+        }
+
         /// <summary>Sets or clears a MasterStatus flag by reference.</summary>
         public static Enums.MasterStatus SetFlag(this Enums.MasterStatus value, Enums.MasterStatus flag, bool set)
         { if (set) value |= flag; else value &= ~flag; return value; }
@@ -345,6 +426,18 @@ namespace TekuSP.Drivers.Nano_OpenTherm
 
         /// <summary>Convert <see cref="Enums.MasterStatus"/> flags to byte.</summary>
         public static byte SetMasterStatus(Enums.MasterStatus value) => (byte)value;
+
+        /// <summary>
+        /// Pack operating modes into the low data byte: HC1 bits 0..1, HC2 bits 3..4, DHW bits 6..7.
+        /// </summary>
+        /// <param name="hc1">Operating mode for Heating Circuit 1.</param>
+        /// <param name="hc2">Operating mode for Heating Circuit 2.</param>
+        /// <param name="dhw">Operating mode for Domestic Hot Water.</param>
+        /// <returns>Composed low byte containing the three 2-bit operating modes.</returns>
+        public static byte SetOperatingModes(Enums.OperatingMode hc1, Enums.OperatingMode hc2, Enums.OperatingMode dhw)
+            => (byte)(((byte)hc1 & 0x03)
+                | (((byte)hc2 & 0x03) << 3)
+                | (((byte)dhw & 0x03) << 6));
 
         /// <summary>Convert <see cref="Enums.RemoteOverrideFunction"/> flags to byte.</summary>
         public static byte SetRemoteOverrideFunction(Enums.RemoteOverrideFunction value) => (byte)value;

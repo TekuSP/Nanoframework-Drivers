@@ -46,14 +46,5 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         bool IsSeptember { get; set; }
 
         #endregion Public Properties
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Backing property for <see cref="Month"/>.
-        /// </summary>
-        protected Month Month { get; set; }
-
-        #endregion Protected Properties
     }
 }

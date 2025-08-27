@@ -7,19 +7,39 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetBurnerOperationHoursRequest : ReadRequest
     {
-        public GetBurnerOperationHoursRequest() : base() { }
-        public GetBurnerOperationHoursRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// Total burner operation hours (low 16 bits, unsigned).
-    /// Units: hours.
-    /// </summary>
-    public ushort Hours { get; set; }
+        public GetBurnerOperationHoursRequest() : base()
+        {
+        }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Hours);
-        protected override void SetRawDataCore(uint value) { Hours = Utilities.GetLowUShort(value); }
+        public GetBurnerOperationHoursRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Total burner operation hours (low 16 bits, unsigned).
+        /// Units: hours.
+        /// </summary>
+        public ushort Hours { get; set; }
+
+        public override MessageID MessageID => MessageID.BurnerOperationHours;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.BurnerOperationHours;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Hours);
+
+        protected override void SetRawDataCore(uint value)
+        { Hours = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

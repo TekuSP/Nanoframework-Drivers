@@ -7,18 +7,38 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetElectricityProducerHoursRequest : ReadRequest
     {
-        public GetElectricityProducerHoursRequest() : base() { }
-        public GetElectricityProducerHoursRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// Total operation hours of the electricity producer (encoded in the low 16 bits).
-    /// </summary>
-    public ushort Hours { get; set; }
+        public GetElectricityProducerHoursRequest() : base()
+        {
+        }
 
-        protected override uint GetRawDataCore() => ProcessRequest(Hours);
-        protected override void SetRawDataCore(uint value) { Hours = Utilities.GetLowUShort(value); }
+        public GetElectricityProducerHoursRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Total operation hours of the electricity producer (encoded in the low 16 bits).
+        /// </summary>
+        public ushort Hours { get; set; }
+
+        public override MessageID MessageID => MessageID.ElectricityProducerHours;
 
         public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.ElectricityProducerHours;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Hours);
+
+        protected override void SetRawDataCore(uint value)
+        { Hours = Utilities.GetLowUShort(value); }
+
+        #endregion Protected Methods
     }
 }

@@ -7,30 +7,50 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetOpenThermVersionMasterRequest : ReadRequest
     {
-        public GetOpenThermVersionMasterRequest() : base() { }
-        public GetOpenThermVersionMasterRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
-    /// <summary>
-    /// OpenTherm major version number supported by the master (high byte).
-    /// </summary>
-    public byte Major { get; set; }
-    /// <summary>
-    /// OpenTherm minor version number supported by the master (low byte).
-    /// </summary>
-    public byte Minor { get; set; }
+        public GetOpenThermVersionMasterRequest() : base()
+        {
+        }
+
+        public GetOpenThermVersionMasterRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// OpenTherm major version number supported by the master (high byte).
+        /// </summary>
+        public byte Major { get; set; }
+
+        public override MessageID MessageID => MessageID.OpenThermVersionMaster;
+
+        public override MessageType MessageType => MessageType.READ_DATA;
+
+        /// <summary>
+        /// OpenTherm minor version number supported by the master (low byte).
+        /// </summary>
+        public byte Minor { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore()
         {
             ushort payload = Utilities.MakeUShort(Major, Minor);
             return ProcessRequest(payload);
         }
+
         protected override void SetRawDataCore(uint value)
         {
             Major = Utilities.GetHighByte(value);
             Minor = Utilities.GetLowByte(value);
         }
 
-        public override MessageType MessageType => MessageType.READ_DATA;
-        public override MessageID MessageID => MessageID.OpenThermVersionMaster;
+        #endregion Protected Methods
     }
 }
