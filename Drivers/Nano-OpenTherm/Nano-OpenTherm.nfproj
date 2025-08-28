@@ -176,6 +176,9 @@
     <Compile Include="Responses\CHPumpStartsResponse.cs" />
     <Compile Include="Responses\CO2ExhaustResponse.cs" />
     <Compile Include="Responses\CollectorTemperatureResponse.cs" />
+    <Compile Include="Responses\ControlSetpointCH2Response.cs" />
+    <Compile Include="Responses\ControlSetpointResponse.cs" />
+    <Compile Include="Responses\CoolingControlResponse.cs" />
     <Compile Include="Responses\CoolingOperationHoursResponse.cs" />
     <Compile Include="Responses\CumulativeElectricityProductionResponse.cs" />
     <Compile Include="Responses\CustomResponse.cs" />
@@ -188,6 +191,7 @@
     <Compile Include="Responses\DHWPumpValveOperationHoursResponse.cs" />
     <Compile Include="Responses\DHWPumpValveStartsResponse.cs" />
     <Compile Include="Responses\DhwSetpointBoundsResponse.cs" />
+    <Compile Include="Responses\DhwSetpointResponse.cs" />
     <Compile Include="Responses\DHWTemperatureResponse.cs" />
     <Compile Include="Responses\ElectricityProducerHoursResponse.cs" />
     <Compile Include="Responses\ElectricityProducerStartsResponse.cs" />
@@ -200,9 +204,12 @@
     <Compile Include="Responses\FaultHistoryBufferSizeResponse.cs" />
     <Compile Include="Responses\FlameCurrentResponse.cs" />
     <Compile Include="Responses\FlameSignalTooLowNumberResponse.cs" />
+    <Compile Include="Responses\MasterConfigResponse.cs" />
     <Compile Include="Responses\MasterProductVersionResponse.cs" />
     <Compile Include="Responses\MaxCapacityMinModLevelResponse.cs" />
+    <Compile Include="Responses\MaxRelModLevelSettingResponse.cs" />
     <Compile Include="Responses\MaxTSetBoundsResponse.cs" />
+    <Compile Include="Responses\MaxTSetResponse.cs" />
     <Compile Include="Responses\NominalVentilationValueResponse.cs" />
     <Compile Include="Responses\OEMDiagnosticCodeResponse.cs" />
     <Compile Include="Responses\OpenThermVersionMasterResponse.cs" />
@@ -218,9 +225,12 @@
     <Compile Include="Responses\RemoteOverrideOperatingModeResponse.cs" />
     <Compile Include="Responses\RemoteOverrideRoomSetPoint2Response.cs" />
     <Compile Include="Responses\RemoteOverrideRoomSetPointResponse.cs" />
+    <Compile Include="Responses\RemoteRequestResponse.cs" />
     <Compile Include="Responses\RemoteVentilationParameterResponse.cs" />
     <Compile Include="Responses\ReturnTemperatureResponse.cs" />
     <Compile Include="Responses\RFsensorStatusInformationResponse.cs" />
+    <Compile Include="Responses\RoomSetpointCH2Response.cs" />
+    <Compile Include="Responses\RoomSetpointResponse.cs" />
     <Compile Include="Responses\RoomTemperatureCH2Response.cs" />
     <Compile Include="Responses\RoomTemperatureResponse.cs" />
     <Compile Include="Responses\SlaveConfigResponse.cs" />

@@ -60,214 +60,111 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// <returns>New typed <see cref="Response"/> instance where applicable; otherwise <c>this</c>.</returns>
         public Response SelectResponse()
         {
-            switch (MessageID)
+            return MessageID switch
             {
-                case MessageID.Status:
-                    return new StatusResponse(this);
-                case MessageID.SConfigSMemberIDcode:
-                    return new SlaveConfigResponse(this);
-                case MessageID.SConfigSMemberIDcodeSolarStorage:
-                    return new SolarStorageSConfigResponse(this);
-                case MessageID.ASFflags:
-                    return new ApplicationFaultCodesResponse(this);
-                case MessageID.RBPflags:
-                    return new RemoteBoilerParameterResponse(this);
-                case MessageID.TrOverride:
-                    return new RemoteOverrideRoomSetPointResponse(this);
-                case MessageID.TSP:
-                    return new TransparentSlaveParametersCountResponse(this);
-                case MessageID.TSPindexTSPvalue:
-                    return new TransparentSlaveParameterResponse(this);
-                case MessageID.FHBsize:
-                    return new FaultHistoryBufferSizeResponse(this);
-                case MessageID.FHBindexFHBvalue:
-                    return new FaultHistoryBufferEntryResponse(this);
-                case MessageID.MaxCapacityMinModLevel:
-                    return new MaxCapacityMinModLevelResponse(this);
-                case MessageID.RelModLevel:
-                    return new RelModulationResponse(this);
-                case MessageID.CHPressure:
-                    return new CHPressureResponse(this);
-                case MessageID.DHWFlowRate:
-                    return new DHWFlowRateResponse(this);
-                case MessageID.DayTime:
-                    return new DayTimeResponse(this);
-                case MessageID.Date:
-                    return new DateResponse(this);
-                case MessageID.Year:
-                    return new YearResponse(this);
-                case MessageID.Tboiler:
-                    return new BoilerTemperatureResponse(this);
-                case MessageID.Tdhw:
-                    return new DHWTemperatureResponse(this);
-                case MessageID.Toutside:
-                    return new OutsideTemperatureResponse(this);
-                case MessageID.Tret:
-                    return new ReturnTemperatureResponse(this);
-                case MessageID.Tr:
-                    return new RoomTemperatureResponse(this);
-                case MessageID.Tstorage:
-                    return new StorageTemperatureResponse(this);
-                case MessageID.OpenThermVersionMaster:
-                    return new OpenThermVersionMasterResponse(this);
-                case MessageID.Tcollector:
-                    return new CollectorTemperatureResponse(this);
-                case MessageID.TflowCH2:
-                    return new CH2FlowTemperatureResponse(this);
-                case MessageID.Tdhw2:
-                    return new DHW2TemperatureResponse(this);
-                case MessageID.Texhaust:
-                    return new ExhaustTemperatureResponse(this);
-                case MessageID.TboilerHeatExchanger:
-                    return new BoilerHeatExchangerTemperatureResponse(this);
-                case MessageID.BoilerFanSpeedSetpointAndActual:
-                    return new BoilerFanSpeedResponse(this);
-                case MessageID.FlameCurrent:
-                    return new FlameCurrentResponse(this);
-                case MessageID.TrCH2:
-                    return new RoomTemperatureCH2Response(this);
-                case MessageID.RelativeHumidity:
-                    return new RelativeHumidityResponse(this);
-                case MessageID.TrOverride2:
-                    return new RemoteOverrideRoomSetPoint2Response(this);
-                case MessageID.TdhwSetUBTdhwSetLB:
-                    return new DhwSetpointBoundsResponse(this);
-                case MessageID.MaxTSetUBMaxTSetLB:
-                    return new MaxTSetBoundsResponse(this);
-                case MessageID.StatusVentilationHeatRecovery:
-                    return new VentilationStatusResponse(this);
-                case MessageID.Vset:
-                    return new VentilationPositionResponse(this);
-                case MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery:
-                    return new VentilationApplicationFaultCodesResponse(this);
-                case MessageID.OEMDiagnosticCodeVentilationHeatRecovery:
-                    return new VentilationOEMDiagnosticCodeResponse(this);
-                case MessageID.SConfigSMemberIDCodeVentilationHeatRecovery:
-                    return new VentilationSConfigResponse(this);
-                case MessageID.OpenThermVersionVentilationHeatRecovery:
-                    return new VentilationOpenThermVersionResponse(this);
-                case MessageID.VentilationHeatRecoveryVersion:
-                    return new VentilationProductVersionResponse(this);
-                case MessageID.RelVentLevel:
-                    return new RelativeVentilationLevelResponse(this);
-                case MessageID.RHexhaust:
-                    return new RelativeHumidityExhaustResponse(this);
-                case MessageID.CO2exhaust:
-                    return new CO2ExhaustResponse(this);
-                case MessageID.Tsi:
-                    return new SupplyInletTemperatureResponse(this);
-                case MessageID.Tso:
-                    return new SupplyOutletTemperatureResponse(this);
-                case MessageID.Tei:
-                    return new ExhaustInletTemperatureResponse(this);
-                case MessageID.Teo:
-                    return new ExhaustOutletTemperatureResponse(this);
-                case MessageID.RPMexhaust:
-                    return new ExhaustFanSpeedResponse(this);
-                case MessageID.RPMsupply:
-                    return new SupplyFanSpeedResponse(this);
-                case MessageID.RBPflagsVentilationHeatRecovery:
-                    return new RemoteVentilationParameterResponse(this);
-                case MessageID.NominalVentilationValue:
-                    return new NominalVentilationValueResponse(this);
-                case MessageID.TSPventilationHeatRecovery:
-                    return new VentilationTSPCountResponse(this);
-                case MessageID.TSPindexTSPvalueVentilationHeatRecovery:
-                    return new VentilationTSPValueResponse(this);
-                case MessageID.FHBsizeVentilationHeatRecovery:
-                    return new VentilationFHBSizeResponse(this);
-                case MessageID.FHBindexFHBvalueVentilationHeatRecovery:
-                    return new VentilationFHBEntryResponse(this);
-                case MessageID.Brand:
-                    return new BrandCharacterResponse(this);
-                case MessageID.BrandVersion:
-                    return new BrandVersionCharacterResponse(this);
-                case MessageID.BrandSerialNumber:
-                    return new BrandSerialByteResponse(this);
-                case MessageID.CoolingOperationHours:
-                    return new CoolingOperationHoursResponse(this);
-                case MessageID.PowerCycles:
-                    return new PowerCyclesResponse(this);
-                case MessageID.RFsensorStatusInformation:
-                    return new RFsensorStatusInformationResponse(this);
-                case MessageID.RemoteOverrideOperatingModeHeatingDHW:
-                    return new RemoteOverrideOperatingModeResponse(this);
-                case MessageID.RemoteOverrideFunction:
-                    return new RemoteOverrideFunctionResponse(this);
-                case MessageID.StatusSolarStorage:
-                    return new SolarStorageStatusResponse(this);
-                case MessageID.ASFflagsOEMfaultCodeSolarStorage:
-                    return new SolarStorageApplicationFaultCodesResponse(this);
-                case MessageID.UnsuccessfulBurnerStarts:
-                    return new UnsuccessfulBurnerStartsResponse(this);
-                case MessageID.FlameSignalTooLowNumber:
-                    return new FlameSignalTooLowNumberResponse(this);
-                case MessageID.OEMDiagnosticCode:
-                    return new OEMDiagnosticCodeResponse(this);
-                case MessageID.SuccessfulBurnerStarts:
-                    return new SuccessfulBurnerStartsResponse(this);
-                case MessageID.CHPumpStarts:
-                    return new CHPumpStartsResponse(this);
-                case MessageID.DHWPumpValveStarts:
-                    return new DHWPumpValveStartsResponse(this);
-                case MessageID.DHWBurnerStarts:
-                    return new DHWBurnerStartsResponse(this);
-                case MessageID.BurnerOperationHours:
-                    return new BurnerOperationHoursResponse(this);
-                case MessageID.CHPumpOperationHours:
-                    return new CHPumpOperationHoursResponse(this);
-                case MessageID.DHWPumpValveOperationHours:
-                    return new DHWPumpValveOperationHoursResponse(this);
-                case MessageID.DHWBurnerOperationHours:
-                    return new DHWBurnerOperationHoursResponse(this);
-                case MessageID.SolarStorageVersion:
-                    return new SolarStorageProductVersionResponse(this);
-                case MessageID.TSPSolarStorage:
-                    return new SolarStorageTSPCountResponse(this);
-                case MessageID.TSPindexTSPvalueSolarStorage:
-                    return new SolarStorageTSPValueResponse(this);
-                case MessageID.FHBsizeSolarStorage:
-                    return new SolarStorageFHBSizeResponse(this);
-                case MessageID.FHBindexFHBvalueSolarStorage:
-                    return new SolarStorageFHBEntryResponse(this);
-                case MessageID.ElectricityProducerStarts:
-                    return new ElectricityProducerStartsResponse(this);
-                case MessageID.ElectricityProducerHours:
-                    return new ElectricityProducerHoursResponse(this);
-                case MessageID.ElectricityProduction:
-                    return new ElectricityProductionResponse(this);
-                case MessageID.CumulativElectricityProduction:
-                    return new CumulativeElectricityProductionResponse(this);
-                case MessageID.OpenThermVersionSlave:
-                    return new OpenThermVersionSlaveResponse(this);
-                case MessageID.MasterVersion:
-                    return new MasterProductVersionResponse(this);
-                case MessageID.SlaveVersion:
-                    return new SlaveProductVersionResponse(this);
-                case MessageID.TSet:
-                    break;
-                case MessageID.MConfigMMemberIDcode:
-                    break;
-                case MessageID.RemoteRequest:
-                    break;
-                case MessageID.CoolingControl:
-                    break;
-                case MessageID.TsetCH2:
-                    break;
-                case MessageID.MaxRelModLevelSetting:
-                    break;
-                case MessageID.TrSet:
-                    break;
-                case MessageID.TrSetCH2:
-                    break;
-                case MessageID.TdhwSet:
-                    break;
-                case MessageID.MaxTSet:
-                    break;
-                default:
-                    return this;
-            }
-            return this;
+                MessageID.Status => new StatusResponse(this),
+                MessageID.SConfigSMemberIDcode => new SlaveConfigResponse(this),
+                MessageID.SConfigSMemberIDcodeSolarStorage => new SolarStorageSConfigResponse(this),
+                MessageID.ASFflags => new ApplicationFaultCodesResponse(this),
+                MessageID.RBPflags => new RemoteBoilerParameterResponse(this),
+                MessageID.TrOverride => new RemoteOverrideRoomSetPointResponse(this),
+                MessageID.TSP => new TransparentSlaveParametersCountResponse(this),
+                MessageID.TSPindexTSPvalue => new TransparentSlaveParameterResponse(this),
+                MessageID.FHBsize => new FaultHistoryBufferSizeResponse(this),
+                MessageID.FHBindexFHBvalue => new FaultHistoryBufferEntryResponse(this),
+                MessageID.MaxCapacityMinModLevel => new MaxCapacityMinModLevelResponse(this),
+                MessageID.RelModLevel => new RelModulationResponse(this),
+                MessageID.CHPressure => new CHPressureResponse(this),
+                MessageID.DHWFlowRate => new DHWFlowRateResponse(this),
+                MessageID.DayTime => new DayTimeResponse(this),
+                MessageID.Date => new DateResponse(this),
+                MessageID.Year => new YearResponse(this),
+                MessageID.Tboiler => new BoilerTemperatureResponse(this),
+                MessageID.Tdhw => new DHWTemperatureResponse(this),
+                MessageID.Toutside => new OutsideTemperatureResponse(this),
+                MessageID.Tret => new ReturnTemperatureResponse(this),
+                MessageID.Tr => new RoomTemperatureResponse(this),
+                MessageID.Tstorage => new StorageTemperatureResponse(this),
+                MessageID.OpenThermVersionMaster => new OpenThermVersionMasterResponse(this),
+                MessageID.Tcollector => new CollectorTemperatureResponse(this),
+                MessageID.TflowCH2 => new CH2FlowTemperatureResponse(this),
+                MessageID.Tdhw2 => new DHW2TemperatureResponse(this),
+                MessageID.Texhaust => new ExhaustTemperatureResponse(this),
+                MessageID.TboilerHeatExchanger => new BoilerHeatExchangerTemperatureResponse(this),
+                MessageID.BoilerFanSpeedSetpointAndActual => new BoilerFanSpeedResponse(this),
+                MessageID.FlameCurrent => new FlameCurrentResponse(this),
+                MessageID.TrCH2 => new RoomTemperatureCH2Response(this),
+                MessageID.RelativeHumidity => new RelativeHumidityResponse(this),
+                MessageID.TrOverride2 => new RemoteOverrideRoomSetPoint2Response(this),
+                MessageID.TdhwSetUBTdhwSetLB => new DhwSetpointBoundsResponse(this),
+                MessageID.MaxTSetUBMaxTSetLB => new MaxTSetBoundsResponse(this),
+                MessageID.StatusVentilationHeatRecovery => new VentilationStatusResponse(this),
+                MessageID.Vset => new VentilationPositionResponse(this),
+                MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery => new VentilationApplicationFaultCodesResponse(this),
+                MessageID.OEMDiagnosticCodeVentilationHeatRecovery => new VentilationOEMDiagnosticCodeResponse(this),
+                MessageID.SConfigSMemberIDCodeVentilationHeatRecovery => new VentilationSConfigResponse(this),
+                MessageID.OpenThermVersionVentilationHeatRecovery => new VentilationOpenThermVersionResponse(this),
+                MessageID.VentilationHeatRecoveryVersion => new VentilationProductVersionResponse(this),
+                MessageID.RelVentLevel => new RelativeVentilationLevelResponse(this),
+                MessageID.RHexhaust => new RelativeHumidityExhaustResponse(this),
+                MessageID.CO2exhaust => new CO2ExhaustResponse(this),
+                MessageID.Tsi => new SupplyInletTemperatureResponse(this),
+                MessageID.Tso => new SupplyOutletTemperatureResponse(this),
+                MessageID.Tei => new ExhaustInletTemperatureResponse(this),
+                MessageID.Teo => new ExhaustOutletTemperatureResponse(this),
+                MessageID.RPMexhaust => new ExhaustFanSpeedResponse(this),
+                MessageID.RPMsupply => new SupplyFanSpeedResponse(this),
+                MessageID.RBPflagsVentilationHeatRecovery => new RemoteVentilationParameterResponse(this),
+                MessageID.NominalVentilationValue => new NominalVentilationValueResponse(this),
+                MessageID.TSPventilationHeatRecovery => new VentilationTSPCountResponse(this),
+                MessageID.TSPindexTSPvalueVentilationHeatRecovery => new VentilationTSPValueResponse(this),
+                MessageID.FHBsizeVentilationHeatRecovery => new VentilationFHBSizeResponse(this),
+                MessageID.FHBindexFHBvalueVentilationHeatRecovery => new VentilationFHBEntryResponse(this),
+                MessageID.Brand => new BrandCharacterResponse(this),
+                MessageID.BrandVersion => new BrandVersionCharacterResponse(this),
+                MessageID.BrandSerialNumber => new BrandSerialByteResponse(this),
+                MessageID.CoolingOperationHours => new CoolingOperationHoursResponse(this),
+                MessageID.PowerCycles => new PowerCyclesResponse(this),
+                MessageID.RFsensorStatusInformation => new RFsensorStatusInformationResponse(this),
+                MessageID.RemoteOverrideOperatingModeHeatingDHW => new RemoteOverrideOperatingModeResponse(this),
+                MessageID.RemoteOverrideFunction => new RemoteOverrideFunctionResponse(this),
+                MessageID.StatusSolarStorage => new SolarStorageStatusResponse(this),
+                MessageID.ASFflagsOEMfaultCodeSolarStorage => new SolarStorageApplicationFaultCodesResponse(this),
+                MessageID.UnsuccessfulBurnerStarts => new UnsuccessfulBurnerStartsResponse(this),
+                MessageID.FlameSignalTooLowNumber => new FlameSignalTooLowNumberResponse(this),
+                MessageID.OEMDiagnosticCode => new OEMDiagnosticCodeResponse(this),
+                MessageID.SuccessfulBurnerStarts => new SuccessfulBurnerStartsResponse(this),
+                MessageID.CHPumpStarts => new CHPumpStartsResponse(this),
+                MessageID.DHWPumpValveStarts => new DHWPumpValveStartsResponse(this),
+                MessageID.DHWBurnerStarts => new DHWBurnerStartsResponse(this),
+                MessageID.BurnerOperationHours => new BurnerOperationHoursResponse(this),
+                MessageID.CHPumpOperationHours => new CHPumpOperationHoursResponse(this),
+                MessageID.DHWPumpValveOperationHours => new DHWPumpValveOperationHoursResponse(this),
+                MessageID.DHWBurnerOperationHours => new DHWBurnerOperationHoursResponse(this),
+                MessageID.SolarStorageVersion => new SolarStorageProductVersionResponse(this),
+                MessageID.TSPSolarStorage => new SolarStorageTSPCountResponse(this),
+                MessageID.TSPindexTSPvalueSolarStorage => new SolarStorageTSPValueResponse(this),
+                MessageID.FHBsizeSolarStorage => new SolarStorageFHBSizeResponse(this),
+                MessageID.FHBindexFHBvalueSolarStorage => new SolarStorageFHBEntryResponse(this),
+                MessageID.ElectricityProducerStarts => new ElectricityProducerStartsResponse(this),
+                MessageID.ElectricityProducerHours => new ElectricityProducerHoursResponse(this),
+                MessageID.ElectricityProduction => new ElectricityProductionResponse(this),
+                MessageID.CumulativElectricityProduction => new CumulativeElectricityProductionResponse(this),
+                MessageID.OpenThermVersionSlave => new OpenThermVersionSlaveResponse(this),
+                MessageID.MasterVersion => new MasterProductVersionResponse(this),
+                MessageID.SlaveVersion => new SlaveProductVersionResponse(this),
+                MessageID.TSet => new ControlSetpointResponse(this),
+                MessageID.MConfigMMemberIDcode => new MasterConfigResponse(this),
+                MessageID.RemoteRequest => new RemoteRequestResponse(this),
+                MessageID.CoolingControl => new CoolingControlResponse(this),
+                MessageID.TsetCH2 => new ControlSetpointCH2Response(this),
+                MessageID.MaxRelModLevelSetting => new MaxRelModLevelSettingResponse(this),
+                MessageID.TrSet => new RoomSetpointResponse(this),
+                MessageID.TrSetCH2 => new RoomSetpointCH2Response(this),
+                MessageID.TdhwSet => new DhwSetpointResponse(this),
+                MessageID.MaxTSet => new MaxTSetResponse(this),
+                _ => this,
+            };
         }
 
         /// <summary>
