@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Device; // for DelayHelper
 using System.Device.Gpio;
-using System.Diagnostics;
 using System.Threading;
 
 using TekuSP.Drivers.Nano_OpenTherm.Requests;
@@ -22,11 +21,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm
     {
         #region Private Fields
 
-        // Manchester timing constant
+        // Manchester timing constants
         private const int HalfBitUs = 500;
+        private const int QuarterBitUs = HalfBitUs / 2; // 250us sampling offset to hit mid-half
+
+        // Additional timing margins
+        private const int PostTxGuardUs = 1500; // guard after TX before re-enabling RX (echo immunity)
+        private const int InterFrameIdleMs = 20; // minimum idle time between frames
+        private const int ResponseTimeoutMs = 1000; // covers spec 100–800ms response time
 
         private readonly ManualResetEvent dataProcessedEvent = new ManualResetEvent(false);
         private GpioController controller;
+
+        // Pending request tracking to correlate responses
+        private IOpenThermData _pendingSend;
+        private TekuSP.Drivers.DriverBase.Enums.OpenTherm.MessageID _pendingMessageId;
 
         #endregion Private Fields
 
@@ -88,14 +97,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         public int DeviceAddress => RawInPin + RawOutPin;
         public bool IsRunning { get; private set; }
         public string Name => "OpenTherm Adapter";
-        public uint RawResponse { get; set; }
 
         #endregion Public Properties
 
         #region Private Properties
 
-        private int DataReceiveIndex { get; set; }
-        private Stopwatch DataReceiveTimer { get; set; }
         private GpioPin InPin { get; set; }
         private Enums.DataStatus InternalReceiveStatus { get; set; }
         private Enums.DataStatus InternalSendStatus { get; set; }
@@ -111,14 +117,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         #region Public Methods
 
         /// <summary>
-        /// Not supported, use <see cref="SendRequest(Request)"/> to request data and <see cref="DataReceived"/> to Read Data
+        /// Not supported, use <see cref="SendPacket(IOpenThermData)"/> to request data and <see cref="DataReceived"/> to Read Data
         /// </summary>
         /// <param name="pointer">Pointer where to read in device</param>
         /// <returns>Data from device or -1 if not supported</returns>
         public long ReadData(byte pointer) => -1;
 
         /// <summary>
-        /// Not supported, use <see cref="SendRequest(Request)"/> to request data and <see cref="DataReceived"/> to Read Data
+        /// Not supported, use <see cref="SendPacket(IOpenThermData)"/> to request data and <see cref="DataReceived"/> to Read Data
         /// </summary>
         /// <param name="data">Data which to read from device</param>
         /// <returns>Length of data read or -1 if not supported</returns>
@@ -168,7 +174,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         public void Restart()
         {
             Stop();
-            Thread.Sleep(1000);
+            Thread.Sleep(50);
             Start();
         }
 
@@ -182,6 +188,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             if (!IsRunning) return false;
             if (InternalSendStatus != Enums.DataStatus.READY) return false;
 
+            // Track pending
+            _pendingSend = data;
+            _pendingMessageId = data.MessageID;
+
+            // Prepare to send: suppress RX during TX
+            InternalReceiveStatus = Enums.DataStatus.DELAY;
             InternalSendStatus = Enums.DataStatus.REQUEST_SENDING;
 
             // Start bit
@@ -196,24 +208,26 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             // Stop bit
             WriteData(true);
 
+            // Subscribe completion handlers BEFORE enabling RX to avoid race
+            DataReceived += SendDataFinished;
+
+            // Start response timeout using static callback (no closure)
+            TimeoutTimer = new Timer(OnTimeout, null, ResponseTimeoutMs, Timeout.Infinite);
+
+            // Post-TX guard to avoid sampling any local echo on RX
+            DelayHelper.DelayMicroseconds(PostTxGuardUs, false);
+
+            // Re-enable RX and move to waiting-for-response state
+            InternalReceiveStatus = Enums.DataStatus.READY;
+            InternalSendStatus = Enums.DataStatus.RESPONSE_WAITING;
+
             DataSent.Invoke(this, data);
 
-            DataReceived += SendDataFinished;
-            DataInvalid += SendDataFinished;
-
-            // Typical OpenTherm reply arrives within 100–800 ms; keep a safe ceiling
-            var timeoutMs = 1000; // 1 second
-            TimeoutTimer = new Timer((_) =>
-            {
-                DataReceived -= SendDataFinished;
-                DataInvalid -= SendDataFinished;
-                DataTimeout.Invoke(this, data);
-                dataProcessedEvent.Set();
-                InternalSendStatus = Enums.DataStatus.READY;
-            }, null, timeoutMs, Timeout.Infinite);
-
-            // Do not block here; let the RX path complete the async wait
+            // Release the bus (open-drain idle by writing High)
             OutPin.Write(PinValue.High);
+
+            // Enforce minimum inter-frame idle time here; this API is considered blocking by design
+            Thread.Sleep(InterFrameIdleMs);
             return true;
         }
 
@@ -251,11 +265,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             InPin = controller.OpenPin(RawInPin, PinMode.Input);
             if (controller.IsPinOpen(RawOutPin))
                 throw new ArgumentException($"Pin Output {RawOutPin} is already opened elsewhere. Please close it first.");
-            OutPin = controller.OpenPin(RawOutPin, PinMode.Output);
+            // Use true open-drain
+            OutPin = controller.OpenPin(RawOutPin, PinMode.OutputOpenDrain);
 
-            DataReceiveTimer = new Stopwatch();
-            OutPin.Write(PinValue.High); //Confirm that we are ready to communicate
-            Thread.Sleep(1000);
+            // Release line when idle (write High to open-drain -> release)
+            OutPin.Write(PinValue.High);
+            Thread.Sleep(50);
             InternalReceiveStatus = Enums.DataStatus.READY;
             InternalSendStatus = Enums.DataStatus.READY;
 
@@ -273,7 +288,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm
 
             InPin.ValueChanged -= InPin_DataRecieved;
 
-            OutPin.Write(PinValue.Low); //Stop communication
+            // Release communication (idle = released)
+            OutPin.Write(PinValue.High);
 
             if (controller != null)
             {
@@ -290,42 +306,40 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             InternalSendStatus = Enums.DataStatus.NOT_INITIALIZED;
 
             LastReceivedDataFromSend = null;
+            _pendingSend = null;
+            TimeoutTimer?.Dispose();
+            TimeoutTimer = null;
             dataProcessedEvent.Set();
             dataProcessedEvent.Reset();
-            if (TimeoutTimer != null)
-            {
-                TimeoutTimer.Dispose();
-                TimeoutTimer = null;
-            }
-            DataReceiveIndex = 0;
 
             controller?.Dispose();
             controller = null;
 
-            Thread.Sleep(1000);
+            Thread.Sleep(50);
         }
 
         /// <summary>
-        /// Not supported, see <see cref="SendRequest(Request)"/> to send data
+        /// Not supported, see <see cref="SendPacket(IOpenThermData)"/> to send data
         /// </summary>
         public void WriteData(byte[] data)
         {
             return;
         }
         /// <summary>
-        /// Writes single bit to OUT pin using Manchester encoding
+        /// Writes single bit to OUT pin using Manchester encoding on open-drain output
         /// </summary>
         /// <param name="bit">Bit to write</param>
         public void WriteData(bool bit)
         {
             // Manchester encoding: 500us per half-bit, mid-bit transition
-            var first = bit ? PinValue.Low : PinValue.High;
+            // With open-drain: High means release, Low means pull-down
+            var first = bit ? PinValue.Low : PinValue.High;   // 1: Low then High, 0: High then Low
             var second = bit ? PinValue.High : PinValue.Low;
 
             OutPin.Write(first);
-            DelayHelper.DelayMicroseconds(HalfBitUs, false); // busy-wait to keep 500us accurate
+            DelayHelper.DelayMicroseconds(HalfBitUs, false);
             OutPin.Write(second);
-            DelayHelper.DelayMicroseconds(HalfBitUs, false); // busy-wait to keep 500us accurate
+            DelayHelper.DelayMicroseconds(HalfBitUs, false);
         }
 
         #endregion Public Methods
@@ -340,13 +354,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             if (!IsRunning || InternalReceiveStatus != Enums.DataStatus.READY)
                 return;
 
+            // Ignore edges while actively sending
+            if (InternalSendStatus == Enums.DataStatus.REQUEST_SENDING)
+                return;
+
             if (e.ChangeType != PinEventTypes.Falling) // only try to decode on falling edge of Start(1)
                 return;
 
             InternalReceiveStatus = Enums.DataStatus.RESPONSE_RECEIVING;
             if (TryDecodeManchesterFrame(out var frame))
             {
-                RawResponse = frame; // set only on success
                 if (Slave)
                 {
                     var req = new ReceivedRequest(frame);
@@ -362,7 +379,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             }
             else
             {
-                // Could not decode a valid frame; don't pass stale RawResponse
+                // Could not decode a valid frame; don't pass stale data
                 DataInvalid.Invoke(this, Slave ? new ReceivedRequest(0) : new ReceivedResponse(0));
             }
             InternalReceiveStatus = Enums.DataStatus.READY;
@@ -378,18 +395,18 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             frame = 0U;
 
             // We got here on the falling edge that should be the first half of Start(1)
-            // Validate Start(1) = Low->High
-            DelayHelper.DelayMicroseconds(HalfBitUs, false);
+            // Sample mid-halves using fixed quarter-bit offset
+            DelayHelper.DelayMicroseconds(QuarterBitUs, false); // center of first half of start bit
             if (InPin.Read() != PinValue.Low) return false;
-            DelayHelper.DelayMicroseconds(HalfBitUs, false);
+            DelayHelper.DelayMicroseconds(HalfBitUs, false); // center of second half of start bit
             if (InPin.Read() != PinValue.High) return false;
 
             // Read 32 data bits (MSB first)
             for (int i = 0; i < 32; i++)
             {
-                DelayHelper.DelayMicroseconds(HalfBitUs, false);
+                DelayHelper.DelayMicroseconds(HalfBitUs, false); // center of first half for this bit
                 var a = InPin.Read();
-                DelayHelper.DelayMicroseconds(HalfBitUs, false);
+                DelayHelper.DelayMicroseconds(HalfBitUs, false); // center of second half for this bit
                 var b = InPin.Read();
                 if (a == b) return false; // no transition -> invalid Manchester bit
 
@@ -398,9 +415,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             }
 
             // Validate Stop(1) = Low->High
-            DelayHelper.DelayMicroseconds(HalfBitUs, false);
+            DelayHelper.DelayMicroseconds(HalfBitUs, false); // center first half of stop bit
             var sa = InPin.Read();
-            DelayHelper.DelayMicroseconds(HalfBitUs, false);
+            DelayHelper.DelayMicroseconds(HalfBitUs, false); // center second half of stop bit
             var sb = InPin.Read();
             if (!(sa == PinValue.Low && sb == PinValue.High)) return false;
 
@@ -412,16 +429,34 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         private void SendDataFinished(object sender, IOpenThermData e)
         {
+            // Only complete if we are actually waiting and message matches our pending one
+            if (InternalSendStatus != Enums.DataStatus.RESPONSE_WAITING)
+                return;
+            if (e != null && e.MessageID != _pendingMessageId)
+                return;
+
             DataReceived -= SendDataFinished;
-            DataInvalid -= SendDataFinished;
-            if (TimeoutTimer != null)
-            {
-                TimeoutTimer.Dispose();
-                TimeoutTimer = null;
-            }
+            DataInvalid -= SendDataFinished; // safe even if not subscribed
+            TimeoutTimer?.Dispose();
+            TimeoutTimer = null;
             LastReceivedDataFromSend = e;
-            dataProcessedEvent.Set();
+            _pendingSend = null;
             InternalSendStatus = Enums.DataStatus.READY;
+            dataProcessedEvent.Set();
+        }
+
+        private void OnTimeout(object state)
+        {
+            // Timeout; detach and signal if still waiting
+            if (InternalSendStatus != Enums.DataStatus.RESPONSE_WAITING)
+                return;
+
+            DataReceived -= SendDataFinished;
+            DataInvalid -= SendDataFinished; // safe even if not subscribed
+            DataTimeout.Invoke(this, _pendingSend);
+            _pendingSend = null;
+            InternalSendStatus = Enums.DataStatus.READY;
+            dataProcessedEvent.Set();
         }
 
         #endregion Private Methods
