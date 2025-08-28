@@ -24,6 +24,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize master status (LB) bits for CH2.
+        /// </summary>
+        public GetRoomTemperatureCH2Request(MS status)
+            : base()
+        {
+            MasterStatus = status;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

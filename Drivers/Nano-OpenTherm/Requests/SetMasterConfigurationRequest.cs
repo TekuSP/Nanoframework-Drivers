@@ -1,73 +1,36 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.Nano_OpenTherm.Enums;
 using TekuSP.Drivers.Nano_OpenTherm.Interfaces;
-using SC = TekuSP.Drivers.Nano_OpenTherm.Enums.SlaveConfiguration;
 
-namespace TekuSP.Drivers.Nano_OpenTherm.Responses
+using MC = TekuSP.Drivers.Nano_OpenTherm.Enums.MasterConfiguration;
+
+namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Solar Storage: Slave Configuration Flags and Member ID Code response.
+    /// Writes the master configuration flags and member ID code (ID=2).
+    /// High byte = MemberIdCode, Low byte = MasterConfiguration.
     /// </summary>
-    /// <remarks>
-    /// Low byte contains <see cref="SlaveConfiguration"/> flags; high byte contains <see cref="MemberIdCode"/>.
-    /// This type can be constructed for sending (ACK/error), or instantiated from a received frame for parsing.
-    /// </remarks>
-    public class SolarStorageSConfigResponse : Response, ISlaveConfiguration, IMemberIdCode
+    public class SetMasterConfigurationRequest : WriteRequest, IMasterConfiguration, IMemberIdCode
     {
-        // Single source of truth: protected enum auto-properties
-        protected SC SlaveConfiguration { get; set; }
-        protected MemberIdCode MemberIdCode { get; set; }
-        /// <summary>
-        /// Initializes a new response for constructing a frame to send.
-        /// </summary>
-        /// <param name="messageType">Optional message type to use. Defaults to <see cref="TekuSP.Drivers.Nano_OpenTherm.Enums.MessageType.READ_ACK"/>.</param>
-        public SolarStorageSConfigResponse(MessageType messageType = MessageType.READ_ACK)
+        public SetMasterConfigurationRequest() : base() { }
+        public SetMasterConfigurationRequest(Request baseReq) : base(baseReq) { }
+        public SetMasterConfigurationRequest(MemberIdCode memberId, MasterConfiguration config)
         {
-            MessageType = messageType;
-        }
-        /// <summary>
-        /// Convenience constructor to set MemberIdCode (HB) and SlaveConfiguration flags (LB).
-        /// </summary>
-        public SolarStorageSConfigResponse(MemberIdCode memberId, SC config, MessageType mt = MessageType.READ_ACK)
-        {
-            MessageType = mt;
             MemberIdCode = memberId;
-            SlaveConfiguration = config;
-        }
-        /// <summary>
-        /// Wrap a received frame and expose properties for flags and member ID.
-        /// </summary>
-    public SolarStorageSConfigResponse(Response baseResponse) : base(baseResponse) { }
-
-        protected override uint GetRawDataCore()
-        {
-            var low = Utilities.SetSlaveConfiguration(SlaveConfiguration);
-            ushort payload = Utilities.MakeUShort((byte)MemberIdCode, low);
-            return ProcessResponse(payload);
-        }
-        protected override void SetRawDataCore(uint value)
-        {
-            SlaveConfiguration = Utilities.GetSlaveConfiguration(value);
-            MemberIdCode = (MemberIdCode)Utilities.GetHighByte(value);
+            MasterConfiguration = config;
         }
 
-        /// <inheritdoc />
-        public override MessageType MessageType { get; set; }
+        public override MessageID MessageID => MessageID.MConfigMMemberIDcode;
+        public override MessageType MessageType => MessageType.WRITE_DATA;
 
-        /// <inheritdoc />
-        public override MessageID MessageID => MessageID.SConfigSMemberIDcodeSolarStorage;
+    /// <summary>Flags for master configuration (low data byte).</summary>
+    protected MasterConfiguration MasterConfiguration { get; set; }
 
-    // ISlaveConfiguration
-    public bool SlaveConfigDHWPresent { get => SlaveConfiguration.IsSet(SC.DHWPresent); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.DHWPresent, value); }
-    public bool SlaveConfigControlType { get => SlaveConfiguration.IsSet(SC.ControlType); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.ControlType, value); }
-    public bool SlaveConfigCooling { get => SlaveConfiguration.IsSet(SC.CoolingConfig); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.CoolingConfig, value); }
-    public bool SlaveConfigDHWConfig { get => SlaveConfiguration.IsSet(SC.DHWConfig); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.DHWConfig, value); }
-    public bool SlaveConfigMasterLowOffPumpControl { get => SlaveConfiguration.IsSet(SC.MasterLowOffPumpControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.MasterLowOffPumpControl, value); }
-    public bool SlaveConfigCH2Present { get => SlaveConfiguration.IsSet(SC.CH2Present); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.CH2Present, value); }
-    public bool SlaveConfigReserved6 { get => SlaveConfiguration.IsSet(SC.Reserved6); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.Reserved6, value); }
-    public bool SlaveConfigReserved7 { get => SlaveConfiguration.IsSet(SC.Reserved7); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.Reserved7, value); }
+    /// <summary>Member ID code of the master (high data byte).</summary>
+    protected MemberIdCode MemberIdCode { get; set; }
 
-    // IMemberIdCode
+    #region IMemberIdCode implementation
+
     public bool IsAET80FormerNordgasSrl { get => MemberIdCode == MemberIdCode.AET80FormerNordgasSrl; set => MemberIdCode = value ? MemberIdCode.AET80FormerNordgasSrl : MemberIdCode; }
     public bool IsAirfitShanghaiHeatingEquipmentCoLtd { get => MemberIdCode == MemberIdCode.AirfitShanghaiHeatingEquipmentCoLtd; set => MemberIdCode = value ? MemberIdCode.AirfitShanghaiHeatingEquipmentCoLtd : MemberIdCode; }
     public bool IsAirios { get => MemberIdCode == MemberIdCode.Airios; set => MemberIdCode = value ? MemberIdCode.Airios : MemberIdCode; }
@@ -172,5 +135,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     public bool IsWundaGroupPLC { get => MemberIdCode == MemberIdCode.WundaGroupPLC; set => MemberIdCode = value ? MemberIdCode.WundaGroupPLC : MemberIdCode; }
     public bool IsXiamenDavellAutoControlEquipmentCoLtd { get => MemberIdCode == MemberIdCode.XiamenDavellAutoControlEquipmentCoLtd; set => MemberIdCode = value ? MemberIdCode.XiamenDavellAutoControlEquipmentCoLtd : MemberIdCode; }
     public bool IsXiamenHysenControlTechnology { get => MemberIdCode == MemberIdCode.XiamenHysenControlTechnology; set => MemberIdCode = value ? MemberIdCode.XiamenHysenControlTechnology : MemberIdCode; }
+
+    #endregion IMemberIdCode implementation
+
+    #region IMasterConfiguration implementation
+
+    public bool MasterConfigReserved0 { get => MasterConfiguration.IsSet(MC.Reserved0); set => MasterConfiguration = MasterConfiguration.SetFlag(MC.Reserved0, value); }
+    public bool MasterConfigReserved1 { get => MasterConfiguration.IsSet(MC.Reserved1); set => MasterConfiguration = MasterConfiguration.SetFlag(MC.Reserved1, value); }
+    public bool MasterConfigReserved2 { get => MasterConfiguration.IsSet(MC.Reserved2); set => MasterConfiguration = MasterConfiguration.SetFlag(MC.Reserved2, value); }
+    public bool MasterConfigReserved3 { get => MasterConfiguration.IsSet(MC.Reserved3); set => MasterConfiguration = MasterConfiguration.SetFlag(MC.Reserved3, value); }
+    public bool MasterConfigReserved4 { get => MasterConfiguration.IsSet(MC.Reserved4); set => MasterConfiguration = MasterConfiguration.SetFlag(MC.Reserved4, value); }
+    public bool MasterConfigReserved5 { get => MasterConfiguration.IsSet(MC.Reserved5); set => MasterConfiguration = MasterConfiguration.SetFlag(MC.Reserved5, value); }
+    public bool MasterConfigReserved6 { get => MasterConfiguration.IsSet(MC.Reserved6); set => MasterConfiguration = MasterConfiguration.SetFlag(MC.Reserved6, value); }
+    public bool MasterConfigReserved7 { get => MasterConfiguration.IsSet(MC.Reserved7); set => MasterConfiguration = MasterConfiguration.SetFlag(MC.Reserved7, value); }
+
+    #endregion IMasterConfiguration implementation
+
+        protected override uint GetRawDataCore()
+        {
+            byte low = Utilities.SetMasterConfiguration(MasterConfiguration);
+            ushort payload = Utilities.MakeUShort((byte)MemberIdCode, low);
+            return ProcessRequest(payload);
+        }
+
+        protected override void SetRawDataCore(uint value)
+        {
+            MasterConfiguration = Utilities.GetMasterConfiguration(value);
+            MemberIdCode = (MemberIdCode)Utilities.GetHighByte(value);
+        }
     }
 }

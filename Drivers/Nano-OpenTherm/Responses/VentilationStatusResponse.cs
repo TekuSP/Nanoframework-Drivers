@@ -14,6 +14,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         protected SlaveStatus SlaveStatus { get; set; }
 
         public VentilationStatusResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
+        /// <summary>
+        /// Convenience constructor to initialize ventilation master/slave status fields.
+        /// </summary>
+        public VentilationStatusResponse(MasterStatus master, SlaveStatus slave, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            MasterStatus = master;
+            SlaveStatus = slave;
+        }
         public VentilationStatusResponse(Response r) : base(r) { }
 
         protected override uint GetRawDataCore()

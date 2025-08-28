@@ -19,6 +19,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize DHW, HC1 and HC2 operating modes.
+        /// </summary>
+        public SetRemoteOverrideOperatingModeRequest(OperatingMode hc1, OperatingMode hc2, OperatingMode dhw)
+        {
+            HC1 = hc1;
+            HC2 = hc2;
+            DHW = dhw;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

@@ -21,6 +21,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize MemberIdCode (HB) and SlaveConfiguration flags (LB).
+        /// </summary>
+        public GetVentilationSConfigRequest(MemberIdCode memberId, SC config)
+        {
+            MemberIdCode = memberId;
+            SlaveConfiguration = config;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

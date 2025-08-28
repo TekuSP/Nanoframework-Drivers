@@ -10,6 +10,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     public class RemoteOverrideFunctionResponse : Response, IRemoteOverrideFunction
     {
         public RemoteOverrideFunctionResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
+        /// <summary>
+        /// Convenience constructor to initialize remote override function flags (low byte).
+        /// </summary>
+        public RemoteOverrideFunctionResponse(RemoteOverrideFunction functionFlags, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            RemoteOverrideFunction = functionFlags;
+        }
         public RemoteOverrideFunctionResponse(Response r) : base(r) { }
 
         protected RemoteOverrideFunction RemoteOverrideFunction { get; set; }

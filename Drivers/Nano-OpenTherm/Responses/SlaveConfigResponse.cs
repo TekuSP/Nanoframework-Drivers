@@ -19,6 +19,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         {
             MessageType = messageType;
         }
+        /// <summary>
+        /// Convenience constructor to set MemberIdCode (HB) and SlaveConfiguration flags (LB).
+        /// </summary>
+        public SlaveConfigResponse(MemberIdCode memberId, SC config, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            MemberIdCode = memberId;
+            SlaveConfiguration = config;
+        }
 
     public SlaveConfigResponse(Response baseResponse) : base(baseResponse) { }
 

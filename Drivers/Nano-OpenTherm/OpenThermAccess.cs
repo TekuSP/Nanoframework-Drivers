@@ -13,16 +13,17 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 // Core control and status
                 case MessageID.Status: return AccessMode.ReadWrite;
                 case MessageID.TSet: return AccessMode.Write; // control setpoint from master
-                case MessageID.MConfigMMemberIDcode: return AccessMode.Read; // typically read master config
+                case MessageID.MConfigMMemberIDcode: return AccessMode.Write; // master writes its config to slave per v2.2
                 case MessageID.SConfigSMemberIDcode: return AccessMode.Read;
                 case MessageID.RemoteRequest: return AccessMode.ReadWrite;
                 case MessageID.ASFflags: return AccessMode.Read;
                 case MessageID.RBPflags: return AccessMode.ReadWrite;
                 case MessageID.CoolingControl: return AccessMode.Write;
                 case MessageID.TsetCH2: return AccessMode.Write;
-                case MessageID.TrOverride: return AccessMode.Write;
+                case MessageID.TrOverride: return AccessMode.Read; // v2.2: remote override setpoint is read-only
+                case MessageID.TrOverride2: return AccessMode.Read; // mirror read-only for second override
                 case MessageID.TSP: return AccessMode.Read;
-                case MessageID.TSPindexTSPvalue: return AccessMode.Read;
+                case MessageID.TSPindexTSPvalue: return AccessMode.ReadWrite; // v2.2: TSP index/value is RW
                 case MessageID.FHBsize: return AccessMode.Read;
                 case MessageID.FHBindexFHBvalue: return AccessMode.Read;
                 case MessageID.MaxRelModLevelSetting: return AccessMode.Write;
@@ -62,7 +63,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                     return AccessMode.Read;
                 case MessageID.TdhwSet:
                 case MessageID.MaxTSet:
-                    return AccessMode.Write;
+                    return AccessMode.ReadWrite; // v2.2: RW (read back and write)
 
                 // Ventilation/heat-recovery
                 case MessageID.StatusVentilationHeatRecovery: return AccessMode.ReadWrite;
@@ -84,7 +85,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 case MessageID.RBPflagsVentilationHeatRecovery: return AccessMode.ReadWrite;
                 case MessageID.NominalVentilationValue: return AccessMode.ReadWrite;
                 case MessageID.TSPventilationHeatRecovery: return AccessMode.Read;
-                case MessageID.TSPindexTSPvalueVentilationHeatRecovery: return AccessMode.Read;
+                case MessageID.TSPindexTSPvalueVentilationHeatRecovery: return AccessMode.ReadWrite; // mirror TSP RW behavior
                 case MessageID.FHBsizeVentilationHeatRecovery: return AccessMode.Read;
                 case MessageID.FHBindexFHBvalueVentilationHeatRecovery: return AccessMode.Read;
 
@@ -113,7 +114,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 // RF / overrides
                 case MessageID.RFsensorStatusInformation: return AccessMode.ReadWrite;
                 case MessageID.RemoteOverrideOperatingModeHeatingDHW: return AccessMode.ReadWrite;
-                case MessageID.RemoteOverrideFunction: return AccessMode.ReadWrite;
+                case MessageID.RemoteOverrideFunction: return AccessMode.Read; // v2.2: function flags are read-only
 
                 // Solar storage
                 case MessageID.StatusSolarStorage: return AccessMode.ReadWrite;
@@ -121,7 +122,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 case MessageID.SConfigSMemberIDcodeSolarStorage: return AccessMode.Read;
                 case MessageID.SolarStorageVersion: return AccessMode.Read;
                 case MessageID.TSPSolarStorage: return AccessMode.Read;
-                case MessageID.TSPindexTSPvalueSolarStorage: return AccessMode.Read;
+                case MessageID.TSPindexTSPvalueSolarStorage: return AccessMode.ReadWrite; // mirror TSP RW behavior
                 case MessageID.FHBsizeSolarStorage: return AccessMode.Read;
                 case MessageID.FHBindexFHBvalueSolarStorage: return AccessMode.Read;
 

@@ -19,6 +19,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize product type (LB) and version (HB).
+        /// </summary>
+        public GetMasterVersionRequest(VersionProductType productType, byte version)
+            : base()
+        {
+            ProductType = productType;
+            Version = version;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

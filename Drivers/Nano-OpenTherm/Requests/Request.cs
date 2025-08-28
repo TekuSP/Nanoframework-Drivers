@@ -108,8 +108,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 // Cooling and CH2 setpoint
                 MessageID.CoolingControl => new SetCoolingControlRequest(this),
                 MessageID.TsetCH2 => new SetCH2SetpointRequest(this),
-                MessageID.TrOverride => new SetRoomOverrideRequest(this),
-                MessageID.TrOverride2 => new SetRoomOverride2Request(this),
+                MessageID.TrOverride => new GetRoomOverrideRequest(this),
+                MessageID.TrOverride2 => new GetRoomOverride2Request(this),
                 // Transparent slave parameters and fault history buffer
                 MessageID.TSP => new GetTransparentSlaveParametersCountRequest(this),
                 MessageID.TSPindexTSPvalue => new GetTransparentSlaveParameterRequest(this),
@@ -132,8 +132,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 MessageID.TrSetCH2 => new SetRoomSetpointCH2Request(this),
                 // Temperatures
                 MessageID.Tr => new GetRoomTemperatureRequest(this),
-                MessageID.Tboiler => new GetBoilerTemperatureRequest(this),
-                MessageID.Tdhw => new GetDWHSetPointRequest(this),
+                MessageID.Tboiler => new GetBoilerTemperatureRequest(this),   
+                MessageID.Tdhw => new GetDHWTemperatureRequest(this),
                 MessageID.Toutside => new GetOutsideTemperatureRequest(this),
                 MessageID.Tret => new GetReturnTemperatureRequest(this),
                 MessageID.Tstorage => new GetStorageTemperatureRequest(this),
@@ -184,7 +184,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 MessageID.PowerCycles => new GetPowerCyclesRequest(this),
                 MessageID.RFsensorStatusInformation => new GetRFsensorStatusInformationRequest(this),
                 MessageID.RemoteOverrideOperatingModeHeatingDHW => new SetRemoteOverrideOperatingModeRequest(this),
-                MessageID.RemoteOverrideFunction => new SetRemoteOverrideFunctionRequest(this),
+                MessageID.RemoteOverrideFunction => new GetRemoteOverrideFunctionRequest(this),
                 MessageID.OEMDiagnosticCode => new GetOEMDiagnosticCodeRequest(this),
                 MessageID.UnsuccessfulBurnerStarts => new GetUnsuccessfulBurnerStartsRequest(this),
                 MessageID.FlameSignalTooLowNumber => new GetFlameSignalTooLowNumberRequest(this),

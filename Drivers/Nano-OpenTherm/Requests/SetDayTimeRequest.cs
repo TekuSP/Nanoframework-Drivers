@@ -20,6 +20,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize day-of-week, hour and minute.
+        /// </summary>
+        public SetDayTimeRequest(DayOfWeek day, byte hour, byte minute)
+        {
+            DayOfWeek = day;
+            Hour = hour;
+            Minute = minute;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

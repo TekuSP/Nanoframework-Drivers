@@ -2,8 +2,10 @@
 using System.Device; // for DelayHelper
 using System.Device.Gpio;
 using System.Threading;
+using System.Diagnostics;
 
 using TekuSP.Drivers.Nano_OpenTherm.Requests;
+using TekuSP.Drivers.Nano_OpenTherm.Enums;
 
 using TekuSP.Drivers.DriverBase.Enums;
 using TekuSP.Drivers.DriverBase.Helpers;
@@ -42,7 +44,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         #region Public Constructors
 
         /// <summary>
-        /// OpenTherm driver constructor
+        /// OpenTherm driver constructor for slave
         /// </summary>
         /// <param name="inPin">IN Pin for OpenTherm</param>
         /// <param name="outPin">OUT Pin for OpenTherm</param>
@@ -56,11 +58,37 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// <br/>Can be used as Boiler input for passthrough
         /// <br/><see href="https://diyless.com/product/master-opentherm-shield"/>
         /// </param>
-        public OpenTherm(int inPin, int outPin, bool slave)
+        public OpenTherm(int inPin, int outPin, bool slave = true)
         {
             RawInPin = inPin;
             RawOutPin = outPin;
             Slave = slave;
+        }
+
+        /// <summary>
+        /// OpenTherm driver constructor for Master
+        /// </summary>
+        /// <param name="inPin">IN Pin for OpenTherm</param>
+        /// <param name="outPin">OUT Pin for OpenTherm</param>
+        /// <param name="slave">Is this device slave?
+        /// <param name="memberId">When acting as Master (Slave == false), advertise this Member ID Code at startup (ID=2 high byte). Defaults to Unknown. Set before calling Start().</param>
+        /// <paramref name="masterConfig"/>>When acting as Master (Slave == false), advertise these MasterConfiguration flags at startup (ID=2 low byte). Defaults to 0 (no flags). Set before calling Start().</param>
+        /// <code>Slave</code>
+        /// Can be used as Boiler simulator/or real Boiler
+        /// <br/>Can be used as Thermostat input for passthrough
+        /// <br/><see href="https://diyless.com/product/slave-opentherm-shield"/>
+        /// <code>Master</code>
+        /// Can be used as Thermostat simulator/or real Thermostat
+        /// <br/>Can be used as Boiler input for passthrough
+        /// <br/><see href="https://diyless.com/product/master-opentherm-shield"/>
+        /// </param>
+        public OpenTherm(int inPin, int outPin, MemberIdCode memberId, MasterConfiguration masterConfig)
+        {
+            RawInPin = inPin;
+            RawOutPin = outPin;
+            Slave = false;
+            MemberIdToAdvertise = memberId;
+            MasterConfigurationToAdvertise = masterConfig;
         }
 
         #endregion Public Constructors
@@ -97,6 +125,23 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         public int DeviceAddress => RawInPin + RawOutPin;
         public bool IsRunning { get; private set; }
         public string Name => "OpenTherm Adapter";
+
+    /// <summary>
+    /// When acting as Master (Slave == false), advertise this Member ID Code at startup (ID=2 high byte).
+    /// Defaults to Unknown. Set before calling Start().
+    /// </summary>
+    public MemberIdCode MemberIdToAdvertise { get; set; } = MemberIdCode.Unknown;
+
+    /// <summary>
+    /// When acting as Master (Slave == false), advertise these MasterConfiguration flags at startup (ID=2 low byte).
+    /// Defaults to 0 (no flags). Set before calling Start().
+    /// </summary>
+    public MasterConfiguration MasterConfigurationToAdvertise { get; set; } = 0;
+
+    /// <summary>
+    /// If true and acting as Master, automatically send SetMasterConfigurationRequest at the end of Start().
+    /// </summary>
+    public bool AutoSendMasterConfigOnStart { get; set; } = true;
 
         #endregion Public Properties
 
@@ -275,6 +320,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             InternalSendStatus = Enums.DataStatus.READY;
 
             InPin.ValueChanged += InPin_DataRecieved;
+
+            // If we are Master, optionally advertise our configuration (v2.2: ID=2 is master write)
+            if (!Slave && AutoSendMasterConfigOnStart)
+            {
+                TrySendMasterConfiguration();
+            }
         }
 
         /// <summary>
@@ -345,6 +396,27 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         #endregion Public Methods
 
         #region Private Methods
+
+        /// <summary>
+        /// Sends the Master Configuration (ID=2) and waits for the acknowledgement.
+        /// </summary>
+        private void TrySendMasterConfiguration()
+        {
+            try
+            {
+                var req = new SetMasterConfigurationRequest(MemberIdToAdvertise, MasterConfigurationToAdvertise);
+
+                var ack = SendRequestAndWaitForResponse(req);
+                if (ack == null)
+                {
+                    Debug.WriteLine("[OpenTherm] Master configuration write timed out.");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.WriteLine($"[OpenTherm] Failed to send master configuration: {ex.Message}");
+            }
+        }
 
         /// <summary>
         /// Processes IN pin data with interrupt trigger and microsecond sampling

@@ -21,6 +21,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to set master status flags.
+        /// </summary>
+        public SetBoilerStatusRequest(MS status)
+        {
+            MasterStatus = status;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

@@ -19,6 +19,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize product type for ventilation device version query.
+        /// </summary>
+        public GetVentilationVersionRequest(VersionProductType productType)
+        {
+            ProductType = productType;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

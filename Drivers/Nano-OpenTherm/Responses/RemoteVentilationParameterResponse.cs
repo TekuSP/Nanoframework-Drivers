@@ -11,6 +11,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         protected RemoteParameterTransferReadWrite RemoteParameterTransferReadWrite { get; set; }
 
         public RemoteVentilationParameterResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
+        /// <summary>
+        /// Convenience constructor to initialize both enable (LB) and read/write (HB) flags.
+        /// </summary>
+        public RemoteVentilationParameterResponse(RemoteParameterTransferEnable enable, RemoteParameterTransferReadWrite rw, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            RemoteParameterTransferEnable = enable;
+            RemoteParameterTransferReadWrite = rw;
+        }
         public RemoteVentilationParameterResponse(Response r) : base(r) { }
 
         protected override uint GetRawDataCore()

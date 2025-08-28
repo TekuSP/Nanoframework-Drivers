@@ -5,17 +5,17 @@ using TekuSP.Drivers.Nano_OpenTherm.Interfaces;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Sets the remote override function (manual/program changes in master/remote room setpoint).
+    /// Reads the remote override function flags. v2.2: ID 100 is read-only.
     /// </summary>
-    public class SetRemoteOverrideFunctionRequest : WriteRequest, IRemoteOverrideFunction
+    public class GetRemoteOverrideFunctionRequest : ReadRequest, IRemoteOverrideFunction
     {
         #region Public Constructors
 
-        public SetRemoteOverrideFunctionRequest() : base()
+    public GetRemoteOverrideFunctionRequest() : base()
         {
         }
 
-        public SetRemoteOverrideFunctionRequest(Request baseReq) : base(baseReq)
+    public GetRemoteOverrideFunctionRequest(Request baseReq) : base(baseReq)
         {
         }
 
@@ -27,9 +27,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public bool ManualChangePriority { get => RemoteOverrideFunction.IsSet(TekuSP.Drivers.Nano_OpenTherm.Enums.RemoteOverrideFunction.ManualChangePriority); set => RemoteOverrideFunction = RemoteOverrideFunction.SetFlag(TekuSP.Drivers.Nano_OpenTherm.Enums.RemoteOverrideFunction.ManualChangePriority, value); }
 
-        public override MessageID MessageID => MessageID.RemoteOverrideFunction;
+    public override MessageID MessageID => MessageID.RemoteOverrideFunction;
 
-        public override MessageType MessageType => MessageType.WRITE_DATA;
+    public override MessageType MessageType => MessageType.READ_DATA;
 
         public bool ProgramChangePriority { get => RemoteOverrideFunction.IsSet(TekuSP.Drivers.Nano_OpenTherm.Enums.RemoteOverrideFunction.ProgramChangePriority); set => RemoteOverrideFunction = RemoteOverrideFunction.SetFlag(TekuSP.Drivers.Nano_OpenTherm.Enums.RemoteOverrideFunction.ProgramChangePriority, value); }
 
@@ -56,16 +56,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore()
-        {
-            uint raw = (uint)((byte)RemoteOverrideFunction); // low byte
-            return ProcessRequest(raw);
-        }
+    protected override uint GetRawDataCore() => ProcessRequest(0);
 
-        protected override void SetRawDataCore(uint value)
-        {
-            RemoteOverrideFunction = Utilities.GetRemoteOverrideFunction(value);
-        }
+    protected override void SetRawDataCore(uint value) { }
 
         #endregion Protected Methods
     }

@@ -10,6 +10,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         protected MemberIdCode MemberIdCode { get; set; }
 
         public MasterConfigResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
+        /// <summary>
+        /// Convenience constructor to build a response with both MemberIdCode (HB) and MasterConfiguration flags (LB).
+        /// </summary>
+        public MasterConfigResponse(MemberIdCode memberId, MasterConfiguration config, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            MemberIdCode = memberId;
+            MasterConfiguration = config;
+        }
         public MasterConfigResponse(Response r) : base(r) { }
 
         protected override uint GetRawDataCore()

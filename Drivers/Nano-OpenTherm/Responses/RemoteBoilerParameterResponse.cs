@@ -18,6 +18,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             MessageType = messageType;
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize both enable (LB) and read/write (HB) flags.
+        /// </summary>
+        public RemoteBoilerParameterResponse(RemoteParameterTransferEnable enable, RemoteParameterTransferReadWrite rw, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            RemoteParameterTransferEnable = enable;
+            RemoteParameterTransferReadWrite = rw;
+        }
+
     public RemoteBoilerParameterResponse(Response baseResponse) : base(baseResponse) { }
 
         // Build the payload from current properties: high byte = Read/Write flags, low byte = Enable flags

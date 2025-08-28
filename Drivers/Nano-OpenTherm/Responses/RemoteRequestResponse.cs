@@ -8,6 +8,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     public class RemoteRequestResponse : Response, IMasterStatus
     {
         public RemoteRequestResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
+        /// <summary>
+        /// Convenience constructor to initialize master status flags (low byte).
+        /// </summary>
+        public RemoteRequestResponse(MS master, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            MasterStatus = master;
+        }
         public RemoteRequestResponse(Response r) : base(r) { }
 
         // IMasterStatus bits

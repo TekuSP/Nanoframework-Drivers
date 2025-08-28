@@ -23,6 +23,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize product type for boiler/slave device version query.
+        /// </summary>
+        public GetSlaveVersionRequest(VersionProductType productType)
+        {
+            ProductType = productType;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

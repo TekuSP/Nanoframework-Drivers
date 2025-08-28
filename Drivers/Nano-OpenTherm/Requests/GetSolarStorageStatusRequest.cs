@@ -26,6 +26,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize master/slave status fields (for echo/ack construction if needed).
+        /// </summary>
+        public GetSolarStorageStatusRequest(MS master, SS slave)
+        {
+            MasterStatus = master;
+            SlaveStatus = slave;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

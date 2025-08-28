@@ -3,17 +3,17 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Remote Override Room Setpoint 2 (°C)
+    /// Reads Remote Override Room Setpoint 2 (°C). v2.2: treat as read-only.
     /// </summary>
-    public class SetRoomOverride2Request : WriteRequest
+    public class GetRoomOverride2Request : ReadRequest
     {
         #region Public Constructors
 
-        public SetRoomOverride2Request() : base()
+    public GetRoomOverride2Request() : base()
         {
         }
 
-        public SetRoomOverride2Request(Request baseReq) : base(baseReq)
+    public GetRoomOverride2Request(Request baseReq) : base(baseReq)
         {
         }
 
@@ -21,22 +21,17 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-        public override MessageID MessageID => MessageID.TrOverride2;
+    public override MessageID MessageID => MessageID.TrOverride2;
 
-        public override MessageType MessageType => MessageType.WRITE_DATA;
-
-        /// <summary>
-        /// Remote override room temperature 2 in °C, encoded as 8.8 fixed‑point in the low 16 bits.
-        /// </summary>
-        public float Temperature { get; set; }
+    public override MessageType MessageType => MessageType.READ_DATA;
 
         #endregion Public Properties
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawTemperature(Temperature));
+    protected override uint GetRawDataCore() => ProcessRequest(0);
 
-        protected override void SetRawDataCore(uint value) => Temperature = Utilities.GetFloat(value);
+    protected override void SetRawDataCore(uint value) { }
 
         #endregion Protected Methods
     }

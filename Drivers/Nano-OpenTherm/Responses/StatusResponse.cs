@@ -18,6 +18,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             MessageType = messageType;
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize master and slave status bitfields.
+        /// </summary>
+        public StatusResponse(MasterStatus master, SlaveStatus slave, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            MasterStatus = master;
+            SlaveStatus = slave;
+        }
+
     public StatusResponse(Response baseResponse) : base(baseResponse) { }
 
         protected override uint GetRawDataCore()

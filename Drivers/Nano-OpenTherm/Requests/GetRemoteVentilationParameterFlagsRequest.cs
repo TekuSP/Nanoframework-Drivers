@@ -19,6 +19,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize enable (LB) and read/write (HB) flags.
+        /// </summary>
+        public GetRemoteVentilationParameterFlagsRequest(RemoteParameterTransferEnable enable, RemoteParameterTransferReadWrite rw)
+            : base()
+        {
+            RemoteParameterTransferEnable = enable;
+            RemoteParameterTransferReadWrite = rw;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

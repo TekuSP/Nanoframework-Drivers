@@ -21,6 +21,18 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize MemberIdCode (HB) and MasterConfiguration (LB).
+        /// </summary>
+        /// <param name="memberId">Member ID code to set in the high byte.</param>
+        /// <param name="config">Master configuration flags to set in the low byte.</param>
+        public GetMasterConfigurationRequest(MemberIdCode memberId, MC config)
+            : base()
+        {
+            MemberIdCode = memberId;
+            MasterConfiguration = config;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

@@ -18,6 +18,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         {
             MessageType = messageType;
         }
+        /// <summary>
+        /// Convenience constructor to initialize both flags (HB) and OEM fault codes (LB).
+        /// </summary>
+        public ApplicationFaultCodesResponse(ApplicationSpecificFaultFlags flags, byte oemCodes, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            ApplicationSpecificFaultFlags = flags;
+            _oemFaultCodes = oemCodes;
+        }
 
     public ApplicationFaultCodesResponse(Response baseResponse) : base(baseResponse) { }
 

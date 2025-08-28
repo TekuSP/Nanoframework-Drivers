@@ -19,6 +19,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize month and day.
+        /// </summary>
+        public SetDateRequest(Month month, byte day)
+        {
+            Month = month;
+            Day = day;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

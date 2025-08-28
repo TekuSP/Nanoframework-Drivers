@@ -14,6 +14,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         public byte OEMFaultCodes { get; set; }
 
         public VentilationApplicationFaultCodesResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
+        /// <summary>
+        /// Convenience constructor to initialize both flags (HB) and OEM fault codes (LB).
+        /// </summary>
+        public VentilationApplicationFaultCodesResponse(ApplicationSpecificFaultFlags flags, byte oemCodes, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            ApplicationSpecificFaultFlags = flags;
+            OEMFaultCodes = oemCodes;
+        }
         public VentilationApplicationFaultCodesResponse(Response r) : base(r) { }
 
         protected override uint GetRawDataCore()

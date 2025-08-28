@@ -12,6 +12,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         protected MemberIdCode MemberIdCode { get; set; }
 
         public VentilationSConfigResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
+        /// <summary>
+        /// Convenience constructor to initialize MemberIdCode (HB) and SlaveConfiguration flags (LB).
+        /// </summary>
+        public VentilationSConfigResponse(MemberIdCode memberId, SC config, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            MemberIdCode = memberId;
+            SlaveConfiguration = config;
+        }
         public VentilationSConfigResponse(Response r) : base(r) { }
 
         protected override uint GetRawDataCore()

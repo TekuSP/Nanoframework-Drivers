@@ -11,6 +11,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         protected SlaveStatus SlaveStatus { get; set; }
 
         public SolarStorageStatusResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
+        /// <summary>
+        /// Convenience constructor to initialize solar storage master/slave status fields.
+        /// </summary>
+        public SolarStorageStatusResponse(MasterStatus master, SlaveStatus slave, MessageType mt = MessageType.READ_ACK)
+        {
+            MessageType = mt;
+            MasterStatus = master;
+            SlaveStatus = slave;
+        }
         public SolarStorageStatusResponse(Response r) : base(r) { }
 
         protected override uint GetRawDataCore()

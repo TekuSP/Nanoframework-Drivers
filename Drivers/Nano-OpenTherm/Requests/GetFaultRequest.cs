@@ -19,6 +19,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         {
         }
 
+        /// <summary>
+        /// Convenience constructor to initialize application-specific fault flags (LB) and OEM fault code (HB).
+        /// </summary>
+        public GetFaultRequest(ApplicationSpecificFaultFlags flags, byte oemFaultCode)
+            : base()
+        {
+            ApplicationSpecificFaultFlags = flags;
+            OEMFaultCode = oemFaultCode;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties

@@ -3,7 +3,7 @@
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Reads the current domestic hot water (DHW) setpoint temperature.
+    /// Reads the domestic hot water (DHW) setpoint temperature (Remote parameter 1).
     /// </summary>
     /// <remarks>
     /// Response payload: low 16 bits as 8.8 fixed-point degrees Celsius.
@@ -24,7 +24,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-        public override MessageID MessageID => MessageID.Tdhw;
+    public override MessageID MessageID => MessageID.TdhwSet;
 
         public override MessageType MessageType => MessageType.READ_DATA;
 
