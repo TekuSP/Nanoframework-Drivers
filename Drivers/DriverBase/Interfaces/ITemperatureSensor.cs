@@ -1,12 +1,11 @@
 ﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Read temperature from sensor
+    /// </summary>
+    /// <returns>Returns raw data from sensor</returns>
     public interface ITemperatureSensor
     {
-        /// <summary>
-        /// Read temperature from sensor
-        /// </summary>
-        /// <returns>Returns raw data from sensor</returns>
-
         #region Public Methods
 
         /// <summary>
@@ -17,6 +16,10 @@
         /// <returns>Returns temperature in target unit</returns>
         double CalculateTemperature(Enums.TemperatureUnit readTemperatureUnit, double rawTemperature);
 
+        /// <summary>
+        /// Read temperature from sensor in default sensor unit
+        /// </summary>
+        /// <returns>Returns data from sensor in default sensor unit</returns>
         double ReadTemperature();
 
         /// <summary>
