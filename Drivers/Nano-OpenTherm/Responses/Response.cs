@@ -91,7 +91,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 MessageID.Tdhw2 => new DHW2TemperatureResponse(this),
                 MessageID.Texhaust => new ExhaustTemperatureResponse(this),
                 MessageID.TboilerHeatExchanger => new BoilerHeatExchangerTemperatureResponse(this),
-                MessageID.BoilerFanSpeedSetpointAndActual => new BoilerFanSpeedResponse(this),
+                // Removed non-standard BoilerFanSpeedSetpointAndActual mapping
                 MessageID.FlameCurrent => new FlameCurrentResponse(this),
                 MessageID.TrCH2 => new RoomTemperatureCH2Response(this),
                 MessageID.RelativeHumidity => new RelativeHumidityResponse(this),

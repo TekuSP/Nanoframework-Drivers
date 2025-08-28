@@ -29,6 +29,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 case MessageID.MaxRelModLevelSetting: return AccessMode.Write;
                 case MessageID.MaxCapacityMinModLevel: return AccessMode.Read;
                 case MessageID.TrSet: return AccessMode.Write;
+                case MessageID.TrSetCH2: return AccessMode.Write;
 
                 // Measurements
                 case MessageID.RelModLevel:
@@ -45,7 +46,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 case MessageID.Tdhw2:
                 case MessageID.Texhaust:
                 case MessageID.TboilerHeatExchanger:
-                case MessageID.BoilerFanSpeedSetpointAndActual:
                 case MessageID.FlameCurrent:
                 case MessageID.TrCH2:
                 case MessageID.RelativeHumidity:

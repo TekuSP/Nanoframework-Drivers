@@ -70,7 +70,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         protected override uint GetRawDataCore()
         {
-            // Place the master flags in the high byte
+            // v2.2 status exchange (ID 0): HB = MasterStatus, LB = SlaveStatus (0 for request)
             ushort payload = Utilities.MakeUShort(Utilities.SetMasterStatus(MasterStatus), 0);
             return ProcessRequest(payload);
         }

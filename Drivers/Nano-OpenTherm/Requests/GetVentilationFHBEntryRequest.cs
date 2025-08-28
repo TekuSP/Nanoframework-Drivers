@@ -4,6 +4,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
     /// Reads a ventilation fault-history buffer entry by index.
+    /// Packs HB=index and LB=0 per v2.2 (FHB read: index in high byte).
     /// </summary>
     /// <remarks>
     /// The <see cref="Index"/> is encoded in the low byte. The response payload contains the entry value
@@ -26,7 +27,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #region Public Properties
 
         /// <summary>
-        /// Index of ventilation fault-history entry to read (0-based). Encoded in the low byte.
+    /// Index of ventilation fault-history entry to read (0-based). Encoded in the high data byte.
         /// </summary>
         public byte Index { get; set; }
 
@@ -38,7 +39,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore() => ProcessRequest(Index);
+    protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
 
         protected override void SetRawDataCore(uint value)
         { Index = Utilities.GetLowByte(value); }

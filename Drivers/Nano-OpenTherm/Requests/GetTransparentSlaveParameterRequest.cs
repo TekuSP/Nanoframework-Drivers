@@ -4,6 +4,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
     /// Reads a specific transparent slave parameter value by index.
+    /// Packs HB=index and LB=0 per v2.2 (TSP read: index in high byte).
     /// </summary>
     public class GetTransparentSlaveParameterRequest : ReadRequest
     {
@@ -22,7 +23,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #region Public Properties
 
         /// <summary>
-        /// Index number of referred transparent slave parameter
+    /// Index number of referred transparent slave parameter (encoded in high data byte)
         /// </summary>
         public byte Index { get; set; }
 
@@ -34,7 +35,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore() => ProcessRequest(Index);
+    protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
 
         protected override void SetRawDataCore(uint value)
         {

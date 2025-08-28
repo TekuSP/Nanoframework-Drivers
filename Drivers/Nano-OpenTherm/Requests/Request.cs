@@ -142,8 +142,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 MessageID.Tdhw2 => new GetDHW2TemperatureRequest(this),
                 MessageID.Texhaust => new GetExhaustTemperatureRequest(this),
                 MessageID.TboilerHeatExchanger => new GetBoilerHeatExchangerTemperatureRequest(this),
-                // Fan speed / flame / humidity
-                MessageID.BoilerFanSpeedSetpointAndActual => new GetBoilerFanSpeedRequest(this),
+                // Flame current / humidity
                 MessageID.FlameCurrent => new GetFlameCurrentRequest(this),
                 MessageID.TrCH2 => new GetRoomTemperatureCH2Request(this),
                 MessageID.RelativeHumidity => new GetRelativeHumidityRequest(this),

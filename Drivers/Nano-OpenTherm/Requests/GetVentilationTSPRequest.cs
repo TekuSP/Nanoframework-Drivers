@@ -4,6 +4,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
     /// Reads a specific transparent ventilation parameter value by index.
+    /// Packs HB=index and LB=0 per v2.2 (TSP read: index in high byte).
     /// </summary>
     public class GetVentilationTSPRequest : ReadRequest
     {
@@ -22,7 +23,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #region Public Properties
 
         /// <summary>
-        /// Index number of the transparent ventilation parameter to read (low byte).
+    /// Index number of the transparent ventilation parameter to read (encoded in high data byte).
         /// </summary>
         public byte Index { get; set; }
 
@@ -34,7 +35,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore() => ProcessRequest(Index);
+    protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
 
         protected override void SetRawDataCore(uint value)
         { Index = Utilities.GetLowByte(value); }
