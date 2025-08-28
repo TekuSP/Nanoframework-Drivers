@@ -121,7 +121,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.TboilerHeatExchanger:
                     return new BoilerHeatExchangerTemperatureResponse(this);
                 case MessageID.BoilerFanSpeedSetpointAndActual:
-                    break;
+                    return new BoilerFanSpeedResponse(this);
                 case MessageID.FlameCurrent:
                     return new FlameCurrentResponse(this);
                 case MessageID.TrCH2:
@@ -129,21 +129,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.RelativeHumidity:
                     return new RelativeHumidityResponse(this);
                 case MessageID.TrOverride2:
-                    break;
+                    return new RemoteOverrideRoomSetPoint2Response(this);
                 case MessageID.TdhwSetUBTdhwSetLB:
                     return new DhwSetpointBoundsResponse(this);
                 case MessageID.MaxTSetUBMaxTSetLB:
                     return new MaxTSetBoundsResponse(this);
                 case MessageID.StatusVentilationHeatRecovery:
-                    break;
+                    return new VentilationStatusResponse(this);
                 case MessageID.Vset:
-                    break;
+                    return new VentilationPositionResponse(this);
                 case MessageID.ASFflagsOEMfaultCodeVentilationHeatRecovery:
-                    break;
+                    return new VentilationApplicationFaultCodesResponse(this);
                 case MessageID.OEMDiagnosticCodeVentilationHeatRecovery:
-                    break;
+                    return new VentilationOEMDiagnosticCodeResponse(this);
                 case MessageID.SConfigSMemberIDCodeVentilationHeatRecovery:
-                    break;
+                    return new VentilationSConfigResponse(this);
                 case MessageID.OpenThermVersionVentilationHeatRecovery:
                     return new VentilationOpenThermVersionResponse(this);
                 case MessageID.VentilationHeatRecoveryVersion:
@@ -167,7 +167,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.RPMsupply:
                     return new SupplyFanSpeedResponse(this);
                 case MessageID.RBPflagsVentilationHeatRecovery:
-                    break;
+                    return new RemoteVentilationParameterResponse(this);
                 case MessageID.NominalVentilationValue:
                     return new NominalVentilationValueResponse(this);
                 case MessageID.TSPventilationHeatRecovery:
@@ -189,21 +189,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.PowerCycles:
                     return new PowerCyclesResponse(this);
                 case MessageID.RFsensorStatusInformation:
-                    break;
+                    return new RFsensorStatusInformationResponse(this);
                 case MessageID.RemoteOverrideOperatingModeHeatingDHW:
-                    break;
+                    return new RemoteOverrideOperatingModeResponse(this);
                 case MessageID.RemoteOverrideFunction:
                     return new RemoteOverrideFunctionResponse(this);
                 case MessageID.StatusSolarStorage:
-                    break;
+                    return new SolarStorageStatusResponse(this);
                 case MessageID.ASFflagsOEMfaultCodeSolarStorage:
-                    break;
+                    return new SolarStorageApplicationFaultCodesResponse(this);
                 case MessageID.UnsuccessfulBurnerStarts:
                     return new UnsuccessfulBurnerStartsResponse(this);
                 case MessageID.FlameSignalTooLowNumber:
                     return new FlameSignalTooLowNumberResponse(this);
                 case MessageID.OEMDiagnosticCode:
-                    break;
+                    return new OEMDiagnosticCodeResponse(this);
                 case MessageID.SuccessfulBurnerStarts:
                     return new SuccessfulBurnerStartsResponse(this);
                 case MessageID.CHPumpStarts:
@@ -221,7 +221,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.DHWBurnerOperationHours:
                     return new DHWBurnerOperationHoursResponse(this);
                 case MessageID.SolarStorageVersion:
-                    break;
+                    return new SolarStorageProductVersionResponse(this);
                 case MessageID.TSPSolarStorage:
                     return new SolarStorageTSPCountResponse(this);
                 case MessageID.TSPindexTSPvalueSolarStorage:
@@ -229,7 +229,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.FHBsizeSolarStorage:
                     return new SolarStorageFHBSizeResponse(this);
                 case MessageID.FHBindexFHBvalueSolarStorage:
-                    break;
+                    return new SolarStorageFHBEntryResponse(this);
                 case MessageID.ElectricityProducerStarts:
                     return new ElectricityProducerStartsResponse(this);
                 case MessageID.ElectricityProducerHours:
@@ -244,10 +244,29 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                     return new MasterProductVersionResponse(this);
                 case MessageID.SlaveVersion:
                     return new SlaveProductVersionResponse(this);
+                case MessageID.TSet:
+                    break;
+                case MessageID.MConfigMMemberIDcode:
+                    break;
+                case MessageID.RemoteRequest:
+                    break;
+                case MessageID.CoolingControl:
+                    break;
+                case MessageID.TsetCH2:
+                    break;
+                case MessageID.MaxRelModLevelSetting:
+                    break;
+                case MessageID.TrSet:
+                    break;
+                case MessageID.TrSetCH2:
+                    break;
+                case MessageID.TdhwSet:
+                    break;
+                case MessageID.MaxTSet:
+                    break;
                 default:
                     return this;
             }
-            // Unreachable
             return this;
         }
 
