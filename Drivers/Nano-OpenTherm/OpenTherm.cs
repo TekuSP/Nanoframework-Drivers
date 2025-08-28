@@ -173,41 +173,47 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         }
 
         /// <summary>
-        /// Sends and processes request
+        /// Sends and processes packet, either <see cref="Request"/> or <see cref="Response"/> or <see cref="IOpenThermData"/>
         /// </summary>
         /// <param name="data">Request or response to send</param>
-        /// <returns>True if sending started successfully</returns>
-        public bool SendRequest(IOpenThermData data)
+        /// <returns>True if sent successfully</returns>
+        public bool SendPacket(IOpenThermData data)
         {
-            if (!IsRunning)
-                return false;
-            if (InternalSendStatus != Enums.DataStatus.READY)
-                return false;
+            if (!IsRunning) return false;
+            if (InternalSendStatus != Enums.DataStatus.READY) return false;
 
             InternalSendStatus = Enums.DataStatus.REQUEST_SENDING;
 
+            // Start bit
             WriteData(true);
+
+            // 32 bits MSB->LSB
             for (int i = 31; i >= 0; i--)
             {
                 WriteData(BitHelper.GetBit(data.RawData, i));
             }
+
+            // Stop bit
             WriteData(true);
 
             DataSent.Invoke(this, data);
 
             DataReceived += SendDataFinished;
             DataInvalid += SendDataFinished;
+
+            // Typical OpenTherm reply arrives within 100–800 ms; keep a safe ceiling
+            var timeoutMs = 1000; // 1 second
             TimeoutTimer = new Timer((_) =>
             {
                 DataReceived -= SendDataFinished;
                 DataInvalid -= SendDataFinished;
-                //Timeout
                 DataTimeout.Invoke(this, data);
                 dataProcessedEvent.Set();
                 InternalSendStatus = Enums.DataStatus.READY;
-            }, null, Slave ? 20000 : 100000, Timeout.Infinite);
+            }, null, timeoutMs, Timeout.Infinite);
+
+            // Do not block here; let the RX path complete the async wait
             OutPin.Write(PinValue.High);
-            Thread.Sleep(1000);
             return true;
         }
 
@@ -218,7 +224,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// <returns>Returns null if unable to send, otherwise returns OpenThermData</returns>
         public IOpenThermData SendRequestAndWaitForResponse(Request request)
         {
-            if (SendRequest(request))
+            if (SendPacket(request))
             {
                 dataProcessedEvent.WaitOne();
                 dataProcessedEvent.Reset();
@@ -317,9 +323,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm
             var second = bit ? PinValue.High : PinValue.Low;
 
             OutPin.Write(first);
-            DelayHelper.DelayMicroseconds(HalfBitUs, true);
+            DelayHelper.DelayMicroseconds(HalfBitUs, false); // busy-wait to keep 500us accurate
             OutPin.Write(second);
-            DelayHelper.DelayMicroseconds(HalfBitUs, true);
+            DelayHelper.DelayMicroseconds(HalfBitUs, false); // busy-wait to keep 500us accurate
         }
 
         #endregion Public Methods
@@ -331,36 +337,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         private void InPin_DataRecieved(object sender, PinValueChangedEventArgs e)
         {
-            if (!IsRunning)
-                return;
-            if (InternalReceiveStatus != Enums.DataStatus.READY)
+            if (!IsRunning || InternalReceiveStatus != Enums.DataStatus.READY)
                 return;
 
-            // Trigger a decode attempt on any edge when ready
+            if (e.ChangeType != PinEventTypes.Falling) // only try to decode on falling edge of Start(1)
+                return;
+
             InternalReceiveStatus = Enums.DataStatus.RESPONSE_RECEIVING;
             if (TryDecodeManchesterFrame(out var frame))
             {
+                RawResponse = frame; // set only on success
                 if (Slave)
                 {
                     var req = new ReceivedRequest(frame);
-                    if (req.IsValidRequest())
-                        DataReceived.Invoke(this, req.SelectRequest());
-                    else
-                        DataInvalid.Invoke(this, req);
+                    if (req.IsValidRequest()) DataReceived.Invoke(this, req.SelectRequest());
+                    else DataInvalid.Invoke(this, req);
                 }
                 else
                 {
                     var res = new ReceivedResponse(frame);
-                    if (res.IsValidResponse())
-                        DataReceived.Invoke(this, res.SelectResponse());
-                    else
-                        DataInvalid.Invoke(this, res);
+                    if (res.IsValidResponse()) DataReceived.Invoke(this, res.SelectResponse());
+                    else DataInvalid.Invoke(this, res);
                 }
             }
             else
             {
-                // could not decode a valid frame
-                DataInvalid.Invoke(this, Slave ? new ReceivedRequest(RawResponse) : new ReceivedResponse(RawResponse));
+                // Could not decode a valid frame; don't pass stale RawResponse
+                DataInvalid.Invoke(this, Slave ? new ReceivedRequest(0) : new ReceivedResponse(0));
             }
             InternalReceiveStatus = Enums.DataStatus.READY;
         }
@@ -374,33 +377,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         {
             frame = 0U;
 
-            // Expect start bit: Low then High with 500us half periods
-            DelayHelper.DelayMicroseconds(HalfBitUs, true);
-            if (InPin.Read() != PinValue.Low)
-            {
-                return false;
-            }
-            DelayHelper.DelayMicroseconds(HalfBitUs, true);
-            if (InPin.Read() != PinValue.High)
-            {
-                return false;
-            }
+            // We got here on the falling edge that should be the first half of Start(1)
+            // Validate Start(1) = Low->High
+            DelayHelper.DelayMicroseconds(HalfBitUs, false);
+            if (InPin.Read() != PinValue.Low) return false;
+            DelayHelper.DelayMicroseconds(HalfBitUs, false);
+            if (InPin.Read() != PinValue.High) return false;
 
-            // Read 32 bits
+            // Read 32 data bits (MSB first)
             for (int i = 0; i < 32; i++)
             {
-                DelayHelper.DelayMicroseconds(HalfBitUs, true);
+                DelayHelper.DelayMicroseconds(HalfBitUs, false);
                 var a = InPin.Read();
-                DelayHelper.DelayMicroseconds(HalfBitUs, true);
+                DelayHelper.DelayMicroseconds(HalfBitUs, false);
                 var b = InPin.Read();
-                if (a == b)
-                {
-                    return false; // no transition -> invalid Manchester bit
-                }
+                if (a == b) return false; // no transition -> invalid Manchester bit
+
                 bool bit = (a == PinValue.Low && b == PinValue.High); // Low->High encodes 1
                 frame = (frame << 1) | (bit ? 1U : 0U);
             }
-            RawResponse = frame;
+
+            // Validate Stop(1) = Low->High
+            DelayHelper.DelayMicroseconds(HalfBitUs, false);
+            var sa = InPin.Read();
+            DelayHelper.DelayMicroseconds(HalfBitUs, false);
+            var sb = InPin.Read();
+            if (!(sa == PinValue.Low && sb == PinValue.High)) return false;
+
             return true;
         }
 
