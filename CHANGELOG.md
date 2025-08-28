@@ -1,4 +1,15 @@
 
+<a name="v0.4.596"></a>
+## [v0.4.596](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.4.504...v0.4.596)
+
+> 2025-08-26
+
+### Pull Requests
+
+* Merge pull request [#162](https://github.com/TekuSP/Meteostanice-CSharp/issues/162) from TekuSP/master-obsolete-fix
+* Merge pull request [#160](https://github.com/TekuSP/Meteostanice-CSharp/issues/160) from TekuSP/TekuSP-patch-sonarcube
+
+
 <a name="v0.4.504"></a>
 ## [v0.4.504](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.3.71-alpha...v0.4.504)
 
