@@ -18,11 +18,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             MessageType = messageType;
         }
 
-        public StatusResponse(Response baseResponse)
-        {
-            MessageType = baseResponse.MessageType;
-            SetRawDataCore(baseResponse.RawData);
-        }
+    public StatusResponse(Response baseResponse) : base(baseResponse) { }
 
         protected override uint GetRawDataCore()
         {

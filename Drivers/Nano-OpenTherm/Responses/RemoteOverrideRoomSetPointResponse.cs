@@ -16,11 +16,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             MessageType = messageType;
         }
 
-        public RemoteOverrideRoomSetPointResponse(Response baseResponse)
-        {
-            MessageType = baseResponse.MessageType;
-            SetRawDataCore(baseResponse.RawData);
-        }
+    public RemoteOverrideRoomSetPointResponse(Response baseResponse) : base(baseResponse) { }
 
     protected override uint GetRawDataCore() => ProcessResponse(_raw16);
     protected override void SetRawDataCore(uint value) => _raw16 = Utilities.GetLowUShort(value);

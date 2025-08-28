@@ -18,11 +18,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             MessageType = messageType;
         }
 
-        public RemoteBoilerParameterResponse(Response baseResponse)
-        {
-            MessageType = baseResponse.MessageType;
-            SetRawDataCore(baseResponse.RawData);
-        }
+    public RemoteBoilerParameterResponse(Response baseResponse) : base(baseResponse) { }
 
         // Build the payload from current properties: high byte = Read/Write flags, low byte = Enable flags
         protected override uint GetRawDataCore()

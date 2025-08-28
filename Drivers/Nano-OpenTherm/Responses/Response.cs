@@ -10,6 +10,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     public abstract class Response : IOpenThermData
     {
         /// <summary>
+        /// Base constructor.
+        /// </summary>
+        protected Response() { }
+
+        /// <summary>
+        /// Initializes this response from another already-parsed response instance.
+        /// Copies MessageType and decodes RawData via SetRawDataCore.
+        /// </summary>
+        /// <param name="baseResponse">Existing response with raw frame and message type.</param>
+        protected Response(Response baseResponse)
+        {
+            MessageType = baseResponse.MessageType;
+            SetRawDataCore(baseResponse.RawData);
+        }
+        /// <summary>
         /// Encoded 32-bit OpenTherm frame for this response.
         /// Derived classes should pack/unpack payload in <see cref="GetRawDataCore"/>/<see cref="SetRawDataCore"/>.
         /// </summary>
@@ -60,61 +75,65 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.TrOverride:
                     return new RemoteOverrideRoomSetPointResponse(this);
                 case MessageID.TSP:
-                    break;
+                    return new TransparentSlaveParametersCountResponse(this);
                 case MessageID.TSPindexTSPvalue:
-                    break;
+                    return new TransparentSlaveParameterResponse(this);
                 case MessageID.FHBsize:
-                    break;
+                    return new FaultHistoryBufferSizeResponse(this);
                 case MessageID.FHBindexFHBvalue:
-                    break;
+                    return new FaultHistoryBufferEntryResponse(this);
                 case MessageID.MaxCapacityMinModLevel:
-                    break;
+                    return new MaxCapacityMinModLevelResponse(this);
                 case MessageID.RelModLevel:
-                    break;
+                    return new RelModulationResponse(this);
                 case MessageID.CHPressure:
-                    break;
+                    return new CHPressureResponse(this);
                 case MessageID.DHWFlowRate:
-                    break;
+                    return new DHWFlowRateResponse(this);
                 case MessageID.DayTime:
-                    break;
+                    return new DayTimeResponse(this);
                 case MessageID.Date:
-                    break;
+                    return new DateResponse(this);
                 case MessageID.Year:
-                    break;
+                    return new YearResponse(this);
                 case MessageID.Tboiler:
-                    break;
+                    return new BoilerTemperatureResponse(this);
                 case MessageID.Tdhw:
-                    break;
+                    return new DHWTemperatureResponse(this);
                 case MessageID.Toutside:
-                    break;
+                    return new OutsideTemperatureResponse(this);
                 case MessageID.Tret:
-                    break;
+                    return new ReturnTemperatureResponse(this);
+                case MessageID.Tr:
+                    return new RoomTemperatureResponse(this);
                 case MessageID.Tstorage:
-                    break;
+                    return new StorageTemperatureResponse(this);
+                case MessageID.OpenThermVersionMaster:
+                    return new OpenThermVersionMasterResponse(this);
                 case MessageID.Tcollector:
-                    break;
+                    return new CollectorTemperatureResponse(this);
                 case MessageID.TflowCH2:
-                    break;
+                    return new CH2FlowTemperatureResponse(this);
                 case MessageID.Tdhw2:
-                    break;
+                    return new DHW2TemperatureResponse(this);
                 case MessageID.Texhaust:
-                    break;
+                    return new ExhaustTemperatureResponse(this);
                 case MessageID.TboilerHeatExchanger:
-                    break;
+                    return new BoilerHeatExchangerTemperatureResponse(this);
                 case MessageID.BoilerFanSpeedSetpointAndActual:
                     break;
                 case MessageID.FlameCurrent:
-                    break;
+                    return new FlameCurrentResponse(this);
                 case MessageID.TrCH2:
-                    break;
+                    return new RoomTemperatureCH2Response(this);
                 case MessageID.RelativeHumidity:
-                    break;
+                    return new RelativeHumidityResponse(this);
                 case MessageID.TrOverride2:
                     break;
                 case MessageID.TdhwSetUBTdhwSetLB:
-                    break;
+                    return new DhwSetpointBoundsResponse(this);
                 case MessageID.MaxTSetUBMaxTSetLB:
-                    break;
+                    return new MaxTSetBoundsResponse(this);
                 case MessageID.StatusVentilationHeatRecovery:
                     break;
                 case MessageID.Vset:
@@ -126,103 +145,105 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 case MessageID.SConfigSMemberIDCodeVentilationHeatRecovery:
                     break;
                 case MessageID.OpenThermVersionVentilationHeatRecovery:
-                    break;
+                    return new VentilationOpenThermVersionResponse(this);
                 case MessageID.VentilationHeatRecoveryVersion:
-                    break;
+                    return new VentilationProductVersionResponse(this);
                 case MessageID.RelVentLevel:
-                    break;
+                    return new RelativeVentilationLevelResponse(this);
                 case MessageID.RHexhaust:
-                    break;
+                    return new RelativeHumidityExhaustResponse(this);
                 case MessageID.CO2exhaust:
-                    break;
+                    return new CO2ExhaustResponse(this);
                 case MessageID.Tsi:
-                    break;
+                    return new SupplyInletTemperatureResponse(this);
                 case MessageID.Tso:
-                    break;
+                    return new SupplyOutletTemperatureResponse(this);
                 case MessageID.Tei:
-                    break;
+                    return new ExhaustInletTemperatureResponse(this);
                 case MessageID.Teo:
-                    break;
+                    return new ExhaustOutletTemperatureResponse(this);
                 case MessageID.RPMexhaust:
-                    break;
+                    return new ExhaustFanSpeedResponse(this);
                 case MessageID.RPMsupply:
-                    break;
+                    return new SupplyFanSpeedResponse(this);
                 case MessageID.RBPflagsVentilationHeatRecovery:
                     break;
                 case MessageID.NominalVentilationValue:
-                    break;
+                    return new NominalVentilationValueResponse(this);
                 case MessageID.TSPventilationHeatRecovery:
-                    break;
+                    return new VentilationTSPCountResponse(this);
                 case MessageID.TSPindexTSPvalueVentilationHeatRecovery:
-                    break;
+                    return new VentilationTSPValueResponse(this);
                 case MessageID.FHBsizeVentilationHeatRecovery:
-                    break;
+                    return new VentilationFHBSizeResponse(this);
                 case MessageID.FHBindexFHBvalueVentilationHeatRecovery:
-                    break;
+                    return new VentilationFHBEntryResponse(this);
                 case MessageID.Brand:
-                    break;
+                    return new BrandCharacterResponse(this);
                 case MessageID.BrandVersion:
-                    break;
+                    return new BrandVersionCharacterResponse(this);
                 case MessageID.BrandSerialNumber:
-                    break;
+                    return new BrandSerialByteResponse(this);
                 case MessageID.CoolingOperationHours:
-                    break;
+                    return new CoolingOperationHoursResponse(this);
                 case MessageID.PowerCycles:
-                    break;
+                    return new PowerCyclesResponse(this);
                 case MessageID.RFsensorStatusInformation:
                     break;
                 case MessageID.RemoteOverrideOperatingModeHeatingDHW:
                     break;
                 case MessageID.RemoteOverrideFunction:
-                    break;
+                    return new RemoteOverrideFunctionResponse(this);
                 case MessageID.StatusSolarStorage:
                     break;
                 case MessageID.ASFflagsOEMfaultCodeSolarStorage:
                     break;
                 case MessageID.UnsuccessfulBurnerStarts:
-                    break;
+                    return new UnsuccessfulBurnerStartsResponse(this);
                 case MessageID.FlameSignalTooLowNumber:
-                    break;
+                    return new FlameSignalTooLowNumberResponse(this);
                 case MessageID.OEMDiagnosticCode:
                     break;
                 case MessageID.SuccessfulBurnerStarts:
-                    break;
+                    return new SuccessfulBurnerStartsResponse(this);
                 case MessageID.CHPumpStarts:
-                    break;
+                    return new CHPumpStartsResponse(this);
                 case MessageID.DHWPumpValveStarts:
-                    break;
+                    return new DHWPumpValveStartsResponse(this);
                 case MessageID.DHWBurnerStarts:
-                    break;
+                    return new DHWBurnerStartsResponse(this);
                 case MessageID.BurnerOperationHours:
-                    break;
+                    return new BurnerOperationHoursResponse(this);
                 case MessageID.CHPumpOperationHours:
-                    break;
+                    return new CHPumpOperationHoursResponse(this);
                 case MessageID.DHWPumpValveOperationHours:
-                    break;
+                    return new DHWPumpValveOperationHoursResponse(this);
                 case MessageID.DHWBurnerOperationHours:
-                    break;
+                    return new DHWBurnerOperationHoursResponse(this);
                 case MessageID.SolarStorageVersion:
                     break;
                 case MessageID.TSPSolarStorage:
-                    break;
+                    return new SolarStorageTSPCountResponse(this);
                 case MessageID.TSPindexTSPvalueSolarStorage:
-                    break;
+                    return new SolarStorageTSPValueResponse(this);
                 case MessageID.FHBsizeSolarStorage:
-                    break;
+                    return new SolarStorageFHBSizeResponse(this);
                 case MessageID.FHBindexFHBvalueSolarStorage:
                     break;
                 case MessageID.ElectricityProducerStarts:
-                    break;
+                    return new ElectricityProducerStartsResponse(this);
                 case MessageID.ElectricityProducerHours:
-                    break;
+                    return new ElectricityProducerHoursResponse(this);
                 case MessageID.ElectricityProduction:
-                    break;
+                    return new ElectricityProductionResponse(this);
                 case MessageID.CumulativElectricityProduction:
-                    break;
+                    return new CumulativeElectricityProductionResponse(this);
                 case MessageID.OpenThermVersionSlave:
-                    break;
+                    return new OpenThermVersionSlaveResponse(this);
+                case MessageID.MasterVersion:
+                    return new MasterProductVersionResponse(this);
                 case MessageID.SlaveVersion:
-                    break;
+                    return new SlaveProductVersionResponse(this);
                 default:
                     return this;
             }

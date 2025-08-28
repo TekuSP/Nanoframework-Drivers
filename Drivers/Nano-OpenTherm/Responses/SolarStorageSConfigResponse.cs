@@ -28,11 +28,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// <summary>
         /// Wrap a received frame and expose properties for flags and member ID.
         /// </summary>
-        public SolarStorageSConfigResponse(Response baseResponse)
-        {
-            MessageType = baseResponse.MessageType;
-            SetRawDataCore(baseResponse.RawData);
-        }
+    public SolarStorageSConfigResponse(Response baseResponse) : base(baseResponse) { }
 
         protected override uint GetRawDataCore()
         {
