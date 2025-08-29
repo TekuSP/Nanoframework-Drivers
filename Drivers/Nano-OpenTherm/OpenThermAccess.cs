@@ -126,7 +126,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                     return AccessMode.Read;
 
                 // RF / overrides
-                case MessageID.RFsensorStatusInformation: return AccessMode.ReadWrite;
+                case MessageID.RFsensorStatusInformation: return AccessMode.Read;
                 case MessageID.RemoteOverrideOperatingModeHeatingDHW: return AccessMode.ReadWrite;
                 case MessageID.RemoteOverrideFunction: return AccessMode.Read; // v2.2: function flags are read-only
 
@@ -153,11 +153,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 case MessageID.MasterVersion:
                 case MessageID.SlaveVersion:
                     return AccessMode.Read;
-                // Vendor-specific (Remeha) – allow RW per user request
-                case MessageID.Remeha131:
-                case MessageID.Remeha132:
-                case MessageID.Remeha133:
-                    return AccessMode.ReadWrite;
+                // Vendor-specific (Remeha)
+                case MessageID.Remeha131: return AccessMode.ReadWrite;
+                case MessageID.Remeha132: return AccessMode.Read;
+                case MessageID.Remeha133: return AccessMode.Read;
 
                 default:
                     return AccessMode.Read; // safe default

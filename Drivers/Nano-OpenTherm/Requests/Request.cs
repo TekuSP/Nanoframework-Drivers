@@ -217,7 +217,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 MessageID.TSPindexTSPvalueSolarStorage => new GetSolarStorageTSPRequest(this),
                 MessageID.FHBsizeSolarStorage => new GetSolarStorageFHBSizeRequest(this),
                 MessageID.FHBindexFHBvalueSolarStorage => new GetSolarStorageFHBEntryRequest(this),
-                // Vendor-specific (Remeha) – single read/write request per ID
+                // Vendor-specific (Remeha)
+                // 131: RW; 132 & 133: READ only (per OTGW map/spec notes)
                 MessageID.Remeha131 => new Remeha131Request(this),
                 MessageID.Remeha132 => new Remeha132Request(this),
                 MessageID.Remeha133 => new Remeha133Request(this),

@@ -3,19 +3,17 @@ using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
-    /// Vendor-specific Remeha Data-ID 132 request supporting both READ_DATA and WRITE_DATA.
-    /// Payload semantics are OEM-defined; exposes a raw 16-bit <see cref="Value"/>.
+    /// Vendor-specific Remeha Data-ID 132 request (READ only per OTGW map).
+    /// Payload semantics are OEM-defined; exposes a raw 16-bit <see cref="Value"/> for completeness.
     /// </summary>
-    public class Remeha132Request : ReadWriteRequest
+    public class Remeha132Request : ReadRequest
     {
-        public Remeha132Request(MessageType messageType) : base(messageType)
-        { }
+        public Remeha132Request() : base() { }
 
-        public Remeha132Request(Request baseReq) : base(baseReq, baseReq.MessageType)
-        { }
+        public Remeha132Request(Request baseReq) : base(baseReq) { }
 
         public override MessageID MessageID => MessageID.Remeha132;
-        public override MessageType MessageType { get; }
+        public override MessageType MessageType => MessageType.READ_DATA;
 
         /// <summary>Raw 16-bit payload to send/receive.</summary>
         public ushort Value { get; set; }
