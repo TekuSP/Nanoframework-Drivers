@@ -25,14 +25,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Enums
         /// CH2 is enabled.
         /// </summary>
         CH2Enabled = 1 << 4,
-        /// <summary>
-        /// Reserved bit 5.
-        /// </summary>
-        Reserved5 = 1 << 5,
-        /// <summary>
-        /// Reserved bit 6.
-        /// </summary>
-        Reserved6 = 1 << 6,
+    /// <summary>
+    /// Summer/Winter mode (bit 5 in v2.3b).
+    /// </summary>
+    SummerWinterMode = 1 << 5,
+    /// <summary>
+    /// DHW blocking (bit 6 in v2.3b).
+    /// </summary>
+    DHWBlocking = 1 << 6,
         /// <summary>
         /// Reserved bit 7.
         /// </summary>

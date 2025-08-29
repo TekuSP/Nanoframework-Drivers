@@ -1,4 +1,5 @@
 ﻿using System;
+
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.DriverBase.Interfaces;
 
@@ -43,7 +44,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         /// </summary>
         protected abstract void SetRawDataCore(uint value);
 
-    public abstract MessageType MessageType { get; set; }
+        public abstract MessageType MessageType { get; set; }
 
         public abstract MessageID MessageID
         {
@@ -91,12 +92,14 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 MessageID.Tdhw2 => new DHW2TemperatureResponse(this),
                 MessageID.Texhaust => new ExhaustTemperatureResponse(this),
                 MessageID.TboilerHeatExchanger => new BoilerHeatExchangerTemperatureResponse(this),
-                // Removed non-standard BoilerFanSpeedSetpointAndActual mapping
+                MessageID.BoilerFanSpeedSetpointAndActual => new BoilerFanSpeedResponse(this),
                 MessageID.FlameCurrent => new FlameCurrentResponse(this),
                 MessageID.TrCH2 => new RoomTemperatureCH2Response(this),
                 MessageID.RelativeHumidity => new RelativeHumidityResponse(this),
                 MessageID.TrOverride2 => new RemoteOverrideRoomSetPoint2Response(this),
                 MessageID.TdhwSetUBTdhwSetLB => new DhwSetpointBoundsResponse(this),
+                MessageID.OTCHCRatioBounds => new OTCHCRatioBoundsResponse(this),
+                MessageID.OTCHeatCurveRatio => new OTCHeatCurveRatioResponse(this),
                 MessageID.MaxTSetUBMaxTSetLB => new MaxTSetBoundsResponse(this),
                 MessageID.StatusVentilationHeatRecovery => new VentilationStatusResponse(this),
                 MessageID.Vset => new VentilationPositionResponse(this),
@@ -153,6 +156,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 MessageID.OpenThermVersionSlave => new OpenThermVersionSlaveResponse(this),
                 MessageID.MasterVersion => new MasterProductVersionResponse(this),
                 MessageID.SlaveVersion => new SlaveProductVersionResponse(this),
+                MessageID.Remeha131 => new Remeha131Response(this),
+                MessageID.Remeha132 => new Remeha132Response(this),
+                MessageID.Remeha133 => new Remeha133Response(this),
                 MessageID.TSet => new ControlSetpointResponse(this),
                 MessageID.MConfigMMemberIDcode => new MasterConfigResponse(this),
                 MessageID.RemoteRequest => new RemoteRequestResponse(this),

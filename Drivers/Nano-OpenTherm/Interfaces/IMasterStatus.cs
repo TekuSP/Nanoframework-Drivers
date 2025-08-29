@@ -24,11 +24,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         /// <summary>Is <see cref="MasterStatus.OTCActive"/> set?</summary>
         bool MasterOTCActive { get; set; }
 
-        /// <summary>Is <see cref="MasterStatus.Reserved5"/> set?</summary>
-        bool MasterReserved5 { get; set; }
+    /// <summary>Is <see cref="MasterStatus.SummerWinterMode"/> set?</summary>
+    bool MasterSummerWinterMode { get; set; }
 
-        /// <summary>Is <see cref="MasterStatus.Reserved6"/> set?</summary>
-        bool MasterReserved6 { get; set; }
+    /// <summary>Is <see cref="MasterStatus.DHWBlocking"/> set?</summary>
+    bool MasterDHWBlocking { get; set; }
+
 
         /// <summary>Is <see cref="MasterStatus.Reserved7"/> set?</summary>
         bool MasterReserved7 { get; set; }

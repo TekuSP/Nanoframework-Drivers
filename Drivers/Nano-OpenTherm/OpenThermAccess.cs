@@ -46,6 +46,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 case MessageID.Tdhw2:
                 case MessageID.Texhaust:
                 case MessageID.TboilerHeatExchanger:
+                case MessageID.BoilerFanSpeedSetpointAndActual:
                 case MessageID.FlameCurrent:
                 case MessageID.TrCH2:
                 case MessageID.RelativeHumidity:
@@ -60,9 +61,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 // Bounds and setpoints
                 case MessageID.TdhwSetUBTdhwSetLB:
                 case MessageID.MaxTSetUBMaxTSetLB:
+                case MessageID.OTCHCRatioBounds:
                     return AccessMode.Read;
                 case MessageID.TdhwSet:
                 case MessageID.MaxTSet:
+                case MessageID.OTCHeatCurveRatio:
                     return AccessMode.ReadWrite; // v2.2: RW (read back and write)
 
                 // Ventilation/heat-recovery
@@ -138,6 +141,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 case MessageID.OpenThermVersionSlave:
                 case MessageID.MasterVersion:
                 case MessageID.SlaveVersion:
+                    return AccessMode.Read;
+                // Vendor-specific (Remeha)
+                case MessageID.Remeha131:
+                case MessageID.Remeha132:
+                case MessageID.Remeha133:
                     return AccessMode.Read;
 
                 default:

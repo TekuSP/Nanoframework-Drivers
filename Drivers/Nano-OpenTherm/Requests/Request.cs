@@ -142,6 +142,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 MessageID.Tdhw2 => new GetDHW2TemperatureRequest(this),
                 MessageID.Texhaust => new GetExhaustTemperatureRequest(this),
                 MessageID.TboilerHeatExchanger => new GetBoilerHeatExchangerTemperatureRequest(this),
+                MessageID.BoilerFanSpeedSetpointAndActual => new GetBoilerFanSpeedRequest(this),
                 // Flame current / humidity
                 MessageID.FlameCurrent => new GetFlameCurrentRequest(this),
                 MessageID.TrCH2 => new GetRoomTemperatureCH2Request(this),
@@ -149,8 +150,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 // Bounds and max setpoints
                 MessageID.TdhwSetUBTdhwSetLB => new GetDhwSetpointBoundsRequest(this),
                 MessageID.MaxTSetUBMaxTSetLB => new GetMaxTSetBoundsRequest(this),
+                MessageID.OTCHCRatioBounds => new GetOTCHeatCurveRatioBoundsRequest(this),
                 MessageID.TdhwSet => new SetDWHSetPointRequest(this),
                 MessageID.MaxTSet => new SetMaxCHSetpointRequest(this),
+                MessageID.OTCHeatCurveRatio => (MessageType == MessageType.WRITE_DATA ? (Request)new SetOTCHeatCurveRatioRequest(this) : new GetOTCHeatCurveRatioRequest(this)),
                 // Ventilation / heat recovery
                 MessageID.StatusVentilationHeatRecovery => new GetVentilationStatusRequest(this),
                 MessageID.Vset => new SetVentilationPositionRequest(this),
@@ -214,6 +217,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 MessageID.TSPindexTSPvalueSolarStorage => new GetSolarStorageTSPRequest(this),
                 MessageID.FHBsizeSolarStorage => new GetSolarStorageFHBSizeRequest(this),
                 MessageID.FHBindexFHBvalueSolarStorage => new GetSolarStorageFHBEntryRequest(this),
+                // Vendor-specific (Remeha)
+                MessageID.Remeha131 => new GetRemeha131Request(this),
+                MessageID.Remeha132 => new GetRemeha132Request(this),
+                MessageID.Remeha133 => new GetRemeha133Request(this),
                 _ => this,
             };
         }

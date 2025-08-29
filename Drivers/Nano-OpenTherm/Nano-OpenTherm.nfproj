@@ -80,6 +80,9 @@
     <Compile Include="Requests\GetExhaustInletTemperatureRequest.cs" />
     <Compile Include="Requests\GetExhaustOutletTemperatureRequest.cs" />
     <Compile Include="Requests\GetExhaustTemperatureRequest.cs" />
+  <Compile Include="Requests\GetBoilerFanSpeedRequest.cs" />
+  <Compile Include="Requests\GetOTCHeatCurveRatioBoundsRequest.cs" />
+  <Compile Include="Requests\GetOTCHeatCurveRatioRequest.cs" />
     <Compile Include="Requests\GetFaultHistoryBufferEntryRequest.cs" />
     <Compile Include="Requests\GetFaultHistoryBufferSizeRequest.cs" />
     <Compile Include="Requests\GetFaultRequest.cs" />
@@ -123,6 +126,9 @@
   <Compile Include="Requests\GetSolarStorageTSPRequest.cs" />
   <Compile Include="Requests\SetSolarStorageTSPRequest.cs" />
     <Compile Include="Requests\GetSolarStorageVersionRequest.cs" />
+  <Compile Include="Requests\GetRemeha131Request.cs" />
+  <Compile Include="Requests\GetRemeha132Request.cs" />
+  <Compile Include="Requests\GetRemeha133Request.cs" />
     <Compile Include="Requests\GetStorageTemperatureRequest.cs" />
     <Compile Include="Requests\GetSuccessfulBurnerStartsRequest.cs" />
     <Compile Include="Requests\GetSupplyFanSpeedRequest.cs" />
@@ -155,6 +161,7 @@
     <Compile Include="Requests\SetMaxCHSetpointRequest.cs" />
     <Compile Include="Requests\SetMaxRelModulationRequest.cs" />
     <Compile Include="Requests\SetNominalVentilationValueRequest.cs" />
+  <Compile Include="Requests\SetOTCHeatCurveRatioRequest.cs" />
     <Compile Include="Requests\SetRemoteOverrideFunctionRequest.cs" />
     <Compile Include="Requests\SetRemoteOverrideOperatingModeRequest.cs" />
     <Compile Include="Requests\SetRoomOverride2Request.cs" />
@@ -179,6 +186,7 @@
     <Compile Include="Responses\CHPumpStartsResponse.cs" />
     <Compile Include="Responses\CO2ExhaustResponse.cs" />
     <Compile Include="Responses\CollectorTemperatureResponse.cs" />
+  <Compile Include="Responses\BoilerFanSpeedResponse.cs" />
     <Compile Include="Responses\ControlSetpointCH2Response.cs" />
     <Compile Include="Responses\ControlSetpointResponse.cs" />
     <Compile Include="Responses\CoolingControlResponse.cs" />
@@ -212,6 +220,8 @@
     <Compile Include="Responses\MaxCapacityMinModLevelResponse.cs" />
     <Compile Include="Responses\MaxRelModLevelSettingResponse.cs" />
     <Compile Include="Responses\MaxTSetBoundsResponse.cs" />
+  <Compile Include="Responses\OTCHeatCurveRatioResponse.cs" />
+  <Compile Include="Responses\OTCHCRatioBoundsResponse.cs" />
     <Compile Include="Responses\MaxTSetResponse.cs" />
     <Compile Include="Responses\NominalVentilationValueResponse.cs" />
     <Compile Include="Responses\OEMDiagnosticCodeResponse.cs" />
@@ -230,6 +240,9 @@
     <Compile Include="Responses\RemoteOverrideRoomSetPointResponse.cs" />
     <Compile Include="Responses\RemoteRequestResponse.cs" />
     <Compile Include="Responses\RemoteVentilationParameterResponse.cs" />
+  <Compile Include="Responses\Remeha131Response.cs" />
+  <Compile Include="Responses\Remeha132Response.cs" />
+  <Compile Include="Responses\Remeha133Response.cs" />
     <Compile Include="Responses\ReturnTemperatureResponse.cs" />
     <Compile Include="Responses\RFsensorStatusInformationResponse.cs" />
     <Compile Include="Responses\RoomSetpointCH2Response.cs" />

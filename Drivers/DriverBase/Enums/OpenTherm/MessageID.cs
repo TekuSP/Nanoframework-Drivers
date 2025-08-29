@@ -26,9 +26,13 @@
         /// </summary>
         SConfigSMemberIDcode = 3,
         /// <summary>
-        /// Remote Request.
+        /// Remote Command (Class 3: Remote Commands).
         /// </summary>
         RemoteRequest = 4,
+        /// <summary>
+        /// Alias aligned with v2.2 naming.
+        /// </summary>
+        Command = 4,
         /// <summary>
         /// Application-specific fault flags and OEM fault code.
         /// </summary>
@@ -166,7 +170,7 @@
         /// </summary>
         RelativeHumidity = 38,
         /// <summary>
-        /// Remote Override Room Setpoint 2.
+        /// Remote Override Room Setpoint 2. Not defined in v2.2 Data-Id map.
         /// </summary>
         TrOverride2 = 39,
         /// <summary>
@@ -178,6 +182,10 @@
         /// </summary>
         MaxTSetUBMaxTSetLB = 49,
         /// <summary>
+        /// OTC heat-curve ratio upper & lower bounds.
+        /// </summary>
+        OTCHCRatioBounds = 50,
+        /// <summary>
         /// DHW Setpoint(°C) (Remote parameter 1)
         /// </summary>
         TdhwSet = 56,
@@ -185,6 +193,10 @@
         /// Max CH water Setpoint(°C) (Remote parameters 2)
         /// </summary>
         MaxTSet = 57,
+        /// <summary>
+        /// OTC heat-curve ratio (f8.8).
+        /// </summary>
+        OTCHeatCurveRatio = 58,
         /// <summary>
         /// Master and Slave Status flags ventilation / heat - recovery
         /// </summary>
@@ -298,9 +310,13 @@
         /// </summary>
         RFsensorStatusInformation = 98,
         /// <summary>
-        /// Operating Mode HC1, HC2/ Operating Mode DHW 
+        /// Operating Mode HC1/HC2/DHW.
         /// </summary>
         RemoteOverrideOperatingModeHeatingDHW = 99,
+        /// <summary>
+        /// Alias aligned with spec naming.
+        /// </summary>
+        OperatingModeHC1HC2DHW = 99,
         /// <summary>
         /// Function of manual and program changes in master and remote room Setpoint 
         /// </summary>
@@ -350,9 +366,13 @@
         /// </summary>
         ElectricityProduction = 111,
         /// <summary>
-        /// Cumulative electricity production in KWh.
+        /// Cumulative electricity production in kWh.
         /// </summary>
         CumulativElectricityProduction = 112,
+        /// <summary>
+        /// Alias aligned with v2.2 naming.
+        /// </summary>
+        CumulativeElectricityProduction = 112,
         /// <summary>
         /// Number of un - successful burner starts
         /// </summary>
@@ -413,5 +433,17 @@
         /// Slave product version number and type
         /// </summary>
         SlaveVersion = 127,
+        /// <summary>
+        /// Remeha vendor-specific: diagnostic/service or status (OEM-specific semantics).
+        /// </summary>
+        Remeha131 = 131,
+        /// <summary>
+        /// Remeha vendor-specific: diagnostic/service or status (OEM-specific semantics).
+        /// </summary>
+        Remeha132 = 132,
+        /// <summary>
+        /// Remeha vendor-specific: diagnostic/service or status (OEM-specific semantics).
+        /// </summary>
+        Remeha133 = 133,
     }
 }

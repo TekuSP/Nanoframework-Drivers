@@ -46,11 +46,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public bool MasterIsHotWaterActive { get => MasterStatus.IsSet(MS.DHWEnabled); set => MasterStatus = MasterStatus.SetFlag(MS.DHWEnabled, value); }
 
-        public bool MasterOTCActive { get => MasterStatus.IsSet(MS.OTCActive); set => MasterStatus = MasterStatus.SetFlag(MS.OTCActive, value); }
+    public bool MasterOTCActive { get => MasterStatus.IsSet(MS.OTCActive); set => MasterStatus = MasterStatus.SetFlag(MS.OTCActive, value); }
 
-        public bool MasterReserved5 { get => MasterStatus.IsSet(MS.Reserved5); set => MasterStatus = MasterStatus.SetFlag(MS.Reserved5, value); }
-
-        public bool MasterReserved6 { get => MasterStatus.IsSet(MS.Reserved6); set => MasterStatus = MasterStatus.SetFlag(MS.Reserved6, value); }
+    public bool MasterSummerWinterMode { get => MasterStatus.IsSet(MS.SummerWinterMode); set => MasterStatus = MasterStatus.SetFlag(MS.SummerWinterMode, value); }
+    public bool MasterDHWBlocking { get => MasterStatus.IsSet(MS.DHWBlocking); set => MasterStatus = MasterStatus.SetFlag(MS.DHWBlocking, value); }
 
         public bool MasterReserved7 { get => MasterStatus.IsSet(MS.Reserved7); set => MasterStatus = MasterStatus.SetFlag(MS.Reserved7, value); }
 

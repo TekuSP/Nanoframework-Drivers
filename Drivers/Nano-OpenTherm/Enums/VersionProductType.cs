@@ -1,8 +1,9 @@
 namespace TekuSP.Drivers.Nano_OpenTherm.Enums
 {
     /// <summary>
-    /// Product type nibble used in Master/Slave product version/type (ID 125/126)
-    /// The mapping below is not standardized across all OEMs; adjust as needed.
+    /// Product type nibble used in Master/Slave product version/type (IDs 126 and 127 per v2.2).
+    /// Note: IDs 124/125 carry the OpenTherm version numbers. The product type mapping below is
+    /// OEM-defined and not standardised; adjust as needed for your devices.
     /// </summary>
     public enum VersionProductType : byte
     {
