@@ -1,3 +1,5 @@
+using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -40,13 +42,17 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     {
         #region Protected Constructors
 
-        protected ReadWriteRequest() : base()
+        protected ReadWriteRequest(MessageType messageType) : base()
         {
+            MessageType = messageType;
         }
 
-        protected ReadWriteRequest(Request baseReq) : base(baseReq)
+        protected ReadWriteRequest(Request baseReq, MessageType messageType) : base(baseReq)
         {
+            MessageType = messageType;
         }
+
+        public override MessageType MessageType { get; }
 
         #endregion Protected Constructors
 

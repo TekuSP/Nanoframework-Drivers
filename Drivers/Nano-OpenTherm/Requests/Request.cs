@@ -217,10 +217,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 MessageID.TSPindexTSPvalueSolarStorage => new GetSolarStorageTSPRequest(this),
                 MessageID.FHBsizeSolarStorage => new GetSolarStorageFHBSizeRequest(this),
                 MessageID.FHBindexFHBvalueSolarStorage => new GetSolarStorageFHBEntryRequest(this),
-                // Vendor-specific (Remeha)
-                MessageID.Remeha131 => new GetRemeha131Request(this),
-                MessageID.Remeha132 => new GetRemeha132Request(this),
-                MessageID.Remeha133 => new GetRemeha133Request(this),
+                // Vendor-specific (Remeha) – single read/write request per ID
+                MessageID.Remeha131 => new Remeha131Request(this),
+                MessageID.Remeha132 => new Remeha132Request(this),
+                MessageID.Remeha133 => new Remeha133Request(this),
                 _ => this,
             };
         }

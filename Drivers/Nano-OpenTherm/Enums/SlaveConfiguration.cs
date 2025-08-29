@@ -29,13 +29,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Enums
         /// CH2 (Central Heating circuit 2) present.
         /// </summary>
         CH2Present = 1 << 5,
-        /// <summary>
-        /// Reserved bit 6.
-        /// </summary>
-        Reserved6 = 1 << 6,
-        /// <summary>
-        /// Reserved bit 7.
-        /// </summary>
-        Reserved7 = 1 << 7,
+    /// <summary>
+    /// Remote water filling function (per OT 2.3b, ID3: bit 6).
+    /// </summary>
+    RemoteWaterFillingFunction = 1 << 6,
+    /// <summary>
+    /// Heat/cool mode control (per OT 2.3b, ID3: bit 7).
+    /// </summary>
+    HeatCoolModeControl = 1 << 7,
     }
 }

@@ -1,4 +1,5 @@
 using System;
+
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.Nano_OpenTherm.Enums;
 
@@ -6,6 +7,16 @@ namespace TekuSP.Drivers.Nano_OpenTherm
 {
     public static class OpenThermAccess
     {
+        public static MessageType GetMessageType(AccessMode accessMode)
+        {
+            if (accessMode == AccessMode.Read)
+                return MessageType.READ_DATA;
+            if (accessMode == AccessMode.Write)
+                return MessageType.WRITE_DATA;
+
+            return MessageType.UNKNOWN_DATA_ID; // ambiguous, could be either read or write
+        }
+        public static MessageType GetMessageType(MessageID id) => GetMessageType(id);
         public static AccessMode GetAccess(MessageID id)
         {
             switch (id)
@@ -142,11 +153,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm
                 case MessageID.MasterVersion:
                 case MessageID.SlaveVersion:
                     return AccessMode.Read;
-                // Vendor-specific (Remeha)
+                // Vendor-specific (Remeha) – allow RW per user request
                 case MessageID.Remeha131:
                 case MessageID.Remeha132:
                 case MessageID.Remeha133:
-                    return AccessMode.Read;
+                    return AccessMode.ReadWrite;
 
                 default:
                     return AccessMode.Read; // safe default

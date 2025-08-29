@@ -126,9 +126,9 @@
   <Compile Include="Requests\GetSolarStorageTSPRequest.cs" />
   <Compile Include="Requests\SetSolarStorageTSPRequest.cs" />
     <Compile Include="Requests\GetSolarStorageVersionRequest.cs" />
-  <Compile Include="Requests\GetRemeha131Request.cs" />
-  <Compile Include="Requests\GetRemeha132Request.cs" />
-  <Compile Include="Requests\GetRemeha133Request.cs" />
+  <Compile Include="Requests\Remeha131Request.cs" />
+  <Compile Include="Requests\Remeha132Request.cs" />
+  <Compile Include="Requests\Remeha133Request.cs" />
     <Compile Include="Requests\GetStorageTemperatureRequest.cs" />
     <Compile Include="Requests\GetSuccessfulBurnerStartsRequest.cs" />
     <Compile Include="Requests\GetSupplyFanSpeedRequest.cs" />
@@ -160,7 +160,7 @@
     <Compile Include="Requests\SetBoilerTemperatureRequest.cs" />
     <Compile Include="Requests\SetMaxCHSetpointRequest.cs" />
     <Compile Include="Requests\SetMaxRelModulationRequest.cs" />
-    <Compile Include="Requests\SetNominalVentilationValueRequest.cs" />
+  <Compile Include="Requests\SetNominalVentilationValueRequest.cs" />
   <Compile Include="Requests\SetOTCHeatCurveRatioRequest.cs" />
     <Compile Include="Requests\SetRemoteOverrideFunctionRequest.cs" />
     <Compile Include="Requests\SetRemoteOverrideOperatingModeRequest.cs" />

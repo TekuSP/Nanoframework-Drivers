@@ -154,8 +154,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public bool SlaveConfigCH2Present { get => SlaveConfiguration.IsSet(SlaveConfiguration.CH2Present); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.CH2Present, value); }
         public bool SlaveConfigMasterLowOffPumpControl { get => SlaveConfiguration.IsSet(SlaveConfiguration.MasterLowOffPumpControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.MasterLowOffPumpControl, value); }
-        public bool SlaveConfigReserved6 { get => SlaveConfiguration.IsSet(SlaveConfiguration.Reserved6); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.Reserved6, value); }
-        public bool SlaveConfigReserved7 { get => SlaveConfiguration.IsSet(SlaveConfiguration.Reserved7); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.Reserved7, value); }
+    public bool SlaveConfigRemoteWaterFillingFunction { get => SlaveConfiguration.IsSet(SlaveConfiguration.RemoteWaterFillingFunction); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.RemoteWaterFillingFunction, value); }
+    public bool SlaveConfigHeatCoolModeControl { get => SlaveConfiguration.IsSet(SlaveConfiguration.HeatCoolModeControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.HeatCoolModeControl, value); }
 
         #endregion Public Properties
 

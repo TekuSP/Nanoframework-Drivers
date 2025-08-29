@@ -27,11 +27,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Interfaces
         /// <summary>Is <see cref="SlaveConfiguration.MasterLowOffPumpControl"/> set?</summary>
         bool SlaveConfigMasterLowOffPumpControl { get; set; }
 
-        /// <summary>Is <see cref="SlaveConfiguration.Reserved6"/> set?</summary>
-        bool SlaveConfigReserved6 { get; set; }
+    /// <summary>Is <see cref="SlaveConfiguration.RemoteWaterFillingFunction"/> set?</summary>
+    bool SlaveConfigRemoteWaterFillingFunction { get; set; }
 
-        /// <summary>Is <see cref="SlaveConfiguration.Reserved7"/> set?</summary>
-        bool SlaveConfigReserved7 { get; set; }
+    /// <summary>Is <see cref="SlaveConfiguration.HeatCoolModeControl"/> set?</summary>
+    bool SlaveConfigHeatCoolModeControl { get; set; }
 
         #endregion Public Properties
     }

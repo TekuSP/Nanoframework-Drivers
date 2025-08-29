@@ -4,12 +4,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
     /// Sets the nominal relative ventilation value (0–100%).
+    /// Wire format: U8 in low byte (per project decision for ID87).
     /// </summary>
     public class SetNominalVentilationValueRequest : WriteRequest
     {
         #region Private Fields
 
-        private float _percent;
+    private byte _percent;
 
         #endregion Private Fields
 
@@ -32,12 +33,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public override MessageType MessageType => MessageType.WRITE_DATA;
 
         /// <summary>
-        /// Nominal relative ventilation value in % (encoded as 8.8 fixed-point in low 16 bits). Value is clamped to 0–100.
+        /// Nominal relative ventilation value in % (U8 in low byte). Value is clamped to 0–100.
         /// </summary>
-        public float Percent
+        public byte Percent
         {
             get => _percent;
-            set => _percent = value.Normalize();
+            set => _percent = (byte)Utilities.Normalize(value);
         }
 
         #endregion Public Properties
@@ -46,12 +47,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         protected override uint GetRawDataCore()
         {
-            return ProcessRequest(Utilities.GetRawPercentage(Percent));
+            return ProcessRequest(Utilities.MakeUShort(0, Percent));
         }
 
         protected override void SetRawDataCore(uint value)
         {
-            Percent = Utilities.GetPercentage(value);
+            Percent = Utilities.GetLowByte(value);
         }
 
         #endregion Protected Methods

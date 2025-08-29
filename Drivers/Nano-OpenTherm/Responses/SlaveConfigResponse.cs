@@ -53,8 +53,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     public bool SlaveConfigDHWConfig { get => SlaveConfiguration.IsSet(SC.DHWConfig); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.DHWConfig, value); }
     public bool SlaveConfigMasterLowOffPumpControl { get => SlaveConfiguration.IsSet(SC.MasterLowOffPumpControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.MasterLowOffPumpControl, value); }
     public bool SlaveConfigCH2Present { get => SlaveConfiguration.IsSet(SC.CH2Present); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.CH2Present, value); }
-    public bool SlaveConfigReserved6 { get => SlaveConfiguration.IsSet(SC.Reserved6); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.Reserved6, value); }
-    public bool SlaveConfigReserved7 { get => SlaveConfiguration.IsSet(SC.Reserved7); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.Reserved7, value); }
+    public bool SlaveConfigRemoteWaterFillingFunction { get => SlaveConfiguration.IsSet(SC.RemoteWaterFillingFunction); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.RemoteWaterFillingFunction, value); }
+    public bool SlaveConfigHeatCoolModeControl { get => SlaveConfiguration.IsSet(SC.HeatCoolModeControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.HeatCoolModeControl, value); }
 
     // IMemberIdCode
     public bool IsAET80FormerNordgasSrl { get => MemberIdCode == MemberIdCode.AET80FormerNordgasSrl; set => MemberIdCode = value ? MemberIdCode.AET80FormerNordgasSrl : MemberIdCode; }

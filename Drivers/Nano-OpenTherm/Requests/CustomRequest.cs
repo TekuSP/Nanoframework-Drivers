@@ -15,7 +15,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Constructors
 
-        public CustomRequest(MessageType messageType, MessageID messageID, uint data = 0)
+        public CustomRequest(MessageType messageType, MessageID messageID, uint data = 0) : base(messageType)
         {
             this.data = data;
             MessageType = messageType;

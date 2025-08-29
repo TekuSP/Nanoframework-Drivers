@@ -4,7 +4,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     /// <summary>
     /// Relative ventilation position (0-100%).
-    /// High/low payload stores percent in 8.8 format by convention across repo helpers.
+    /// Note: Use U8 encoding (0..100) in low byte per project decision for ID71.
+    /// TODO: If device expects f8.8, introduce per-ID switch.
     /// </summary>
     public class VentilationPositionResponse : Response
     {
@@ -12,10 +13,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
         public VentilationPositionResponse(Response r) : base(r) { }
 
         /// <summary>Ventilation position in percent (0-100).</summary>
-        public float Percent { get; set; }
+        public byte Percent { get; set; }
 
-        protected override uint GetRawDataCore() => ProcessResponse(Utilities.GetRawPercentage(Percent));
-        protected override void SetRawDataCore(uint value) => Percent = Utilities.GetPercentage(value);
+        protected override uint GetRawDataCore()
+            => ProcessResponse(Utilities.MakeUShort(0, (byte)Utilities.Normalize(Percent)));
+        protected override void SetRawDataCore(uint value) => Percent = Utilities.GetLowByte(value);
 
         public override MessageType MessageType { get; set; }
         public override MessageID MessageID => MessageID.Vset;
