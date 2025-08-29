@@ -16,7 +16,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm
 
             return MessageType.UNKNOWN_DATA_ID; // ambiguous, could be either read or write
         }
-        public static MessageType GetMessageType(MessageID id) => GetMessageType(id);
+        public static MessageType GetMessageType(MessageID id) => GetMessageType(GetAccess(id));
         public static AccessMode GetAccess(MessageID id)
         {
             switch (id)
