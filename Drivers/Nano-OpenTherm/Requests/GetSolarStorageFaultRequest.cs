@@ -13,6 +13,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageFaultRequest : ReadRequest, IApplicationSpecificFaultFlags
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageApplicationFaultCodesResponse);
         #region Public Constructors
 
         public GetSolarStorageFaultRequest() : base()

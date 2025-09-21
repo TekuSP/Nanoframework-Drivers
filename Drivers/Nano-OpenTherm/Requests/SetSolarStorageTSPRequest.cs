@@ -11,6 +11,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetSolarStorageTSPRequest() : base() { }
         public SetSolarStorageTSPRequest(Request baseReq) : base(baseReq) { }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageTSPValueResponse);
+
         public override MessageID MessageID => MessageID.TSPindexTSPvalueSolarStorage;
         public override MessageType MessageType => MessageType.WRITE_DATA;
 

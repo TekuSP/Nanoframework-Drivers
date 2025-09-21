@@ -24,6 +24,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CumulativeElectricityProductionResponse);
+
         /// <summary>
         /// Cumulative electricity production in kWh (low 16 bits).
         /// </summary>

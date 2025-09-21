@@ -32,6 +32,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DateResponse);
+
         /// <summary>
         /// Day of month (1..31), encoded in the low byte (bits 0-4).
         /// </summary>

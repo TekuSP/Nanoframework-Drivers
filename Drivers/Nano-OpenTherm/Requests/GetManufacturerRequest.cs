@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetManufacturerRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BrandCharacterResponse);
         #region Public Constructors
 
         public GetManufacturerRequest() : base()

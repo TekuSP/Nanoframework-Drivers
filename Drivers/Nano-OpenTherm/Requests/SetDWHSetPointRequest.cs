@@ -27,6 +27,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DhwSetpointResponse);
+
         public override MessageID MessageID => MessageID.TdhwSet;
 
         public override MessageType MessageType => MessageType.WRITE_DATA;

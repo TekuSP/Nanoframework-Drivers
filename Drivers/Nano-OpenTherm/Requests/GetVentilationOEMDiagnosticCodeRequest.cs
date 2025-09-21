@@ -11,6 +11,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetVentilationOEMDiagnosticCodeRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationOEMDiagnosticCodeResponse);
         #region Public Constructors
 
         public GetVentilationOEMDiagnosticCodeRequest() : base()

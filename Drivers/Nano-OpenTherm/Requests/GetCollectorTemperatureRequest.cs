@@ -10,6 +10,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetCollectorTemperatureRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CollectorTemperatureResponse);
         #region Public Constructors
 
         public GetCollectorTemperatureRequest() : base()

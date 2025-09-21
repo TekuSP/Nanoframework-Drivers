@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetDhwSetpointBoundsRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DhwSetpointBoundsResponse);
         #region Public Constructors
 
         public GetDhwSetpointBoundsRequest() : base()

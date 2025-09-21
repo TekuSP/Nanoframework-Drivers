@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetDHWTemperatureRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWTemperatureResponse);
         public GetDHWTemperatureRequest() : base() { }
         public GetDHWTemperatureRequest(Request baseReq) : base(baseReq) { }
 

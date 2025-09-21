@@ -10,6 +10,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetCH2FlowTemperatureRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CH2FlowTemperatureResponse);
         #region Public Constructors
 
         public GetCH2FlowTemperatureRequest() : base()

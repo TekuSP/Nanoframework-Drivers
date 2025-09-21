@@ -14,6 +14,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetRoomTemperatureRequest : ReadRequest, IMasterStatus
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RoomTemperatureResponse);
         #region Public Constructors
 
         public GetRoomTemperatureRequest() : base()

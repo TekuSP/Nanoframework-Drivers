@@ -8,6 +8,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class SetVentilationPositionRequest : WriteRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationPositionResponse);
         #region Private Fields
 
     private byte _percent;

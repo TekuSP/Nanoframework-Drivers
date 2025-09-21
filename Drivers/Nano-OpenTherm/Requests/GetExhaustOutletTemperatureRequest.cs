@@ -10,6 +10,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetExhaustOutletTemperatureRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ExhaustOutletTemperatureResponse);
         #region Public Constructors
 
         public GetExhaustOutletTemperatureRequest() : base()

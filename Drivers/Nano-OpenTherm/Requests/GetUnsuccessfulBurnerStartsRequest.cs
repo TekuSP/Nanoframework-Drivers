@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetUnsuccessfulBurnerStartsRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.UnsuccessfulBurnerStartsResponse);
         #region Public Constructors
 
         public GetUnsuccessfulBurnerStartsRequest() : base()

@@ -13,6 +13,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSlaveVersionRequest : ReadRequest, IVersionProductType
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SlaveProductVersionResponse);
         #region Public Constructors
 
         public GetSlaveVersionRequest() : base()

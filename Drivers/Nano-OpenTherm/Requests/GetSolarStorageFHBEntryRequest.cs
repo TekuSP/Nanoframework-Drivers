@@ -27,6 +27,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageFHBEntryResponse);
+
         /// <summary>
     /// Fault history buffer index to read (0-based). Encoded in the high data byte.
         /// </summary>

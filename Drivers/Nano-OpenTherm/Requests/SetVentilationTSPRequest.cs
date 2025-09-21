@@ -11,6 +11,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetVentilationTSPRequest() : base() { }
         public SetVentilationTSPRequest(Request baseReq) : base(baseReq) { }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationTSPValueResponse);
+
         public override MessageID MessageID => MessageID.TSPindexTSPvalueVentilationHeatRecovery;
         public override MessageType MessageType => MessageType.WRITE_DATA;
 

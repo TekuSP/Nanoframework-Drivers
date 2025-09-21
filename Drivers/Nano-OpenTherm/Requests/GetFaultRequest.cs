@@ -9,6 +9,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetFaultRequest : ReadRequest, IApplicationSpecificFaultFlags
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ApplicationFaultCodesResponse);
         #region Public Constructors
 
         public GetFaultRequest() : base()

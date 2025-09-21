@@ -7,6 +7,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetOTCHeatCurveRatioRequest() : base() { }
         public SetOTCHeatCurveRatioRequest(Request baseReq) : base(baseReq) { }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.OTCHeatCurveRatioResponse);
+
         public override MessageID MessageID => MessageID.OTCHeatCurveRatio;
         public override MessageType MessageType => MessageType.WRITE_DATA;
 

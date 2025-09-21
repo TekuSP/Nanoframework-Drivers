@@ -8,6 +8,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetVentilationTSPRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationTSPValueResponse);
         #region Public Constructors
 
         public GetVentilationTSPRequest() : base()

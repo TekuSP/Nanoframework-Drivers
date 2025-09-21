@@ -10,6 +10,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetCoolingOperationHoursRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CoolingOperationHoursResponse);
         #region Public Constructors
 
         public GetCoolingOperationHoursRequest() : base()

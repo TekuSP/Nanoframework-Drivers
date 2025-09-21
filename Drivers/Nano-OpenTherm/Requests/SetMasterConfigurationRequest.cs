@@ -12,6 +12,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class SetMasterConfigurationRequest : WriteRequest, IMasterConfiguration, IMemberIdCode
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MasterConfigResponse);
         public SetMasterConfigurationRequest() : base() { }
         public SetMasterConfigurationRequest(Request baseReq) : base(baseReq) { }
         public SetMasterConfigurationRequest(MemberIdCode memberId, MasterConfiguration config)

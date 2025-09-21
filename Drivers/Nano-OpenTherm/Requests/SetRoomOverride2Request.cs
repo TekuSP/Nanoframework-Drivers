@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetRoomOverride2Request : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteOverrideRoomSetPoint2Response);
         #region Public Constructors
 
     public GetRoomOverride2Request() : base()

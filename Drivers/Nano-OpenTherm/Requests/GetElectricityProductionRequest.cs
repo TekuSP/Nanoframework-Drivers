@@ -21,6 +21,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ElectricityProductionResponse);
+
         public override MessageID MessageID => MessageID.ElectricityProduction;
 
         public override MessageType MessageType => MessageType.READ_DATA;

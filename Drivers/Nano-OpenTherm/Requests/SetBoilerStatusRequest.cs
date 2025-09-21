@@ -11,6 +11,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class SetBoilerStatusRequest : WriteRequest, IMasterStatus
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.StatusResponse);
         #region Public Constructors
 
         public SetBoilerStatusRequest() : base()

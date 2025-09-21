@@ -10,6 +10,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetBoilerHeatExchangerTemperatureRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BoilerHeatExchangerTemperatureResponse);
         #region Public Constructors
 
         public GetBoilerHeatExchangerTemperatureRequest() : base()

@@ -4,6 +4,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class GetOTCHeatCurveRatioRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.OTCHeatCurveRatioResponse);
         public GetOTCHeatCurveRatioRequest() : base() { }
         public GetOTCHeatCurveRatioRequest(Request baseReq) : base(baseReq) { }
 

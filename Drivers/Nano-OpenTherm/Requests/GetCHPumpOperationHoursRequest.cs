@@ -21,6 +21,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CHPumpOperationHoursResponse);
+
         /// <summary>
         /// Total operation hours of the central heating pump (low 16 bits, unsigned).
         /// Units: hours.

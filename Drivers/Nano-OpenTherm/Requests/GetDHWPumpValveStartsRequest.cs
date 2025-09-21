@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetDHWPumpValveStartsRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWPumpValveStartsResponse);
         #region Public Constructors
 
         public GetDHWPumpValveStartsRequest() : base()

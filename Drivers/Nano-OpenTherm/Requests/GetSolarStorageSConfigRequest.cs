@@ -14,6 +14,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageSConfigRequest : ReadRequest, ISlaveConfiguration, IMemberIdCode
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageSConfigResponse);
         #region Public Constructors
 
         public GetSolarStorageSConfigRequest() : base()

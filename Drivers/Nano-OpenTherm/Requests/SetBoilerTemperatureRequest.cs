@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class SetBoilerTemperatureRequest : WriteRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ControlSetpointResponse);
         #region Private Fields
 
         private float _temperature;

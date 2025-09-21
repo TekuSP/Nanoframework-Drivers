@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetFaultHistoryBufferSizeRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.FaultHistoryBufferSizeResponse);
         #region Public Constructors
 
         public GetFaultHistoryBufferSizeRequest() : base()

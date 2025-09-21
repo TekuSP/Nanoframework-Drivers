@@ -9,6 +9,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetRemoteVentilationParameterFlagsRequest : ReadRequest, IRemoteParameterTransferEnable, IRemoteParameterTransferReadWrite
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteVentilationParameterResponse);
         #region Public Constructors
 
         public GetRemoteVentilationParameterFlagsRequest() : base()

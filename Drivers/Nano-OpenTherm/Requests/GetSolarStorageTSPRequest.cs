@@ -12,6 +12,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageTSPRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageTSPValueResponse);
         #region Public Constructors
 
         public GetSolarStorageTSPRequest() : base()

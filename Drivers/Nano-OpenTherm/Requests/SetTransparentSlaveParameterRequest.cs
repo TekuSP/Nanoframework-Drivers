@@ -11,6 +11,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public SetTransparentSlaveParameterRequest() : base() { }
         public SetTransparentSlaveParameterRequest(Request baseReq) : base(baseReq) { }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.TransparentSlaveParameterResponse);
+
         public override MessageID MessageID => MessageID.TSPindexTSPvalue;
         public override MessageType MessageType => MessageType.WRITE_DATA;
 

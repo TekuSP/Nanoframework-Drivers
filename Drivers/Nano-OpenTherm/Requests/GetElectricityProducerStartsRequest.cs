@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetElectricityProducerStartsRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ElectricityProducerStartsResponse);
         #region Public Constructors
 
         public GetElectricityProducerStartsRequest() : base()

@@ -8,6 +8,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetFaultHistoryBufferEntryRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.FaultHistoryBufferEntryResponse);
         #region Public Constructors
 
         public GetFaultHistoryBufferEntryRequest() : base()

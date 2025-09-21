@@ -8,6 +8,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class Remeha132Request : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.Remeha132Response);
         public Remeha132Request() : base() { }
 
         public Remeha132Request(Request baseReq) : base(baseReq) { }

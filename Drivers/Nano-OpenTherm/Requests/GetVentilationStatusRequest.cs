@@ -12,6 +12,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetVentilationStatusRequest : ReadRequest, IMasterStatus, ISlaveStatus
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationStatusResponse);
         #region Public Constructors
 
         public GetVentilationStatusRequest() : base()

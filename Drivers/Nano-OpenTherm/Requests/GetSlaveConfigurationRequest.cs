@@ -35,6 +35,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SlaveConfigResponse);
+
         // IMemberIdCode
         public bool IsAET80FormerNordgasSrl { get => MemberIdCode == MemberIdCode.AET80FormerNordgasSrl; set => MemberIdCode = value ? MemberIdCode.AET80FormerNordgasSrl : MemberIdCode; }
 

@@ -48,6 +48,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public abstract MessageType MessageType { get; }
 
+    /// <summary>
+    /// The concrete Response type expected for this Request. Used for mapping and validation.
+    /// </summary>
+    public abstract System.Type ExpectedResponse { get; }
+
         // Explicit IOpenThermData implementation to allow public accessor shape to vary in derived classes
         /// <summary>
         /// Gets or sets the encoded 32-bit OpenTherm frame for this request.

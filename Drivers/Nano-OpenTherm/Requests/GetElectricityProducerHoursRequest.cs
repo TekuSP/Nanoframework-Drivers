@@ -21,6 +21,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ElectricityProducerHoursResponse);
+
         /// <summary>
         /// Total operation hours of the electricity producer (encoded in the low 16 bits).
         /// </summary>

@@ -7,6 +7,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetMaxTSetBoundsRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MaxTSetBoundsResponse);
         #region Public Constructors
 
         public GetMaxTSetBoundsRequest() : base()

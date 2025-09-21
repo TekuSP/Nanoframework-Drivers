@@ -4,6 +4,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class GetDHWBurnerOperationHoursRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWBurnerOperationHoursResponse);
         #region Public Constructors
 
         public GetDHWBurnerOperationHoursRequest() : base()

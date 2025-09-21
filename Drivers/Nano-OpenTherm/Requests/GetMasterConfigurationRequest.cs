@@ -11,6 +11,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetMasterConfigurationRequest : ReadRequest, IMasterConfiguration, IMemberIdCode
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MasterConfigResponse);
         #region Public Constructors
 
         public GetMasterConfigurationRequest() : base()

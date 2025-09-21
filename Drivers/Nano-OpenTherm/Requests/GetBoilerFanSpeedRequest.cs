@@ -8,6 +8,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public GetBoilerFanSpeedRequest() : base() { }
         public GetBoilerFanSpeedRequest(Request baseReq) : base(baseReq) { }
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BoilerFanSpeedResponse);
+
     public override MessageID MessageID => MessageID.BoilerFanSpeedSetpointAndActual;
     public override MessageType MessageType => MessageType.READ_DATA;
 

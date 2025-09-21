@@ -34,6 +34,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DayTimeResponse);
+
         /// <summary>
         /// Hour of day (0..23). Packed in low byte bits 0..4.
         /// </summary>

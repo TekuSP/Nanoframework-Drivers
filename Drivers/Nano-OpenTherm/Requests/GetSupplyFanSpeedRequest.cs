@@ -10,6 +10,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSupplyFanSpeedRequest : ReadRequest
     {
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SupplyFanSpeedResponse);
         #region Public Constructors
 
         public GetSupplyFanSpeedRequest() : base()
