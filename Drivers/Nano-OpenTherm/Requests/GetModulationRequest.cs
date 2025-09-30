@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetModulationRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RelModulationResponse);
         #region Public Constructors
 
         public GetModulationRequest() : base()
@@ -22,6 +21,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RelModulationResponse);
         public override MessageID MessageID => MessageID.RelModLevel;
 
         public override MessageType MessageType => MessageType.READ_DATA;

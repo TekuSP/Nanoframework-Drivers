@@ -14,7 +14,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageSConfigRequest : ReadRequest, ISlaveConfiguration, IMemberIdCode
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageSConfigResponse);
         #region Public Constructors
 
         public GetSolarStorageSConfigRequest() : base()
@@ -37,6 +36,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageSConfigResponse);
 
         // IMemberIdCode
         public bool IsAET80FormerNordgasSrl { get => MemberIdCode == MemberIdCode.AET80FormerNordgasSrl; set => MemberIdCode = value ? MemberIdCode.AET80FormerNordgasSrl : MemberIdCode; }
@@ -153,10 +154,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         // ISlaveConfiguration
         public bool SlaveConfigDHWPresent { get => SlaveConfiguration.IsSet(SlaveConfiguration.DHWPresent); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.DHWPresent, value); }
 
+        public bool SlaveConfigHeatCoolModeControl { get => SlaveConfiguration.IsSet(SlaveConfiguration.HeatCoolModeControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.HeatCoolModeControl, value); }
         public bool SlaveConfigCH2Present { get => SlaveConfiguration.IsSet(SlaveConfiguration.CH2Present); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.CH2Present, value); }
         public bool SlaveConfigMasterLowOffPumpControl { get => SlaveConfiguration.IsSet(SlaveConfiguration.MasterLowOffPumpControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.MasterLowOffPumpControl, value); }
-    public bool SlaveConfigRemoteWaterFillingFunction { get => SlaveConfiguration.IsSet(SlaveConfiguration.RemoteWaterFillingFunction); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.RemoteWaterFillingFunction, value); }
-    public bool SlaveConfigHeatCoolModeControl { get => SlaveConfiguration.IsSet(SlaveConfiguration.HeatCoolModeControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.HeatCoolModeControl, value); }
+        public bool SlaveConfigRemoteWaterFillingFunction { get => SlaveConfiguration.IsSet(SlaveConfiguration.RemoteWaterFillingFunction); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SlaveConfiguration.RemoteWaterFillingFunction, value); }
 
         #endregion Public Properties
 

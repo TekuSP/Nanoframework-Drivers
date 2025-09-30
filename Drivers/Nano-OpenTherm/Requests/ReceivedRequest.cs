@@ -36,13 +36,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #region Public Properties
 
         /// <inheritdoc />
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ReceivedResponse);
+
+        /// <inheritdoc />
         public override MessageID MessageID { get; }
 
         /// <inheritdoc />
         public override MessageType MessageType { get; }
-
-    /// <inheritdoc />
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ReceivedResponse);
 
         #endregion Public Properties
 

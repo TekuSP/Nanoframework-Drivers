@@ -10,7 +10,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetStorageTemperatureRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.StorageTemperatureResponse);
         #region Public Constructors
 
         public GetStorageTemperatureRequest() : base()
@@ -25,6 +24,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.StorageTemperatureResponse);
         public override MessageID MessageID => MessageID.Tstorage;
 
         public override MessageType MessageType => MessageType.READ_DATA;

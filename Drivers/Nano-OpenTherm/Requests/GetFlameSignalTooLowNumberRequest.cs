@@ -4,7 +4,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class GetFlameSignalTooLowNumberRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.FlameSignalTooLowNumberResponse);
         #region Public Constructors
 
         public GetFlameSignalTooLowNumberRequest() : base()
@@ -25,6 +24,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public ushort Count { get; set; }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.FlameSignalTooLowNumberResponse);
         public override MessageID MessageID => MessageID.FlameSignalTooLowNumber;
 
         public override MessageType MessageType => MessageType.READ_DATA;

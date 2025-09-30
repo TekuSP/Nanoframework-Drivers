@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetDHWBurnerStartsRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWBurnerStartsResponse);
         #region Public Constructors
 
         public GetDHWBurnerStartsRequest() : base()
@@ -28,6 +27,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public ushort Count { get; set; }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWBurnerStartsResponse);
         public override MessageID MessageID => MessageID.DHWBurnerStarts;
 
         public override MessageType MessageType => MessageType.READ_DATA;

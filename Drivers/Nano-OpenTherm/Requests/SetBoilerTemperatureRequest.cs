@@ -1,5 +1,7 @@
 ﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -7,10 +9,9 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class SetBoilerTemperatureRequest : WriteRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ControlSetpointResponse);
         #region Private Fields
 
-        private float _temperature;
+        private Temperature _temperature;
 
         #endregion Private Fields
 
@@ -28,6 +29,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ControlSetpointResponse);
         public override MessageID MessageID => MessageID.TSet;
 
         public override MessageType MessageType => MessageType.WRITE_DATA;
@@ -37,10 +39,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// Encoded as 8.8 fixed-point in the low 16 bits of the frame.
         /// Values are normalized/clamped to the valid OpenTherm range.
         /// </summary>
-        public float Temperature
+        public Temperature Temperature
         {
             get => _temperature;
-            set => _temperature = value.Normalize();
+            set => _temperature = Temperature.FromDegreesCelsius(((float)value.DegreesCelsius).Normalize());
         }
 
         #endregion Public Properties
@@ -49,12 +51,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         protected override uint GetRawDataCore()
         {
-            return ProcessRequest(Utilities.GetRawTemperature(Temperature));
+            return ProcessRequest(Utilities.GetRawF88((float)Temperature.DegreesCelsius, 0, 100));
         }
 
         protected override void SetRawDataCore(uint value)
         {
-            Temperature = Utilities.GetFloat(value);
+            Temperature = Temperature.FromDegreesCelsius(Utilities.GetFloat(value));
         }
 
         #endregion Protected Methods

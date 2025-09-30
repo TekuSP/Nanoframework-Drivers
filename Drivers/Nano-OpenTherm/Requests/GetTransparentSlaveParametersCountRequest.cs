@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetTransparentSlaveParametersCountRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.TransparentSlaveParametersCountResponse);
         #region Public Constructors
 
         public GetTransparentSlaveParametersCountRequest() : base()
@@ -22,6 +21,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.TransparentSlaveParametersCountResponse);
         public override MessageID MessageID => MessageID.TSP;
 
         public override MessageType MessageType => MessageType.READ_DATA;

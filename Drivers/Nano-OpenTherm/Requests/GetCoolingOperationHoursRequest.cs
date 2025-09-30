@@ -10,7 +10,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetCoolingOperationHoursRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CoolingOperationHoursResponse);
         #region Public Constructors
 
         public GetCoolingOperationHoursRequest() : base()
@@ -24,6 +23,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CoolingOperationHoursResponse);
 
         /// <summary>
         /// Total cooling operation hours (low 16 bits, unsigned).

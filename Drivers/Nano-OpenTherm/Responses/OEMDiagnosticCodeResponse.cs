@@ -6,8 +6,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// <summary>Generic OEM diagnostic/service code response (low 16 bits).</summary>
     public class OEMDiagnosticCodeResponse : UShortValueResponseBase
     {
-        public OEMDiagnosticCodeResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public OEMDiagnosticCodeResponse(Response r) : base(r) { }
+        #region Public Constructors
+
+        public OEMDiagnosticCodeResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public OEMDiagnosticCodeResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public override MessageID MessageID => MessageID.OEMDiagnosticCode;
+
+        #endregion Public Properties
     }
 }

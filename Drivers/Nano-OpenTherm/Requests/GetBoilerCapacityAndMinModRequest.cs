@@ -25,7 +25,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MaxCapacityMinModLevelResponse);
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MaxCapacityMinModLevelResponse);
 
         public override MessageID MessageID => MessageID.MaxCapacityMinModLevel;
 

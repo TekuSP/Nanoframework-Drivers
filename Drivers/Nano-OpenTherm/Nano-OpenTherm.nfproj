@@ -80,17 +80,17 @@
     <Compile Include="Requests\GetExhaustInletTemperatureRequest.cs" />
     <Compile Include="Requests\GetExhaustOutletTemperatureRequest.cs" />
     <Compile Include="Requests\GetExhaustTemperatureRequest.cs" />
-  <Compile Include="Requests\GetBoilerFanSpeedRequest.cs" />
-  <Compile Include="Requests\GetOTCHeatCurveRatioBoundsRequest.cs" />
-  <Compile Include="Requests\GetOTCHeatCurveRatioRequest.cs" />
+    <Compile Include="Requests\GetBoilerFanSpeedRequest.cs" />
+    <Compile Include="Requests\GetOTCHeatCurveRatioBoundsRequest.cs" />
+    <Compile Include="Requests\GetOTCHeatCurveRatioRequest.cs" />
     <Compile Include="Requests\GetFaultHistoryBufferEntryRequest.cs" />
     <Compile Include="Requests\GetFaultHistoryBufferSizeRequest.cs" />
     <Compile Include="Requests\GetFaultRequest.cs" />
     <Compile Include="Requests\GetFlameCurrentRequest.cs" />
     <Compile Include="Requests\GetFlameSignalTooLowNumberRequest.cs" />
     <Compile Include="Requests\GetManufacturerVersionRequest.cs" />
-  <Compile Include="Requests\GetMasterConfigurationRequest.cs" />
-  <Compile Include="Requests\SetMasterConfigurationRequest.cs" />
+    <Compile Include="Requests\GetMasterConfigurationRequest.cs" />
+    <Compile Include="Requests\SetMasterConfigurationRequest.cs" />
     <Compile Include="Requests\GetMasterVersionRequest.cs" />
     <Compile Include="Requests\GetMaxTSetBoundsRequest.cs" />
     <Compile Include="Requests\GetOEMDiagnosticCodeRequest.cs" />
@@ -123,20 +123,20 @@
     <Compile Include="Requests\GetSolarStorageSConfigRequest.cs" />
     <Compile Include="Requests\GetSolarStorageStatusRequest.cs" />
     <Compile Include="Requests\GetSolarStorageTSPCountRequest.cs" />
-  <Compile Include="Requests\GetSolarStorageTSPRequest.cs" />
-  <Compile Include="Requests\SetSolarStorageTSPRequest.cs" />
+    <Compile Include="Requests\GetSolarStorageTSPRequest.cs" />
+    <Compile Include="Requests\SetSolarStorageTSPRequest.cs" />
     <Compile Include="Requests\GetSolarStorageVersionRequest.cs" />
-  <Compile Include="Requests\Remeha131Request.cs" />
-  <Compile Include="Requests\Remeha132Request.cs" />
-  <Compile Include="Requests\Remeha133Request.cs" />
+    <Compile Include="Requests\Remeha131Request.cs" />
+    <Compile Include="Requests\Remeha132Request.cs" />
+    <Compile Include="Requests\Remeha133Request.cs" />
     <Compile Include="Requests\GetStorageTemperatureRequest.cs" />
     <Compile Include="Requests\GetSuccessfulBurnerStartsRequest.cs" />
     <Compile Include="Requests\GetSupplyFanSpeedRequest.cs" />
     <Compile Include="Requests\GetSupplyInletTemperatureRequest.cs" />
     <Compile Include="Requests\GetSupplyOutletTemperatureRequest.cs" />
-  <Compile Include="Requests\GetTransparentSlaveParameterRequest.cs" />
-  <Compile Include="Requests\SetTransparentSlaveParameterRequest.cs" />
-  <Compile Include="Requests\GetTransparentSlaveParametersCountRequest.cs" />
+    <Compile Include="Requests\GetTransparentSlaveParameterRequest.cs" />
+    <Compile Include="Requests\SetTransparentSlaveParameterRequest.cs" />
+    <Compile Include="Requests\GetTransparentSlaveParametersCountRequest.cs" />
     <Compile Include="Requests\GetUnsuccessfulBurnerStartsRequest.cs" />
     <Compile Include="Requests\GetVentilationFaultRequest.cs" />
     <Compile Include="Requests\GetVentilationFHBEntryRequest.cs" />
@@ -145,8 +145,8 @@
     <Compile Include="Requests\GetVentilationSConfigRequest.cs" />
     <Compile Include="Requests\GetVentilationStatusRequest.cs" />
     <Compile Include="Requests\GetVentilationTSPCountRequest.cs" />
-  <Compile Include="Requests\GetVentilationTSPRequest.cs" />
-  <Compile Include="Requests\SetVentilationTSPRequest.cs" />
+    <Compile Include="Requests\GetVentilationTSPRequest.cs" />
+    <Compile Include="Requests\SetVentilationTSPRequest.cs" />
     <Compile Include="Requests\GetVentilationVersionRequest.cs" />
     <Compile Include="Requests\ReceivedRequest.cs" />
     <Compile Include="Requests\Request.cs" />
@@ -160,8 +160,8 @@
     <Compile Include="Requests\SetBoilerTemperatureRequest.cs" />
     <Compile Include="Requests\SetMaxCHSetpointRequest.cs" />
     <Compile Include="Requests\SetMaxRelModulationRequest.cs" />
-  <Compile Include="Requests\SetNominalVentilationValueRequest.cs" />
-  <Compile Include="Requests\SetOTCHeatCurveRatioRequest.cs" />
+    <Compile Include="Requests\SetNominalVentilationValueRequest.cs" />
+    <Compile Include="Requests\SetOTCHeatCurveRatioRequest.cs" />
     <Compile Include="Requests\SetRemoteOverrideFunctionRequest.cs" />
     <Compile Include="Requests\SetRemoteOverrideOperatingModeRequest.cs" />
     <Compile Include="Requests\SetRoomOverride2Request.cs" />
@@ -186,7 +186,7 @@
     <Compile Include="Responses\CHPumpStartsResponse.cs" />
     <Compile Include="Responses\CO2ExhaustResponse.cs" />
     <Compile Include="Responses\CollectorTemperatureResponse.cs" />
-  <Compile Include="Responses\BoilerFanSpeedResponse.cs" />
+    <Compile Include="Responses\BoilerFanSpeedResponse.cs" />
     <Compile Include="Responses\ControlSetpointCH2Response.cs" />
     <Compile Include="Responses\ControlSetpointResponse.cs" />
     <Compile Include="Responses\CoolingControlResponse.cs" />
@@ -220,8 +220,8 @@
     <Compile Include="Responses\MaxCapacityMinModLevelResponse.cs" />
     <Compile Include="Responses\MaxRelModLevelSettingResponse.cs" />
     <Compile Include="Responses\MaxTSetBoundsResponse.cs" />
-  <Compile Include="Responses\OTCHeatCurveRatioResponse.cs" />
-  <Compile Include="Responses\OTCHCRatioBoundsResponse.cs" />
+    <Compile Include="Responses\OTCHeatCurveRatioResponse.cs" />
+    <Compile Include="Responses\OTCHCRatioBoundsResponse.cs" />
     <Compile Include="Responses\MaxTSetResponse.cs" />
     <Compile Include="Responses\NominalVentilationValueResponse.cs" />
     <Compile Include="Responses\OEMDiagnosticCodeResponse.cs" />
@@ -240,9 +240,9 @@
     <Compile Include="Responses\RemoteOverrideRoomSetPointResponse.cs" />
     <Compile Include="Responses\RemoteRequestResponse.cs" />
     <Compile Include="Responses\RemoteVentilationParameterResponse.cs" />
-  <Compile Include="Responses\Remeha131Response.cs" />
-  <Compile Include="Responses\Remeha132Response.cs" />
-  <Compile Include="Responses\Remeha133Response.cs" />
+    <Compile Include="Responses\Remeha131Response.cs" />
+    <Compile Include="Responses\Remeha132Response.cs" />
+    <Compile Include="Responses\Remeha133Response.cs" />
     <Compile Include="Responses\ReturnTemperatureResponse.cs" />
     <Compile Include="Responses\RFsensorStatusInformationResponse.cs" />
     <Compile Include="Responses\RoomSetpointCH2Response.cs" />
@@ -302,6 +302,39 @@
     </Reference>
     <Reference Include="System.Diagnostics.Stopwatch, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\..\packages\nanoFramework.System.Diagnostics.Stopwatch.1.2.862\lib\System.Diagnostics.Stopwatch.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Math">
+      <HintPath>..\..\packages\nanoFramework.System.Math.1.5.116\lib\System.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.ElectricCurrent">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.ElectricCurrent.6.0.0-pre017\lib\UnitsNet.ElectricCurrent.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Energy">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Energy.6.0.0-pre017\lib\UnitsNet.Energy.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Power">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Power.6.0.0-pre017\lib\UnitsNet.Power.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Pressure">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Pressure.6.0.0-pre017\lib\UnitsNet.Pressure.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Ratio">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Ratio.6.0.0-pre017\lib\UnitsNet.Ratio.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.RelativeHumidity">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.RelativeHumidity.6.0.0-pre017\lib\UnitsNet.RelativeHumidity.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.RotationalSpeed">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.RotationalSpeed.6.0.0-pre017\lib\UnitsNet.RotationalSpeed.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Temperature">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Temperature.6.0.0-pre017\lib\UnitsNet.Temperature.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.VolumeConcentration">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.VolumeConcentration.6.0.0-pre017\lib\UnitsNet.VolumeConcentration.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.VolumeFlow">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.VolumeFlow.6.0.0-pre017\lib\UnitsNet.VolumeFlow.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

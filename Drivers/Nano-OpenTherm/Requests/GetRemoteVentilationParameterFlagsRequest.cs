@@ -9,7 +9,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetRemoteVentilationParameterFlagsRequest : ReadRequest, IRemoteParameterTransferEnable, IRemoteParameterTransferReadWrite
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteVentilationParameterResponse);
         #region Public Constructors
 
         public GetRemoteVentilationParameterFlagsRequest() : base()
@@ -44,6 +43,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public bool EnableReserved5 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved5); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved5, value); }
         public bool EnableReserved6 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved6); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved6, value); }
         public bool EnableReserved7 { get => RemoteParameterTransferEnable.IsSet(RemoteParameterTransferEnable.Reserved7); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RemoteParameterTransferEnable.Reserved7, value); }
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteVentilationParameterResponse);
         public override MessageID MessageID => MessageID.RBPflagsVentilationHeatRecovery;
         public override MessageType MessageType => MessageType.READ_DATA;
 

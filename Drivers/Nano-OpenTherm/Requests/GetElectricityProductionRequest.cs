@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -21,25 +23,23 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ElectricityProductionResponse);
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ElectricityProductionResponse);
 
         public override MessageID MessageID => MessageID.ElectricityProduction;
 
         public override MessageType MessageType => MessageType.READ_DATA;
 
-        /// <summary>
-        /// Current electricity production in Watts (encoded in the low 16 bits).
-        /// </summary>
-        public ushort Watts { get; set; }
+        /// <summary>Instantaneous power production.</summary>
+        public Power Power { get; set; }
 
         #endregion Public Properties
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore() => ProcessRequest(Watts);
+        protected override uint GetRawDataCore() => ProcessRequest((ushort)Power.Watts);
 
         protected override void SetRawDataCore(uint value)
-        { Watts = Utilities.GetLowUShort(value); }
+        { Power = Power.FromWatts(Utilities.GetLowUShort(value)); }
 
         #endregion Protected Methods
     }

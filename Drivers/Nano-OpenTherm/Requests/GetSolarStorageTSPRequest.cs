@@ -12,7 +12,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageTSPRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageTSPValueResponse);
         #region Public Constructors
 
         public GetSolarStorageTSPRequest() : base()
@@ -27,8 +26,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageTSPValueResponse);
+
         /// <summary>
-    /// TSP index to read (0-based). Encoded in the high data byte.
+        /// TSP index to read (0-based). Encoded in the high data byte.
         /// </summary>
         public byte Index { get; set; }
 
@@ -40,7 +41,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-    protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
+        protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
 
         protected override void SetRawDataCore(uint value)
         { Index = Utilities.GetLowByte(value); }

@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -10,7 +12,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     {
         #region Private Fields
 
-    private byte _percent;
+        private Ratio _percent;
 
         #endregion Private Fields
 
@@ -28,7 +30,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.NominalVentilationValueResponse);
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.NominalVentilationValueResponse);
 
         public override MessageID MessageID => MessageID.NominalVentilationValue;
 
@@ -37,10 +39,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// <summary>
         /// Nominal relative ventilation value in % (U8 in low byte). Value is clamped to 0–100.
         /// </summary>
-        public byte Percent
+        /// <summary>
+        /// Nominal ventilation value (0..100%) as Ratio. Encoded as U8 percent in low byte.
+        /// </summary>
+        public Ratio Percent
         {
             get => _percent;
-            set => _percent = (byte)Utilities.Normalize(value);
+            set => _percent = Ratio.FromPercent(Utilities.Normalize((float)value.Percent));
         }
 
         #endregion Public Properties
@@ -49,12 +54,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         protected override uint GetRawDataCore()
         {
-            return ProcessRequest(Utilities.MakeUShort(0, Percent));
+            var pct = (byte)Utilities.Normalize((float)Percent.Percent);
+            return ProcessRequest(Utilities.MakeUShort(0, pct));
         }
 
         protected override void SetRawDataCore(uint value)
         {
-            Percent = Utilities.GetLowByte(value);
+            Percent = Ratio.FromPercent(Utilities.GetLowByte(value));
         }
 
         #endregion Protected Methods

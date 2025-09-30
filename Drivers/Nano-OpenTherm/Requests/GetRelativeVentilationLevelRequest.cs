@@ -10,7 +10,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetRelativeVentilationLevelRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RelativeVentilationLevelResponse);
         #region Public Constructors
 
         public GetRelativeVentilationLevelRequest() : base()
@@ -25,6 +24,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RelativeVentilationLevelResponse);
         public override MessageID MessageID => MessageID.RelVentLevel;
 
         public override MessageType MessageType => MessageType.READ_DATA;

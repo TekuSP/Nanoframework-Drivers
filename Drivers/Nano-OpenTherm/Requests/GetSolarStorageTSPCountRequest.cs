@@ -10,7 +10,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageTSPCountRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageTSPCountResponse);
         #region Public Constructors
 
         public GetSolarStorageTSPCountRequest() : base()
@@ -25,6 +24,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageTSPCountResponse);
         public override MessageID MessageID => MessageID.TSPSolarStorage;
 
         public override MessageType MessageType => MessageType.READ_DATA;

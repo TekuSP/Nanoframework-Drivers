@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetVentilationTSPCountRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationTSPCountResponse);
         #region Public Constructors
 
         public GetVentilationTSPCountRequest() : base()
@@ -22,6 +21,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationTSPCountResponse);
         public override MessageID MessageID => MessageID.TSPventilationHeatRecovery;
 
         public override MessageType MessageType => MessageType.READ_DATA;

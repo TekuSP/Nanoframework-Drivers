@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetBurnerOperationHoursRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BurnerOperationHoursResponse);
         #region Public Constructors
 
         public GetBurnerOperationHoursRequest() : base()
@@ -21,6 +20,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BurnerOperationHoursResponse);
 
         /// <summary>
         /// Total burner operation hours (low 16 bits, unsigned).

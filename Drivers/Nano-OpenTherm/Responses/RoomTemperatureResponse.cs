@@ -1,15 +1,26 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+using TekuSP.Drivers.Nano_OpenTherm.Responses.BaseResponses;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
-    public class RoomTemperatureResponse : Response
+    public class RoomTemperatureResponse : FloatTemperatureResponseBase
     {
-        public RoomTemperatureResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-    public RoomTemperatureResponse(Response r) : base(r) { }
-        public float TemperatureC { get; set; }
-        protected override uint GetRawDataCore() => ProcessResponse(Utilities.GetRawTemperature(TemperatureC));
-        protected override void SetRawDataCore(uint value) => TemperatureC = Utilities.GetFloat(value);
-        public override MessageType MessageType { get; set; }
+        #region Public Constructors
+
+        public RoomTemperatureResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public RoomTemperatureResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public override MessageID MessageID => MessageID.Tr;
+        public override MessageType MessageType { get; set; }
+
+        #endregion Public Properties
     }
 }

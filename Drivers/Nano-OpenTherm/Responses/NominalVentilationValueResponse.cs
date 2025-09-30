@@ -1,5 +1,6 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
-using TekuSP.Drivers.Nano_OpenTherm.Responses.BaseResponses;
+
+using UnitsNet;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
@@ -9,15 +10,31 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// </summary>
     public class NominalVentilationValueResponse : Response
     {
-        public NominalVentilationValueResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public NominalVentilationValueResponse(Response r) : base(r) { }
+        #region Public Constructors
 
-        public byte Percent { get; set; }
+        public NominalVentilationValueResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
 
-        protected override uint GetRawDataCore() => ProcessResponse(Utilities.MakeUShort(0, Percent));
-        protected override void SetRawDataCore(uint value) => Percent = Utilities.GetLowByte(value);
+        public NominalVentilationValueResponse(Response r) : base(r)
+        {
+        }
 
-        public override MessageType MessageType { get; set; }
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public override MessageID MessageID => MessageID.NominalVentilationValue;
+        public override MessageType MessageType { get; set; }
+        public Ratio NominalVentilation { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessResponse(Utilities.MakeUShort(0, (byte)Utilities.Normalize((float)NominalVentilation.Percent)));
+
+        protected override void SetRawDataCore(uint value) => NominalVentilation = Ratio.FromPercent(Utilities.GetLowByte(value));
+
+        #endregion Protected Methods
     }
 }

@@ -13,7 +13,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSolarStorageVersionRequest : ReadRequest, IVersionProductType
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageProductVersionResponse);
         #region Public Constructors
 
         public GetSolarStorageVersionRequest() : base()
@@ -35,6 +34,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageProductVersionResponse);
 
         // IVersionProductType
         /// <summary>Product is a Boiler.</summary>

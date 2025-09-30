@@ -5,8 +5,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     public class BoilerHeatExchangerTemperatureResponse : FloatTemperatureResponseBase
     {
-        public BoilerHeatExchangerTemperatureResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public BoilerHeatExchangerTemperatureResponse(Response r) : base(r) { }
+        #region Public Constructors
+
+        public BoilerHeatExchangerTemperatureResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public BoilerHeatExchangerTemperatureResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public override MessageID MessageID => MessageID.TboilerHeatExchanger;
+
+        #endregion Public Properties
     }
 }

@@ -9,28 +9,28 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetRemoteOverrideFunctionRequest : ReadRequest, IRemoteOverrideFunction
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteOverrideFunctionResponse);
         #region Public Constructors
 
-    public GetRemoteOverrideFunctionRequest() : base()
+        public GetRemoteOverrideFunctionRequest() : base()
         {
         }
 
-    public GetRemoteOverrideFunctionRequest(Request baseReq) : base(baseReq)
+        public GetRemoteOverrideFunctionRequest(Request baseReq) : base(baseReq)
         {
         }
 
         #endregion Public Constructors
 
-        // Backing via protected interface property only
-
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteOverrideFunctionResponse);
+        // Backing via protected interface property only
 
         public bool ManualChangePriority { get => RemoteOverrideFunction.IsSet(TekuSP.Drivers.Nano_OpenTherm.Enums.RemoteOverrideFunction.ManualChangePriority); set => RemoteOverrideFunction = RemoteOverrideFunction.SetFlag(TekuSP.Drivers.Nano_OpenTherm.Enums.RemoteOverrideFunction.ManualChangePriority, value); }
 
-    public override MessageID MessageID => MessageID.RemoteOverrideFunction;
+        public override MessageID MessageID => MessageID.RemoteOverrideFunction;
 
-    public override MessageType MessageType => MessageType.READ_DATA;
+        public override MessageType MessageType => MessageType.READ_DATA;
 
         public bool ProgramChangePriority { get => RemoteOverrideFunction.IsSet(TekuSP.Drivers.Nano_OpenTherm.Enums.RemoteOverrideFunction.ProgramChangePriority); set => RemoteOverrideFunction = RemoteOverrideFunction.SetFlag(TekuSP.Drivers.Nano_OpenTherm.Enums.RemoteOverrideFunction.ProgramChangePriority, value); }
 
@@ -57,9 +57,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-    protected override uint GetRawDataCore() => ProcessRequest(0);
+        protected override uint GetRawDataCore() => ProcessRequest(0);
 
-    protected override void SetRawDataCore(uint value) { }
+        protected override void SetRawDataCore(uint value)
+        { }
 
         #endregion Protected Methods
     }

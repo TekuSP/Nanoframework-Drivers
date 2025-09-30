@@ -39,6 +39,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #region Public Properties
 
         /// <summary>
+        /// The concrete Response type expected for this Request. Used for mapping and validation.
+        /// </summary>
+        public abstract System.Type ExpectedResponse { get; }
+
+        /// <summary>
         /// Message ID of this request. Encoded in bits 16..23 of the frame.
         /// </summary>
         public abstract MessageID MessageID { get; }
@@ -47,11 +52,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// Message Type of this request. Encoded in bits 28..30 of the frame.
         /// </summary>
         public abstract MessageType MessageType { get; }
-
-    /// <summary>
-    /// The concrete Response type expected for this Request. Used for mapping and validation.
-    /// </summary>
-    public abstract System.Type ExpectedResponse { get; }
 
         // Explicit IOpenThermData implementation to allow public accessor shape to vary in derived classes
         /// <summary>
@@ -137,7 +137,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
                 MessageID.TrSetCH2 => new SetRoomSetpointCH2Request(this),
                 // Temperatures
                 MessageID.Tr => new GetRoomTemperatureRequest(this),
-                MessageID.Tboiler => new GetBoilerTemperatureRequest(this),   
+                MessageID.Tboiler => new GetBoilerTemperatureRequest(this),
                 MessageID.Tdhw => new GetDHWTemperatureRequest(this),
                 MessageID.Toutside => new GetOutsideTemperatureRequest(this),
                 MessageID.Tret => new GetReturnTemperatureRequest(this),

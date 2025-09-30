@@ -9,7 +9,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// </summary>
     public class CustomResponse : Response
     {
+        #region Private Fields
+
         private uint data;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Creates a new response with the given type, id and payload.
@@ -24,16 +30,28 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             this.data = Utilities.MakeUShort(Utilities.GetHighByte(data), Utilities.GetLowByte(data));
         }
 
-    /// <summary>
-    /// Encode header and parity from the stored payload.
-    /// </summary>
-    protected override uint GetRawDataCore() => ProcessResponse(data);
-    /// <summary>
-    /// Update stored payload (low 16 bits) from a raw frame.
-    /// </summary>
-    protected override void SetRawDataCore(uint value) => data = Utilities.MakeUShort(Utilities.GetHighByte(value), Utilities.GetLowByte(value));
+        #endregion Public Constructors
 
-    public override MessageType MessageType { get; set; }
+        #region Public Properties
+
         public override MessageID MessageID { get; }
+
+        public override MessageType MessageType { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Encode header and parity from the stored payload.
+        /// </summary>
+        protected override uint GetRawDataCore() => ProcessResponse(data);
+
+        /// <summary>
+        /// Update stored payload (low 16 bits) from a raw frame.
+        /// </summary>
+        protected override void SetRawDataCore(uint value) => data = Utilities.MakeUShort(Utilities.GetHighByte(value), Utilities.GetLowByte(value));
+
+        #endregion Protected Methods
     }
 }

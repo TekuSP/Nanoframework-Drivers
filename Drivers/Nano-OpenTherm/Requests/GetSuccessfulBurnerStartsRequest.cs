@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetSuccessfulBurnerStartsRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SuccessfulBurnerStartsResponse);
         #region Public Constructors
 
         public GetSuccessfulBurnerStartsRequest() : base()
@@ -28,6 +27,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public ushort Count { get; set; }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SuccessfulBurnerStartsResponse);
         public override MessageID MessageID => MessageID.SuccessfulBurnerStarts;
 
         public override MessageType MessageType => MessageType.READ_DATA;

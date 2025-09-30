@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetRelativeHumidityRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RelativeHumidityResponse);
         #region Public Constructors
 
         public GetRelativeHumidityRequest() : base()
@@ -22,6 +21,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RelativeHumidityResponse);
         public override MessageID MessageID => MessageID.RelativeHumidity;
 
         public override MessageType MessageType => MessageType.READ_DATA;

@@ -8,21 +8,34 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class Remeha131Request : ReadWriteRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.Remeha131Response);
+        #region Public Constructors
+
         public Remeha131Request(MessageType messageType) : base(messageType)
         { }
 
         public Remeha131Request(Request baseReq) : base(baseReq, baseReq.MessageType)
         { }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.Remeha131Response);
         public override MessageID MessageID => MessageID.Remeha131;
         public override MessageType MessageType { get; }
 
         /// <summary>Raw 16-bit payload to send/receive.</summary>
         public ushort Value { get; set; }
 
+        #endregion Public Properties
+
+        #region Protected Methods
+
         protected override uint GetRawDataCore() => ProcessRequest(Value);
+
         protected override void SetRawDataCore(uint value)
         { Value = (ushort)(value & 0xFFFF); }
+
+        #endregion Protected Methods
     }
 }

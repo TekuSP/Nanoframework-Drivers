@@ -12,7 +12,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetSerialRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BrandSerialByteResponse);
         #region Public Constructors
 
         public GetSerialRequest() : base()
@@ -26,6 +25,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BrandSerialByteResponse);
 
         /// <summary>
         /// Index of the serial/brand number byte to read from the device (0-based).

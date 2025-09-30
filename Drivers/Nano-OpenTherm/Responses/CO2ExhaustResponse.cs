@@ -1,21 +1,41 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+using TekuSP.Drivers.Nano_OpenTherm.Responses.BaseResponses;
+
+using UnitsNet;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     /// <summary>
-    /// CO2 in exhaust measured value. Encoding per spec/device (8.8 fixed point).
+    /// CO2 in exhaust measured value. Raw U16 value in parts-per-million per spec (ID79).
     /// </summary>
-    public class CO2ExhaustResponse : Response
+    public class CO2ExhaustResponse : UShortValueResponseBase
     {
-        public CO2ExhaustResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public CO2ExhaustResponse(Response r) : base(r) { }
+        #region Public Constructors
 
-        public float Value { get; set; }
+        public CO2ExhaustResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
 
-        protected override uint GetRawDataCore() => ProcessResponse(Utilities.GetRawTemperature(Value));
-        protected override void SetRawDataCore(uint value) => Value = Utilities.GetFloat(value);
+        public CO2ExhaustResponse(Response r) : base(r)
+        {
+        }
 
-        public override MessageType MessageType { get; set; }
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// CO₂ concentration in exhaust air (ID79) specified as U16 0..10000 ppm in v2.3b spec.
+        /// Underlying raw value is direct ppm (no scaling); expose as UnitsNet.VolumeConcentration.
+        /// </summary>
+        public VolumeConcentration CO2
+        {
+            get => VolumeConcentration.FromPartsPerMillion(Value);
+            set => Value = (ushort)System.Math.Clamp((int)System.Math.Round(value.PartsPerMillion), 0, 10000);
+        }
+
         public override MessageID MessageID => MessageID.CO2exhaust;
+        public override MessageType MessageType { get; set; }
+
+        #endregion Public Properties
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
+﻿using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 using TekuSP.Drivers.DriverBase.Interfaces;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses
@@ -10,10 +8,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// </summary>
     public abstract class Response : IOpenThermData
     {
+        #region Protected Constructors
+
         /// <summary>
         /// Base constructor.
         /// </summary>
-        protected Response() { }
+        protected Response()
+        { }
 
         /// <summary>
         /// Initializes this response from another already-parsed response instance.
@@ -25,6 +26,18 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             MessageType = baseResponse.MessageType;
             SetRawDataCore(baseResponse.RawData);
         }
+
+        #endregion Protected Constructors
+
+        #region Public Properties
+
+        public abstract MessageID MessageID
+        {
+            get;
+        }
+
+        public abstract MessageType MessageType { get; set; }
+
         /// <summary>
         /// Encoded 32-bit OpenTherm frame for this response.
         /// Derived classes should pack/unpack payload in <see cref="GetRawDataCore"/>/<see cref="SetRawDataCore"/>.
@@ -35,21 +48,34 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             set => SetRawDataCore(value);
         }
 
-        /// <summary>
-        /// Derived classes encode the frame here by packing current properties and calling <see cref="ProcessResponse(uint)"/>.
-        /// </summary>
-        protected abstract uint GetRawDataCore();
-        /// <summary>
-        /// Derived classes decode the provided frame here, updating their properties from the low 16-bit payload.
-        /// </summary>
-        protected abstract void SetRawDataCore(uint value);
+        #endregion Public Properties
 
-        public abstract MessageType MessageType { get; set; }
+        #region Public Methods
 
-        public abstract MessageID MessageID
+        /// <summary>
+        /// Is valid Response?
+        /// </summary>
+        /// <returns>Validity</returns>
+        public bool IsValidResponse()
         {
-            get;
+            // Parity over full 32-bit frame must be odd
+            if (!Utilities.Parity(RawData))
+                return false;
+            var msgType = (byte)Utilities.GetMessageType(RawData);
+            bool typeOk = msgType == (byte)MessageType.READ_ACK
+                || msgType == (byte)MessageType.WRITE_ACK
+                || msgType == (byte)MessageType.DATA_INVALID
+                || msgType == (byte)MessageType.UNKNOWN_DATA_ID;
+            if (!typeOk) return false;
+
+            // Enforce access mode for ACKs
+            if (msgType == (byte)MessageType.READ_ACK && !OpenThermAccess.IsOperationAllowed(MessageID, MessageType.READ_DATA))
+                return false;
+            if (msgType == (byte)MessageType.WRITE_ACK && !OpenThermAccess.IsOperationAllowed(MessageID, MessageType.WRITE_DATA))
+                return false;
+            return true;
         }
+
         /// <summary>
         /// Creates a strongly-typed response wrapper based on <see cref="MessageID"/>.
         /// </summary>
@@ -173,6 +199,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             };
         }
 
+        #endregion Public Methods
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Derived classes encode the frame here by packing current properties and calling <see cref="ProcessResponse(uint)"/>.
+        /// </summary>
+        protected abstract uint GetRawDataCore();
+
         /// <summary>
         /// Processes response
         /// </summary>
@@ -187,28 +222,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
                 data |= 1u << 31;
             return data;
         }
-        /// <summary>
-        /// Is valid Response?
-        /// </summary>
-        /// <returns>Validity</returns>
-        public bool IsValidResponse()
-        {
-            // Parity over full 32-bit frame must be odd
-            if (!Utilities.Parity(RawData))
-                return false;
-            var msgType = (byte)Utilities.GetMessageType(RawData);
-            bool typeOk = msgType == (byte)MessageType.READ_ACK
-                || msgType == (byte)MessageType.WRITE_ACK
-                || msgType == (byte)MessageType.DATA_INVALID
-                || msgType == (byte)MessageType.UNKNOWN_DATA_ID;
-            if (!typeOk) return false;
 
-            // Enforce access mode for ACKs
-            if (msgType == (byte)MessageType.READ_ACK && !OpenThermAccess.IsOperationAllowed(MessageID, MessageType.READ_DATA))
-                return false;
-            if (msgType == (byte)MessageType.WRITE_ACK && !OpenThermAccess.IsOperationAllowed(MessageID, MessageType.WRITE_DATA))
-                return false;
-            return true;
-        }
+        /// <summary>
+        /// Derived classes decode the provided frame here, updating their properties from the low 16-bit payload.
+        /// </summary>
+        protected abstract void SetRawDataCore(uint value);
+
+        #endregion Protected Methods
     }
 }

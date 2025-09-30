@@ -33,8 +33,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteOverrideOperatingModeResponse);
-
         // IOperatingModeDHW
         public bool DHWModeIsAuto
         { get => DHW == OperatingMode.Auto; set { if (value) DHW = OperatingMode.Auto; } }
@@ -47,6 +45,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         public bool DHWModeIsReserved
         { get => DHW == OperatingMode.Reserved; set { if (value) DHW = OperatingMode.Reserved; } }
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteOverrideOperatingModeResponse);
 
         // IOperatingModeHC2
         public bool HC2ModeIsAuto

@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses.BaseResponses
 {
     /// <summary>
@@ -7,14 +9,32 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses.BaseResponses
     /// </summary>
     public abstract class FloatTemperatureResponseBase : Response
     {
-    protected FloatTemperatureResponseBase() { }
-    protected FloatTemperatureResponseBase(Response baseResponse) : base(baseResponse) { }
-        /// <summary>Temperature value in Celsius.</summary>
-        public float TemperatureC { get; set; }
+        #region Protected Constructors
 
-        protected override uint GetRawDataCore() => ProcessResponse(Utilities.GetRawTemperature(TemperatureC));
-        protected override void SetRawDataCore(uint value) => TemperatureC = Utilities.GetFloat(value);
+        protected FloatTemperatureResponseBase()
+        { }
+
+        protected FloatTemperatureResponseBase(Response baseResponse) : base(baseResponse)
+        {
+        }
+
+        #endregion Protected Constructors
+
+        #region Public Properties
 
         public override MessageType MessageType { get; set; }
+
+        /// <summary>Temperature value with full unit context.</summary>
+        public Temperature Temperature { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessResponse(Utilities.GetRawF88((float)Temperature.DegreesCelsius, 0, 100));
+
+        protected override void SetRawDataCore(uint value) => Temperature = Temperature.FromDegreesCelsius(Utilities.GetFloat(value));
+
+        #endregion Protected Methods
     }
 }

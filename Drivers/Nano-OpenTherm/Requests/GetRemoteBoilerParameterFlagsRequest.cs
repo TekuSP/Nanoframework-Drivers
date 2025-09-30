@@ -12,7 +12,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetRemoteBoilerParameterFlagsRequest : ReadRequest, IRemoteParameterTransferEnable, IRemoteParameterTransferReadWrite
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteBoilerParameterResponse);
         #region Public Constructors
 
         public GetRemoteBoilerParameterFlagsRequest() : base()
@@ -35,26 +34,20 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #endregion Public Constructors
 
-        // Backing via protected auto-properties only
-
         #region Public Properties
 
         public bool EnableDHWSetpoint { get => RemoteParameterTransferEnable.IsSet(RPE.DHWSetpoint); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RPE.DHWSetpoint, value); }
 
+        // Backing via protected auto-properties only
         public bool EnableMaxCHSetpoint { get => RemoteParameterTransferEnable.IsSet(RPE.MaxCHSetpoint); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RPE.MaxCHSetpoint, value); }
 
         public bool EnableReserved2 { get => RemoteParameterTransferEnable.IsSet(RPE.Reserved2); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RPE.Reserved2, value); }
-
         public bool EnableReserved3 { get => RemoteParameterTransferEnable.IsSet(RPE.Reserved3); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RPE.Reserved3, value); }
-
         public bool EnableReserved4 { get => RemoteParameterTransferEnable.IsSet(RPE.Reserved4); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RPE.Reserved4, value); }
-
         public bool EnableReserved5 { get => RemoteParameterTransferEnable.IsSet(RPE.Reserved5); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RPE.Reserved5, value); }
-
         public bool EnableReserved6 { get => RemoteParameterTransferEnable.IsSet(RPE.Reserved6); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RPE.Reserved6, value); }
-
         public bool EnableReserved7 { get => RemoteParameterTransferEnable.IsSet(RPE.Reserved7); set => RemoteParameterTransferEnable = RemoteParameterTransferEnable.SetFlag(RPE.Reserved7, value); }
-
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteBoilerParameterResponse);
         public override MessageID MessageID => MessageID.RBPflags;
 
         public override MessageType MessageType => MessageType.READ_DATA;

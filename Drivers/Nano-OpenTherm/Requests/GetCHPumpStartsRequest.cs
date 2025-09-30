@@ -21,14 +21,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CHPumpStartsResponse);
-
         /// <summary>
         /// Number of starts of the central heating pump (low 16 bits, unsigned).
         /// Units: count.
         /// </summary>
         public ushort Count { get; set; }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CHPumpStartsResponse);
         public override MessageID MessageID => MessageID.CHPumpStarts;
 
         public override MessageType MessageType => MessageType.READ_DATA;

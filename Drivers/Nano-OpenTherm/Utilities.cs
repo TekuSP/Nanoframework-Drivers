@@ -216,24 +216,50 @@ namespace TekuSP.Drivers.Nano_OpenTherm
         /// </summary>
         public static float GetPercentage(uint rawData) => GetFloat(rawData);
 
-        /// <summary>
-        /// Alias for percentage encoding (8.8 fixed-point, clamped 0..100).
-        /// </summary>
-        public static uint GetRawPercentage(float percent) => GetRawTemperature(percent);
+    /// <summary>
+    /// Alias for percentage encoding (8.8 fixed-point, clamped 0..100).
+    /// Uses the generic F8.8 encoder internally.
+    /// </summary>
+    public static uint GetRawPercentage(float percent) => GetRawF88(percent, 0, 100);
 
         /// <summary>
-        /// Gets raw temperature from float
+        /// Generic F8.8 encoder (unsigned clamp) for dimensionless or bounded positive quantities.
+        /// Value is clamped to the provided min/max range and encoded as 8.8 fixed-point in a 16-bit field.
         /// </summary>
-        /// <param name="temperature">Temperature</param>
-        /// <returns>Uint Raw Temperature</returns>
-        public static uint GetRawTemperature(float temperature)
+        /// <param name="value">Engineering value.</param>
+        /// <param name="min">Minimum allowed value.</param>
+        /// <param name="max">Maximum allowed value.</param>
+        public static uint GetRawF88(float value, float min, float max)
         {
-            if (temperature < 0)
-                temperature = 0;
-            if (temperature > 100)
-                temperature = 100;
-            return (uint)(temperature * 256);
+            if (value < min) value = min;
+            if (value > max) value = max;
+            return (uint)(value * 256f);
         }
+
+        /// <summary>
+        /// Generic signed F8.8 encoder supporting negative values (for quantities with potential sign, e.g. offsets).
+        /// Clamps to provided bounds and encodes in 2's complement if negative.
+        /// </summary>
+        public static uint GetRawF88Signed(float value, float min, float max)
+        {
+            if (value < min) value = min;
+            if (value > max) value = max;
+            if (value < 0)
+            {
+                // 2's complement for 16-bit signed
+                var abs = (ushort)(-value * 256f);
+                var twos = (ushort)(0x10000 - abs);
+                return twos;
+            }
+            return (uint)(value * 256f);
+        }
+
+        /// <summary>
+        /// Decode F8.8 unsigned magnitude (delegates to existing <see cref="GetFloat"/>)
+        /// Retained for naming symmetry.
+        /// </summary>
+        public static float GetF88(uint rawData) => GetFloat(rawData);
+
 
         /// <summary>
         /// Gets Remote Override Function from raw data

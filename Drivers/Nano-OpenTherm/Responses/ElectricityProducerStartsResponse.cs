@@ -5,8 +5,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     public class ElectricityProducerStartsResponse : UShortValueResponseBase
     {
-        public ElectricityProducerStartsResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-    public ElectricityProducerStartsResponse(Response r) : base(r) { }
+        #region Public Constructors
+
+        public ElectricityProducerStartsResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public ElectricityProducerStartsResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public override MessageID MessageID => MessageID.ElectricityProducerStarts;
+
+        #endregion Public Properties
     }
 }

@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetManufacturerVersionRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BrandVersionCharacterResponse);
         #region Public Constructors
 
         public GetManufacturerVersionRequest() : base()
@@ -21,6 +20,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.BrandVersionCharacterResponse);
 
         /// <summary>
         /// Index of the character to read (0-based, low byte of request payload).

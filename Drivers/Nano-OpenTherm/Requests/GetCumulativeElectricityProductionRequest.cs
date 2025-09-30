@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -24,13 +26,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CumulativeElectricityProductionResponse);
+        /// <summary>Cumulative energy production.</summary>
+        public Energy Energy { get; set; }
 
-        /// <summary>
-        /// Cumulative electricity production in kWh (low 16 bits).
-        /// </summary>
-        public ushort KWh { get; set; }
-
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CumulativeElectricityProductionResponse);
         public override MessageID MessageID => MessageID.CumulativElectricityProduction;
 
         public override MessageType MessageType => MessageType.READ_DATA;
@@ -39,10 +38,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore() => ProcessRequest(KWh);
+        protected override uint GetRawDataCore() => ProcessRequest((ushort)Energy.KilowattHours);
 
         protected override void SetRawDataCore(uint value)
-        { KWh = Utilities.GetLowUShort(value); }
+        { Energy = Energy.FromKilowattHours(Utilities.GetLowUShort(value)); }
 
         #endregion Protected Methods
     }

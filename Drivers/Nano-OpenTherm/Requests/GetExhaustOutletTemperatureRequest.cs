@@ -10,7 +10,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </remarks>
     public class GetExhaustOutletTemperatureRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ExhaustOutletTemperatureResponse);
         #region Public Constructors
 
         public GetExhaustOutletTemperatureRequest() : base()
@@ -25,6 +24,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ExhaustOutletTemperatureResponse);
         public override MessageID MessageID => MessageID.Teo;
 
         public override MessageType MessageType => MessageType.READ_DATA;

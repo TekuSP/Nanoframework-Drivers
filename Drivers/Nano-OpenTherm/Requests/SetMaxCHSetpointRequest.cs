@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -9,7 +11,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     {
         #region Private Fields
 
-        private float _temperature;
+        private Temperature _temperature;
 
         #endregion Private Fields
 
@@ -27,7 +29,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MaxTSetResponse);
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MaxTSetResponse);
 
         public override MessageID MessageID => MessageID.MaxTSet;
 
@@ -36,19 +38,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// <summary>
         /// Maximum allowed CH water temperature in °C (encoded as 8.8 fixed-point in low 16 bits). Value is clamped to 0–100.
         /// </summary>
-        public float Temperature
+        public Temperature Temperature
         {
             get => _temperature;
-            set => _temperature = value.Normalize();
+            set => _temperature = Temperature.FromDegreesCelsius(((float)value.DegreesCelsius).Normalize());
         }
 
         #endregion Public Properties
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawTemperature(Temperature));
+        protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawF88((float)Temperature.DegreesCelsius, 0, 100));
 
-        protected override void SetRawDataCore(uint value) => Temperature = Utilities.GetFloat(value);
+        protected override void SetRawDataCore(uint value) => Temperature = Temperature.FromDegreesCelsius(Utilities.GetFloat(value));
 
         #endregion Protected Methods
     }

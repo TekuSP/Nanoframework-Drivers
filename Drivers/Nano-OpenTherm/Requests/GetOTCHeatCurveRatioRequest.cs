@@ -4,16 +4,38 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class GetOTCHeatCurveRatioRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.OTCHeatCurveRatioResponse);
-        public GetOTCHeatCurveRatioRequest() : base() { }
-        public GetOTCHeatCurveRatioRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
 
+        public GetOTCHeatCurveRatioRequest() : base()
+        {
+        }
+
+        public GetOTCHeatCurveRatioRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public double CurveFactor { get; protected set; }
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.OTCHeatCurveRatioResponse);
         public override MessageID MessageID => MessageID.OTCHeatCurveRatio;
         public override MessageType MessageType => MessageType.READ_DATA;
 
-        public float Ratio { get; protected set; }
+        #endregion Public Properties
 
-        protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawTemperature(Ratio));
-        protected override void SetRawDataCore(uint value) => Ratio = Utilities.GetFloat(value);
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawF88((float)CurveFactor, 0, 40));
+
+        protected override void SetRawDataCore(uint value)
+        {
+            var v = Utilities.GetFloat(value);
+            if (v < 0) v = 0; else if (v > 40) v = 40;
+            CurveFactor = v;
+        }
+
+        #endregion Protected Methods
     }
 }

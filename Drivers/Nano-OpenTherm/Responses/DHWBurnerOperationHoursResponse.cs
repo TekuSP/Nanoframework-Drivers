@@ -5,8 +5,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     public class DHWBurnerOperationHoursResponse : UShortValueResponseBase
     {
-        public DHWBurnerOperationHoursResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-    public DHWBurnerOperationHoursResponse(Response r) : base(r) { }
+        #region Public Constructors
+
+        public DHWBurnerOperationHoursResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public DHWBurnerOperationHoursResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public override MessageID MessageID => MessageID.DHWBurnerOperationHours;
+
+        #endregion Public Properties
     }
 }

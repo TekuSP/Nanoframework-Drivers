@@ -35,7 +35,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SlaveConfigResponse);
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SlaveConfigResponse);
 
         // IMemberIdCode
         public bool IsAET80FormerNordgasSrl { get => MemberIdCode == MemberIdCode.AET80FormerNordgasSrl; set => MemberIdCode = value ? MemberIdCode.AET80FormerNordgasSrl : MemberIdCode; }
@@ -152,10 +152,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         // ISlaveConfiguration
         public bool SlaveConfigDHWPresent { get => SlaveConfiguration.IsSet(SC.DHWPresent); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.DHWPresent, value); }
 
+        public bool SlaveConfigHeatCoolModeControl { get => SlaveConfiguration.IsSet(SC.HeatCoolModeControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.HeatCoolModeControl, value); }
         public bool SlaveConfigCH2Present { get => SlaveConfiguration.IsSet(SC.CH2Present); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.CH2Present, value); }
         public bool SlaveConfigMasterLowOffPumpControl { get => SlaveConfiguration.IsSet(SC.MasterLowOffPumpControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.MasterLowOffPumpControl, value); }
-    public bool SlaveConfigRemoteWaterFillingFunction { get => SlaveConfiguration.IsSet(SC.RemoteWaterFillingFunction); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.RemoteWaterFillingFunction, value); }
-    public bool SlaveConfigHeatCoolModeControl { get => SlaveConfiguration.IsSet(SC.HeatCoolModeControl); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.HeatCoolModeControl, value); }
+        public bool SlaveConfigRemoteWaterFillingFunction { get => SlaveConfiguration.IsSet(SC.RemoteWaterFillingFunction); set => SlaveConfiguration = SlaveConfiguration.SetFlag(SC.RemoteWaterFillingFunction, value); }
 
         #endregion Public Properties
 

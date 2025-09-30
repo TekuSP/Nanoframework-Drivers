@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetDHWPumpValveOperationHoursRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWPumpValveOperationHoursResponse);
         #region Public Constructors
 
         public GetDHWPumpValveOperationHoursRequest() : base()
@@ -21,6 +20,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWPumpValveOperationHoursResponse);
 
         /// <summary>
         /// DHW pump/valve operation hours (low 16 bits, unsigned).

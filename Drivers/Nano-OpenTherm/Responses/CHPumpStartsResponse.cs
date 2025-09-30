@@ -5,8 +5,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     public class CHPumpStartsResponse : UShortValueResponseBase
     {
-        public CHPumpStartsResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-    public CHPumpStartsResponse(Response r) : base(r) { }
+        #region Public Constructors
+
+        public CHPumpStartsResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public CHPumpStartsResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public override MessageID MessageID => MessageID.CHPumpStarts;
+
+        #endregion Public Properties
     }
 }

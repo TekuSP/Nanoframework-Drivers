@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetElectricityProducerStartsRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ElectricityProducerStartsResponse);
         #region Public Constructors
 
         public GetElectricityProducerStartsRequest() : base()
@@ -27,6 +26,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public ushort Count { get; set; }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ElectricityProducerStartsResponse);
         public override MessageID MessageID => MessageID.ElectricityProducerStarts;
 
         public override MessageType MessageType => MessageType.READ_DATA;

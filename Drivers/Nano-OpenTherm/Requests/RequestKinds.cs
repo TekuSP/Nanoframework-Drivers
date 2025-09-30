@@ -52,11 +52,11 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             MessageType = messageType;
         }
 
-        public override MessageType MessageType { get; }
-
         #endregion Protected Constructors
 
         #region Public Properties
+
+        public override MessageType MessageType { get; }
 
         /// <summary>
         /// Encoded 32-bit OpenTherm frame with both public getter and setter.

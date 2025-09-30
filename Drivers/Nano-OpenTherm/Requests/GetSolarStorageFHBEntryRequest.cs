@@ -30,7 +30,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.SolarStorageFHBEntryResponse);
 
         /// <summary>
-    /// Fault history buffer index to read (0-based). Encoded in the high data byte.
+        /// Fault history buffer index to read (0-based). Encoded in the high data byte.
         /// </summary>
         public byte Index { get; set; }
 
@@ -42,7 +42,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-    protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
+        protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
 
         protected override void SetRawDataCore(uint value)
         { Index = Utilities.GetLowByte(value); }

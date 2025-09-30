@@ -8,7 +8,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetFaultHistoryBufferEntryRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.FaultHistoryBufferEntryResponse);
         #region Public Constructors
 
         public GetFaultHistoryBufferEntryRequest() : base()
@@ -23,8 +22,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.FaultHistoryBufferEntryResponse);
+
         /// <summary>
-    /// Index number of fault-history buffer entry to read (encoded in the high data byte).
+        /// Index number of fault-history buffer entry to read (encoded in the high data byte).
         /// </summary>
         public byte Index { get; set; }
 
@@ -36,7 +37,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-    protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
+        protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
 
         protected override void SetRawDataCore(uint value)
         {

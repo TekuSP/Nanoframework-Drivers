@@ -7,15 +7,33 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// </summary>
     public class BrandCharacterResponse : Response
     {
-        public BrandCharacterResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public BrandCharacterResponse(Response r) : base(r) { }
+        #region Public Constructors
+
+        public BrandCharacterResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public BrandCharacterResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public char Character { get; set; }
 
-        protected override uint GetRawDataCore() => ProcessResponse(Character);
-        protected override void SetRawDataCore(uint value) => Character = (char)Utilities.GetLowByte(value);
+        public override MessageID MessageID => MessageID.Brand;
 
         public override MessageType MessageType { get; set; }
-        public override MessageID MessageID => MessageID.Brand;
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore() => ProcessResponse(Character);
+
+        protected override void SetRawDataCore(uint value) => Character = (char)Utilities.GetLowByte(value);
+
+        #endregion Protected Methods
     }
 }

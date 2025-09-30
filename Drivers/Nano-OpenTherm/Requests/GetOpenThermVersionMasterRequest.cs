@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetOpenThermVersionMasterRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.OpenThermVersionMasterResponse);
         #region Public Constructors
 
         public GetOpenThermVersionMasterRequest() : base()
@@ -21,6 +20,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.OpenThermVersionMasterResponse);
 
         /// <summary>
         /// OpenTherm major version number supported by the master (high byte).

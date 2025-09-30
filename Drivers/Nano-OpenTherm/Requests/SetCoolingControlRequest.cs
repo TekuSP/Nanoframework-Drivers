@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -9,7 +11,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     {
         #region Private Fields
 
-        private float _percent;
+        private Ratio _percent;
 
         #endregion Private Fields
 
@@ -27,7 +29,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CoolingControlResponse);
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.CoolingControlResponse);
 
         public override MessageID MessageID => MessageID.CoolingControl;
 
@@ -36,10 +38,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// <summary>
         /// Cooling control signal in % (encoded as 8.8 fixed-point in low 16 bits). Value is clamped 0..100.
         /// </summary>
-        public float Percent
+        public Ratio Percent
         {
             get => _percent;
-            set => _percent = value.Normalize();
+            set => _percent = Ratio.FromPercent(((float)value.Percent).Normalize());
         }
 
         #endregion Public Properties
@@ -48,12 +50,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         protected override uint GetRawDataCore()
         {
-            return ProcessRequest(Utilities.GetRawPercentage(Percent));
+            return ProcessRequest(Utilities.GetRawPercentage((float)Percent.Percent));
         }
 
         protected override void SetRawDataCore(uint value)
         {
-            Percent = Utilities.GetPercentage(value);
+            Percent = Ratio.FromPercent(Utilities.GetPercentage(value));
         }
 
         #endregion Protected Methods

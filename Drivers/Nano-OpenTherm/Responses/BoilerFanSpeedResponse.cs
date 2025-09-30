@@ -1,4 +1,3 @@
-using System;
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses
@@ -9,11 +8,27 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// </summary>
     public class BoilerFanSpeedResponse : Response
     {
-        public BoilerFanSpeedResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public BoilerFanSpeedResponse(Response r) : base(r) { }
+        #region Public Constructors
 
-    public byte SetpointByte { get; set; }
-    public byte ActualByte { get; set; }
+        public BoilerFanSpeedResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public BoilerFanSpeedResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public byte ActualByte { get; set; }
+        public override MessageID MessageID => MessageID.BoilerFanSpeedSetpointAndActual;
+        public override MessageType MessageType { get; set; }
+        public byte SetpointByte { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore()
         {
@@ -27,8 +42,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             ActualByte = Utilities.GetLowByte(value);
         }
 
-        public override MessageType MessageType { get; set; }
-        public override MessageID MessageID => MessageID.BoilerFanSpeedSetpointAndActual;
+        #endregion Protected Methods
     }
 }
+
 // Note: OpenTherm 2.3b Data-ID 35 uses HB/LB bytes, not f8.8.

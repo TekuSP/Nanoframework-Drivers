@@ -1,5 +1,6 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
-using TekuSP.Drivers.Nano_OpenTherm.Enums;
+
+using UnitsNet;
 
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
@@ -8,19 +9,35 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// </summary>
     public class RelModulationResponse : Response
     {
+        #region Public Constructors
+
         public RelModulationResponse(MessageType messageType = MessageType.READ_ACK) => MessageType = messageType;
-    public RelModulationResponse(Response baseResponse) : base(baseResponse) { }
 
-        /// <summary>Relative modulation level percentage (0..100).</summary>
-        public float RelativeModulationPercent { get; set; }
+        public RelModulationResponse(Response baseResponse) : base(baseResponse)
+        {
+        }
 
-        protected override uint GetRawDataCore()
-            => ProcessResponse(Utilities.GetRawPercentage(RelativeModulationPercent));
+        #endregion Public Constructors
 
-        protected override void SetRawDataCore(uint value)
-            => RelativeModulationPercent = Utilities.GetPercentage(value);
+        #region Public Properties
+
+        public override MessageID MessageID => MessageID.RelModLevel;
 
         public override MessageType MessageType { get; set; }
-        public override MessageID MessageID => MessageID.RelModLevel;
+
+        /// <summary>Relative modulation level (0..100%).</summary>
+        public Ratio RelativeModulation { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore()
+            => ProcessResponse(Utilities.GetRawPercentage((float)RelativeModulation.Percent));
+
+        protected override void SetRawDataCore(uint value)
+            => RelativeModulation = Ratio.FromPercent(Utilities.GetPercentage(value));
+
+        #endregion Protected Methods
     }
 }

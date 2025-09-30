@@ -4,7 +4,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     public class GetDHWBurnerOperationHoursRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWBurnerOperationHoursResponse);
         #region Public Constructors
 
         public GetDHWBurnerOperationHoursRequest() : base()
@@ -18,6 +17,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.DHWBurnerOperationHoursResponse);
 
         /// <summary>
         /// Number of hours the burner has operated during DHW mode (low 16 bits, unsigned).

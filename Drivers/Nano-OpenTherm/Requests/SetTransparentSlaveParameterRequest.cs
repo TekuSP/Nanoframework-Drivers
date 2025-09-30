@@ -8,19 +8,34 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class SetTransparentSlaveParameterRequest : WriteRequest
     {
-        public SetTransparentSlaveParameterRequest() : base() { }
-        public SetTransparentSlaveParameterRequest(Request baseReq) : base(baseReq) { }
+        #region Public Constructors
+
+        public SetTransparentSlaveParameterRequest() : base()
+        {
+        }
+
+        public SetTransparentSlaveParameterRequest(Request baseReq) : base(baseReq)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.TransparentSlaveParameterResponse);
-
-        public override MessageID MessageID => MessageID.TSPindexTSPvalue;
-        public override MessageType MessageType => MessageType.WRITE_DATA;
 
         /// <summary>TSP index to write (0..255), placed in the high data byte.</summary>
         public byte Index { get; set; }
 
-    /// <summary>Raw value to write (placed in low data byte). Encoding is parameter-specific.</summary>
+        public override MessageID MessageID => MessageID.TSPindexTSPvalue;
+        public override MessageType MessageType => MessageType.WRITE_DATA;
+
+        /// <summary>Raw value to write (placed in low data byte). Encoding is parameter-specific.</summary>
         public ushort Value { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore()
         {
@@ -33,5 +48,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
             Index = Utilities.GetHighByte(value);
             Value = Utilities.GetLowUShort(value);
         }
+
+        #endregion Protected Methods
     }
 }

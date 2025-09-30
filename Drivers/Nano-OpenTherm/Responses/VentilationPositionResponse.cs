@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     /// <summary>
@@ -9,17 +11,35 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// </summary>
     public class VentilationPositionResponse : Response
     {
-        public VentilationPositionResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public VentilationPositionResponse(Response r) : base(r) { }
+        #region Public Constructors
 
-        /// <summary>Ventilation position in percent (0-100).</summary>
-        public byte Percent { get; set; }
+        public VentilationPositionResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
 
-        protected override uint GetRawDataCore()
-            => ProcessResponse(Utilities.MakeUShort(0, (byte)Utilities.Normalize(Percent)));
-        protected override void SetRawDataCore(uint value) => Percent = Utilities.GetLowByte(value);
+        public VentilationPositionResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public override MessageID MessageID => MessageID.Vset;
 
         public override MessageType MessageType { get; set; }
-        public override MessageID MessageID => MessageID.Vset;
+
+        /// <summary>Ventilation position.</summary>
+        public Ratio Position { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override uint GetRawDataCore()
+            => ProcessResponse(Utilities.MakeUShort(0, (byte)Utilities.Normalize((float)Position.Percent)));
+
+        protected override void SetRawDataCore(uint value) => Position = Ratio.FromPercent(Utilities.GetLowByte(value));
+
+        #endregion Protected Methods
     }
 }

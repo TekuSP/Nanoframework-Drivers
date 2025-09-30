@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetOEMDiagnosticCodeRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.OEMDiagnosticCodeResponse);
         #region Public Constructors
 
         public GetOEMDiagnosticCodeRequest() : base()
@@ -27,6 +26,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// </summary>
         public ushort Code { get; set; }
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.OEMDiagnosticCodeResponse);
         public override MessageID MessageID => MessageID.OEMDiagnosticCode;
 
         public override MessageType MessageType => MessageType.READ_DATA;

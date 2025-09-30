@@ -7,7 +7,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetFlameCurrentRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.FlameCurrentResponse);
         #region Public Constructors
 
         public GetFlameCurrentRequest() : base()
@@ -22,6 +21,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.FlameCurrentResponse);
         public override MessageID MessageID => MessageID.FlameCurrent;
 
         public override MessageType MessageType => MessageType.READ_DATA;

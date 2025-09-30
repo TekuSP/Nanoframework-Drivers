@@ -8,7 +8,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetVentilationTSPRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationTSPValueResponse);
         #region Public Constructors
 
         public GetVentilationTSPRequest() : base()
@@ -23,8 +22,10 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.VentilationTSPValueResponse);
+
         /// <summary>
-    /// Index number of the transparent ventilation parameter to read (encoded in high data byte).
+        /// Index number of the transparent ventilation parameter to read (encoded in high data byte).
         /// </summary>
         public byte Index { get; set; }
 
@@ -36,7 +37,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Protected Methods
 
-    protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
+        protected override uint GetRawDataCore() => ProcessRequest(Utilities.MakeUShort(Index, 0));
 
         protected override void SetRawDataCore(uint value)
         { Index = Utilities.GetLowByte(value); }

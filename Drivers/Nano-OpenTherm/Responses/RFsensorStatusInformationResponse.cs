@@ -7,20 +7,36 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
     /// </summary>
     public class RFsensorStatusInformationResponse : Response
     {
-        public RFsensorStatusInformationResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public RFsensorStatusInformationResponse(Response r) : base(r) { }
+        #region Public Constructors
+
+        public RFsensorStatusInformationResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public RFsensorStatusInformationResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Battery level in percent (0-100). Stored in low byte of payload.
+        /// </summary>
+        public byte BatteryLevelPercent { get; set; }
 
         public override MessageID MessageID => MessageID.RFsensorStatusInformation;
+
+        public override MessageType MessageType { get; set; }
 
         /// <summary>
         /// RF signal strength in percent (0-100). Stored in high byte of payload.
         /// </summary>
         public byte RFStrengthPercent { get; set; }
 
-        /// <summary>
-        /// Battery level in percent (0-100). Stored in low byte of payload.
-        /// </summary>
-        public byte BatteryLevelPercent { get; set; }
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override uint GetRawDataCore()
         {
@@ -34,6 +50,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
             BatteryLevelPercent = Utilities.GetLowByte(value);
         }
 
-        public override MessageType MessageType { get; set; }
+        #endregion Protected Methods
     }
 }

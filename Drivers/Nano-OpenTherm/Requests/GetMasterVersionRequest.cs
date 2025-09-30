@@ -9,7 +9,6 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetMasterVersionRequest : ReadRequest, IVersionProductType
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MasterProductVersionResponse);
         #region Public Constructors
 
         public GetMasterVersionRequest() : base()
@@ -33,6 +32,8 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         #endregion Public Constructors
 
         #region Public Properties
+
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.MasterProductVersionResponse);
 
         // IVersionProductType
         /// <summary>Product is a Boiler.</summary>

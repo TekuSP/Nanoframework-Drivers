@@ -5,8 +5,21 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses
 {
     public class VentilationFHBEntryResponse : UShortValueResponseBase
     {
-        public VentilationFHBEntryResponse(MessageType mt = MessageType.READ_ACK) { MessageType = mt; }
-        public VentilationFHBEntryResponse(Response r) : base(r) { }
+        #region Public Constructors
+
+        public VentilationFHBEntryResponse(MessageType mt = MessageType.READ_ACK)
+        { MessageType = mt; }
+
+        public VentilationFHBEntryResponse(Response r) : base(r)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public override MessageID MessageID => MessageID.FHBindexFHBvalueVentilationHeatRecovery;
+
+        #endregion Public Properties
     }
 }

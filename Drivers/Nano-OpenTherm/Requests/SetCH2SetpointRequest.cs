@@ -1,5 +1,7 @@
 using TekuSP.Drivers.DriverBase.Enums.OpenTherm;
 
+using UnitsNet;
+
 namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 {
     /// <summary>
@@ -21,7 +23,7 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ControlSetpointCH2Response);
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.ControlSetpointCH2Response);
 
         public override MessageID MessageID => MessageID.TsetCH2;
 
@@ -30,15 +32,15 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
         /// <summary>
         /// Desired CH2 water temperature in °C (encoded as 8.8 fixed-point in low 16 bits).
         /// </summary>
-        public float Temperature { get; set; }
+        public Temperature Temperature { get; set; }
 
         #endregion Public Properties
 
         #region Protected Methods
 
-        protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawTemperature(Temperature));
+        protected override uint GetRawDataCore() => ProcessRequest(Utilities.GetRawF88((float)Temperature.DegreesCelsius, 0, 100));
 
-        protected override void SetRawDataCore(uint value) => Temperature = Utilities.GetFloat(value);
+        protected override void SetRawDataCore(uint value) => Temperature = Temperature.FromDegreesCelsius(Utilities.GetFloat(value));
 
         #endregion Protected Methods
     }

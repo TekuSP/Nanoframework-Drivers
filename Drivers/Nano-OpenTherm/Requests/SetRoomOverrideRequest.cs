@@ -7,14 +7,13 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
     /// </summary>
     public class GetRoomOverrideRequest : ReadRequest
     {
-        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteOverrideRoomSetPointResponse);
         #region Public Constructors
 
-    public GetRoomOverrideRequest() : base()
+        public GetRoomOverrideRequest() : base()
         {
         }
 
-    public GetRoomOverrideRequest(Request baseReq) : base(baseReq)
+        public GetRoomOverrideRequest(Request baseReq) : base(baseReq)
         {
         }
 
@@ -22,17 +21,19 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Requests
 
         #region Public Properties
 
-    public override MessageID MessageID => MessageID.TrOverride;
+        public override System.Type ExpectedResponse => typeof(TekuSP.Drivers.Nano_OpenTherm.Responses.RemoteOverrideRoomSetPointResponse);
+        public override MessageID MessageID => MessageID.TrOverride;
 
-    public override MessageType MessageType => MessageType.READ_DATA;
+        public override MessageType MessageType => MessageType.READ_DATA;
 
         #endregion Public Properties
 
         #region Protected Methods
 
-    protected override uint GetRawDataCore() => ProcessRequest(0);
+        protected override uint GetRawDataCore() => ProcessRequest(0);
 
-    protected override void SetRawDataCore(uint value) { }
+        protected override void SetRawDataCore(uint value)
+        { }
 
         #endregion Protected Methods
     }

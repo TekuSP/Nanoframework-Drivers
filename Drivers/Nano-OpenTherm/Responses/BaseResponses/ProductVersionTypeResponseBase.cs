@@ -9,16 +9,51 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses.BaseResponses
     /// </summary>
     public abstract class ProductVersionTypeResponseBase : Response, IVersionProductType
     {
-    protected ProductVersionTypeResponseBase() { }
-    protected ProductVersionTypeResponseBase(Response baseResponse) : base(baseResponse) { }
+        #region Protected Constructors
+
+        protected ProductVersionTypeResponseBase()
+        { }
+
+        protected ProductVersionTypeResponseBase(Response baseResponse) : base(baseResponse)
+        {
+        }
+
+        #endregion Protected Constructors
+
+        #region Public Properties
+
+        // IVersionProductType convenience selectors
+        public bool IsBoiler
+        { get => ProductType == VersionProductType.Boiler; set { if (value) ProductType = VersionProductType.Boiler; } }
+
+        public bool IsController
+        { get => ProductType == VersionProductType.Controller; set { if (value) ProductType = VersionProductType.Controller; } }
+
+        public bool IsHeatPump
+        { get => ProductType == VersionProductType.HeatPump; set { if (value) ProductType = VersionProductType.HeatPump; } }
+
+        public bool IsSensor
+        { get => ProductType == VersionProductType.Sensor; set { if (value) ProductType = VersionProductType.Sensor; } }
+
+        public bool IsUnknown
+        { get => ProductType == VersionProductType.Unknown; set { if (value) ProductType = VersionProductType.Unknown; } }
+
+        public bool IsVentilation
+        { get => ProductType == VersionProductType.Ventilation; set { if (value) ProductType = VersionProductType.Ventilation; } }
+
+        public override MessageType MessageType { get; set; }
         public byte ProductVersion { get; set; }
+
+        #endregion Public Properties
+
+        #region Protected Properties
+
         protected VersionProductType ProductType { get; set; }
 
-        protected override void SetRawDataCore(uint value)
-        {
-            ProductVersion = Utilities.GetHighByte(value);
-            ProductType = (VersionProductType)(Utilities.GetLowByte(value) & 0x0F);
-        }
+        #endregion Protected Properties
+
+        #region Protected Methods
+
         protected override uint GetRawDataCore()
         {
             byte low = (byte)((byte)ProductType & 0x0F);
@@ -26,14 +61,12 @@ namespace TekuSP.Drivers.Nano_OpenTherm.Responses.BaseResponses
             return ProcessResponse(payload);
         }
 
-        public override MessageType MessageType { get; set; }
+        protected override void SetRawDataCore(uint value)
+        {
+            ProductVersion = Utilities.GetHighByte(value);
+            ProductType = (VersionProductType)(Utilities.GetLowByte(value) & 0x0F);
+        }
 
-        // IVersionProductType convenience selectors
-        public bool IsBoiler { get => ProductType == VersionProductType.Boiler; set { if (value) ProductType = VersionProductType.Boiler; } }
-        public bool IsController { get => ProductType == VersionProductType.Controller; set { if (value) ProductType = VersionProductType.Controller; } }
-        public bool IsHeatPump { get => ProductType == VersionProductType.HeatPump; set { if (value) ProductType = VersionProductType.HeatPump; } }
-        public bool IsSensor { get => ProductType == VersionProductType.Sensor; set { if (value) ProductType = VersionProductType.Sensor; } }
-        public bool IsUnknown { get => ProductType == VersionProductType.Unknown; set { if (value) ProductType = VersionProductType.Unknown; } }
-        public bool IsVentilation { get => ProductType == VersionProductType.Ventilation; set { if (value) ProductType = VersionProductType.Ventilation; } }
+        #endregion Protected Methods
     }
 }
