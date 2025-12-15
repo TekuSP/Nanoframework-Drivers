@@ -118,7 +118,7 @@ jobs:
         if: ${{ matrix.configuration == 'Release' }}
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v5.0.0
+        uses: actions/upload-artifact@v6.0.0
         if: ${{ matrix.configuration == 'Release' }}
         with:
           name: TekuSP-Drivers
