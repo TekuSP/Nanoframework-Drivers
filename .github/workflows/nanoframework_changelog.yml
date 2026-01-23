@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Git Safe Directory
         run: git config --global --add safe.directory "${{ github.workspace }}"
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
           fetch-tags: true
