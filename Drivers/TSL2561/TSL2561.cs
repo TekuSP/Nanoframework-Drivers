@@ -60,7 +60,7 @@ namespace TekuSP.Drivers.TSL2561
         public override long ReadData(byte pointer)
         {
             byte[] result = new byte[1];
-            I2CDevice.WriteRead(new byte[] { (byte)((pointer & 0x0F) | Commands.TSL2561_COMMAND_BIT) }, result);
+            I2CDevice.WriteRead(new byte[] { (byte)((pointer & 0x0F) | (byte)CommandBits.Command) }, result);
             return result[0];
         }
 
@@ -92,7 +92,7 @@ namespace TekuSP.Drivers.TSL2561
         public long ReadResultData(byte pointer)
         {
             byte[] result = new byte[2];
-            I2CDevice.WriteRead(new byte[] { (byte)((pointer & 0x0F) | Commands.TSL2561_COMMAND_BIT) }, result);
+            I2CDevice.WriteRead(new byte[] { (byte)((pointer & 0x0F) | (byte)CommandBits.Command) }, result);
             return ((uint)result[0]).LowWord().HighWord(result[1]);
         }
 
@@ -105,7 +105,7 @@ namespace TekuSP.Drivers.TSL2561
         /// <inheritdoc/>
         public override void WriteData(params byte[] data)
         {
-            data[0] = (byte)((data[0] & 0x0F) | Commands.TSL2561_COMMAND_BIT);
+            data[0] = (byte)((data[0] & 0x0F) | (byte)CommandBits.Command);
             I2CDevice.Write(data);
         }
 
@@ -131,7 +131,7 @@ namespace TekuSP.Drivers.TSL2561
         {
             Wakeup();
             Thread.Sleep(GetIntegrationTimeMillis(TSL2561IntegrationTime));
-            var result = ReadResultData(Commands.TSL2561_WORD_BIT | (byte)Registers.TSL2561_REGISTER_CHAN0_LOW);
+            var result = ReadResultData((byte)((byte)CommandBits.Word | (byte)Registers.TSL2561_REGISTER_CHAN0_LOW));
             Sleep();
             return result;
         }
@@ -143,7 +143,7 @@ namespace TekuSP.Drivers.TSL2561
         {
             Wakeup();
             Thread.Sleep(GetIntegrationTimeMillis(TSL2561IntegrationTime));
-            var result = ReadResultData(Commands.TSL2561_WORD_BIT | (byte)Registers.TSL2561_REGISTER_CHAN1_LOW);
+            var result = ReadResultData((byte)((byte)CommandBits.Word | (byte)Registers.TSL2561_REGISTER_CHAN1_LOW));
             Sleep();
             return result;
         }
@@ -193,7 +193,7 @@ namespace TekuSP.Drivers.TSL2561
         /// </summary>
         public void Sleep()
         {
-            WriteData(new byte[] { (byte)Registers.TSL2561_REGISTER_CONTROL | Commands.TSL2561_CONTROL_POWEROFF });
+            WriteData(new byte[] { (byte)((byte)Registers.TSL2561_REGISTER_CONTROL | (byte)ControlPower.PowerOff) });
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace TekuSP.Drivers.TSL2561
         /// </summary>
         public void Wakeup()
         {
-            WriteData(new byte[] { (byte)Registers.TSL2561_REGISTER_CONTROL | Commands.TSL2561_CONTROL_POWERON });
+            WriteData(new byte[] { (byte)((byte)Registers.TSL2561_REGISTER_CONTROL | (byte)ControlPower.PowerOn) });
         }
 
         #endregion Public Methods

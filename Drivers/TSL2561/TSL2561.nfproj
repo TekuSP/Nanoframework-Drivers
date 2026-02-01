@@ -22,7 +22,11 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Constants\Commands.cs" />
-    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Enums\Registers.cs" />
+    <Compile Include="Enums\IntegrationTime.cs" />
+    <Compile Include="Enums\Gain.cs" />
+    <Compile Include="Enums\CommandBits.cs" />
+    <Compile Include="Enums\ControlPower.cs" />
     <Compile Include="TSL2561.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

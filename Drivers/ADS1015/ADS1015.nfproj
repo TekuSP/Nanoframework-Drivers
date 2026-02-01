@@ -26,7 +26,10 @@
     <Compile Include="Enums\GainSetting.cs" />
     <Compile Include="Enums\ModeSetting.cs" />
     <Compile Include="Enums\DataRateSetting.cs" />
-    <Compile Include="Enums\ComparatorEnums.cs" />
+    <Compile Include="Enums\ComparatorMode.cs" />
+    <Compile Include="Enums\ComparatorPolarity.cs" />
+    <Compile Include="Enums\ComparatorLatching.cs" />
+    <Compile Include="Enums\ComparatorAssert.cs" />
     <Compile Include="Enums\OSCommands.cs" />
     <Compile Include="Enums\PointerRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

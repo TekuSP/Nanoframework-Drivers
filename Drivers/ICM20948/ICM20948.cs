@@ -121,7 +121,7 @@ namespace TekuSP.Drivers.ICM20948
             while (counter > 0)
             {
                 Thread.Sleep(10);
-                byte result = ReadSecondary(ICM20948Constants.I2C_ADD_ICM20948_AK09916 | ICM20948Constants.I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_ST2, 1)[0];
+                byte result = ReadSecondary((byte)((byte)MagI2cAddress.AK09916 | (byte)MagI2cReadWriteFlag.Read), (byte)ICM20948_MAG.REG_ADD_MAG_ST2, 1)[0];
                 if ((result & 0x01) != 0)
                     break;
                 counter -= 1;
@@ -130,7 +130,7 @@ namespace TekuSP.Drivers.ICM20948
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    var readData = ReadSecondary(ICM20948Constants.I2C_ADD_ICM20948_AK09916 | ICM20948Constants.I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_DATA, 6);
+                    var readData = ReadSecondary((byte)((byte)MagI2cAddress.AK09916 | (byte)MagI2cReadWriteFlag.Read), (byte)ICM20948_MAG.REG_ADD_MAG_DATA, 6);
                     tempX[i] = (readData[1] << 8) | readData[0];
                     tempY[i] = (readData[3] << 8) | readData[2];
                     tempZ[i] = (readData[5] << 8) | readData[4];
@@ -299,7 +299,7 @@ namespace TekuSP.Drivers.ICM20948
                 Stop();
                 throw new SystemException("AK09916 Magnetic Self-Test routine failed!");
             }
-            WriteSecondary(ICM20948Constants.I2C_ADD_ICM20948_AK09916 | ICM20948Constants.I2C_ADD_ICM20948_AK09916_WRITE, (byte)ICM20948_MAG.REG_ADD_MAG_CNTL2, (byte)ICM20948_MAG.REG_VAL_MAG_MODE_20HZ); //20 HZ mode
+            WriteSecondary((byte)((byte)MagI2cAddress.AK09916 | (byte)MagI2cReadWriteFlag.Write), (byte)ICM20948_MAG.REG_ADD_MAG_CNTL2, (byte)ICM20948_MAG.REG_VAL_MAG_MODE_20HZ); //20 HZ mode
         }
 
         /// <inheritdoc/>
@@ -474,7 +474,7 @@ namespace TekuSP.Drivers.ICM20948
 
         private bool MagSelfTest()
         {
-            var result = ReadSecondary(ICM20948Constants.I2C_ADD_ICM20948_AK09916 | ICM20948Constants.I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_WIA1, 2);
+            var result = ReadSecondary((byte)((byte)MagI2cAddress.AK09916 | (byte)MagI2cReadWriteFlag.Read), (byte)ICM20948_MAG.REG_ADD_MAG_WIA1, 2);
             return (result[0] == (byte)ICM20948_MAG.REG_VAL_MAG_WIA1 && result[1] == (byte)ICM20948_MAG.REG_VAL_MAG_WIA2);
         }
 

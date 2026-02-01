@@ -47,6 +47,7 @@
     <Compile Include="Interfaces\ISensitivity.cs" />
     <Compile Include="Interfaces\ISleepSupport.cs" />
     <Compile Include="Interfaces\ITemperatureSensor.cs" />
+    <Compile Include="Interfaces\ITouchData.cs" />
     <Compile Include="Interfaces\ITouchSensor.cs" />
     <Compile Include="Interfaces\IVersion.cs" />
     <Compile Include="Interfaces\IVersionInfo.cs" />

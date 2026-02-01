@@ -24,26 +24,4 @@ namespace TekuSP.Drivers.DriverBase.Interfaces
         /// </summary>
         public event ITouchDataHandler OnStateChanged;
     }
-    /// <summary>
-    /// XY Touch Data
-    /// </summary>
-    public interface ITouchData
-    {
-        /// <summary>
-        /// X of a press
-        /// </summary>
-        public int X { get; }
-        /// <summary>
-        /// Y of a press
-        /// </summary>
-        public int Y { get; }
-        /// <summary>
-        /// If supported, returns enum of gesture used for touch
-        /// </summary>
-        public byte Gesture { get; }
-        /// <summary>
-        /// If supported, returns how much pressed touch screen was
-        /// </summary>
-        public int TouchPressure { get; }
-    }
 }

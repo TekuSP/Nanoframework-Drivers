@@ -1,5 +1,7 @@
 ﻿using TekuSP.Drivers.DriverBase;
 using TekuSP.Drivers.DriverBase.Interfaces;
+using TekuSP.Drivers.CST816D.Constants;
+using TekuSP.Drivers.CST816D.Enums;
 
 using System;
 using System.Device.Gpio;
@@ -77,8 +79,8 @@ namespace TekuSP.Drivers.CST816D
         public ITouchData Poll()
         {
             Register returnData = new Register();
-            byte[] scanRegisterData = new byte[Registers.ScanRegisterByte];
-            I2CDevice.WriteRead(new byte[] { Registers.ScanRegisterAddress }, scanRegisterData);
+            byte[] scanRegisterData = new byte[Cst816DConstants.ScanRegisterByte];
+            I2CDevice.WriteRead(new byte[] { (byte)RegisterAddress.Scan }, scanRegisterData);
 
             returnData.Reserve0 = scanRegisterData[0];
             returnData.Gesture = scanRegisterData[1];
@@ -91,12 +93,12 @@ namespace TekuSP.Drivers.CST816D
             returnData.Miscellaneous = scanRegisterData[8];
             //TODO, add more data
 
-            returnData.X = (ushort)(((returnData.XH & Registers.MSBMask) << 8) | ((returnData.XL & Registers.LSBMask)));
-            returnData.Y = (ushort)(((returnData.YH & Registers.MSBMask) << 8) | ((returnData.YL & Registers.LSBMask)));
+            returnData.X = (ushort)(((returnData.XH & Cst816DConstants.MSBMask) << 8) | ((returnData.XL & Cst816DConstants.LSBMask)));
+            returnData.Y = (ushort)(((returnData.YH & Cst816DConstants.MSBMask) << 8) | ((returnData.YL & Cst816DConstants.LSBMask)));
 
-            if (returnData.X > Registers.MaxX || returnData.X < Registers.MinX)
+            if (returnData.X > Cst816DConstants.MaxX || returnData.X < Cst816DConstants.MinX)
                 returnData.X = 0xff;
-            if (returnData.Y > Registers.MaxY || returnData.Y < Registers.MinY)
+            if (returnData.Y > Cst816DConstants.MaxY || returnData.Y < Cst816DConstants.MinY)
                 returnData.Y = 0xff;
 
             returnData.TouchPressure = returnData.Pressure;
@@ -140,7 +142,7 @@ namespace TekuSP.Drivers.CST816D
         public int ReadVersion()
         {
             byte[] returnData = new byte[1];
-            I2CDevice.WriteRead(new byte[] { Registers.VersionAddress }, returnData);
+            I2CDevice.WriteRead(new byte[] { (byte)RegisterAddress.Version }, returnData);
             return returnData[0];
         }
 
@@ -151,7 +153,7 @@ namespace TekuSP.Drivers.CST816D
         public string ReadVersionInfo()
         {
             byte[] returnData = new byte[3];
-            I2CDevice.WriteRead(new byte[] { Registers.VersionInfoAddress }, returnData);
+            I2CDevice.WriteRead(new byte[] { (byte)RegisterAddress.VersionInfo }, returnData);
             return $"{returnData[0]}.{returnData[1]}.{returnData[2]}";
         }
 
@@ -168,7 +170,7 @@ namespace TekuSP.Drivers.CST816D
         public void Sleep()
         {
             Restart();
-            I2CDevice.Write(new byte[] { Registers.SleepRegister, Registers.StandbyCommand });
+            I2CDevice.Write(new byte[] { (byte)RegisterAddress.Sleep, Cst816DConstants.StandbyCommand });
             Stop();
         }
 

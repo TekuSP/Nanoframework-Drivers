@@ -1,1 +1,0 @@
-﻿// Split into Constants/Registers.cs, Register.cs, and Enums/Gesture.cs

@@ -14,6 +14,9 @@
 - If a helper, interface, or enum is not device-specific, move it into DriverBase (or the transport-specific base) instead of keeping it in a single driver.
 - Prefer using shared helpers/event handlers from DriverBase (and extend them if generally applicable) instead of duplicating math/utility logic in individual drivers. See [Drivers/DriverBase/Helpers/BitHelper.cs](Drivers/DriverBase/Helpers/BitHelper.cs) and [Drivers/DriverBase/Event Handlers](Drivers/DriverBase/Event%20Handlers).
 - Prefer putting enums and constants into dedicated folders (Enums/, Constants/) inside each driver; newer drivers follow this pattern (example: [Drivers/TCS34725/Enums](Drivers/TCS34725/Enums)), older ones may not yet.
+- Prefer enums over constants when the values represent discrete choices or flags.
+- Keep a single class, enum, or struct per file; split types into separate files when needed.
+- File names should match or closely align with the type name contained in the file.
 - Do not use partial classes in drivers. Keep enums/constants as standalone types in the driver namespace (or a Constants/Enums namespace) and update references explicitly.
 - Add XML documentation comments for public (and where meaningful internal) types, members, enums, and constants. Use existing comments, datasheets, or device knowledge to describe units, ranges, and behavior.
 - Expose device enums/constants as public (consistent access), unless there is a strong reason to keep them non-public.
