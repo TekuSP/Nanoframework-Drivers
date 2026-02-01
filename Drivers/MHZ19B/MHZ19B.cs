@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using UnitsNet;
 
 namespace TekuSP.Drivers.MHZ19B
 {
@@ -26,6 +27,7 @@ namespace TekuSP.Drivers.MHZ19B
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public void AutoCalibration(bool turnOn)
         {
             byte[] dataToSend = new byte[8] { 0xFF, 0x01, 0x79, 0x00, 0x00, 0x00, 0x00, 0x00 }; //Default off
@@ -39,9 +41,10 @@ namespace TekuSP.Drivers.MHZ19B
         /// Calibrates Span Point, Run <see cref="CalibrateZeroPoint"/> before running this, make sure the sensor worked under a certain level co2 for over 20 minutes.
         /// </summary>
         /// <param name="ppm">1000 ppm or more suggested, 2000 ppm recommended</param>
-        public void CalibrateSpanPoint(int ppm)
+        public void CalibrateSpanPoint(Ratio ppm)
         {
-            byte[] dataToSend = new byte[8] { 0xFF, 0x01, 0x88, (byte)(ppm / 256), (byte)(ppm % 256), 0x00, 0x00, 0x00 };
+            int ppmValue = (int)Math.Round(ppm.PartsPerMillion);
+            byte[] dataToSend = new byte[8] { 0xFF, 0x01, 0x88, (byte)(ppmValue / 256), (byte)(ppmValue % 256), 0x00, 0x00, 0x00 };
             dataToSend[7] = CalculateCheckSum(dataToSend);
             WriteData(dataToSend); //No response expected
         }
@@ -60,19 +63,21 @@ namespace TekuSP.Drivers.MHZ19B
         /// Reads and calculates CO2 Limited Concentration
         /// </summary>
         /// <returns>CO2 concentration in ppm</returns>
-        public int ReadCO2Concentration()
+        public VolumeConcentration ReadCO2Concentration()
         {
             var response = SendAndRead(MHZCommands.CO2LimitedTemp);
-            return GetFromHighLowByte(response[2],response[3]);
+            int ppmValue = GetFromHighLowByte(response[2], response[3]);
+            return VolumeConcentration.FromPartsPerMillion(ppmValue);
         }
         /// <summary>
         /// Reads and calculates CO2 Unlimited Concentration
         /// </summary>
         /// <returns>CO2 concentration in ppm</returns>
-        public int ReadCO2ConcentrationUnlimited()
+        public VolumeConcentration ReadCO2ConcentrationUnlimited()
         {
             var response = SendAndRead(MHZCommands.CO2UnlimitedTemp);
-            return GetFromHighLowByte(response[4], response[5]);
+            int ppmValue = GetFromHighLowByte(response[4], response[5]);
+            return VolumeConcentration.FromPartsPerMillion(ppmValue);
         }
 
         /// <summary>
@@ -88,13 +93,14 @@ namespace TekuSP.Drivers.MHZ19B
         /// <summary>
         /// Not supported on MHZ-19B
         /// </summary>
-        /// <param name="pointer"></param>
-        /// <returns></returns>
+        /// <param name="pointer">Register pointer (ignored).</param>
+        /// <returns>Always returns -1 to indicate not supported.</returns>
         public override long ReadData(byte pointer)
         {
             return -1;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(params byte[] data)
         {
             var read = serialDevice.BytesToRead;
@@ -134,15 +140,18 @@ namespace TekuSP.Drivers.MHZ19B
         /// Sets detection range for CO2 Sensor
         /// </summary>
         /// <param name="ppm">Only 2000 ppm or 5000 ppm allowed!</param>
-        public void SetDetectionRange(int ppm)
+        /// <inheritdoc/>
+        public void SetDetectionRange(Ratio ppm)
         {
-            if (ppm != 2000 || ppm != 5000)
+            int ppmValue = (int)Math.Round(ppm.PartsPerMillion);
+            if (ppmValue != 2000 && ppmValue != 5000)
                 return; //Allowed is only 2000 ppm or 5000 ppm
-            byte[] dataToSend = new byte[9] { 0xFF, 0x01, 0x99, (byte)(ppm / 256), (byte)(ppm % 256), 0x00, 0x00, 0x00,0x00 };
+            byte[] dataToSend = new byte[9] { 0xFF, 0x01, 0x99, (byte)(ppmValue / 256), (byte)(ppmValue % 256), 0x00, 0x00, 0x00,0x00 };
             dataToSend[8] = CalculateCheckSum(dataToSend);
             WriteData(dataToSend); //No response expected
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             base.Start();
@@ -154,11 +163,13 @@ namespace TekuSP.Drivers.MHZ19B
             serialDevice.ReadTimeout = 1000;
         }
 
+        /// <inheritdoc/>
         public override void Stop()
         {
             base.Stop();
         }
 
+        /// <inheritdoc/>
         public override void WriteData(byte[] data)
         {
             serialDevice.Write(data, 0, data.Length);
@@ -219,24 +230,6 @@ namespace TekuSP.Drivers.MHZ19B
         {
             return (high * 256) + low;
         }
-        enum MHZCommands
-        {
-          RecoveryReset = 0x78,	// 0 Recovery Reset        Changes operation mode and performs MCU reset
-          ABC = 0x79,	// 1 ABC Mode ON/OFF       Turns ABC logic on or off (b[3] == 0xA0 - on, 0x00 - off)
-          GetABC = 0x7D,	// 2 Get ABC logic status  (1 - enabled, 0 - disabled)	
-          RawCO2 = 0x84,	// 3 Raw CO2
-          CO2UnlimitedTemp = 0x85,	// 4 Temp double, CO2 Unlimited
-          CO2LimitedTemp = 0x86,	// 5 Temp integer, CO2 limited
-          ZeroCalibration = 0x87,	// 6 Zero Calibration
-          SpanCalibration = 0x88,	// 7 Span Calibration
-          Range = 0x99,	// 8 Range
-          GetRange = 0x9B,	// 9 Get Range
-          GetBackgroundCO2 = 0x9C,	// 10 Get Background CO2
-          GetFirmwaveVersion = 0xA0,	// 11 Get Firmware Version
-          ResendMessage = 0xA2,	// 12 Get Last Response
-          GetTemperatureCalibration = 0xA3		// 13 Get Temp Calibration
-        };
-
         #endregion Private Methods
     }
 }

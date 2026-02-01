@@ -11,7 +11,9 @@ namespace TekuSP.Drivers.DriverBase
     {
         #region Protected Fields
 
+        /// <summary>I2C connection settings used to create the device.</summary>
         protected I2cConnectionSettings I2CConnectionSettings;
+        /// <summary>Underlying I2C device instance.</summary>
         protected I2cDevice I2CDevice;
 
         #endregion Protected Fields
@@ -51,31 +53,42 @@ namespace TekuSP.Drivers.DriverBase
 
         #region Public Properties
 
+        /// <inheritdoc/>
         public virtual CommunicationType CommunicationType { get; }
+        /// <inheritdoc/>
         public virtual int DeviceAddress { get; }
+        /// <inheritdoc/>
         public virtual bool IsRunning => I2CDevice != null;
+        /// <inheritdoc/>
         public virtual string Name { get; }
 
         #endregion Public Properties
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public abstract long ReadData(byte pointer);
 
+        /// <inheritdoc/>
         public abstract long ReadData(byte[] data);
 
+        /// <inheritdoc/>
         public abstract string ReadDeviceId();
 
+        /// <inheritdoc/>
         public abstract string ReadManufacturerId();
 
+        /// <inheritdoc/>
         public abstract string ReadSerialNumber();
 
+        /// <inheritdoc/>
         public virtual void Restart()
         {
             Stop();
             Start();
         }
 
+        /// <inheritdoc/>
         public virtual void Start()
         {
             if (I2CDevice != null)
@@ -83,12 +96,14 @@ namespace TekuSP.Drivers.DriverBase
             I2CDevice = new I2cDevice(I2CConnectionSettings);
         }
 
+        /// <inheritdoc/>
         public virtual void Stop()
         {
             I2CDevice?.Dispose();
             I2CDevice = null;
         }
 
+        /// <inheritdoc/>
         public abstract void WriteData(byte[] data);
 
         #endregion Public Methods

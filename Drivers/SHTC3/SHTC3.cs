@@ -3,10 +3,11 @@ using System.Device.I2c;
 using System.Threading;
 
 using TekuSP.Drivers.DriverBase;
-using TekuSP.Drivers.DriverBase.Enums;
 using TekuSP.Drivers.DriverBase.Interfaces;
 
 using TekuSP.Drivers.SHTC3.Enums;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace TekuSP.Drivers.SHTC3
 {
@@ -17,10 +18,21 @@ namespace TekuSP.Drivers.SHTC3
     {
         #region Public Constructors
 
+        /// <summary>
+        /// Initializes SHTC3 with default I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public SHTC3(int I2CBusID, int deviceAddress = 0x70) : base("SHTC3", I2CBusID, deviceAddress)
         {
         }
 
+        /// <summary>
+        /// Initializes SHTC3 with custom I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="connectionSettings">Custom I2C connection settings.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public SHTC3(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x70) : base("SHTC3", I2CBusID, connectionSettings, deviceAddress)
         {
         }
@@ -29,41 +41,36 @@ namespace TekuSP.Drivers.SHTC3
 
         #region Public Properties
 
+        /// <inheritdoc/>
         public bool IsSleeping { get; private set; }
 
+        /// <summary>Current measurement mode.</summary>
         public MeasurementMode MeasurementMode { get; private set; } = MeasurementMode.SHTC3_CMD_CSD_NPM;
 
         #endregion Public Properties
 
         #region Public Methods
 
-        public double CalculateHumidity(HumidityType readHumidityType, double rawHumidity)
+        /// <inheritdoc/>
+        public RelativeHumidity CalculateHumidity(RelativeHumidityUnit readHumidityType, double rawHumidity)
         {
-            switch (readHumidityType)
-            {
-                case HumidityType.Relative:
-                    return 100f * ((double)rawHumidity / 65535f);
-
-                default:
-                    throw new ArgumentException("Only Relative humidity is supported in this sensor!");
-            }
+            double humidityPercent = 100f * ((double)rawHumidity / 65535f);
+            return RelativeHumidity.FromPercent(humidityPercent).ToUnit(readHumidityType);
         }
 
-        public double CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
+        /// <inheritdoc/>
+        public Temperature CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
         {
-            switch (readTemperatureUnit)
-            {
-                case TemperatureUnit.Celsius:
-                    return -45f + (175f * ((double)rawTemperature / 65535f));
-
-                case TemperatureUnit.Fahrenheit:
-                    return (-45f + (175f * ((double)rawTemperature / 65535f))) * (9.0f / 5f) + 32.0f;
-
-                default:
-                    throw new ArgumentException("Only Celsius and Fahrenheit is supported in this sensor!");
-            }
+            double celsius = -45f + (175f * ((double)rawTemperature / 65535f));
+            return Temperature.FromDegreesCelsius(celsius).ToUnit(readTemperatureUnit);
         }
 
+        /// <summary>
+        /// Validates CRC for a 16-bit packet.
+        /// </summary>
+        /// <param name="packet">Packet data.</param>
+        /// <param name="cs">Checksum byte.</param>
+        /// <returns>True if CRC is valid.</returns>
         public bool CheckCRC(ushort packet, byte cs)
         {
             byte upper = (byte)(packet >> 8);
@@ -95,17 +102,20 @@ namespace TekuSP.Drivers.SHTC3
         /// </summary>
         /// <param name="pointer">Data to write</param>
         /// <returns>-1</returns>
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             WriteData(new byte[] { pointer });
             return -1;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte[] data)
         {
             return I2CDevice.Read(data).BytesTransferred;
         }
 
+        /// <inheritdoc/>
         public override string ReadDeviceId() //TODO: This has some wrong results
         {
             WakeUp();
@@ -123,6 +133,7 @@ namespace TekuSP.Drivers.SHTC3
             return ID.ToString();
         }
 
+        /// <inheritdoc/>
         public double ReadHumidity()
         {
             WakeUp();
@@ -154,11 +165,13 @@ namespace TekuSP.Drivers.SHTC3
             return RH;
         }
 
-        public double ReadHumidity(HumidityType readHumidityType)
+        /// <inheritdoc/>
+        public RelativeHumidity ReadHumidity(RelativeHumidityUnit readHumidityType)
         {
             return CalculateHumidity(readHumidityType, ReadHumidity());
         }
 
+        /// <inheritdoc/>
         public override string ReadManufacturerId()
         {
             return "Sensirion";
@@ -173,6 +186,7 @@ namespace TekuSP.Drivers.SHTC3
             return "Not supported";
         }
 
+        /// <inheritdoc/>
         public double ReadTemperature() //TODO: This requires some major refactoring, wtf is going on
         {
             WakeUp();
@@ -204,7 +218,8 @@ namespace TekuSP.Drivers.SHTC3
             return T;
         }
 
-        public double ReadTemperature(TemperatureUnit readTemperatureUnit)
+        /// <inheritdoc/>
+        public Temperature ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
             return CalculateTemperature(readTemperatureUnit, ReadTemperature());
         }
@@ -256,6 +271,9 @@ namespace TekuSP.Drivers.SHTC3
             return Status.SHTC3_Status_Error;
         }
 
+        /// <summary>
+        /// Puts the sensor into sleep mode to reduce power consumption.
+        /// </summary>
         public void Sleep()
         {
             if (IsSleeping) //We are already asleep
@@ -264,6 +282,7 @@ namespace TekuSP.Drivers.SHTC3
                 IsSleeping = true;
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             base.Start();
@@ -272,6 +291,7 @@ namespace TekuSP.Drivers.SHTC3
             ReadDeviceId();
         }
 
+        /// <inheritdoc/>
         public override void Stop()
         {
             WakeUp();
@@ -279,6 +299,9 @@ namespace TekuSP.Drivers.SHTC3
             base.Stop();
         }
 
+        /// <summary>
+        /// Wakes the sensor from sleep mode.
+        /// </summary>
         public void WakeUp()
         {
             if (!IsSleeping) //We are already awake
@@ -287,6 +310,11 @@ namespace TekuSP.Drivers.SHTC3
                 IsSleeping = false;
         }
 
+        /// <summary>
+        /// Writes a command to the sensor.
+        /// </summary>
+        /// <param name="command">The command to send.</param>
+        /// <returns>The operation status.</returns>
         public Status WriteCommand(Commands command)
         {
             var result = I2CDevice.Write(new SpanByte(new byte[] { (byte)(((ushort)command) >> 8), (byte)(((ushort)command) & 0x00FF) }));
@@ -295,6 +323,7 @@ namespace TekuSP.Drivers.SHTC3
             return Status.SHTC3_Status_Error;
         }
 
+        /// <inheritdoc/>
         public override void WriteData(params byte[] data)
         {
             I2CDevice.Write(data);

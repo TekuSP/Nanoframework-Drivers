@@ -11,8 +11,10 @@ namespace TekuSP.Drivers.DriverBase
     {
         #region Protected Fields
 
+        /// <summary>SPI connection settings used to create the device.</summary>
         protected SpiConnectionSettings SpiConnectionSettings;
 
+        /// <summary>Underlying SPI device instance.</summary>
         protected SpiDevice SpiDevice;
 
         #endregion Protected Fields
@@ -53,37 +55,48 @@ namespace TekuSP.Drivers.DriverBase
 
         #region Public Properties
 
+        /// <inheritdoc/>
         public virtual CommunicationType CommunicationType { get; }
 
         /// <summary>
         /// SPI uses Chip Select as Addresses, this value thereby is Chip Select Pin
         /// </summary>
+        /// <inheritdoc/>
         public virtual int DeviceAddress { get; }
 
+        /// <inheritdoc/>
         public virtual bool IsRunning => SpiDevice != null;
 
+        /// <inheritdoc/>
         public virtual string Name { get; }
 
         #endregion Public Properties
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public abstract long ReadData(byte pointer);
 
+        /// <inheritdoc/>
         public abstract long ReadData(byte[] data);
 
+        /// <inheritdoc/>
         public abstract string ReadDeviceId();
 
+        /// <inheritdoc/>
         public abstract string ReadManufacturerId();
 
+        /// <inheritdoc/>
         public abstract string ReadSerialNumber();
 
+        /// <inheritdoc/>
         public virtual void Restart()
         {
             Stop();
             Start();
         }
 
+        /// <inheritdoc/>
         public virtual void Start()
         {
             if (SpiDevice != null)
@@ -91,12 +104,14 @@ namespace TekuSP.Drivers.DriverBase
             SpiDevice = SpiDevice.Create(SpiConnectionSettings);
         }
 
+        /// <inheritdoc/>
         public virtual void Stop()
         {
             SpiDevice?.Dispose();
             SpiDevice = null;
         }
 
+        /// <inheritdoc/>
         public abstract void WriteData(byte[] data);
 
         #endregion Public Methods

@@ -21,11 +21,16 @@
     <tags>drivers i2c tekusp net netmf nf nanoframework TAOS TCS34725 colorsensor lux lightsensor</tags>
     <dependencies>
       <dependency id="TekuSP.Drivers.DriverBase" version="$version$" />
+      <dependency id="TekuSP.Drivers.DriverBase.Interfaces.Light" version="$version$" />
+      <dependency id="TekuSP.Drivers.DriverBase.Interfaces.Sensitivity" version="$version$" />
       <dependency id="TekuSP.Drivers.DriverBaseI2C" version="$version$" />
       <dependency id="nanoFramework.CoreLibrary" version="1.17.11" />
       <dependency id="nanoFramework.System.Device.I2c" version="1.1.29" />
       <dependency id="nanoFramework.System.Device.Gpio" version="1.1.57" />
+      <dependency id="nanoFramework.System.Math" version="1.5.116" />
       <dependency id="nanoFramework.Runtime.Events" version="1.11.32" />
+      <dependency id="UnitsNet.nanoFramework.Duration" version="5.75.0" />
+      <dependency id="UnitsNet.nanoFramework.Illuminance" version="5.75.0" />
     </dependencies>
   </metadata>
   <files>

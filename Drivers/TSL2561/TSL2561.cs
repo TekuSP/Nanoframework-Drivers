@@ -5,6 +5,8 @@ using System.Device.I2c;
 using TekuSP.Drivers.DriverBase.Interfaces;
 using System;
 using System.Threading;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace TekuSP.Drivers.TSL2561
 {
@@ -17,12 +19,27 @@ namespace TekuSP.Drivers.TSL2561
         private IntegrationTime TSL2561IntegrationTime;
         #region Public Constructors
 
+        /// <summary>
+        /// Initializes TSL2561 with default I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="integrationTime">Integration time setting.</param>
+        /// <param name="gain">Gain setting.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public TSL2561(int I2CBusID, IntegrationTime integrationTime, Gain gain, int deviceAddress = 0x39) : base("TSL2561", I2CBusID, deviceAddress)
         {
             TSL2561IntegrationTime = integrationTime;
             TSL25615Gain = gain;
         }
 
+        /// <summary>
+        /// Initializes TSL2561 with custom I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="connectionSettings">Custom I2C connection settings.</param>
+        /// <param name="integrationTime">Integration time setting.</param>
+        /// <param name="gain">Gain setting.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public TSL2561(int I2CBusID, I2cConnectionSettings connectionSettings, IntegrationTime integrationTime, Gain gain, int deviceAddress = 0x39) : base("TSL2561", I2CBusID, connectionSettings, deviceAddress)
         {
             TSL2561IntegrationTime = integrationTime;
@@ -33,6 +50,7 @@ namespace TekuSP.Drivers.TSL2561
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public override void Start()
         {
             base.Start();
@@ -40,13 +58,15 @@ namespace TekuSP.Drivers.TSL2561
             SetGain(TSL25615Gain);
             Sleep();
         }
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             byte[] result = new byte[1];
-            I2CDevice.WriteRead(new byte[] { (byte)((pointer & 0x0F) | Commands.TSL2561_COMMAND_BIT) }, result);
+            I2CDevice.WriteRead(new byte[] { (byte)((pointer & 0x0F) | (byte)CommandBits.Command) }, result);
             return result[0];
         }
 
+        /// <inheritdoc/>
         public override long ReadData(params byte[] data)
         {
             byte[] result = new byte[1];
@@ -54,31 +74,40 @@ namespace TekuSP.Drivers.TSL2561
             return result[0];
         }
 
+        /// <inheritdoc/>
         public override string ReadDeviceId()
         {
             return ReadData(0x0A).ToString();
         }
 
+        /// <inheritdoc/>
         public override string ReadManufacturerId()
         {
             return "Not supported";
         }
 
+        /// <summary>
+        /// Reads a 16-bit result from a register.
+        /// </summary>
+        /// <param name="pointer">Register address.</param>
+        /// <returns>16-bit value.</returns>
         public long ReadResultData(byte pointer)
         {
             byte[] result = new byte[2];
-            I2CDevice.WriteRead(new byte[] { (byte)((pointer & 0x0F) | Commands.TSL2561_COMMAND_BIT) }, result);
+            I2CDevice.WriteRead(new byte[] { (byte)((pointer & 0x0F) | (byte)CommandBits.Command) }, result);
             return ((uint)result[0]).LowWord().HighWord(result[1]);
         }
 
+        /// <inheritdoc/>
         public override string ReadSerialNumber()
         {
             return "Not supported";
         }
 
+        /// <inheritdoc/>
         public override void WriteData(params byte[] data)
         {
-            data[0] = (byte)((data[0] & 0x0F) | Commands.TSL2561_COMMAND_BIT);
+            data[0] = (byte)((data[0] & 0x0F) | (byte)CommandBits.Command);
             I2CDevice.Write(data);
         }
 
@@ -96,32 +125,57 @@ namespace TekuSP.Drivers.TSL2561
                     return 0;
             }
         }
-        public float GetLux()
+        /// <summary>
+        /// Gets lux value (raw) from channel 0.
+        /// </summary>
+        /// <returns>Illuminance in lux.</returns>
+        public Illuminance GetLux()
         {
             Wakeup();
             Thread.Sleep(GetIntegrationTimeMillis(TSL2561IntegrationTime));
-            var result = ReadResultData(Commands.TSL2561_WORD_BIT | (byte)Registers.TSL2561_REGISTER_CHAN0_LOW);
+            var result = ReadResultData((byte)((byte)CommandBits.Word | (byte)Registers.TSL2561_REGISTER_CHAN0_LOW));
             Sleep();
-            return result;
+            return Illuminance.FromLux(result);
         }
-        public float GetIR()
+        /// <summary>
+        /// Gets IR value (raw) from channel 1.
+        /// </summary>
+        /// <returns>IR level as a dimensionless ratio.</returns>
+        public Ratio GetIR()
         {
             Wakeup();
             Thread.Sleep(GetIntegrationTimeMillis(TSL2561IntegrationTime));
-            var result = ReadResultData(Commands.TSL2561_WORD_BIT | (byte)Registers.TSL2561_REGISTER_CHAN1_LOW);
+            var result = ReadResultData((byte)((byte)CommandBits.Word | (byte)Registers.TSL2561_REGISTER_CHAN1_LOW));
             Sleep();
-            return result;
+            return Ratio.FromPartsPerMillion(result);
         }
 
+        /// <summary>
+        /// Sets integration time using a raw byte value.
+        /// </summary>
+        /// <param name="integrationTime">Integration time register value.</param>
         public void SetIntegrationTime(byte integrationTime)
         {
             SetIntegrationTime((IntegrationTime)integrationTime);
         }
 
+        /// <summary>
+        /// Sets gain using a raw byte value.
+        /// </summary>
+        /// <param name="gain">Gain register value.</param>
         public void SetGain(byte gain)
         {
             SetGain((Gain)gain);
         }
+        /// <summary>
+        /// Sets integration time.
+        /// </summary>
+        /// <param name="integrationTime">Integration time.</param>
+        public void SetIntegrationTime(Duration integrationTime)
+        {
+            SetIntegrationTime(MapIntegrationTime(integrationTime));
+        }
+
         /// <summary>
         /// Sets integration time
         /// </summary>
@@ -145,14 +199,34 @@ namespace TekuSP.Drivers.TSL2561
             Sleep();
         }
 
+        /// <summary>
+        /// Puts the sensor into power-down mode.
+        /// </summary>
         public void Sleep()
         {
-            WriteData(new byte[] { (byte)Registers.TSL2561_REGISTER_CONTROL | Commands.TSL2561_CONTROL_POWEROFF });
+            WriteData(new byte[] { (byte)((byte)Registers.TSL2561_REGISTER_CONTROL | (byte)ControlPower.PowerOff) });
         }
 
+        /// <summary>
+        /// Wakes the sensor from power-down mode.
+        /// </summary>
         public void Wakeup()
         {
-            WriteData(new byte[] { (byte)Registers.TSL2561_REGISTER_CONTROL | Commands.TSL2561_CONTROL_POWERON });
+            WriteData(new byte[] { (byte)((byte)Registers.TSL2561_REGISTER_CONTROL | (byte)ControlPower.PowerOn) });
+        }
+
+        private static IntegrationTime MapIntegrationTime(Duration integrationTime)
+        {
+            double ms = integrationTime.Milliseconds;
+            double diff13 = Math.Abs(ms - 13.7);
+            double diff101 = Math.Abs(ms - 101);
+            double diff402 = Math.Abs(ms - 402);
+
+            if (diff13 <= diff101 && diff13 <= diff402)
+                return IntegrationTime.TSL2561_INTEGRATIONTIME_13MS;
+            if (diff101 <= diff402)
+                return IntegrationTime.TSL2561_INTEGRATIONTIME_101MS;
+            return IntegrationTime.TSL2561_INTEGRATIONTIME_402MS;
         }
 
         #endregion Public Methods

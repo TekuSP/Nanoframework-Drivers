@@ -63,10 +63,10 @@ namespace Meteostanice
             //Debug.WriteLine($"Initialized device {manu} {devID} - {serial}");
             //while (true)
             //{
-            //    temperature = lPS22HB.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius);
-            //    pressure = lPS22HB.ReadPressure(DriverBase.Enums.PressureType.mBar);
-            //    Debug.WriteLine($"Temperature is: {temperature} C");
-            //    Debug.WriteLine($"Pressure is: {pressure} mBar");
+            //    var temperature = lPS22HB.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
+            //    var pressure = lPS22HB.ReadPressure(UnitsNet.Units.PressureUnit.Millibar);
+            //    Debug.WriteLine($"Temperature is: {temperature.DegreesCelsius} C");
+            //    Debug.WriteLine($"Pressure is: {pressure.Millibars} mBar");
             //    Thread.Sleep(5000);
             //}
             //Configuration.SetPinFunction(40, DeviceFunction.I2C1_CLOCK);
@@ -93,8 +93,10 @@ namespace Meteostanice
             //Debug.WriteLine($"Device {sHTC3.ReadManufacturerId()} {sHTC3.ReadDeviceId()} - {sHTC3.ReadSerialNumber()}");
             //while (true)
             //{
-            //    Debug.WriteLine($"Temperature is: {sHTC3.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius)} C");
-            //    Debug.WriteLine($"Humidity is: {sHTC3.ReadHumidity(DriverBase.Enums.HumidityType.Relative)} %");
+            //    var temperature = sHTC3.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
+            //    var humidity = sHTC3.ReadHumidity(UnitsNet.Units.RelativeHumidityUnit.Percent);
+            //    Debug.WriteLine($"Temperature is: {temperature.DegreesCelsius} C");
+            //    Debug.WriteLine($"Humidity is: {humidity.Percent} %");
             //    Thread.Sleep(5000);
             //}
             //CST816D.CST816D cst = new CST816D.CST816D(1, 41, 42);
@@ -118,7 +120,7 @@ namespace Meteostanice
                 var lux = colorSensor.GetLux();
                 Debug.WriteLine($"Colors, R: {colors.R} G: {colors.G} B: {colors.B}");
                 Debug.WriteLine($"Kelvins: {kelvin}");
-                Debug.WriteLine($"Lux: {lux}");
+                Debug.WriteLine($"Lux: {lux.Lux}");
                 Thread.Sleep(1000);
             }
         }
