@@ -1,5 +1,8 @@
 ﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Basic CO2 sensor interface.
+    /// </summary>
     public interface ICO2Sensor
     {
         /// <summary>

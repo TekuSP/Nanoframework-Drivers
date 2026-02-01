@@ -1,5 +1,8 @@
 ﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Represents an 8-bit register model with pack/unpack helpers.
+    /// </summary>
     public interface IRegister
     {
         #region Public Methods

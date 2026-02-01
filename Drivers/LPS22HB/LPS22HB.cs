@@ -4,49 +4,42 @@ using System.Device.I2c;
 using TekuSP.Drivers.DriverBase;
 using TekuSP.Drivers.DriverBase.Enums;
 using TekuSP.Drivers.DriverBase.Interfaces;
+using TekuSP.Drivers.LPS22HB.Constants;
+using TekuSP.Drivers.LPS22HB.Enums;
 
 namespace TekuSP.Drivers.LPS22HB
 {
+    /// <summary>
+    /// Driver for STMicroelectronics LPS22HB pressure sensor.
+    /// </summary>
     public class LPS22HB : DriverBaseI2C, ITemperatureSensor, IPressureSensor
     {
-        #region Private Fields
-
-        private const int ushortMaxValuePlusOne = 65536;
-
-        #endregion Private Fields
-
         #region Public Constructors
 
+        /// <summary>
+        /// Initializes LPS22HB with default I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public LPS22HB(int I2CBusID, int deviceAddress = 0x5D) : base("LPS22HB", I2CBusID, deviceAddress)
         {
         }
 
+        /// <summary>
+        /// Initializes LPS22HB with custom I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="connectionSettings">Custom I2C connection settings.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public LPS22HB(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x5D) : base("LPS22HB", I2CBusID, connectionSettings, deviceAddress)
         {
         }
 
         #endregion Public Constructors
 
-        #region Private Enums
-
-        private enum LPS22HBCommands
-        {
-            LPS22HB_WHO_AM_I = 0x0F, //Who am I
-            LPS22HB_RES_CONF = 0x1A, //Normal (0) or Low current mode (1)
-            LPS22HB_CTRL_REG1 = 0x10, //Output rate and filter settings
-            LPS22HB_CTRL_REG2 = 0x11, //BOOT FIFO_EN STOP_ON_FTH IF_ADD_INC I2C_DIS SWRESET One_Shot
-            LPS22HB_STATUS_REG = 0x27, //Temp or Press data available bits
-            LPS22HB_PRES_OUT_XL = 0x28, //XLSB
-            LPS22HB_PRES_OUT_L = 0x29, //LSB
-            LPS22HB_PRES_OUT_H = 0x2A, //MSB
-            LPS22HB_TEMP_OUT_L = 0x2B, //LSB
-            LPS22HB_TEMP_OUT_H = 0x2C //MSB
-        }
-
-        #endregion Private Enums
-
         #region Public Methods
 
+        /// <inheritdoc/>
         public double CalculatePressure(PressureType type, double rawPressure)
         {
             switch (type)
@@ -65,6 +58,7 @@ namespace TekuSP.Drivers.LPS22HB
             }
         }
 
+        /// <inheritdoc/>
         public double CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
         {
             switch (readTemperatureUnit)
@@ -72,25 +66,28 @@ namespace TekuSP.Drivers.LPS22HB
                 case TemperatureUnit.Celsius:
                     return rawTemperature; //Already in Celsius
                 case TemperatureUnit.Fahrenheit:
-                    return (rawTemperature * 9 / 5) + (32 * ushortMaxValuePlusOne);
+                    return (rawTemperature * 9 / 5) + (32 * LPS22HBConstants.UShortMaxValuePlusOne);
 
                 default:
                     throw new System.NotImplementedException();
             }
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             WriteData(new byte[] { pointer });
             return -1;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(params byte[] data)
         {
             data[0] = I2CDevice.ReadByte();
             return 1;
         }
 
+        /// <inheritdoc/>
         public override string ReadDeviceId()
         {
             return ReadWrite(LPS22HBCommands.LPS22HB_WHO_AM_I).ToString();
@@ -100,11 +97,13 @@ namespace TekuSP.Drivers.LPS22HB
         /// Not supported
         /// </summary>
         /// <returns>Returns manufacturer</returns>
+        /// <inheritdoc/>
         public override string ReadManufacturerId()
         {
             return "STMicroelectronics";
         }
 
+        /// <inheritdoc/>
         public double ReadPressure()
         {
             WriteData(LPS22HBCommands.LPS22HB_CTRL_REG2, 0x1);
@@ -116,6 +115,7 @@ namespace TekuSP.Drivers.LPS22HB
             return ((((long)pressOutH << 24) | ((long)pressOutL << 16) | ((long)pressOutXL << 8)) >> 8);
         }
 
+        /// <inheritdoc/>
         public double ReadPressure(PressureType type)
         {
             double pr = ReadPressure();
@@ -128,11 +128,13 @@ namespace TekuSP.Drivers.LPS22HB
         /// Not Supported
         /// </summary>
         /// <returns>Not Supported</returns>
+        /// <inheritdoc/>
         public override string ReadSerialNumber()
         {
             return "Not Supported";
         }
 
+        /// <inheritdoc/>
         public double ReadTemperature()
         {
             WriteData(LPS22HBCommands.LPS22HB_CTRL_REG2, 0x1);
@@ -143,11 +145,13 @@ namespace TekuSP.Drivers.LPS22HB
             return ((tempOutH << 8) | (tempOutL & 0xff)) / 100.0f;
         }
 
+        /// <inheritdoc/>
         public double ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
             return CalculateTemperature(readTemperatureUnit, ReadTemperature());
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             base.Start();
@@ -155,6 +159,11 @@ namespace TekuSP.Drivers.LPS22HB
             WriteData(LPS22HBCommands.LPS22HB_CTRL_REG1, 0x00); // one-shot mode
         }
 
+        /// <summary>
+        /// Checks status flags for data availability.
+        /// </summary>
+        /// <param name="status">Status bit mask.</param>
+        /// <returns>True if data is available.</returns>
         public bool Status(byte status)
         {
             int count = 1000;
@@ -173,6 +182,7 @@ namespace TekuSP.Drivers.LPS22HB
                 return true;
         }
 
+        /// <inheritdoc/>
         public override void WriteData(params byte[] data)
         {
             I2CDevice.Write(new SpanByte(data));

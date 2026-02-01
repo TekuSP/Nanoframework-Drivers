@@ -22,6 +22,11 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="ICM20948.cs" />
+    <Compile Include="Constants\ICM20948Constants.cs" />
+    <Compile Include="Enums\ICM20948Bank0.cs" />
+    <Compile Include="Enums\ICM20948Bank2.cs" />
+    <Compile Include="Enums\ICM20948Bank3.cs" />
+    <Compile Include="Enums\ICM20948Mag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

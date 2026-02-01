@@ -3,127 +3,38 @@ using System.Device.I2c;
 using System.Threading;
 
 using TekuSP.Drivers.DriverBase;
+using TekuSP.Drivers.ICM20948.Constants;
+using TekuSP.Drivers.ICM20948.Enums;
 
 namespace TekuSP.Drivers.ICM20948
 {
+    /// <summary>
+    /// Driver for TDK InvenSense ICM-20948 9-axis IMU.
+    /// </summary>
     public class ICM20948 : DriverBaseI2C
     {
-        #region Private Fields
-
-        private const byte I2C_ADD_ICM20948_AK09916 = 0x0C;
-        private const byte I2C_ADD_ICM20948_AK09916_READ = 0x80;
-        private const byte I2C_ADD_ICM20948_AK09916_WRITE = 0x00;
-
-        #endregion Private Fields
-
         #region Public Constructors
 
+        /// <summary>
+        /// Initializes the ICM20948 driver with default I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public ICM20948(int I2CBusID, int deviceAddress = 0x68) : base("ICM20948", I2CBusID, deviceAddress)
         {
         }
 
+        /// <summary>
+        /// Initializes the ICM20948 driver with custom I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="connectionSettings">Custom I2C connection settings.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public ICM20948(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x68) : base("ICM20948", I2CBusID, connectionSettings, deviceAddress)
         {
         }
 
         #endregion Public Constructors
-
-        #region Private Enums
-
-        private enum ICM20948_BANK0
-        {
-            REG_ADD_WIA = 0x00,
-            REG_VAL_WIA = 0xEA,
-            REG_ADD_USER_CTRL = 0x03,
-            REG_VAL_BIT_DMP_EN = 0x80,
-            REG_VAL_BIT_FIFO_EN = 0x40,
-            REG_VAL_BIT_I2C_MST_EN = 0x20,
-            REG_VAL_BIT_I2C_IF_DIS = 0x10,
-            REG_VAL_BIT_DMP_RST = 0x08,
-            REG_VAL_BIT_DIAMOND_DMP_RST = 0x04,
-            REG_ADD_PWR_MIGMT_1 = 0x06,
-            REG_VAL_ALL_RGE_RESET = 0x80,
-            REG_VAL_RUN_MODE = 0x01, //Nonlow-powermode
-            REG_ADD_LP_CONFIG = 0x05,
-            REG_ADD_PWR_MGMT_1 = 0x06,
-            REG_ADD_PWR_MGMT_2 = 0x07,
-            REG_ADD_ACCEL_XOUT_H = 0x2D,
-            REG_ADD_ACCEL_XOUT_L = 0x2E,
-            REG_ADD_ACCEL_YOUT_H = 0x2F,
-            REG_ADD_ACCEL_YOUT_L = 0x30,
-            REG_ADD_ACCEL_ZOUT_H = 0x31,
-            REG_ADD_ACCEL_ZOUT_L = 0x32,
-            REG_ADD_GYRO_XOUT_H = 0x33,
-            REG_ADD_GYRO_XOUT_L = 0x34,
-            REG_ADD_GYRO_YOUT_H = 0x35,
-            REG_ADD_GYRO_YOUT_L = 0x36,
-            REG_ADD_GYRO_ZOUT_H = 0x37,
-            REG_ADD_GYRO_ZOUT_L = 0x38,
-            REG_ADD_EXT_SENS_DATA_00 = 0x3B,
-            REG_ADD_REG_BANK_SEL = 0x7F,
-            REG_VAL_REG_BANK_0 = 0x00,
-            REG_VAL_REG_BANK_1 = 0x10,
-            REG_VAL_REG_BANK_2 = 0x20,
-            REG_VAL_REG_BANK_3 = 0x30
-        }
-
-        private enum ICM20948_BANK2
-        {
-            REG_ADD_GYRO_SMPLRT_DIV = 0x00,
-            REG_ADD_GYRO_CONFIG_1 = 0x01,
-            REG_VAL_BIT_GYRO_DLPCFG_2 = 0x10,//bit[5:3]
-            REG_VAL_BIT_GYRO_DLPCFG_4 = 0x20,//bit[5:3]
-            REG_VAL_BIT_GYRO_DLPCFG_6 = 0x30,//bit[5:3]
-            REG_VAL_BIT_GYRO_FS_250DPS = 0x00,//bit[2:1]
-            REG_VAL_BIT_GYRO_FS_500DPS = 0x02,//bit[2:1]
-            REG_VAL_BIT_GYRO_FS_1000DPS = 0x04,//bit[2:1]
-            REG_VAL_BIT_GYRO_FS_2000DPS = 0x06,//bit[2:1]
-            REG_VAL_BIT_GYRO_DLPF = 0x01,//bit[0]
-            REG_ADD_ACCEL_SMPLRT_DIV_2 = 0x11,
-            REG_ADD_ACCEL_CONFIG = 0x14,
-            REG_VAL_BIT_ACCEL_DLPCFG_2 = 0x10,//bit[5:3]
-            REG_VAL_BIT_ACCEL_DLPCFG_4 = 0x20,//bit[5:3]
-            REG_VAL_BIT_ACCEL_DLPCFG_6 = 0x30,//bit[5:3]
-            REG_VAL_BIT_ACCEL_FS_2g = 0x00,//bit[2:1]
-            REG_VAL_BIT_ACCEL_FS_4g = 0x02,//bit[2:1]
-            REG_VAL_BIT_ACCEL_FS_8g = 0x04,//bit[2:1]
-            REG_VAL_BIT_ACCEL_FS_16g = 0x06,//bit[2:1]
-            REG_VAL_BIT_ACCEL_DLPF = 0x01//bit[0]
-        }
-
-        private enum ICM20948_BANK3
-        {
-            REG_ADD_I2C_SLV0_ADDR = 0x03,
-            REG_ADD_I2C_SLV0_REG = 0x04,
-            REG_ADD_I2C_SLV0_CTRL = 0x05,
-            REG_VAL_BIT_SLV0_EN = 0x80,
-            REG_VAL_BIT_MASK_LEN = 0x07,
-            REG_ADD_I2C_SLV0_DO = 0x06,
-            REG_ADD_I2C_SLV1_ADDR = 0x07,
-            REG_ADD_I2C_SLV1_REG = 0x08,
-            REG_ADD_I2C_SLV1_CTRL = 0x09,
-            REG_ADD_I2C_SLV1_DO = 0x0A
-        }
-
-        private enum ICM20948_MAG
-        {
-            REG_ADD_MAG_WIA1 = 0x00,
-            REG_VAL_MAG_WIA1 = 0x48,
-            REG_ADD_MAG_WIA2 = 0x01,
-            REG_VAL_MAG_WIA2 = 0x09,
-            REG_ADD_MAG_ST2 = 0x10,
-            REG_ADD_MAG_DATA = 0x11,
-            REG_ADD_MAG_CNTL2 = 0x31,
-            REG_VAL_MAG_MODE_PD = 0x00,
-            REG_VAL_MAG_MODE_SM = 0x01,
-            REG_VAL_MAG_MODE_10HZ = 0x02,
-            REG_VAL_MAG_MODE_20HZ = 0x04,
-            REG_VAL_MAG_MODE_50HZ = 0x05,
-            REG_VAL_MAG_MODE_100HZ = 0x08,
-            REG_VAL_MAG_MODE_ST = 0x10
-        }
-
-        #endregion Private Enums
 
         #region Public Properties
 
@@ -132,10 +43,13 @@ namespace TekuSP.Drivers.ICM20948
         /// </summary>
         public int[] GyroscopeCalibrationOffset { get; set; }
 
+        /// <summary>Pitch angle in degrees (computed).</summary>
         public double Pitch { get; private set; }
 
+        /// <summary>Roll angle in degrees (computed).</summary>
         public double Roll { get; private set; }
 
+        /// <summary>Yaw angle in degrees (computed).</summary>
         public double Yaw { get; private set; }
 
         #endregion Public Properties
@@ -207,7 +121,7 @@ namespace TekuSP.Drivers.ICM20948
             while (counter > 0)
             {
                 Thread.Sleep(10);
-                byte result = ReadSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_ST2, 1)[0];
+                byte result = ReadSecondary(ICM20948Constants.I2C_ADD_ICM20948_AK09916 | ICM20948Constants.I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_ST2, 1)[0];
                 if ((result & 0x01) != 0)
                     break;
                 counter -= 1;
@@ -216,7 +130,7 @@ namespace TekuSP.Drivers.ICM20948
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    var readData = ReadSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_DATA, 6);
+                    var readData = ReadSecondary(ICM20948Constants.I2C_ADD_ICM20948_AK09916 | ICM20948Constants.I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_DATA, 6);
                     tempX[i] = (readData[1] << 8) | readData[0];
                     tempY[i] = (readData[3] << 8) | readData[2];
                     tempZ[i] = (readData[5] << 8) | readData[4];
@@ -239,6 +153,7 @@ namespace TekuSP.Drivers.ICM20948
                 magneticField[2] = magneticField[2] + 65535;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             WriteData(new byte[] { pointer });
@@ -246,31 +161,42 @@ namespace TekuSP.Drivers.ICM20948
         }
 
         /// <summary>
-        /// Not supported, calls <see cref="ReadPrimary(byte[])"/>
+        /// Not supported, calls <see cref="ReadPrimary()"/>.
         /// </summary>
-        /// <param name="data">Data which should be returned</param>
-        /// <returns>Number of read bytes</returns>
+        /// <param name="data">Data which should be returned.</param>
+        /// <returns>Number of read bytes.</returns>
         public override long ReadData(byte[] data)
         {
             data[0] = ReadPrimary();
             return data.Length;
         }
 
+        /// <inheritdoc/>
         public override string ReadDeviceId()
         {
             return "Not supported";
         }
 
+        /// <inheritdoc/>
         public override string ReadManufacturerId()
         {
             return "TDK InvenSense";
         }
 
+        /// <summary>
+        /// Reads a single byte from the primary I2C device.
+        /// </summary>
+        /// <returns>Byte read.</returns>
         public byte ReadPrimary()
         {
             return I2CDevice.ReadByte();
         }
 
+        /// <summary>
+        /// Reads a number of bytes from the primary I2C device.
+        /// </summary>
+        /// <param name="length">Number of bytes to read.</param>
+        /// <returns>Read buffer.</returns>
         public byte[] ReadPrimary(byte length)
         {
             SpanByte buffer = new SpanByte(new byte[length]);
@@ -278,6 +204,13 @@ namespace TekuSP.Drivers.ICM20948
             return buffer.ToArray();
         }
 
+        /// <summary>
+        /// Reads bytes from the secondary (magnetometer) device via I2C master.
+        /// </summary>
+        /// <param name="I2CAddr">Secondary device address.</param>
+        /// <param name="registerAddr">Register address.</param>
+        /// <param name="length">Number of bytes to read.</param>
+        /// <returns>Read buffer.</returns>
         public byte[] ReadSecondary(byte I2CAddr, byte registerAddr, byte length)
         {
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
@@ -306,6 +239,7 @@ namespace TekuSP.Drivers.ICM20948
             return returnValue;
         }
 
+        /// <inheritdoc/>
         public override string ReadSerialNumber()
         {
             return "Not supported";
@@ -333,6 +267,7 @@ namespace TekuSP.Drivers.ICM20948
             GyroscopeCalibrationOffset[2] = tempGz >> 5;
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             base.Start();
@@ -364,9 +299,10 @@ namespace TekuSP.Drivers.ICM20948
                 Stop();
                 throw new SystemException("AK09916 Magnetic Self-Test routine failed!");
             }
-            WriteSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_WRITE, (byte)ICM20948_MAG.REG_ADD_MAG_CNTL2, (byte)ICM20948_MAG.REG_VAL_MAG_MODE_20HZ); //20 HZ mode
+            WriteSecondary(ICM20948Constants.I2C_ADD_ICM20948_AK09916 | ICM20948Constants.I2C_ADD_ICM20948_AK09916_WRITE, (byte)ICM20948_MAG.REG_ADD_MAG_CNTL2, (byte)ICM20948_MAG.REG_VAL_MAG_MODE_20HZ); //20 HZ mode
         }
 
+        /// <inheritdoc/>
         public override void Stop()
         {
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_0);
@@ -390,16 +326,27 @@ namespace TekuSP.Drivers.ICM20948
         /// Not Supported, automatically calls <see cref="WritePrimary(byte[])"/>
         /// </summary>
         /// <param name="data">Data to write</param>
+        /// <inheritdoc/>
         public override void WriteData(byte[] data)
         {
             WritePrimary(data);
         }
 
+        /// <summary>
+        /// Writes bytes to the primary I2C device.
+        /// </summary>
+        /// <param name="data">Data to write.</param>
         public void WritePrimary(params byte[] data)
         {
             I2CDevice.Write(data);
         }
 
+        /// <summary>
+        /// Writes a byte to the secondary (magnetometer) device via I2C master.
+        /// </summary>
+        /// <param name="I2CAddr">Secondary device address.</param>
+        /// <param name="registerAddr">Register address.</param>
+        /// <param name="data">Data byte.</param>
         public void WriteSecondary(byte I2CAddr, byte registerAddr, byte data)
         {
             SwitchBanks(ICM20948_BANK0.REG_VAL_REG_BANK_3);
@@ -527,7 +474,7 @@ namespace TekuSP.Drivers.ICM20948
 
         private bool MagSelfTest()
         {
-            var result = ReadSecondary(I2C_ADD_ICM20948_AK09916 | I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_WIA1, 2);
+            var result = ReadSecondary(ICM20948Constants.I2C_ADD_ICM20948_AK09916 | ICM20948Constants.I2C_ADD_ICM20948_AK09916_READ, (byte)ICM20948_MAG.REG_ADD_MAG_WIA1, 2);
             return (result[0] == (byte)ICM20948_MAG.REG_VAL_MAG_WIA1 && result[1] == (byte)ICM20948_MAG.REG_VAL_MAG_WIA2);
         }
 

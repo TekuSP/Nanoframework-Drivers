@@ -1,5 +1,8 @@
 ﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Interface for sensors exposing device registers.
+    /// </summary>
     public interface IRegisterSensor
     {
         #region Public Methods

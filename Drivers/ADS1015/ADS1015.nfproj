@@ -28,6 +28,7 @@
     <Compile Include="Enums\DataRateSetting.cs" />
     <Compile Include="Enums\ComparatorEnums.cs" />
     <Compile Include="Enums\OSCommands.cs" />
+    <Compile Include="Enums\PointerRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

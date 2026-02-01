@@ -1,5 +1,8 @@
 ﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Advanced CO2 sensor capabilities beyond basic concentration reading.
+    /// </summary>
     public interface IAdvancedCO2Sensor : ICO2Sensor
     {
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Basic pressure sensor interface.
+    /// </summary>
     public interface IPressureSensor
     {
         /// <summary>

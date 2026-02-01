@@ -47,6 +47,9 @@ namespace TekuSP.Drivers.SHTC3.Enums
         /// </summary>
         SHTC3_CMD_CSD_TF_LPM = 0x609C
     }
+    /// <summary>
+    /// High-level measurement modes for SHTC3 operation.
+    /// </summary>
     public enum MeasurementMode
     {
         /// <summary>

@@ -21,8 +21,8 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Commands.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="Constants\Commands.cs" />
+    <Compile Include="Enums\Enums.cs" />
     <Compile Include="TSL2561.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

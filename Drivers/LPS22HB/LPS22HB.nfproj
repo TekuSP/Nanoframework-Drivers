@@ -22,6 +22,8 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="LPS22HB.cs" />
+    <Compile Include="Constants\LPS22HBConstants.cs" />
+    <Compile Include="Enums\LPS22HBCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

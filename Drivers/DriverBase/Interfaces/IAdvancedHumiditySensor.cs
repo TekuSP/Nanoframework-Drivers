@@ -1,5 +1,8 @@
 ﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Advanced humidity sensor capabilities such as heater control.
+    /// </summary>
     public interface IAdvancedHumiditySensor : IHumiditySensor
     {
         #region Public Methods

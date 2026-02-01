@@ -15,12 +15,12 @@ namespace TekuSP.Drivers.DriverBase.Interfaces
         /// <returns>Returns X, Y of a press</returns>
         public ITouchData Poll();
         /// <summary>
-        /// Gets current state when <see cref="StartPolling(int)"/> is running
+        /// Gets current state while polling is active.
         /// </summary>
         /// <returns>Returns X, Y of a press</returns>
         public ITouchData GetCurrentState();
         /// <summary>
-        /// Triggers when touch change happens, when <see cref="StartPolling(int)"/> is running
+        /// Triggers when touch change happens during polling.
         /// </summary>
         public event ITouchDataHandler OnStateChanged;
     }

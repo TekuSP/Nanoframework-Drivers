@@ -22,7 +22,7 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="CRGBData.cs" />
-    <Compile Include="Enums\AI.cs" />
+    <Compile Include="Enums\AutoIncrement.cs" />
     <Compile Include="Enums\Commands.cs" />
     <Compile Include="Enums\Config.cs" />
     <Compile Include="Enums\Data.cs" />
@@ -30,7 +30,7 @@
     <Compile Include="Enums\Gain.cs" />
     <Compile Include="Enums\GainControl.cs" />
     <Compile Include="Enums\IntegrationTime.cs" />
-    <Compile Include="Offsets.cs" />
+    <Compile Include="Constants\Offsets.cs" />
     <Compile Include="Enums\Pers.cs" />
     <Compile Include="Enums\Status.cs" />
     <Compile Include="Enums\Time.cs" />

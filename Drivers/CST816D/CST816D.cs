@@ -29,12 +29,27 @@ namespace TekuSP.Drivers.CST816D
 
         #region Public Constructors
 
+        /// <summary>
+        /// Initializes the CST816D driver with default I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="interruptPin">Interrupt pin number.</param>
+        /// <param name="resetPin">Reset pin number.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public CST816D(int I2CBusID, int interruptPin, int resetPin, int deviceAddress = 0x15) : base("CST816D", I2CBusID, deviceAddress)
         {
             interruptPinNumber = interruptPin;
             resetPinNumber = resetPin;
         }
 
+        /// <summary>
+        /// Initializes the CST816D driver with custom I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="connectionSettings">Custom I2C connection settings.</param>
+        /// <param name="interruptPin">Interrupt pin number.</param>
+        /// <param name="resetPin">Reset pin number.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public CST816D(int I2CBusID, I2cConnectionSettings connectionSettings, int interruptPin, int resetPin, int deviceAddress = 0x15) : base("CST816D", I2CBusID, connectionSettings, deviceAddress)
         {
             interruptPinNumber = interruptPin;
@@ -45,17 +60,20 @@ namespace TekuSP.Drivers.CST816D
 
         #region Public Events
 
+        /// <inheritdoc/>
         public event ITouchDataHandler OnStateChanged;
 
         #endregion Public Events
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public ITouchData GetCurrentState()
         {
             return currentState;
         }
 
+        /// <inheritdoc/>
         public ITouchData Poll()
         {
             Register returnData = new Register();
@@ -85,31 +103,40 @@ namespace TekuSP.Drivers.CST816D
             return returnData;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             return ReadData(new byte[] { pointer });
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte[] data)
         {
             return I2CDevice.Read(data).BytesTransferred;
         }
 
+        /// <inheritdoc/>
         public override string ReadDeviceId()
         {
             return "CST816D";
         }
 
+        /// <inheritdoc/>
         public override string ReadManufacturerId()
         {
             return "Hynitron Microelectronics Co., Ltd.";
         }
 
+        /// <inheritdoc/>
         public override string ReadSerialNumber()
         {
             return "Not supported";
         }
 
+        /// <summary>
+        /// Reads the firmware version byte.
+        /// </summary>
+        /// <returns>Version byte.</returns>
         public int ReadVersion()
         {
             byte[] returnData = new byte[1];
@@ -117,6 +144,10 @@ namespace TekuSP.Drivers.CST816D
             return returnData[0];
         }
 
+        /// <summary>
+        /// Reads the firmware version info string (major.minor.patch).
+        /// </summary>
+        /// <returns>Version string.</returns>
         public string ReadVersionInfo()
         {
             byte[] returnData = new byte[3];
@@ -124,6 +155,7 @@ namespace TekuSP.Drivers.CST816D
             return $"{returnData[0]}.{returnData[1]}.{returnData[2]}";
         }
 
+        /// <inheritdoc/>
         public override void Restart()
         {
             resetPin.Toggle();
@@ -132,6 +164,7 @@ namespace TekuSP.Drivers.CST816D
             Thread.Sleep(50);
         }
 
+        /// <inheritdoc/>
         public void Sleep()
         {
             Restart();
@@ -139,6 +172,7 @@ namespace TekuSP.Drivers.CST816D
             Stop();
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             if (I2CDevice != null)
@@ -156,6 +190,7 @@ namespace TekuSP.Drivers.CST816D
             interruptPin.ValueChanged += InterruptPin_ValueChanged;
         }
 
+        /// <inheritdoc/>
         public override void Stop()
         {
             interruptPin.ValueChanged -= InterruptPin_ValueChanged;
@@ -164,11 +199,13 @@ namespace TekuSP.Drivers.CST816D
             base.Stop();
         }
 
+        /// <inheritdoc/>
         public void Wakeup()
         {
             Start();
         }
 
+        /// <inheritdoc/>
         public override void WriteData(byte[] data)
         {
             I2CDevice.Write(data);

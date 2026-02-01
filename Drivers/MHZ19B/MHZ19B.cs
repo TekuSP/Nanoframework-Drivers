@@ -26,6 +26,7 @@ namespace TekuSP.Drivers.MHZ19B
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public void AutoCalibration(bool turnOn)
         {
             byte[] dataToSend = new byte[8] { 0xFF, 0x01, 0x79, 0x00, 0x00, 0x00, 0x00, 0x00 }; //Default off
@@ -88,13 +89,14 @@ namespace TekuSP.Drivers.MHZ19B
         /// <summary>
         /// Not supported on MHZ-19B
         /// </summary>
-        /// <param name="pointer"></param>
-        /// <returns></returns>
+        /// <param name="pointer">Register pointer (ignored).</param>
+        /// <returns>Always returns -1 to indicate not supported.</returns>
         public override long ReadData(byte pointer)
         {
             return -1;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(params byte[] data)
         {
             var read = serialDevice.BytesToRead;
@@ -134,6 +136,7 @@ namespace TekuSP.Drivers.MHZ19B
         /// Sets detection range for CO2 Sensor
         /// </summary>
         /// <param name="ppm">Only 2000 ppm or 5000 ppm allowed!</param>
+        /// <inheritdoc/>
         public void SetDetectionRange(int ppm)
         {
             if (ppm != 2000 || ppm != 5000)
@@ -143,6 +146,7 @@ namespace TekuSP.Drivers.MHZ19B
             WriteData(dataToSend); //No response expected
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             base.Start();
@@ -154,11 +158,13 @@ namespace TekuSP.Drivers.MHZ19B
             serialDevice.ReadTimeout = 1000;
         }
 
+        /// <inheritdoc/>
         public override void Stop()
         {
             base.Stop();
         }
 
+        /// <inheritdoc/>
         public override void WriteData(byte[] data)
         {
             serialDevice.Write(data, 0, data.Length);
@@ -219,24 +225,6 @@ namespace TekuSP.Drivers.MHZ19B
         {
             return (high * 256) + low;
         }
-        enum MHZCommands
-        {
-          RecoveryReset = 0x78,	// 0 Recovery Reset        Changes operation mode and performs MCU reset
-          ABC = 0x79,	// 1 ABC Mode ON/OFF       Turns ABC logic on or off (b[3] == 0xA0 - on, 0x00 - off)
-          GetABC = 0x7D,	// 2 Get ABC logic status  (1 - enabled, 0 - disabled)	
-          RawCO2 = 0x84,	// 3 Raw CO2
-          CO2UnlimitedTemp = 0x85,	// 4 Temp double, CO2 Unlimited
-          CO2LimitedTemp = 0x86,	// 5 Temp integer, CO2 limited
-          ZeroCalibration = 0x87,	// 6 Zero Calibration
-          SpanCalibration = 0x88,	// 7 Span Calibration
-          Range = 0x99,	// 8 Range
-          GetRange = 0x9B,	// 9 Get Range
-          GetBackgroundCO2 = 0x9C,	// 10 Get Background CO2
-          GetFirmwaveVersion = 0xA0,	// 11 Get Firmware Version
-          ResendMessage = 0xA2,	// 12 Get Last Response
-          GetTemperatureCalibration = 0xA3		// 13 Get Temp Calibration
-        };
-
         #endregion Private Methods
     }
 }

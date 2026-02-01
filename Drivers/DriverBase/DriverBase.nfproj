@@ -25,8 +25,7 @@
     <Compile Include="Enums\HumidityType.cs" />
     <Compile Include="Enums\PressureType.cs" />
     <Compile Include="Enums\TemperatureUnit.cs" />
-    <Compile Include="Event Handlers\IColorDataEventHandler.cs" />
-    <Compile Include="Event Handlers\ITouchDataEventHandler.cs" />
+    <Compile Include="Event Handlers\EventHandlers.cs" />
     <Compile Include="Helpers\BitHelper.cs" />
     <Compile Include="Interfaces\IADCModule.cs" />
     <Compile Include="Interfaces\IAdvancedCO2Sensor.cs" />

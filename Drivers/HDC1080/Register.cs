@@ -3,22 +3,33 @@ using TekuSP.Drivers.DriverBase.Interfaces;
 
 namespace TekuSP.Drivers.HDC1080
 {
+    /// <summary>
+    /// HDC1080 configuration register model.
+    /// </summary>
     public class HDC1080_Register : IRegister
     {
         #region Public Properties
 
+        /// <summary>Battery status flag.</summary>
         public bool BatteryStatus { get; set; }
+        /// <summary>Heater enable flag.</summary>
         public bool Heater { get; set; }
+        /// <summary>Humidity measurement resolution setting bits.</summary>
         public byte HumidityMeasurementResolution { get; set; } = 0;
+        /// <summary>Mode of acquisition flag.</summary>
         public bool ModeOfAcquisition { get; set; }
+        /// <summary>Reserved flag bit.</summary>
         public bool ReservedAgain { get; set; }
+        /// <summary>Software reset flag.</summary>
         public bool SoftwareReset { get; set; }
+        /// <summary>Temperature measurement resolution flag.</summary>
         public bool TemperatureMeasurementResolution { get; set; }
 
         #endregion Public Properties
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public byte GetData()
         {
             byte b = new byte();
@@ -33,6 +44,7 @@ namespace TekuSP.Drivers.HDC1080
             return b;
         }
 
+        /// <inheritdoc/>
         public void SetData(byte input)
         {
             byte b = new byte();

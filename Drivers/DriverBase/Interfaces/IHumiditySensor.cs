@@ -1,5 +1,8 @@
 ﻿namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Basic humidity sensor interface.
+    /// </summary>
     public interface IHumiditySensor
     {
         #region Public Methods
