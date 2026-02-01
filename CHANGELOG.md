@@ -1,4 +1,14 @@
 
+<a name="v0.4.702"></a>
+## [v0.4.702](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.4.596...v0.4.702)
+
+> 2026-02-01
+
+### Pull Requests
+
+* Merge pull request [#187](https://github.com/TekuSP/Meteostanice-CSharp/issues/187) from TekuSP/add_units_net_support
+
+
 <a name="v0.4.596"></a>
 ## [v0.4.596](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.4.504...v0.4.596)
 
