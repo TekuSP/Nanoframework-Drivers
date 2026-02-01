@@ -2,11 +2,14 @@
 using TekuSP.Drivers.DriverBase.Event_Handlers;
 using TekuSP.Drivers.DriverBase.Interfaces;
 
+using System;
 using System.Device.Gpio;
 using System.Threading;
 
 using TekuSP.Drivers.TCS34725.Enums;
 using System.Device.I2c;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace TekuSP.Drivers.TCS34725
 {
@@ -106,10 +109,11 @@ namespace TekuSP.Drivers.TCS34725
         }
 
         /// <inheritdoc/>
-        public float GetLux()
+        public Illuminance GetLux()
         {
             var data = GetRawData();
-            return (-0.32466F * data.R) + (1.57837F * data.G) + (-0.73191F * data.B);
+            double lux = (-0.32466F * data.R) + (1.57837F * data.G) + (-0.73191F * data.B);
+            return Illuminance.FromLux(lux);
         }
 
         /// <inheritdoc/>
@@ -212,6 +216,16 @@ namespace TekuSP.Drivers.TCS34725
         }
 
         /// <summary>
+        /// Sets integration time by mapping to the closest <see cref="IntegrationTime"/> value.
+        /// </summary>
+        /// <param name="integrationTime">Integration time.</param>
+        /// <remarks>Supported discrete values are defined by <see cref="IntegrationTime"/>.</remarks>
+        public void SetIntegrationTime(Duration integrationTime)
+        {
+            SetIntegrationTime(MapIntegrationTime(integrationTime));
+        }
+
+        /// <summary>
         /// Sets integration time
         /// </summary>
         /// <param name="integrationTime">Integration time</param>
@@ -258,6 +272,35 @@ namespace TekuSP.Drivers.TCS34725
             WriteRegister(0x05, (byte)(low >> 8));
             WriteRegister(0x06, (byte)(high & 0xFF));
             WriteRegister(0x07, (byte)(high >> 8));
+        }
+
+        private static IntegrationTime MapIntegrationTime(Duration integrationTime)
+        {
+            double ms = integrationTime.Milliseconds;
+            double[] options = { 2.4, 24, 50, 101, 154, 700 };
+            IntegrationTime[] mappings =
+            {
+                IntegrationTime.TCS34725_INTEGRATIONTIME_2_4MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_24MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_50MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_101MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_154MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_700MS
+            };
+
+            double bestDiff = double.MaxValue;
+            int bestIndex = 0;
+            for (int i = 0; i < options.Length; i++)
+            {
+                double diff = Math.Abs(ms - options[i]);
+                if (diff < bestDiff)
+                {
+                    bestDiff = diff;
+                    bestIndex = i;
+                }
+            }
+
+            return mappings[bestIndex];
         }
 
         /// <inheritdoc/>

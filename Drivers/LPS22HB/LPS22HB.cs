@@ -2,10 +2,11 @@
 using System.Device.I2c;
 
 using TekuSP.Drivers.DriverBase;
-using TekuSP.Drivers.DriverBase.Enums;
 using TekuSP.Drivers.DriverBase.Interfaces;
 using TekuSP.Drivers.LPS22HB.Constants;
 using TekuSP.Drivers.LPS22HB.Enums;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace TekuSP.Drivers.LPS22HB
 {
@@ -40,37 +41,16 @@ namespace TekuSP.Drivers.LPS22HB
         #region Public Methods
 
         /// <inheritdoc/>
-        public double CalculatePressure(PressureType type, double rawPressure)
+        public Pressure CalculatePressure(PressureUnit type, double rawPressure)
         {
-            switch (type)
-            {
-                case PressureType.mBar:
-                    return rawPressure / 4096.0f;
-
-                case PressureType.Bar:
-                    return (rawPressure / 4096.0f) / 1000;
-
-                case PressureType.Torr:
-                    return ((rawPressure / 4096.0f) / 1000) / 750.06167382f;
-
-                default:
-                    throw new System.NotImplementedException();
-            }
+            double millibar = rawPressure / 4096.0f;
+            return Pressure.FromMillibars(millibar).ToUnit(type);
         }
 
         /// <inheritdoc/>
-        public double CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
+        public Temperature CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
         {
-            switch (readTemperatureUnit)
-            {
-                case TemperatureUnit.Celsius:
-                    return rawTemperature; //Already in Celsius
-                case TemperatureUnit.Fahrenheit:
-                    return (rawTemperature * 9 / 5) + (32 * LPS22HBConstants.UShortMaxValuePlusOne);
-
-                default:
-                    throw new System.NotImplementedException();
-            }
+            return Temperature.FromDegreesCelsius(rawTemperature).ToUnit(readTemperatureUnit);
         }
 
         /// <inheritdoc/>
@@ -116,11 +96,11 @@ namespace TekuSP.Drivers.LPS22HB
         }
 
         /// <inheritdoc/>
-        public double ReadPressure(PressureType type)
+        public Pressure ReadPressure(PressureUnit type)
         {
             double pr = ReadPressure();
             if (pr == -1)
-                return pr;
+                return Pressure.FromMillibars(-1).ToUnit(type);
             return CalculatePressure(type, pr);
         }
 
@@ -146,7 +126,7 @@ namespace TekuSP.Drivers.LPS22HB
         }
 
         /// <inheritdoc/>
-        public double ReadTemperature(TemperatureUnit readTemperatureUnit)
+        public Temperature ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
             return CalculateTemperature(readTemperatureUnit, ReadTemperature());
         }

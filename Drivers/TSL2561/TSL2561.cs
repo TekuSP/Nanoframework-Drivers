@@ -5,6 +5,8 @@ using System.Device.I2c;
 using TekuSP.Drivers.DriverBase.Interfaces;
 using System;
 using System.Threading;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace TekuSP.Drivers.TSL2561
 {
@@ -126,26 +128,26 @@ namespace TekuSP.Drivers.TSL2561
         /// <summary>
         /// Gets lux value (raw) from channel 0.
         /// </summary>
-        /// <returns>Lux value.</returns>
-        public float GetLux()
+        /// <returns>Illuminance in lux.</returns>
+        public Illuminance GetLux()
         {
             Wakeup();
             Thread.Sleep(GetIntegrationTimeMillis(TSL2561IntegrationTime));
             var result = ReadResultData((byte)((byte)CommandBits.Word | (byte)Registers.TSL2561_REGISTER_CHAN0_LOW));
             Sleep();
-            return result;
+            return Illuminance.FromLux(result);
         }
         /// <summary>
         /// Gets IR value (raw) from channel 1.
         /// </summary>
-        /// <returns>IR value.</returns>
-        public float GetIR()
+        /// <returns>IR level as a dimensionless ratio.</returns>
+        public Ratio GetIR()
         {
             Wakeup();
             Thread.Sleep(GetIntegrationTimeMillis(TSL2561IntegrationTime));
             var result = ReadResultData((byte)((byte)CommandBits.Word | (byte)Registers.TSL2561_REGISTER_CHAN1_LOW));
             Sleep();
-            return result;
+            return Ratio.FromPartsPerMillion(result);
         }
 
         /// <summary>
@@ -165,6 +167,15 @@ namespace TekuSP.Drivers.TSL2561
         {
             SetGain((Gain)gain);
         }
+        /// <summary>
+        /// Sets integration time.
+        /// </summary>
+        /// <param name="integrationTime">Integration time.</param>
+        public void SetIntegrationTime(Duration integrationTime)
+        {
+            SetIntegrationTime(MapIntegrationTime(integrationTime));
+        }
+
         /// <summary>
         /// Sets integration time
         /// </summary>
@@ -202,6 +213,20 @@ namespace TekuSP.Drivers.TSL2561
         public void Wakeup()
         {
             WriteData(new byte[] { (byte)((byte)Registers.TSL2561_REGISTER_CONTROL | (byte)ControlPower.PowerOn) });
+        }
+
+        private static IntegrationTime MapIntegrationTime(Duration integrationTime)
+        {
+            double ms = integrationTime.Milliseconds;
+            double diff13 = Math.Abs(ms - 13.7);
+            double diff101 = Math.Abs(ms - 101);
+            double diff402 = Math.Abs(ms - 402);
+
+            if (diff13 <= diff101 && diff13 <= diff402)
+                return IntegrationTime.TSL2561_INTEGRATIONTIME_13MS;
+            if (diff101 <= diff402)
+                return IntegrationTime.TSL2561_INTEGRATIONTIME_101MS;
+            return IntegrationTime.TSL2561_INTEGRATIONTIME_402MS;
         }
 
         #endregion Public Methods

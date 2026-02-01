@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using UnitsNet;
 
 namespace TekuSP.Drivers.MHZ19B
 {
@@ -40,9 +41,10 @@ namespace TekuSP.Drivers.MHZ19B
         /// Calibrates Span Point, Run <see cref="CalibrateZeroPoint"/> before running this, make sure the sensor worked under a certain level co2 for over 20 minutes.
         /// </summary>
         /// <param name="ppm">1000 ppm or more suggested, 2000 ppm recommended</param>
-        public void CalibrateSpanPoint(int ppm)
+        public void CalibrateSpanPoint(Ratio ppm)
         {
-            byte[] dataToSend = new byte[8] { 0xFF, 0x01, 0x88, (byte)(ppm / 256), (byte)(ppm % 256), 0x00, 0x00, 0x00 };
+            int ppmValue = (int)Math.Round(ppm.PartsPerMillion);
+            byte[] dataToSend = new byte[8] { 0xFF, 0x01, 0x88, (byte)(ppmValue / 256), (byte)(ppmValue % 256), 0x00, 0x00, 0x00 };
             dataToSend[7] = CalculateCheckSum(dataToSend);
             WriteData(dataToSend); //No response expected
         }
@@ -61,19 +63,21 @@ namespace TekuSP.Drivers.MHZ19B
         /// Reads and calculates CO2 Limited Concentration
         /// </summary>
         /// <returns>CO2 concentration in ppm</returns>
-        public int ReadCO2Concentration()
+        public VolumeConcentration ReadCO2Concentration()
         {
             var response = SendAndRead(MHZCommands.CO2LimitedTemp);
-            return GetFromHighLowByte(response[2],response[3]);
+            int ppmValue = GetFromHighLowByte(response[2], response[3]);
+            return VolumeConcentration.FromPartsPerMillion(ppmValue);
         }
         /// <summary>
         /// Reads and calculates CO2 Unlimited Concentration
         /// </summary>
         /// <returns>CO2 concentration in ppm</returns>
-        public int ReadCO2ConcentrationUnlimited()
+        public VolumeConcentration ReadCO2ConcentrationUnlimited()
         {
             var response = SendAndRead(MHZCommands.CO2UnlimitedTemp);
-            return GetFromHighLowByte(response[4], response[5]);
+            int ppmValue = GetFromHighLowByte(response[4], response[5]);
+            return VolumeConcentration.FromPartsPerMillion(ppmValue);
         }
 
         /// <summary>
@@ -137,11 +141,12 @@ namespace TekuSP.Drivers.MHZ19B
         /// </summary>
         /// <param name="ppm">Only 2000 ppm or 5000 ppm allowed!</param>
         /// <inheritdoc/>
-        public void SetDetectionRange(int ppm)
+        public void SetDetectionRange(Ratio ppm)
         {
-            if (ppm != 2000 || ppm != 5000)
+            int ppmValue = (int)Math.Round(ppm.PartsPerMillion);
+            if (ppmValue != 2000 && ppmValue != 5000)
                 return; //Allowed is only 2000 ppm or 5000 ppm
-            byte[] dataToSend = new byte[9] { 0xFF, 0x01, 0x99, (byte)(ppm / 256), (byte)(ppm % 256), 0x00, 0x00, 0x00,0x00 };
+            byte[] dataToSend = new byte[9] { 0xFF, 0x01, 0x99, (byte)(ppmValue / 256), (byte)(ppmValue % 256), 0x00, 0x00, 0x00,0x00 };
             dataToSend[8] = CalculateCheckSum(dataToSend);
             WriteData(dataToSend); //No response expected
         }

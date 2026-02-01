@@ -1,4 +1,4 @@
-﻿namespace TekuSP.Drivers.DriverBase.Interfaces
+namespace TekuSP.Drivers.DriverBase.Interfaces
 {
     /// <summary>
     /// Advanced temperature sensor capabilities such as resolution control.

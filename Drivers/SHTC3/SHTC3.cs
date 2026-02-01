@@ -3,10 +3,11 @@ using System.Device.I2c;
 using System.Threading;
 
 using TekuSP.Drivers.DriverBase;
-using TekuSP.Drivers.DriverBase.Enums;
 using TekuSP.Drivers.DriverBase.Interfaces;
 
 using TekuSP.Drivers.SHTC3.Enums;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace TekuSP.Drivers.SHTC3
 {
@@ -51,32 +52,17 @@ namespace TekuSP.Drivers.SHTC3
         #region Public Methods
 
         /// <inheritdoc/>
-        public double CalculateHumidity(HumidityType readHumidityType, double rawHumidity)
+        public RelativeHumidity CalculateHumidity(RelativeHumidityUnit readHumidityType, double rawHumidity)
         {
-            switch (readHumidityType)
-            {
-                case HumidityType.Relative:
-                    return 100f * ((double)rawHumidity / 65535f);
-
-                default:
-                    throw new ArgumentException("Only Relative humidity is supported in this sensor!");
-            }
+            double humidityPercent = 100f * ((double)rawHumidity / 65535f);
+            return RelativeHumidity.FromPercent(humidityPercent).ToUnit(readHumidityType);
         }
 
         /// <inheritdoc/>
-        public double CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
+        public Temperature CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
         {
-            switch (readTemperatureUnit)
-            {
-                case TemperatureUnit.Celsius:
-                    return -45f + (175f * ((double)rawTemperature / 65535f));
-
-                case TemperatureUnit.Fahrenheit:
-                    return (-45f + (175f * ((double)rawTemperature / 65535f))) * (9.0f / 5f) + 32.0f;
-
-                default:
-                    throw new ArgumentException("Only Celsius and Fahrenheit is supported in this sensor!");
-            }
+            double celsius = -45f + (175f * ((double)rawTemperature / 65535f));
+            return Temperature.FromDegreesCelsius(celsius).ToUnit(readTemperatureUnit);
         }
 
         /// <summary>
@@ -180,7 +166,7 @@ namespace TekuSP.Drivers.SHTC3
         }
 
         /// <inheritdoc/>
-        public double ReadHumidity(HumidityType readHumidityType)
+        public RelativeHumidity ReadHumidity(RelativeHumidityUnit readHumidityType)
         {
             return CalculateHumidity(readHumidityType, ReadHumidity());
         }
@@ -233,7 +219,7 @@ namespace TekuSP.Drivers.SHTC3
         }
 
         /// <inheritdoc/>
-        public double ReadTemperature(TemperatureUnit readTemperatureUnit)
+        public Temperature ReadTemperature(TemperatureUnit readTemperatureUnit)
         {
             return CalculateTemperature(readTemperatureUnit, ReadTemperature());
         }
