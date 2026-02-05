@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>TekuSP.Drivers.SHT3x</id>
+    <title>TekuSP I2C Driver for Sensirion SHT3x</title>
+    <version>$version$</version>
+    <!--<version>$version$</version>-->
+    <authors>Richard "TekuSP" Torhan</authors>
+    <owners>Richard "TekuSP" Torhan</owners>
+    <license type="file">LICENSE.md</license>
+    <projectUrl>https://github.com/TekuSP/Meteostanice-CSharp</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <developmentDependency>false</developmentDependency>
+    <description>
+      Nuget Package for Nanoframework, used for: Sensor Sensirion SHT3x humidity and temperature sensor
+    </description>
+    <releaseNotes>
+    </releaseNotes>
+    <repository type="git" url="https://github.com/TekuSP/Meteostanice-CSharp" commit="$commit$" />
+    <copyright>Copyright (c) Richard Torhan 2025</copyright>
+    <tags>drivers i2c tekusp net netmf nf nanoframework Sensirion SHT3x</tags>
+    <dependencies>
+      <dependency id="TekuSP.Drivers.DriverBase" version="$version$" />
+      <dependency id="TekuSP.Drivers.DriverBase.Interfaces.Humidity" version="$version$" />
+      <dependency id="TekuSP.Drivers.DriverBase.Interfaces.Temperature" version="$version$" />
+      <dependency id="TekuSP.Drivers.DriverBaseI2C" version="$version$" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.17.11" />
+      <dependency id="nanoFramework.System.Device.I2c" version="1.1.29" />
+      <dependency id="UnitsNet.nanoFramework.RelativeHumidity" version="5.75.0" />
+      <dependency id="UnitsNet.nanoFramework.Temperature" version="5.75.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\TekuSP.Drivers.SHT3x.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
+  </files>
+</package>

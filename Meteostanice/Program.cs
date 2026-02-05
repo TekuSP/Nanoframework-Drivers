@@ -4,6 +4,8 @@ using System.Threading;
 using TekuSP.Drivers.CST816D;
 
 using nanoFramework.Hardware.Esp32;
+using TekuSP.Drivers.SHT3x;
+using TekuSP.Drivers.SHT3x.Enums;
 using TekuSP.Drivers.TCS34725;
 
 namespace Meteostanice
@@ -71,8 +73,8 @@ namespace Meteostanice
             //}
             //Configuration.SetPinFunction(40, DeviceFunction.I2C1_CLOCK);
             //Configuration.SetPinFunction(Gpio.IO39, DeviceFunction.I2C1_DATA);
-            Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
-            Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
+            Configuration.SetPinFunction(54, DeviceFunction.I2C1_CLOCK);
+            Configuration.SetPinFunction(53, DeviceFunction.I2C1_DATA);
             //ICM20948.ICM20948 icm = new ICM20948.ICM20948(1);
             //icm.Start();
 
@@ -110,18 +112,38 @@ namespace Meteostanice
             //cst.Start();
             //Debug.WriteLine("Version: " + cst.ReadVersion());
             //Debug.WriteLine("Version info: " + cst.ReadVersionInfo());
-            TCS34725 colorSensor = new TCS34725(1, TekuSP.Drivers.TCS34725.Enums.IntegrationTime.TCS34725_INTEGRATIONTIME_101MS, TekuSP.Drivers.TCS34725.Enums.Gain.TCS34725_GAIN_4X);
-            colorSensor.Start();
-            Debug.WriteLine(colorSensor.ReadDeviceId());
+            //TCS34725 colorSensor = new TCS34725(1, TekuSP.Drivers.TCS34725.Enums.IntegrationTime.TCS34725_INTEGRATIONTIME_101MS, TekuSP.Drivers.TCS34725.Enums.Gain.TCS34725_GAIN_4X);
+            //colorSensor.Start();
+            //Debug.WriteLine(colorSensor.ReadDeviceId());
+            //while (true)
+            //{
+            //    var colors = colorSensor.GetRGB();
+            //    var kelvin = colorSensor.GetColorTemperature();
+            //    var lux = colorSensor.GetLux();
+            //    Debug.WriteLine($"Colors, R: {colors.R} G: {colors.G} B: {colors.B}");
+            //    Debug.WriteLine($"Kelvins: {kelvin}");
+            //    Debug.WriteLine($"Lux: {lux.Lux}");
+            //    Thread.Sleep(1000);
+            //}
+
+            
+
+            SHT3x sht3x = new SHT3x(1);
+            sht3x.Start();
+            Debug.WriteLine($"Device {sht3x.ReadManufacturerId()}");
+            sht3x.StartSingleShotMeasurement(Repeatability.High, MeasurementMode.SingleShot);
+
             while (true)
             {
-                var colors = colorSensor.GetRGB();
-                var kelvin = colorSensor.GetColorTemperature();
-                var lux = colorSensor.GetLux();
-                Debug.WriteLine($"Colors, R: {colors.R} G: {colors.G} B: {colors.B}");
-                Debug.WriteLine($"Kelvins: {kelvin}");
-                Debug.WriteLine($"Lux: {lux.Lux}");
-                Thread.Sleep(1000);
+                var temperature = sht3x.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
+                var humidity = sht3x.ReadHumidity(UnitsNet.Units.RelativeHumidityUnit.Percent);
+                Debug.WriteLine($"Temperature: {temperature.DegreesCelsius} C");
+                Debug.WriteLine($"Humidity: {humidity.Percent} %");
+
+                var status = sht3x.GetStatus(out SHT3xStatus deviceStatus);
+                Debug.WriteLine($"Status: {status}, Heater: {deviceStatus.HeaterActive}, Alert: {deviceStatus.AlertPending}");
+
+                Thread.Sleep(2000);
             }
         }
 

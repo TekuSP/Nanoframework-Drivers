@@ -34,6 +34,7 @@
     <ProjectReference Include="..\Drivers\LPS22HB\LPS22HB.nfproj" />
     <ProjectReference Include="..\Drivers\MHZ19B\MHZ19B.nfproj" />
     <ProjectReference Include="..\Drivers\SHTC3\SHTC3.nfproj" />
+    <ProjectReference Include="..\Drivers\SHT3x\SHT3x.nfproj" />
     <ProjectReference Include="..\Drivers\SSD1331\SSD1331.nfproj" />
     <ProjectReference Include="..\Drivers\TCS34725\TCS34725.nfproj" />
     <ProjectReference Include="..\Drivers\TSL2561\TSL2561.nfproj" />

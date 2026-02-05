@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <NanoFrameworkProjectSystemPath>$(MSBuildExtensionsPath)\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
@@ -8,12 +8,12 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{11A8DD76-328B-46DF-9F39-F559912D0360};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>392595b2-2e74-4dec-8ae8-50efbf15aa6d</ProjectGuid>
+    <ProjectGuid>{CBE7FBE8-99AD-4C11-9E98-1D8C5C1D3D57}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>TekuSP.Drivers.DriverBase</RootNamespace>
-    <AssemblyName>TekuSP.Drivers.DriverBase</AssemblyName>
+    <RootNamespace>TekuSP.Drivers.SHT3x</RootNamespace>
+    <AssemblyName>TekuSP.Drivers.SHT3x</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -21,35 +21,38 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Enums\CommunicationType.cs" />
-    <Compile Include="Enums\PeriodicMeasurementRate.cs" />
-    <Compile Include="Event Handlers\EventHandlers.cs" />
-    <Compile Include="Helpers\BitHelper.cs" />
-    <Compile Include="Interfaces\IADCModule.cs" />
-    <Compile Include="Interfaces\IAdvancedColorSensor.cs" />
-    <Compile Include="Interfaces\IColorData.cs" />
-    <Compile Include="Interfaces\IColorSensor.cs" />
-    <Compile Include="Interfaces\IDriverBase.cs" />
-    <Compile Include="Interfaces\IHeaterControl.cs" />
-    <Compile Include="Interfaces\IPeriodicMeasurement.cs" />
-    <Compile Include="Interfaces\IPowerSaving.cs" />
-    <Compile Include="Interfaces\IRegister.cs" />
-    <Compile Include="Interfaces\IRegisterSensor.cs" />
-    <Compile Include="Interfaces\ISleepSupport.cs" />
-    <Compile Include="Interfaces\IStatusProvider.cs" />
-    <Compile Include="Interfaces\ITouchData.cs" />
-    <Compile Include="Interfaces\ITouchSensor.cs" />
-    <Compile Include="Interfaces\IVersion.cs" />
-    <Compile Include="Interfaces\IVersionInfo.cs" />
+    <Compile Include="Constants\SHT3xConstants.cs" />
+    <Compile Include="Enums\Status.cs" />
+    <Compile Include="Enums\MeasurementDelayMs.cs" />
+    <Compile Include="Enums\Repeatability.cs" />
+    <Compile Include="Enums\MeasurementMode.cs" />
+    <Compile Include="Enums\Commands.cs" />
+    <Compile Include="SHT3x.cs" />
+    <Compile Include="SHT3xStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DriverBase.nuspec" />
     <None Include="packages.config" />
+    <None Include="SHT3x.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DriverBaseI2C\DriverBaseI2C.nfproj" />
+    <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
+    <ProjectReference Include="..\DriverBaseInterfaces\Humidity\DriverBaseInterfaces.Humidity.nfproj" />
+    <ProjectReference Include="..\DriverBaseInterfaces\Temperature\DriverBaseInterfaces.Temperature.nfproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib, Version=1.17.11.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\..\packages\nanoFramework.CoreLibrary.1.17.11\lib\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Device.I2c, Version=1.1.29.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.System.Device.I2c.1.1.29\lib\System.Device.I2c.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.RelativeHumidity, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.RelativeHumidity.5.75.0\lib\UnitsNet.RelativeHumidity.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Temperature, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Temperature.5.75.0\lib\UnitsNet.Temperature.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
