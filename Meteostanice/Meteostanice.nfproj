@@ -38,6 +38,7 @@
     <ProjectReference Include="..\Drivers\SSD1331\SSD1331.nfproj" />
     <ProjectReference Include="..\Drivers\TCS34725\TCS34725.nfproj" />
     <ProjectReference Include="..\Drivers\TSL2561\TSL2561.nfproj" />
+    <ProjectReference Include="..\Drivers\PI4IOE5V6408\PI4IOE5V6408.nfproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib, Version=1.17.11.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">

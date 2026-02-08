@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Device.I2c;
+using System.Diagnostics;
 using System.Threading;
 
 using TekuSP.Drivers.CST816D;
@@ -7,6 +9,8 @@ using nanoFramework.Hardware.Esp32;
 using TekuSP.Drivers.SHT3x;
 using TekuSP.Drivers.SHT3x.Enums;
 using TekuSP.Drivers.TCS34725;
+using TekuSP.Drivers.PI4IOE5V6408;
+using System.Device.Gpio;
 
 namespace Meteostanice
 {
@@ -73,8 +77,7 @@ namespace Meteostanice
             //}
             //Configuration.SetPinFunction(40, DeviceFunction.I2C1_CLOCK);
             //Configuration.SetPinFunction(Gpio.IO39, DeviceFunction.I2C1_DATA);
-            Configuration.SetPinFunction(54, DeviceFunction.I2C1_CLOCK);
-            Configuration.SetPinFunction(53, DeviceFunction.I2C1_DATA);
+
             //ICM20948.ICM20948 icm = new ICM20948.ICM20948(1);
             //icm.Start();
 
@@ -125,10 +128,37 @@ namespace Meteostanice
             //    Debug.WriteLine($"Lux: {lux.Lux}");
             //    Thread.Sleep(1000);
             //}
+            //GpioController gpio = new GpioController();
+            //var pin = gpio.OpenPin(54, PinMode.Output);
+            //while (true)
+            //{
+            //    Debug.WriteLine("Pin 54 HIGH");
+            //    pin.Write(PinValue.High);
+            //    Thread.Sleep(10000);
+            //    Debug.WriteLine("Pin 54 LOW");
+            //    pin.Write(PinValue.Low);
+            //    Thread.Sleep(10000);
+            //}
 
-            
+            Configuration.SetPinFunction(32, DeviceFunction.I2C1_CLOCK);
+            Configuration.SetPinFunction(31, DeviceFunction.I2C1_DATA);
 
-            SHT3x sht3x = new SHT3x(1);
+            Configuration.SetPinFunction(54, DeviceFunction.I2C2_CLOCK);
+            Configuration.SetPinFunction(53, DeviceFunction.I2C2_DATA);
+
+            // PI4IOE5V6408 expander test (addresses commonly 0x43 or 0x44)
+            try
+            {
+                var expander = new TekuSP.Drivers.PI4IOE5V6408.PI4IOE5V6408(1, 0x43);
+                expander.Start();
+                expander.WritePin(2, PinValue.High); 
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("PI4IOE5V6408 not detected: " + ex.Message);
+            }
+
+            SHT3x sht3x = new SHT3x(2);
             sht3x.Start();
             Debug.WriteLine($"Device {sht3x.ReadManufacturerId()}");
             sht3x.StartSingleShotMeasurement(Repeatability.High, MeasurementMode.SingleShot);
@@ -146,7 +176,6 @@ namespace Meteostanice
                 Thread.Sleep(2000);
             }
         }
-
         #endregion Public Methods
     }
 }

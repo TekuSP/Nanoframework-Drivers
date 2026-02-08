@@ -391,7 +391,9 @@ namespace TekuSP.Drivers.SHT3x
         /// <returns>Operation status.</returns>
         public Status SoftReset()
         {
-            return WriteCommand(Commands.SoftReset);
+            Status status = WriteCommand(Commands.SoftReset);
+            Thread.Sleep(10);
+            return status;
         }
 
         /// <summary>
