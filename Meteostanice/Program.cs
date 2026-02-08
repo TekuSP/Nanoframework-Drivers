@@ -149,7 +149,7 @@ namespace Meteostanice
             // PI4IOE5V6408 expander test (addresses commonly 0x43 or 0x44)
             try
             {
-                var expander = new TekuSP.Drivers.PI4IOE5V6408.PI4IOE5V6408(1, 0x43);
+                var expander = new PI4IOE5V6408(1, 0x43);
                 expander.Start();
                 expander.WritePin(2, PinValue.High); 
             }
