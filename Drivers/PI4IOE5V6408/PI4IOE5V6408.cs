@@ -5,7 +5,7 @@ using TekuSP.Drivers.DriverBase.Enums;
 using TekuSP.Drivers.PI4IOE5V6408.Enums;
 using System.Device.Gpio;
 using TekuSP.Drivers.DriverBase.Interfaces;
-using TekuSP.Drivers.PI4IOE5V6408.Structs;
+using TekuSP.Drivers.PI4IOE5V6408.Helpers;
 
 namespace TekuSP.Drivers.PI4IOE5V6408
 {

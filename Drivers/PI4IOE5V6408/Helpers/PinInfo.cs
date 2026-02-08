@@ -1,10 +1,10 @@
-namespace TekuSP.Drivers.PI4IOE5V6408.Structs
+namespace TekuSP.Drivers.PI4IOE5V6408.Helpers
 {
     /// <summary>
     /// Simple struct to return a pin value and direction together.
     /// nanoFramework does not support tuples yet, so use this container.
     /// </summary>
-    public struct PinInfo
+    public class PinInfo
     {
         /// <summary>
         /// Current pin logical level.

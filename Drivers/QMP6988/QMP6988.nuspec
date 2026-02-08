@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>TekuSP.Drivers.QMP6988</id>
+    <title>TekuSP I2C Driver for QST QMP6988 pressure sensor</title>
+    <version>$version$</version>
+    <!--<version>$version$</version>-->
+    <authors>Richard "TekuSP" Torhan</authors>
+    <owners>Richard "TekuSP" Torhan</owners>
+    <license type="file">LICENSE.md</license>
+    <projectUrl>https://github.com/TekuSP/Meteostanice-CSharp</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <developmentDependency>false</developmentDependency>
+    <description>
+      Nuget Package for Nanoframework, used for: QST QMP6988 pressure sensor
+    </description>
+    <releaseNotes>
+    </releaseNotes>
+    <repository type="git" url="https://github.com/TekuSP/Meteostanice-CSharp" commit="$commit$" />
+    <copyright>Copyright (c) Richard Torhan 2026</copyright>
+    <tags>drivers i2c tekusp net netmf nf nanoframework QMP6988 pressure</tags>
+    <dependencies>
+      <dependency id="TekuSP.Drivers.DriverBase" version="$version$" />
+      <dependency id="TekuSP.Drivers.DriverBase.Interfaces.Pressure" version="$version$" />
+      <dependency id="TekuSP.Drivers.DriverBase.Interfaces.Temperature" version="$version$" />
+      <dependency id="TekuSP.Drivers.DriverBaseI2C" version="$version$" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.17.11" />
+      <dependency id="nanoFramework.System.Device.I2c" version="1.1.29" />
+      <dependency id="nanoFramework.System.Math" version="1.5.116" />
+      <dependency id="UnitsNet.nanoFramework.Pressure" version="5.75.0" />
+      <dependency id="UnitsNet.nanoFramework.Temperature" version="5.75.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\TekuSP.Drivers.QMP6988.*" target="lib" />
+    <file src="../../LICENSE.md" target="" />
+  </files>
+</package>
