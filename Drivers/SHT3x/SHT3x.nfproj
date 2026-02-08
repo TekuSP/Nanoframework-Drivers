@@ -22,6 +22,7 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Constants\SHT3xConstants.cs" />
+    <Compile Include="Enums\PeriodicMeasurementsRate.cs" />
     <Compile Include="Enums\Status.cs" />
     <Compile Include="Enums\MeasurementDelayMs.cs" />
     <Compile Include="Enums\Repeatability.cs" />

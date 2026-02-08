@@ -1,9 +1,9 @@
-namespace TekuSP.Drivers.DriverBase.Enums
+﻿namespace TekuSP.Drivers.SHT3x.Enums
 {
     /// <summary>
     /// Common periodic measurement rates.
     /// </summary>
-    public enum PeriodicMeasurementRate
+    public enum PeriodicMeasurementRate : byte
     {
         /// <summary>
         /// One measurement every two seconds (0.5 Hz).

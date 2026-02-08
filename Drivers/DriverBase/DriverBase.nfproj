@@ -22,7 +22,6 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Enums\CommunicationType.cs" />
-    <Compile Include="Enums\PeriodicMeasurementRate.cs" />
     <Compile Include="Event Handlers\EventHandlers.cs" />
     <Compile Include="Helpers\BitHelper.cs" />
     <Compile Include="Interfaces\IADCModule.cs" />

@@ -15,13 +15,13 @@ namespace TekuSP.Drivers.DriverBase.Interfaces
         /// <summary>
         /// Gets the configured measurement rate.
         /// </summary>
-        PeriodicMeasurementRate PeriodicMeasurementRate { get; }
+        byte PeriodicMeasurementRate { get; }
 
         /// <summary>
         /// Starts periodic measurement at the specified rate.
         /// </summary>
         /// <param name="measurementRate">Measurement rate.</param>
-        void StartPeriodicMeasurement(PeriodicMeasurementRate measurementRate);
+        void StartPeriodicMeasurement(byte measurementRate);
 
         /// <summary>
         /// Stops periodic measurement.
