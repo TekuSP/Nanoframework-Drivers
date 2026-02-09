@@ -4,7 +4,7 @@ using UnitsNet.Units;
 namespace TekuSP.Drivers.DriverBase.Interfaces
 {
     /// <summary>
-    /// Advanced CO2 sensor capabilities beyond basic concentration reading.
+    /// Altitude sensor capabilities interface.
     /// </summary>
     public interface IAltitudeSensor
     {

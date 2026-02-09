@@ -4,7 +4,6 @@ namespace TekuSP.Drivers.DriverBase.Interfaces
 {
     /// <summary>
     /// Generic interface to control oversampling settings on a sensor.
-    /// Uses raw byte values to avoid introducing device-specific enums into DriverBase.
     /// </summary>
     public interface IOversamplingControl
     {
