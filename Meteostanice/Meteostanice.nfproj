@@ -33,6 +33,7 @@
     <ProjectReference Include="..\Drivers\ICM20948\ICM20948.nfproj" />
     <ProjectReference Include="..\Drivers\LPS22HB\LPS22HB.nfproj" />
     <ProjectReference Include="..\Drivers\MHZ19B\MHZ19B.nfproj" />
+    <ProjectReference Include="..\Drivers\QMP6988\QMP6988.nfproj" />
     <ProjectReference Include="..\Drivers\SHTC3\SHTC3.nfproj" />
     <ProjectReference Include="..\Drivers\SHT3x\SHT3x.nfproj" />
     <ProjectReference Include="..\Drivers\SSD1331\SSD1331.nfproj" />
@@ -91,6 +92,9 @@
     </Reference>
     <Reference Include="UnitsNet.VolumeConcentration, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\UnitsNet.nanoFramework.VolumeConcentration.5.75.0\lib\UnitsNet.VolumeConcentration.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Length, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\UnitsNet.nanoFramework.Length.5.75.0\lib\UnitsNet.Length.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

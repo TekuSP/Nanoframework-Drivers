@@ -40,6 +40,8 @@
     <Compile Include="Interfaces\ITouchSensor.cs" />
     <Compile Include="Interfaces\IVersion.cs" />
     <Compile Include="Interfaces\IVersionInfo.cs" />
+    <Compile Include="Interfaces\IIirFilterControl.cs" />
+    <Compile Include="Interfaces\IOversamplingControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

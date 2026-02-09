@@ -22,11 +22,13 @@
     <Compile Include="Enums\Oversampling.cs" />
     <Compile Include="Enums\PowerMode.cs" />
     <Compile Include="Enums\StandbyTime.cs" />
+    <Compile Include="Enums\OtpRegister.cs" />
     <Compile Include="QMP6988.cs" />
     <Compile Include="Enums\ControlRegister.cs" />
     <Compile Include="Enums\DataRegister.cs" />
     <Compile Include="Helpers\CalibrationData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Constants\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib, Version=1.17.11.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
@@ -43,6 +45,12 @@
     </Reference>
     <Reference Include="UnitsNet.Temperature, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\UnitsNet.nanoFramework.Temperature.5.75.0\lib\UnitsNet.Temperature.dll</HintPath>
+    </Reference>
+     <Reference Include="UnitsNet.Duration, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Duration.5.75.0\lib\UnitsNet.Duration.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Length, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Length.5.75.0\lib\UnitsNet.Length.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

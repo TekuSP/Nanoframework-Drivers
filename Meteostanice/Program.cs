@@ -11,6 +11,7 @@ using TekuSP.Drivers.SHT3x.Enums;
 using TekuSP.Drivers.TCS34725;
 using TekuSP.Drivers.PI4IOE5V6408;
 using System.Device.Gpio;
+using TekuSP.Drivers.QMP6988;
 
 namespace Meteostanice
 {
@@ -160,19 +161,35 @@ namespace Meteostanice
 
             SHT3x sht3x = new SHT3x(2);
             sht3x.Start();
-            Debug.WriteLine($"Device {sht3x.ReadManufacturerId()}");
+            Debug.WriteLine($"Device SHT3x: {sht3x.ReadManufacturerId()}");
             sht3x.StartSingleShotMeasurement(Repeatability.High, MeasurementMode.SingleShot);
+
+            QMP6988 qmp = new QMP6988(2);
+            qmp.Start();
+
+            Debug.WriteLine($"Device QMP6988: {qmp.ReadManufacturerId()}");
+
 
             while (true)
             {
                 var temperature = sht3x.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
                 var humidity = sht3x.ReadHumidity(UnitsNet.Units.RelativeHumidityUnit.Percent);
-                Debug.WriteLine($"Temperature: {temperature.DegreesCelsius} C");
-                Debug.WriteLine($"Humidity: {humidity.Percent} %");
+                Debug.WriteLine($"SHT3x: Temperature: {temperature.DegreesCelsius} C");
+                Debug.WriteLine($"SHT3x:  Humidity: {humidity.Percent} %");
 
                 var status = sht3x.GetStatus(out SHT3xStatus deviceStatus);
-                Debug.WriteLine($"Status: {status}, Heater: {deviceStatus.HeaterActive}, Alert: {deviceStatus.AlertPending}");
+                Debug.WriteLine($"SHT3x: Status: {status}, Heater: {deviceStatus.HeaterActive}, Alert: {deviceStatus.AlertPending}");
 
+                var qmpTemperature = qmp.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
+                var qmpPressure = qmp.ReadPressure(UnitsNet.Units.PressureUnit.Pascal);
+                Debug.WriteLine($"QMP6988: Temperature: {qmpTemperature.DegreesCelsius} C");
+                Debug.WriteLine($"QMP6988: Pressure: {qmpPressure.Pascals} Pa");
+                Debug.WriteLine($"QMP6988: Altitude {qmp.CalculateAltitude(qmpPressure, qmpTemperature, UnitsNet.Units.LengthUnit.Meter).Meters} m");
+
+                var rawTemperature = qmp.ReadTemperature();
+                var rawPressure = qmp.ReadPressure();
+                Debug.WriteLine($"QMP6988: Raw Temperature: {rawTemperature}");
+                Debug.WriteLine($"QMP6988: Raw Pressure: {rawPressure}");
                 Thread.Sleep(2000);
             }
         }

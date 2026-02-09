@@ -27,7 +27,16 @@ namespace TekuSP.Drivers.QMP6988.Helpers
         /// <param name="b12">Pressure Coefficient b12.</param>
         /// <param name="b21">Pressure Coefficient b21.</param>
         /// <param name="bp3">Pressure Coefficient bp3.</param>
-        public CalibrationData(uint a0, short a1, short a2, uint b00, short bt1, short bt2, short bp1, short b11, short bp2, short b12, short b21, short bp3)
+        // Internal fixed-point converted coefficients used by the integer compensation routines.
+        // Match C++ M5Stack types: a0,b00,a1,a2 are 32-bit (int); higher-order bt*/bp* are 64-bit.
+        private int IkA0;
+        private int IkB00;
+        private int IkA1;
+        private int IkA2;
+        private long IkBt1; private long IkBt2; private long IkBp1; private long IkB11;
+        private long IkBp2; private long IkB12; private long IkB21; private long IkBp3;
+
+        public CalibrationData(int a0, short a1, short a2, int b00, short bt1, short bt2, short bp1, short b11, short bp2, short b12, short b21, short bp3)
         {
             A0 = a0;
             A1 = a1;
@@ -41,16 +50,19 @@ namespace TekuSP.Drivers.QMP6988.Helpers
             B12 = b12;
             B21 = b21;
             Bp3 = bp3;
+
+            // Precompute internal integer-format coefficients following the reference M5Stack implementation.
+            ComputeInternalCalibration();
         }
 
         // --- Temperature Coefficients ---
 
         /// <summary>
         /// Temperature Coefficient a0.
-        /// <para>20-bit unsigned integer.</para>
-        /// <para>Represents the base temperature offset.</para>
+        /// <para>20-bit signed integer (two's complement).</para>
+        /// <para>Represents the base temperature offset (fixed-point Q16 scaling).</para>
         /// </summary>
-        public uint A0
+        public int A0
         {
             get; set;
         }
@@ -79,10 +91,10 @@ namespace TekuSP.Drivers.QMP6988.Helpers
 
         /// <summary>
         /// Pressure Coefficient b00.
-        /// <para>20-bit unsigned integer.</para>
-        /// <para>Represents the base pressure offset.</para>
+        /// <para>20-bit signed integer (two's complement).</para>
+        /// <para>Represents the base pressure offset (fixed-point Q16 scaling).</para>
         /// </summary>
-        public uint B00
+        public int B00
         {
             get; set;
         }
@@ -184,14 +196,11 @@ namespace TekuSP.Drivers.QMP6988.Helpers
             // Note: The coefficients must be scaled by their respective powers of 2.
             // ---------------------------------------------------------
 
-            // A0 is scaled by 2^-4 (16)
-            // A1 is scaled by 2^-19
-            // A2 is scaled by 2^-35
-
-            double celsius = (A0 / 16.0) +
-                          (A1 * dt / 524288.0) +
-                          (A2 * (dt * dt) / 34359738368.0);
-
+            // Use the integer fixed-point algorithm ported from the reference implementation
+            // (M5Stack QMP6988 driver) to get consistent results with device-specific scaling.
+            int dT = (int)(rawTemperature - 8388608.0);
+            short tInt = ConvTx02e(dT);
+            double celsius = tInt / 256.0; // per reference: T = T_int / 256
             return Temperature.FromDegreesCelsius(celsius).ToUnit(targetUnit);
         }
 
@@ -213,24 +222,90 @@ namespace TekuSP.Drivers.QMP6988.Helpers
             // Formula is a mix of linear, quadratic, and cross-term (temp * press) parts.
             // ---------------------------------------------------------
 
-            // Basic terms
-            double press = (B00 / 16.0) +
-                           (Bt1 * dt / 524288.0) +
-                           (Bp1 * dp / 524288.0);
+            // Port of the reference integer pressure algorithm (M5Stack QMP6988 driver)
+            int dP = (int)(rawPressure - 8388608.0);
+            int dT = (int)(rawTemperature - 8388608.0);
+            short tx = ConvTx02e(dT);
+            int pInt = GetPressure02e(dP, tx);
+            double pascals = pInt / 16.0; // per reference: pressure = P_int / 16
+            return Pressure.FromPascals(pascals).ToUnit(targetUnit);
+        }
 
-            // Quadratic and Cross terms (scaled by 2^-35)
-            // Note: 2^35 = 34,359,738,368
-            press += (B11 * dt * dp) / 34359738368.0;
-            press += (Bt2 * (dt * dt)) / 34359738368.0;
-            press += (Bp2 * (dp * dp)) / 34359738368.0;
+        private void ComputeInternalCalibration()
+        {
+            // Follow M5Stack reference conversions (integer fixed-point)
+            IkA0 = A0; // 20Q4 per reference comments (stored as 32-bit)
+            IkB00 = B00; // 32-bit
+            IkA1 = (int)(3608L * A1 - 1731677965L);   // 31Q23 -> store as 32-bit
+            IkA2 = (int)(16889L * A2 - 87619360L);    // 30Q47 -> store as 32-bit
 
-            // Cubic and Higher Order terms (scaled by 2^-50)
-            // Note: 2^50 = 1,125,899,906,842,624
-            press += (B12 * dp * (dt * dt)) / 1125899906842624.0;
-            press += (B21 * dt * (dp * dp)) / 1125899906842624.0;
-            press += (Bp3 * (dp * dp * dp)) / 1125899906842624.0;
+            IkBt1 = 2982L * Bt1 + 107370906L;  // 28Q15 (64-bit)
+            IkBt2 = 329854L * Bt2 + 108083093L; // 34Q38
+            IkBp1 = 19923L * Bp1 + 1133836764L; // 31Q20
+            IkB11 = 2406L * B11 + 118215883L;   // 28Q34
+            IkBp2 = 3079L * Bp2 - 181579595L;   // 29Q43
+            IkB12 = 6846L * B12 + 85590281L;    // 29Q53
+            IkB21 = 13836L * B21 + 79333336L;   // 29Q60
+            IkBp3 = 2915L * Bp3 + 157155561L;   // 28Q65
+        }
 
-            return Pressure.FromPascals(press).ToUnit(targetUnit);
+        private short ConvTx02e(int dt)
+        {
+            long wk1, wk2;
+            wk1 = ((long)IkA1) * (long)dt;
+            wk2 = (((long)IkA2) * (long)dt) >> 14;
+            wk2 = (wk2 * (long)dt) >> 10;
+            wk2 = ((wk1 + wk2) / 32767L) >> 19;
+            short ret = (short)(((long)IkA0 + wk2) >> 4);
+            return ret;
+        }
+
+        private int GetPressure02e(int dp, short tx)
+        {
+            // Reimplemented using the same stepwise operations as shown in the diagnostic breakdown
+            // to ensure identical intermediate results and avoid subtle ordering/truncation differences.
+            long wk1 = IkBt1 * (long)tx;
+            long wk2 = (IkBp1 * (long)dp) >> 5;
+            wk1 += wk2;
+
+            // first-stage higher-order terms
+            long tmp = (IkBt2 * (long)tx) >> 1;
+            tmp = (tmp * (long)tx) >> 8;
+            long wk3 = tmp;
+
+            long t2 = (IkB11 * (long)tx) >> 4;
+            t2 = (t2 * (long)dp) >> 1;
+            wk3 += t2;
+
+            long t3 = (IkBp2 * (long)dp) >> 13;
+            t3 = (t3 * (long)dp) >> 1;
+            wk3 += t3;
+
+            // reduce stage1
+            long stage1 = (wk1 + (wk3 >> 14)) / 32767L;
+            long stage1_q4 = stage1 >> 11; // reduce to Q4
+
+            // second stage terms
+            long s2 = IkB12 * (long)tx;
+            s2 = (s2 * (long)tx) >> 22;
+            s2 = (s2 * (long)dp) >> 1;
+
+            long s3 = IkB21 * (long)tx;
+            s3 = (s3 >> 6);
+            s3 = (s3 * (long)dp) >> 23;
+            s3 = (s3 * (long)dp) >> 1;
+
+            long s4 = IkBp3 * (long)dp;
+            s4 = (s4 >> 12);
+            s4 = (s4 * (long)dp) >> 23;
+            s4 = (s4 * (long)dp);
+
+            long stage2 = (s2 + s3 + s4) >> 15;
+            long stage2_div = stage2 / 32767L;
+            long stage2_q4 = stage2_div >> 11;
+
+            long final_int = stage1_q4 + stage2_q4 + IkB00;
+            return (int)final_int;
         }
     }
 }
