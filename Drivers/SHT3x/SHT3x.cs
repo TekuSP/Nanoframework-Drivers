@@ -437,10 +437,10 @@ namespace TekuSP.Drivers.SHT3x
         /// <inheritdoc/>
         void IPeriodicMeasurement.StartPeriodicMeasurement(byte measurementRate)
         {
-            if (measurementRate != (byte)PeriodicMeasurementRate.EveryTwoSeconds ||
-                measurementRate != (byte)PeriodicMeasurementRate.OnePerSecond ||
-                measurementRate != (byte)PeriodicMeasurementRate.TwoPerSecond ||
-                measurementRate != (byte)PeriodicMeasurementRate.FourPerSecond ||
+            if (measurementRate != (byte)PeriodicMeasurementRate.EveryTwoSeconds &&
+                measurementRate != (byte)PeriodicMeasurementRate.OnePerSecond &&
+                measurementRate != (byte)PeriodicMeasurementRate.TwoPerSecond &&
+                measurementRate != (byte)PeriodicMeasurementRate.FourPerSecond &&
                 measurementRate != (byte)PeriodicMeasurementRate.TenPerSecond)
             {
                 throw new ArgumentException("Invalid measurement rate", nameof(measurementRate));
