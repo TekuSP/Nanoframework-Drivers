@@ -21,7 +21,7 @@ namespace TekuSP.Drivers.DriverBase.Interfaces
         /// <returns>Target unit pressure from sensor.</returns>
         Pressure CalculatePressure(PressureUnit type, double rawPressure);
         /// <summary>
-        /// Reads pressure from sensor and calculates pressure to your unit
+        /// Reads pressure from sensor and calculates pressure to your unit, always calls <see cref="CalculatePressure(PressureUnit, double)"/>
         /// </summary>
         /// <param name="type">Pressure unit type.</param>
         /// <returns>Target unit pressure from sensor.</returns>

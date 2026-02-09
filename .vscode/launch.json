@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "nanoframework",
+            "request": "launch",
+            "name": "nanoFramework: Launch and Debug",
+            "program": "${workspaceFolder}/Meteostanice/bin/Debug/",
+            "device": "COM9",
+            "stopOnEntry": true,
+            "deployAssemblies": true,
+            "assembliesPath": "${workspaceFolder}/Meteostanice/bin/Debug",
+            "verbose": true
+        },
+        {
+            "type": "nanoframework",
+            "request": "attach",
+            "name": "nanoFramework: Attach to Device",
+            "device": "COM9",
+            "program": "${workspaceFolder}/Meteostanice/bin/Debug"
+        }
+    ]
+}
