@@ -307,34 +307,34 @@
       <HintPath>..\..\packages\nanoFramework.System.Math.1.5.116\lib\System.Math.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.ElectricCurrent">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.ElectricCurrent.6.0.0-pre017\lib\UnitsNet.ElectricCurrent.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.ElectricCurrent.6.0.0-pre019\lib\UnitsNet.ElectricCurrent.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Energy">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.Energy.6.0.0-pre017\lib\UnitsNet.Energy.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Energy.6.0.0-pre019\lib\UnitsNet.Energy.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Power">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.Power.6.0.0-pre017\lib\UnitsNet.Power.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Power.6.0.0-pre019\lib\UnitsNet.Power.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Pressure">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.Pressure.6.0.0-pre017\lib\UnitsNet.Pressure.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Pressure.6.0.0-pre019\lib\UnitsNet.Pressure.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Ratio">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.Ratio.6.0.0-pre017\lib\UnitsNet.Ratio.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Ratio.6.0.0-pre019\lib\UnitsNet.Ratio.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.RelativeHumidity">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.RelativeHumidity.6.0.0-pre017\lib\UnitsNet.RelativeHumidity.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.RelativeHumidity.6.0.0-pre019\lib\UnitsNet.RelativeHumidity.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.RotationalSpeed">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.RotationalSpeed.6.0.0-pre017\lib\UnitsNet.RotationalSpeed.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.RotationalSpeed.6.0.0-pre019\lib\UnitsNet.RotationalSpeed.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Temperature">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.Temperature.6.0.0-pre017\lib\UnitsNet.Temperature.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Temperature.6.0.0-pre019\lib\UnitsNet.Temperature.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.VolumeConcentration">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.VolumeConcentration.6.0.0-pre017\lib\UnitsNet.VolumeConcentration.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.VolumeConcentration.6.0.0-pre019\lib\UnitsNet.VolumeConcentration.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.VolumeFlow">
-      <HintPath>..\..\packages\UnitsNet.nanoFramework.VolumeFlow.6.0.0-pre017\lib\UnitsNet.VolumeFlow.dll</HintPath>
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.VolumeFlow.6.0.0-pre019\lib\UnitsNet.VolumeFlow.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
