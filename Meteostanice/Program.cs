@@ -1,10 +1,17 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Device.I2c;
+using System.Diagnostics;
 using System.Threading;
 
 using TekuSP.Drivers.CST816D;
 
 using nanoFramework.Hardware.Esp32;
+using TekuSP.Drivers.SHT3x;
+using TekuSP.Drivers.SHT3x.Enums;
 using TekuSP.Drivers.TCS34725;
+using TekuSP.Drivers.PI4IOE5V6408;
+using System.Device.Gpio;
+using TekuSP.Drivers.QMP6988;
 
 namespace Meteostanice
 {
@@ -63,16 +70,15 @@ namespace Meteostanice
             //Debug.WriteLine($"Initialized device {manu} {devID} - {serial}");
             //while (true)
             //{
-            //    temperature = lPS22HB.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius);
-            //    pressure = lPS22HB.ReadPressure(DriverBase.Enums.PressureType.mBar);
-            //    Debug.WriteLine($"Temperature is: {temperature} C");
-            //    Debug.WriteLine($"Pressure is: {pressure} mBar");
+            //    var temperature = lPS22HB.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
+            //    var pressure = lPS22HB.ReadPressure(UnitsNet.Units.PressureUnit.Millibar);
+            //    Debug.WriteLine($"Temperature is: {temperature.DegreesCelsius} C");
+            //    Debug.WriteLine($"Pressure is: {pressure.Millibars} mBar");
             //    Thread.Sleep(5000);
             //}
             //Configuration.SetPinFunction(40, DeviceFunction.I2C1_CLOCK);
             //Configuration.SetPinFunction(Gpio.IO39, DeviceFunction.I2C1_DATA);
-            Configuration.SetPinFunction(Gpio.IO23, DeviceFunction.I2C1_CLOCK);
-            Configuration.SetPinFunction(Gpio.IO18, DeviceFunction.I2C1_DATA);
+
             //ICM20948.ICM20948 icm = new ICM20948.ICM20948(1);
             //icm.Start();
 
@@ -93,8 +99,10 @@ namespace Meteostanice
             //Debug.WriteLine($"Device {sHTC3.ReadManufacturerId()} {sHTC3.ReadDeviceId()} - {sHTC3.ReadSerialNumber()}");
             //while (true)
             //{
-            //    Debug.WriteLine($"Temperature is: {sHTC3.ReadTemperature(DriverBase.Enums.TemperatureUnit.Celsius)} C");
-            //    Debug.WriteLine($"Humidity is: {sHTC3.ReadHumidity(DriverBase.Enums.HumidityType.Relative)} %");
+            //    var temperature = sHTC3.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
+            //    var humidity = sHTC3.ReadHumidity(UnitsNet.Units.RelativeHumidityUnit.Percent);
+            //    Debug.WriteLine($"Temperature is: {temperature.DegreesCelsius} C");
+            //    Debug.WriteLine($"Humidity is: {humidity.Percent} %");
             //    Thread.Sleep(5000);
             //}
             //CST816D.CST816D cst = new CST816D.CST816D(1, 41, 42);
@@ -108,21 +116,83 @@ namespace Meteostanice
             //cst.Start();
             //Debug.WriteLine("Version: " + cst.ReadVersion());
             //Debug.WriteLine("Version info: " + cst.ReadVersionInfo());
-            TCS34725 colorSensor = new TCS34725(1, TekuSP.Drivers.TCS34725.Enums.IntegrationTime.TCS34725_INTEGRATIONTIME_101MS, TekuSP.Drivers.TCS34725.Enums.Gain.TCS34725_GAIN_4X);
-            colorSensor.Start();
-            Debug.WriteLine(colorSensor.ReadDeviceId());
+            //TCS34725 colorSensor = new TCS34725(1, TekuSP.Drivers.TCS34725.Enums.IntegrationTime.TCS34725_INTEGRATIONTIME_101MS, TekuSP.Drivers.TCS34725.Enums.Gain.TCS34725_GAIN_4X);
+            //colorSensor.Start();
+            //Debug.WriteLine(colorSensor.ReadDeviceId());
+            //while (true)
+            //{
+            //    var colors = colorSensor.GetRGB();
+            //    var kelvin = colorSensor.GetColorTemperature();
+            //    var lux = colorSensor.GetLux();
+            //    Debug.WriteLine($"Colors, R: {colors.R} G: {colors.G} B: {colors.B}");
+            //    Debug.WriteLine($"Kelvins: {kelvin}");
+            //    Debug.WriteLine($"Lux: {lux.Lux}");
+            //    Thread.Sleep(1000);
+            //}
+            //GpioController gpio = new GpioController();
+            //var pin = gpio.OpenPin(54, PinMode.Output);
+            //while (true)
+            //{
+            //    Debug.WriteLine("Pin 54 HIGH");
+            //    pin.Write(PinValue.High);
+            //    Thread.Sleep(10000);
+            //    Debug.WriteLine("Pin 54 LOW");
+            //    pin.Write(PinValue.Low);
+            //    Thread.Sleep(10000);
+            //}
+
+            Configuration.SetPinFunction(32, DeviceFunction.I2C1_CLOCK);
+            Configuration.SetPinFunction(31, DeviceFunction.I2C1_DATA);
+
+            Configuration.SetPinFunction(54, DeviceFunction.I2C2_CLOCK);
+            Configuration.SetPinFunction(53, DeviceFunction.I2C2_DATA);
+
+            // PI4IOE5V6408 expander test (addresses commonly 0x43 or 0x44)
+            try
+            {
+                var expander = new PI4IOE5V6408(1, 0x43);
+                expander.Start();
+                expander.WritePin(2, PinValue.High); 
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("PI4IOE5V6408 not detected: " + ex.Message);
+            }
+
+            SHT3x sht3x = new SHT3x(2);
+            sht3x.Start();
+            Debug.WriteLine($"Device SHT3x: {sht3x.ReadManufacturerId()}");
+            sht3x.StartSingleShotMeasurement(Repeatability.High, MeasurementMode.SingleShot);
+
+            QMP6988 qmp = new QMP6988(2);
+            qmp.Start();
+
+            Debug.WriteLine($"Device QMP6988: {qmp.ReadManufacturerId()}");
+
+
             while (true)
             {
-                var colors = colorSensor.GetRGB();
-                var kelvin = colorSensor.GetColorTemperature();
-                var lux = colorSensor.GetLux();
-                Debug.WriteLine($"Colors, R: {colors.R} G: {colors.G} B: {colors.B}");
-                Debug.WriteLine($"Kelvins: {kelvin}");
-                Debug.WriteLine($"Lux: {lux}");
-                Thread.Sleep(1000);
+                var temperature = sht3x.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
+                var humidity = sht3x.ReadHumidity(UnitsNet.Units.RelativeHumidityUnit.Percent);
+                Debug.WriteLine($"SHT3x: Temperature: {temperature.DegreesCelsius} C");
+                Debug.WriteLine($"SHT3x:  Humidity: {humidity.Percent} %");
+
+                var status = sht3x.GetStatus(out SHT3xStatus deviceStatus);
+                Debug.WriteLine($"SHT3x: Status: {status}, Heater: {deviceStatus.HeaterActive}, Alert: {deviceStatus.AlertPending}");
+
+                var qmpTemperature = qmp.ReadTemperature(UnitsNet.Units.TemperatureUnit.DegreeCelsius);
+                var qmpPressure = qmp.ReadPressure(UnitsNet.Units.PressureUnit.Pascal);
+                Debug.WriteLine($"QMP6988: Temperature: {qmpTemperature.DegreesCelsius} C");
+                Debug.WriteLine($"QMP6988: Pressure: {qmpPressure.Pascals} Pa");
+                Debug.WriteLine($"QMP6988: Altitude {qmp.CalculateAltitude(qmpPressure, qmpTemperature, UnitsNet.Units.LengthUnit.Meter).Meters} m");
+
+                var rawTemperature = qmp.ReadTemperature();
+                var rawPressure = qmp.ReadPressure();
+                Debug.WriteLine($"QMP6988: Raw Temperature: {rawTemperature}");
+                Debug.WriteLine($"QMP6988: Raw Pressure: {rawPressure}");
+                Thread.Sleep(2000);
             }
         }
-
         #endregion Public Methods
     }
 }

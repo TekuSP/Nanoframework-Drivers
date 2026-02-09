@@ -2,11 +2,14 @@
 using TekuSP.Drivers.DriverBase.Event_Handlers;
 using TekuSP.Drivers.DriverBase.Interfaces;
 
+using System;
 using System.Device.Gpio;
 using System.Threading;
 
 using TekuSP.Drivers.TCS34725.Enums;
 using System.Device.I2c;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace TekuSP.Drivers.TCS34725
 {
@@ -25,12 +28,28 @@ namespace TekuSP.Drivers.TCS34725
 
         #region Public Constructors
 
+        /// <summary>
+        /// Initializes TCS34725 with default I2C settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="integrationTime">Integration time setting.</param>
+        /// <param name="gain">Gain setting.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public TCS34725(int I2CBusID, IntegrationTime integrationTime, Gain gain, int deviceAddress = 0x29) : base("TCS34725", I2CBusID, deviceAddress)
         {
             tcs34725IntegrationTime = integrationTime;
             tcs34725Gain = gain;
         }
 
+        /// <summary>
+        /// Initializes TCS34725 with custom I2C settings.
+        /// </summary>
+        /// <param name="name">Device name.</param>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="connectionSettings">Custom I2C connection settings.</param>
+        /// <param name="integrationTime">Integration time setting.</param>
+        /// <param name="gain">Gain setting.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public TCS34725(string name, int I2CBusID, I2cConnectionSettings connectionSettings, IntegrationTime integrationTime, Gain gain, int deviceAddress) : base(name, I2CBusID, connectionSettings, deviceAddress)
         {
             tcs34725IntegrationTime = integrationTime;
@@ -41,14 +60,17 @@ namespace TekuSP.Drivers.TCS34725
 
         #region Public Events
 
+        /// <inheritdoc/>
         public event EventHandlers.IColorDataEventHandler OnLimitRawReached;
 
+        /// <inheritdoc/>
         public event EventHandlers.IColorDataEventHandler OnLimitReached;
 
         #endregion Public Events
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public int GetColorTemperature()
         {
             var data = GetRawData();
@@ -82,16 +104,19 @@ namespace TekuSP.Drivers.TCS34725
 
             if (r2 == 0)
                 return 0;
-            int cct = (3810 * (int)b2) / /** Color temp coefficient. */ (int)r2 + 1391; /** Color temp offset. */
+            int cct = (3810 * (int)b2) / /* Color temp coefficient. */ (int)r2 + 1391; /* Color temp offset. */
             return cct;
         }
 
-        public float GetLux()
+        /// <inheritdoc/>
+        public Illuminance GetLux()
         {
             var data = GetRawData();
-            return (-0.32466F * data.R) + (1.57837F * data.G) + (-0.73191F * data.B);
+            double lux = (-0.32466F * data.R) + (1.57837F * data.G) + (-0.73191F * data.B);
+            return Illuminance.FromLux(lux);
         }
 
+        /// <inheritdoc/>
         public IColorData GetRawData()
         {
             CRGBData data;
@@ -101,6 +126,7 @@ namespace TekuSP.Drivers.TCS34725
             return data;
         }
 
+        /// <inheritdoc/>
         public IColorData GetRGB()
         {
             CRGBData data = (CRGBData)GetRawData();
@@ -114,16 +140,19 @@ namespace TekuSP.Drivers.TCS34725
             return data;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             return ReadData(new byte[] { pointer });
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte[] data)
         {
             return I2CDevice.Read(data).BytesTransferred;
         }
 
+        /// <inheritdoc/>
         public override string ReadDeviceId()
         {
             Wakeup();
@@ -132,6 +161,7 @@ namespace TekuSP.Drivers.TCS34725
             return id;
         }
 
+        /// <inheritdoc/>
         public override string ReadManufacturerId()
         {
             return "TAOS";
@@ -150,6 +180,7 @@ namespace TekuSP.Drivers.TCS34725
             return returnBuffer[0];
         }
 
+        /// <inheritdoc/>
         public override string ReadSerialNumber()
         {
             return "Not supported";
@@ -178,9 +209,20 @@ namespace TekuSP.Drivers.TCS34725
             tcs34725Gain = gain;
         }
 
+        /// <inheritdoc/>
         public void SetGain(byte gain)
         {
             SetGain((Gain)gain);
+        }
+
+        /// <summary>
+        /// Sets integration time by mapping to the closest <see cref="IntegrationTime"/> value.
+        /// </summary>
+        /// <param name="integrationTime">Integration time.</param>
+        /// <remarks>Supported discrete values are defined by <see cref="IntegrationTime"/>.</remarks>
+        public void SetIntegrationTime(Duration integrationTime)
+        {
+            SetIntegrationTime(MapIntegrationTime(integrationTime));
         }
 
         /// <summary>
@@ -193,11 +235,13 @@ namespace TekuSP.Drivers.TCS34725
             tcs34725IntegrationTime = integrationTime;
         }
 
+        /// <inheritdoc/>
         public void SetIntegrationTime(byte integrationTime)
         {
             SetIntegrationTime((IntegrationTime)integrationTime);
         }
 
+        /// <inheritdoc/>
         public void SetInterrupt(bool enable, int interruptPin)
         {
             byte r = ReadRegister((byte)Enable.TCS34725_ENABLE);
@@ -221,6 +265,7 @@ namespace TekuSP.Drivers.TCS34725
             WriteRegister((byte)Enable.TCS34725_ENABLE, r);
         }
 
+        /// <inheritdoc/>
         public void SetInterruptLimits(int low, int high)
         {
             WriteRegister(0x04, (byte)(low & 0xFF));
@@ -229,12 +274,43 @@ namespace TekuSP.Drivers.TCS34725
             WriteRegister(0x07, (byte)(high >> 8));
         }
 
+        private static IntegrationTime MapIntegrationTime(Duration integrationTime)
+        {
+            double ms = integrationTime.Milliseconds;
+            double[] options = { 2.4, 24, 50, 101, 154, 700 };
+            IntegrationTime[] mappings =
+            {
+                IntegrationTime.TCS34725_INTEGRATIONTIME_2_4MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_24MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_50MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_101MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_154MS,
+                IntegrationTime.TCS34725_INTEGRATIONTIME_700MS
+            };
+
+            double bestDiff = double.MaxValue;
+            int bestIndex = 0;
+            for (int i = 0; i < options.Length; i++)
+            {
+                double diff = Math.Abs(ms - options[i]);
+                if (diff < bestDiff)
+                {
+                    bestDiff = diff;
+                    bestIndex = i;
+                }
+            }
+
+            return mappings[bestIndex];
+        }
+
+        /// <inheritdoc/>
         public void Sleep()
         {
             byte register = ReadRegister((byte)Enable.TCS34725_ENABLE);
             WriteRegister((byte)Enable.TCS34725_ENABLE, (byte)(register & ~((byte)Enable.TCS34725_ENABLE_PON | (byte)Enable.TCS34725_ENABLE_AEN)));
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             base.Start();
@@ -242,6 +318,7 @@ namespace TekuSP.Drivers.TCS34725
             SetGain(tcs34725Gain);
         }
 
+        /// <inheritdoc/>
         public void Wakeup()
         {
             WriteRegister((byte)Enable.TCS34725_ENABLE, (byte)Enable.TCS34725_ENABLE_PON);
@@ -250,6 +327,7 @@ namespace TekuSP.Drivers.TCS34725
             Thread.Sleep(((256 - GetIntegrationTimeMillis(tcs34725IntegrationTime)) * 12 / 5 + 1));
         }
 
+        /// <inheritdoc/>
         public override void WriteData(byte[] data)
         {
             I2CDevice.Write(data);

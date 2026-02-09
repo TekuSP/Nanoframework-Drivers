@@ -22,7 +22,7 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="CRGBData.cs" />
-    <Compile Include="Enums\AI.cs" />
+    <Compile Include="Enums\AutoIncrement.cs" />
     <Compile Include="Enums\Commands.cs" />
     <Compile Include="Enums\Config.cs" />
     <Compile Include="Enums\Data.cs" />
@@ -30,7 +30,7 @@
     <Compile Include="Enums\Gain.cs" />
     <Compile Include="Enums\GainControl.cs" />
     <Compile Include="Enums\IntegrationTime.cs" />
-    <Compile Include="Offsets.cs" />
+    <Compile Include="Constants\Offsets.cs" />
     <Compile Include="Enums\Pers.cs" />
     <Compile Include="Enums\Status.cs" />
     <Compile Include="Enums\Time.cs" />
@@ -40,6 +40,8 @@
   <ItemGroup>
     <ProjectReference Include="..\DriverBaseI2C\DriverBaseI2C.nfproj" />
     <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
+    <ProjectReference Include="..\DriverBaseInterfaces\Light\DriverBaseInterfaces.Light.nfproj" />
+    <ProjectReference Include="..\DriverBaseInterfaces\Sensitivity\DriverBaseInterfaces.Sensitivity.nfproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -57,6 +59,15 @@
     </Reference>
     <Reference Include="System.Device.I2c, Version=1.1.29.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\..\packages\nanoFramework.System.Device.I2c.1.1.29\lib\System.Device.I2c.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Math, Version=1.5.116.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.System.Math.1.5.116\lib\System.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Duration, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Duration.5.75.0\lib\UnitsNet.Duration.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Illuminance, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Illuminance.5.75.0\lib\UnitsNet.Illuminance.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />

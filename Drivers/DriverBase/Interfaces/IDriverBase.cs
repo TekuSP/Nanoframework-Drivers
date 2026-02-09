@@ -2,6 +2,9 @@
 
 namespace TekuSP.Drivers.DriverBase.Interfaces
 {
+    /// <summary>
+    /// Base driver contract for device communication and lifecycle.
+    /// </summary>
     public interface IDriverBase
     {
         #region Public Properties

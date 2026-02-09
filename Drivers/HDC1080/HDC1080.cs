@@ -1,9 +1,11 @@
 ﻿using TekuSP.Drivers.DriverBase;
-using TekuSP.Drivers.DriverBase.Enums;
 using TekuSP.Drivers.DriverBase.Interfaces;
+using TekuSP.Drivers.HDC1080.Constants;
 using System;
 using System.Threading;
 using System.Device.I2c;
+using UnitsNet;
+using UnitsNet.Units;
 
 namespace TekuSP.Drivers.HDC1080
 {
@@ -12,12 +14,6 @@ namespace TekuSP.Drivers.HDC1080
     /// </summary>
     public class HDC1080 : DriverBaseI2C, IAdvancedTemperatureSensor, IAdvancedHumiditySensor, IRegisterSensor, IDewPointSensor
     {
-        #region Private Fields
-
-        private const int ushortMaxValuePlusOne = 65536;
-
-        #endregion Private Fields
-
         #region Public Constructors
 
         /// <summary>
@@ -45,53 +41,36 @@ namespace TekuSP.Drivers.HDC1080
 
         #region Public Methods
 
-        public double CalculateDewPoint(TemperatureUnit dewPointType, double rawTemperature, double rawHumidity)
+        /// <inheritdoc/>
+        public Temperature CalculateDewPoint(TemperatureUnit dewPointType, double rawTemperature, double rawHumidity)
         {
             if (rawHumidity == 0)
                 throw new ArgumentException();
-            rawHumidity = Math.Log10(rawHumidity);
-            rawTemperature = CalculateTemperature(dewPointType, rawTemperature);
-            return 15927869 * (rawHumidity + ((1155072 * rawTemperature) / (15927869 + rawTemperature))) / (1155072 - rawHumidity - ((1155072 * rawTemperature) / (15927869 + rawTemperature)));
+            double humidityPercent = CalculateHumidity(RelativeHumidityUnit.Percent, rawHumidity).Percent;
+            double logHumidity = Math.Log10(humidityPercent);
+            double temperatureCelsius = CalculateTemperature(TemperatureUnit.DegreeCelsius, rawTemperature).DegreesCelsius;
+            double dewPointCelsius = 15927869 * (logHumidity + ((1155072 * temperatureCelsius) / (15927869 + temperatureCelsius))) / (1155072 - logHumidity - ((1155072 * temperatureCelsius) / (15927869 + temperatureCelsius)));
+            return Temperature.FromDegreesCelsius(dewPointCelsius).ToUnit(dewPointType);
         }
 
-        public double CalculateHumidity(HumidityType readHumidityType, double rawHumidity)
+        /// <inheritdoc/>
+        public RelativeHumidity CalculateHumidity(RelativeHumidityUnit readHumidityType, double rawHumidity)
         {
-            switch (readHumidityType)
-            {
-                case HumidityType.Relative:
-                    return (rawHumidity * 100) / ushortMaxValuePlusOne;
-
-                case HumidityType.RelativeQ16:
-                    return rawHumidity * 100;
-
-                default:
-                    throw new System.NotImplementedException();
-            }
+            double humidityPercent = (rawHumidity * 100) / HDC1080Constants.UShortMaxValuePlusOne;
+            return RelativeHumidity.FromPercent(humidityPercent).ToUnit(readHumidityType);
         }
 
-        public double CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
+        /// <inheritdoc/>
+        public Temperature CalculateTemperature(TemperatureUnit readTemperatureUnit, double rawTemperature)
         {
-            switch (readTemperatureUnit)
-            {
-                case TemperatureUnit.Celsius:
-                    return (rawTemperature * 165) - 40;
-
-                case TemperatureUnit.CelsiusQ16:
-                    return (rawTemperature * 165) - (40 * ushortMaxValuePlusOne);
-
-                case TemperatureUnit.Fahrenheit:
-                    return ((((rawTemperature * 165) - 40) * 9 / 5)) + (32 * ushortMaxValuePlusOne);
-
-                case TemperatureUnit.FahrenheitQ16:
-                    return ((((rawTemperature * 165) - (40 * ushortMaxValuePlusOne)) * 9 / 5)) + (32 * ushortMaxValuePlusOne);
-
-                default:
-                    throw new System.NotImplementedException();
-            }
+            double celsius = (rawTemperature * 165) - 40;
+            return Temperature.FromDegreesCelsius(celsius).ToUnit(readTemperatureUnit);
         }
 
-        public double GetAndCalculteDewPoint(TemperatureUnit dewPointType) => CalculateDewPoint(dewPointType, ReadTemperature(), ReadHumidity());
+        /// <inheritdoc/>
+        public Temperature GetAndCalculteDewPoint(TemperatureUnit dewPointType) => CalculateDewPoint(dewPointType, ReadTemperature(), ReadHumidity());
 
+        /// <inheritdoc/>
         public void HeatUp(int seconds)
         {
             SetHeater(true);
@@ -104,6 +83,7 @@ namespace TekuSP.Drivers.HDC1080
             SetHeater(false);
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             byte[] resultData = new byte[2];
@@ -113,20 +93,26 @@ namespace TekuSP.Drivers.HDC1080
             return resultData[0] << 8 | resultData[1];
         }
 
+        /// <inheritdoc/>
         public override long ReadData(params byte[] data)
         {
             I2CDevice.Read(data);
             return data.Length;
         }
 
+        /// <inheritdoc/>
         public override string ReadDeviceId() => ReadData(0xFF).ToString();
 
+        /// <inheritdoc/>
         public double ReadHumidity() => ReadData(0x01);
 
-        public double ReadHumidity(HumidityType readHumidityType) => CalculateHumidity(readHumidityType, ReadHumidity());
+        /// <inheritdoc/>
+        public RelativeHumidity ReadHumidity(RelativeHumidityUnit readHumidityType) => CalculateHumidity(readHumidityType, ReadHumidity());
 
+        /// <inheritdoc/>
         public override string ReadManufacturerId() => ReadData(0xFE).ToString();
 
+        /// <inheritdoc/>
         public IRegister ReadRegister()
         {
             HDC1080_Register register = new HDC1080_Register();
@@ -134,12 +120,16 @@ namespace TekuSP.Drivers.HDC1080
             return register;
         }
 
+        /// <inheritdoc/>
         public override string ReadSerialNumber() => $"{ReadData(0xFB)}{ReadData(0xFC)}{ReadData(0xFD)}";
 
+        /// <inheritdoc/>
         public double ReadTemperature() => (ReadData(0x00) / 65536f);
 
-        public double ReadTemperature(TemperatureUnit readTemperatureUnit) => CalculateTemperature(readTemperatureUnit, ReadTemperature());
+        /// <inheritdoc/>
+        public Temperature ReadTemperature(TemperatureUnit readTemperatureUnit) => CalculateTemperature(readTemperatureUnit, ReadTemperature());
 
+        /// <inheritdoc/>
         public void SetHeater(bool heaterTargetStatus)
         {
             if (heaterTargetStatus)
@@ -158,6 +148,7 @@ namespace TekuSP.Drivers.HDC1080
             }
         }
 
+        /// <inheritdoc/>
         public void SetHumidityResolution(int resolution)
         {
             HDC1080_Register register = (HDC1080_Register)ReadRegister();
@@ -177,6 +168,7 @@ namespace TekuSP.Drivers.HDC1080
             WriteRegister(register);
         }
 
+        /// <inheritdoc/>
         public void SetTemperatureResolution(int resolution)
         {
             HDC1080_Register register = (HDC1080_Register)ReadRegister();
@@ -200,11 +192,13 @@ namespace TekuSP.Drivers.HDC1080
             WriteRegister(register);
         }
 
+        /// <inheritdoc/>
         public override void WriteData(params byte[] data)
         {
             I2CDevice.Write(data);
         }
 
+        /// <inheritdoc/>
         public void WriteRegister(IRegister register)
         {
             WriteData(new byte[] { 0x02, register.GetData(), 0x00 });

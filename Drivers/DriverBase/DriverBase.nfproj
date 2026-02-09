@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <NanoFrameworkProjectSystemPath>$(MSBuildExtensionsPath)\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
@@ -22,38 +22,29 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Enums\CommunicationType.cs" />
-    <Compile Include="Enums\HumidityType.cs" />
+    <Compile Include="Event Handlers\EventHandlers.cs" />
     <Compile Include="Enums\OpenTherm\MessageID.cs" />
     <Compile Include="Enums\OpenTherm\MessageType.cs" />
-    <Compile Include="Enums\PressureType.cs" />
-    <Compile Include="Enums\TemperatureUnit.cs" />
-    <Compile Include="Event Handlers\IColorDataEventHandler.cs" />
-    <Compile Include="Event Handlers\ITouchDataEventHandler.cs" />
     <Compile Include="Helpers\BitHelper.cs" />
     <Compile Include="Interfaces\IADCModule.cs" />
-    <Compile Include="Interfaces\IAdvancedCO2Sensor.cs" />
     <Compile Include="Interfaces\IAdvancedColorSensor.cs" />
-    <Compile Include="Interfaces\IAdvancedHumiditySensor.cs" />
-    <Compile Include="Interfaces\IAdvancedTemperatureSensor.cs" />
-    <Compile Include="Interfaces\ICO2Sensor.cs" />
     <Compile Include="Interfaces\IColorData.cs" />
     <Compile Include="Interfaces\IColorSensor.cs" />
-    <Compile Include="Interfaces\IDewPointSensor.cs" />
     <Compile Include="Interfaces\IDriverBase.cs" />
-    <Compile Include="Interfaces\IHumiditySensor.cs" />
-    <Compile Include="Interfaces\IIRSensor.cs" />
-    <Compile Include="Interfaces\ILightSensor.cs" />
     <Compile Include="Interfaces\IOpenThermData.cs" />
+    <Compile Include="Interfaces\IHeaterControl.cs" />
+    <Compile Include="Interfaces\IPeriodicMeasurement.cs" />
     <Compile Include="Interfaces\IPowerSaving.cs" />
-    <Compile Include="Interfaces\IPressureSensor.cs" />
     <Compile Include="Interfaces\IRegister.cs" />
     <Compile Include="Interfaces\IRegisterSensor.cs" />
-    <Compile Include="Interfaces\ISensitivity.cs" />
     <Compile Include="Interfaces\ISleepSupport.cs" />
-    <Compile Include="Interfaces\ITemperatureSensor.cs" />
+    <Compile Include="Interfaces\IStatusProvider.cs" />
+    <Compile Include="Interfaces\ITouchData.cs" />
     <Compile Include="Interfaces\ITouchSensor.cs" />
     <Compile Include="Interfaces\IVersion.cs" />
     <Compile Include="Interfaces\IVersionInfo.cs" />
+    <Compile Include="Interfaces\IIirFilterControl.cs" />
+    <Compile Include="Interfaces\IOversamplingControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

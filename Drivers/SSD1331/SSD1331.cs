@@ -15,11 +15,16 @@ namespace TekuSP.Drivers.SSD1331
         #region Protected Fields
 
         //If dcPin is high, data is written to Graphic Display Data RAM (GDDRAM). If it is low, the inputs at D0-D15 are interpreted as a Command and it will be decoded and be written to the corresponding command register.
+        /// <summary>Command/data select pin (D/C).</summary>
         protected GpioPin dcPin; //Command Decoder Interface, digital PIN
 
+        /// <summary>Command/data select pin number.</summary>
         protected int dcPinInt;
+        /// <summary>GPIO controller instance.</summary>
         protected GpioController gpio;
+        /// <summary>Reset pin.</summary>
         protected GpioPin rstPin;
+        /// <summary>Reset pin number.</summary>
         protected int rstPinInt;
 
         #endregion Protected Fields
@@ -60,60 +65,11 @@ namespace TekuSP.Drivers.SSD1331
 
         #endregion Public Constructors
 
-        #region Public Enums
-
-        /// <summary>
-        /// Supported display modes
-        /// </summary>
-        public enum DisplayModes //TODO: Move to enums?
-        {
-            /// <summary>
-            /// Normal Display
-            /// </summary>
-            Normal = 0xA4,
-
-            /// <summary>
-            /// Entire Display ON, all pixels turn ON at GS63
-            /// </summary>
-            AllPixelsOn = 0xA5,
-
-            /// <summary>
-            /// Entire Display OFF, all pixels turn OFF
-            /// </summary>
-            AllPixelsOff = 0xA6,
-
-            /// <summary>
-            /// Inverse Display
-            /// </summary>
-            Inverse = 0xA7
-        }
-
-        /// <summary>
-        /// Supported display states
-        /// </summary>
-        public enum DisplayState //TODO: Move to enums?
-        {
-            /// <summary>
-            /// Display ON in dim mode
-            /// </summary>
-            OnDim = 0xAC,
-
-            /// <summary>
-            /// Display OFF (sleep mode)
-            /// </summary>
-            OFF = 0xAE,
-
-            /// <summary>
-            /// Display ON in normal mode
-            /// </summary>
-            ON = 0xAF
-        }
-
-        #endregion Public Enums
-
         #region Public Properties
 
+        /// <summary>Display height in pixels.</summary>
         public byte Height { get; }//TODO: Move to interface
+        /// <summary>Display width in pixels.</summary>
         public byte Width { get; }
 
         #endregion Public Properties
@@ -285,28 +241,33 @@ namespace TekuSP.Drivers.SSD1331
             WriteCommand(0x26, result);
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             WriteData(pointer);
             return -1; //This is Display, we never return any data as MISO is disconnected
         }
 
+        /// <inheritdoc/>
         public override long ReadData(params byte[] data)
         {
             WriteData(data);
             return -1; //This is Display, we never return any data as MISO is disconnected
         }
 
+        /// <inheritdoc/>
         public override string ReadDeviceId()
         {
             return "Device does not support device id";
         }
 
+        /// <inheritdoc/>
         public override string ReadManufacturerId()
         {
             return "Device does not support manufacturer id";
         }
 
+        /// <inheritdoc/>
         public override string ReadSerialNumber()
         {
             return "Device does not support serial number";
@@ -405,7 +366,7 @@ namespace TekuSP.Drivers.SSD1331
         /// Set Display Clock Divider / Oscillator Frequency
         /// </summary>
         /// <param name="dividerWithFosc">
-        /// Define the divide ratio (D) of the display clocks (DCLK): Divide ratio (D) = <paramref name="divideRatio"/> + 1 (i.e., 1 to 16) <br/>
+        /// Define the divide ratio (D) of the display clocks (DCLK): Divide ratio (D) = <paramref name="dividerWithFosc"/> + 1 (i.e., 1 to 16) <br/>
         /// Fosc frequency. Frequency increases as setting value increases. <br/>
         /// </param>
         public void SetDisplayClockDividerOscillatorFrequency(byte dividerWithFosc) //TODO: Verify
@@ -674,6 +635,7 @@ namespace TekuSP.Drivers.SSD1331
             WriteCommand(0xBE, VCOMH);
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             //Start SPI communication
@@ -711,6 +673,7 @@ namespace TekuSP.Drivers.SSD1331
             ClearWindow(); //Clear screen
         }
 
+        /// <inheritdoc/>
         public override void Stop()
         {
             //Stopping display
@@ -728,6 +691,10 @@ namespace TekuSP.Drivers.SSD1331
             base.Stop();
         }
 
+        /// <summary>
+        /// Writes one or more command bytes to the display controller.
+        /// </summary>
+        /// <param name="command">Command bytes.</param>
         public void WriteCommand(params byte[] command) //TODO: Move this to interface
         {
             foreach (var item in command) //Really retarded Adafruit communication speciality?
@@ -738,11 +705,16 @@ namespace TekuSP.Drivers.SSD1331
             }
         }
 
+        /// <inheritdoc/>
         public override void WriteData(params byte[] data)
         {
             SpiDevice.Write(data);
         }
 
+        /// <summary>
+        /// Writes a 16-bit data value to the display.
+        /// </summary>
+        /// <param name="data">Data value.</param>
         public void WriteData(ushort data) //TODO: Decide if this should go to base interface
         {
             SpiDevice.Write(new ushort[] { data });

@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Git Safe Directory
         run: git config --global --add safe.directory "${{ github.workspace }}"
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -38,7 +38,7 @@ jobs:
         run: git-chglog -o CHANGELOG.md ..${{ env.tagVersion }}
       
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7.0.8
+        uses: peter-evans/create-pull-request@v8.1.0
         with:
           commit-message: update changelog
           title: Update Changelog

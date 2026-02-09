@@ -22,11 +22,13 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="MHZ19B.cs" />
+    <Compile Include="Enums\MHZCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DriverBaseUART\DriverBaseUART.nfproj" />
     <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />
+    <ProjectReference Include="..\DriverBaseInterfaces\CO2\DriverBaseInterfaces.CO2.nfproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MHZ19B.nuspec" />
@@ -47,6 +49,15 @@
     </Reference>
     <Reference Include="System.IO.Streams, Version=1.1.96.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\..\packages\nanoFramework.System.IO.Streams.1.1.96\lib\System.IO.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Math, Version=1.5.116.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\..\packages\nanoFramework.System.Math.1.5.116\lib\System.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.VolumeConcentration, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.VolumeConcentration.5.75.0\lib\UnitsNet.VolumeConcentration.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.Ratio, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\UnitsNet.nanoFramework.Ratio.5.75.0\lib\UnitsNet.Ratio.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />

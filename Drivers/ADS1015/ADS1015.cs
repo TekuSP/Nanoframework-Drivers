@@ -16,35 +16,53 @@ namespace TekuSP.Drivers.ADS1015
     {
         #region Public Constructors
 
+        /// <summary>
+        /// Initializes ADS1015 with default I2C connection settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public ADS1015(int I2CBusID, int deviceAddress = 0x48) : base("ADS1015", I2CBusID, deviceAddress)
         {
         }
 
+        /// <summary>
+        /// Initializes ADS1015 with custom I2C connection settings.
+        /// </summary>
+        /// <param name="I2CBusID">I2C bus ID.</param>
+        /// <param name="connectionSettings">Custom I2C connection settings.</param>
+        /// <param name="deviceAddress">I2C device address.</param>
         public ADS1015(int I2CBusID, I2cConnectionSettings connectionSettings, int deviceAddress = 0x48) : base("ADS1015", I2CBusID, connectionSettings, deviceAddress)
         {
         }
 
         #endregion Public Constructors
 
-        #region Private Enums
-
-        private enum PointerRegister
-        {
-            ADS_POINTER_CONVERT = 0x00,
-            ADS_POINTER_CONFIG = 0x01,
-            ADS_POINTER_LOWTHRESH = 0x02,
-            ADS_POINTER_HIGHTHRESH = 0x03
-        }
-
-        #endregion Private Enums
-
         #region Public Methods
 
+        /// <summary>
+        /// Performs a differential conversion using default configuration.
+        /// </summary>
+        /// <param name="channelOne">Positive input channel.</param>
+        /// <param name="channelTwo">Negative input channel.</param>
+        /// <returns>Signed 12-bit conversion result.</returns>
         public short DifferentialRead(int channelOne, int channelTwo)
         {
             return DifferentialRead(channelOne, channelTwo, modeSetting: ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS);
         }
 
+        /// <summary>
+        /// Performs a differential conversion with full configuration options.
+        /// </summary>
+        /// <param name="channelOne">Positive input channel.</param>
+        /// <param name="channelTwo">Negative input channel.</param>
+        /// <param name="modeSetting">Conversion mode setting.</param>
+        /// <param name="gain">PGA gain setting.</param>
+        /// <param name="comparatorLatching">Comparator latching mode.</param>
+        /// <param name="comparatorPolarity">Comparator polarity.</param>
+        /// <param name="comparatorAssert">Comparator assert behavior.</param>
+        /// <param name="comparatorMode">Comparator mode.</param>
+        /// <param name="dataRate">Data rate setting.</param>
+        /// <returns>Signed 12-bit conversion result.</returns>
         public short DifferentialRead(int channelOne, int channelTwo, ModeSetting modeSetting = ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS, GainSetting gain = GainSetting.ADS_CONFIG_PGA_2048, ComparatorLatching comparatorLatching = ComparatorLatching.ADS_CONFIG_COMP_NONLAT, ComparatorPolarity comparatorPolarity = ComparatorPolarity.ADS_CONFIG_COMP_POL_LOW, ComparatorAssert comparatorAssert = ComparatorAssert.ADS_CONFIG_COMP_QUE_NON, ComparatorMode comparatorMode = ComparatorMode.ADS_CONFIG_COMP_MODE_TRADITIONAL, DataRateSetting dataRate = DataRateSetting.ADS_CONFIG_DR_RATE_1600)
         {
             ushort configuration = (ushort)((ushort)modeSetting | (ushort)gain | (ushort)comparatorAssert | (ushort)comparatorLatching | (ushort)comparatorPolarity | (ushort)comparatorMode | (ushort)dataRate);
@@ -70,12 +88,14 @@ namespace TekuSP.Drivers.ADS1015
             return (short)res;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(byte pointer)
         {
             WriteData(new byte[] { pointer });
             return -1;
         }
 
+        /// <inheritdoc/>
         public override long ReadData(params byte[] data)
         {
             SpanByte read = new SpanByte(data);
@@ -111,11 +131,28 @@ namespace TekuSP.Drivers.ADS1015
             return "Not supported";
         }
 
+        /// <summary>
+        /// Performs a single-ended conversion using default configuration.
+        /// </summary>
+        /// <param name="channelNumber">Input channel number (0-3).</param>
+        /// <returns>Unsigned 12-bit conversion result.</returns>
         public ushort SingleRead(int channelNumber)
         {
             return SingleRead(channelNumber, modeSetting: ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS);
         }
 
+        /// <summary>
+        /// Performs a single-ended conversion with full configuration options.
+        /// </summary>
+        /// <param name="channelNumber">Input channel number (0-3).</param>
+        /// <param name="modeSetting">Conversion mode setting.</param>
+        /// <param name="gain">PGA gain setting.</param>
+        /// <param name="comparatorLatching">Comparator latching mode.</param>
+        /// <param name="comparatorPolarity">Comparator polarity.</param>
+        /// <param name="comparatorAssert">Comparator assert behavior.</param>
+        /// <param name="comparatorMode">Comparator mode.</param>
+        /// <param name="dataRate">Data rate setting.</param>
+        /// <returns>Unsigned 12-bit conversion result.</returns>
         public ushort SingleRead(int channelNumber, ModeSetting modeSetting = ModeSetting.ADS_CONFIG_MODE_NOCONTINUOUS, GainSetting gain = GainSetting.ADS_CONFIG_PGA_2048, ComparatorLatching comparatorLatching = ComparatorLatching.ADS_CONFIG_COMP_NONLAT, ComparatorPolarity comparatorPolarity = ComparatorPolarity.ADS_CONFIG_COMP_POL_LOW, ComparatorAssert comparatorAssert = ComparatorAssert.ADS_CONFIG_COMP_QUE_NON, ComparatorMode comparatorMode = ComparatorMode.ADS_CONFIG_COMP_MODE_TRADITIONAL, DataRateSetting dataRate = DataRateSetting.ADS_CONFIG_DR_RATE_1600)
         {
             ushort configuration = (ushort)((ushort)modeSetting | (ushort)gain | (ushort)comparatorAssert | (ushort)comparatorLatching | (ushort)comparatorPolarity | (ushort)comparatorMode | (ushort)dataRate);
@@ -146,11 +183,17 @@ namespace TekuSP.Drivers.ADS1015
             return (ushort)(ReadRegister((byte)PointerRegister.ADS_POINTER_CONVERT) >> 4);
         }
 
+        /// <inheritdoc/>
         public override void WriteData(params byte[] data)
         {
             I2CDevice.Write(new SpanByte(data));
         }
 
+        /// <summary>
+        /// Writes a 16-bit value to a register.
+        /// </summary>
+        /// <param name="reg">Register address.</param>
+        /// <param name="value">16-bit value to write.</param>
         public void WriteRegister(byte reg, ushort value)
         {
             I2CDevice.Write(new SpanByte(new byte[] { reg, (byte)(value >> 8), (byte)(value & 0xFF) }));
