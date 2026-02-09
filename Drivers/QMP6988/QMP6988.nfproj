@@ -46,7 +46,7 @@
     <Reference Include="UnitsNet.Temperature, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\UnitsNet.nanoFramework.Temperature.5.75.0\lib\UnitsNet.Temperature.dll</HintPath>
     </Reference>
-     <Reference Include="UnitsNet.Duration, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="UnitsNet.Duration, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\UnitsNet.nanoFramework.Duration.5.75.0\lib\UnitsNet.Duration.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Length, Version=5.75.0.0, Culture=neutral, PublicKeyToken=null">
@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DriverBaseI2C\DriverBaseI2C.nfproj" />
+    <ProjectReference Include="..\DriverBaseInterfaces\Altitude\DriverBaseInterfaces.Altitude.nfproj" />
     <ProjectReference Include="..\DriverBaseInterfaces\Pressure\DriverBaseInterfaces.Pressure.nfproj" />
     <ProjectReference Include="..\DriverBaseInterfaces\Temperature\DriverBaseInterfaces.Temperature.nfproj" />
     <ProjectReference Include="..\DriverBase\DriverBase.nfproj" />

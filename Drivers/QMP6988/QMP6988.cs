@@ -17,7 +17,7 @@ namespace TekuSP.Drivers.QMP6988
     /// Provides raw reads, compensated temperature/pressure values using factory OTP calibration,
     /// and support for periodic measurement modes.
     /// </summary>
-    public class QMP6988 : DriverBaseI2C, ITemperatureSensor, IPressureSensor, IPeriodicMeasurement, IOversamplingControl, IIirFilterControl
+    public class QMP6988 : DriverBaseI2C, ITemperatureSensor, IPressureSensor, IPeriodicMeasurement, IOversamplingControl, IIirFilterControl, IAltitudeSensor
     {
         /// <summary>
         /// Creates a new QMP6988 driver instance using the provided I2C bus ID and device address.
@@ -447,6 +447,26 @@ namespace TekuSP.Drivers.QMP6988
             }
 
             return true;
+        }
+        /// <inheritdoc/>
+        public Length CalculateAltitude(LengthUnit readLengthUnit, double rawPressure, double rawTemperature)
+        {
+            // Compensate raw pressure and temperature using factory calibration data
+            Pressure press = CalculatePressure(PressureUnit.Pascal, (uint)rawPressure);
+            Temperature temp = CalculateTemperature(TemperatureUnit.DegreeCelsius, (uint)rawTemperature);
+            // Calculate altitude using the compensated pressure and temperature
+            return CalculateAltitude(press, temp, readLengthUnit);
+        }
+        /// <inheritdoc/>
+        public double ReadAltitude()
+        {
+            return ReadAltitude(LengthUnit.Meter).Meters;
+        }
+        /// <inheritdoc/>
+        public Length ReadAltitude(LengthUnit readAltitudeUnit)
+        {
+            ReadMeasurement(TemperatureUnit.DegreeCelsius, PressureUnit.Pascal, out Temperature temp, out Pressure press);
+            return CalculateAltitude(press, temp, LengthUnit.Meter);
         }
 
         /// <summary>
