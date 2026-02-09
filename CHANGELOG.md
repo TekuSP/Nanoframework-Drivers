@@ -1,4 +1,14 @@
 
+<a name="v0.4.721"></a>
+## [v0.4.721](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.4.702...v0.4.721)
+
+> 2026-02-09
+
+### Pull Requests
+
+* Merge pull request [#189](https://github.com/TekuSP/Meteostanice-CSharp/issues/189) from TekuSP/M5_ENV3
+
+
 <a name="v0.4.702"></a>
 ## [v0.4.702](https://github.com/TekuSP/Meteostanice-CSharp/compare/v0.4.596...v0.4.702)
 
