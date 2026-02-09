@@ -12,8 +12,8 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>DriverBaseInterfaces.Gpio</RootNamespace>
-    <AssemblyName>DriverBaseInterfaces.Gpio</AssemblyName>
+    <RootNamespace>TekuSP.Drivers.DriverBase.Interfaces</RootNamespace>
+    <AssemblyName>TekuSP.Drivers.DriverBase.Interfaces.Gpio</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
