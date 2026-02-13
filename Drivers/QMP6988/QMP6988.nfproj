@@ -12,8 +12,8 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>QMP6988</RootNamespace>
-    <AssemblyName>QMP6988</AssemblyName>
+    <RootNamespace>TekuSP.Drivers.QMP6988</RootNamespace>
+    <AssemblyName>TekuSP.Drivers.QMP6988</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
