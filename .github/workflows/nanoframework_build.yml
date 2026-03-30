@@ -90,7 +90,7 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       
       - name: Prepare nuget version ${{ env.major }}.${{ env.minor }}.${{ github.run_number }}
-        uses: richardrigutins/replace-in-files@v2
+        uses: richardrigutins/replace-in-files@v3
         with:
           files: '**/*.nuspec'
           search-text: '$version$'
