@@ -30,6 +30,7 @@ jobs:
           dotnet-version: 10.0.x
           cache: true
           cache-dependency-path: "**/packages.lock.json"
+          path: ${{ github.workspace }}/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
