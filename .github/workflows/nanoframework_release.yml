@@ -24,6 +24,7 @@ permissions:
   checks: write
   contents: write
   packages: write
+  id-token: write
 
 concurrency:
   group: release-${{ github.event.release.tag_name || inputs.tag }}
@@ -80,7 +81,7 @@ jobs:
       - name: Cache and restore nugets
         uses: actions/cache@v5
         with:
-          path: ~/.nuget/packages
+          path: ${{runner.workspace}}\Nanoframework-Drivers\packages
           key: ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
              ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-
@@ -184,6 +185,12 @@ jobs:
       - name: Pack nugets
         run: ./GenerateNugets.ps1
 
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: TekuSP
+    
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7.0.1
         with:
@@ -209,4 +216,4 @@ jobs:
 
       - name: Push nugets to Nuget.org
         run: |
-          nuget push "**/*TekuSP*.nupkg" -Source https://api.nuget.org/v3/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.NUGET_KEY }}
+          nuget push "**/*TekuSP*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json -NoSymbols -SkipDuplicate
