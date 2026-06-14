@@ -23,6 +23,16 @@ permissions:
 defaults:
   run:
     shell: pwsh
+    
+permissions:
+  checks: write
+  contents: write
+  packages: write
+
+concurrency:
+  group: release-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: true
+
 jobs:
   Build:
     name: Build NanoFramework SLN
@@ -33,6 +43,9 @@ jobs:
       Configuration: Release
       major: '0'
       minor: '4'
+      GITHUB_ACTOR: ${{ github.actor }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -42,7 +55,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5.3.0
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5.2.0
@@ -62,12 +75,23 @@ jobs:
           nuget-version: 'latest'
           
       - name: Install Nanoframework Extension
-        uses: nanoframework/nanobuild@v1.19
+        uses: nanoframework/nanobuild@v1.20
+        with:
+          usePreview: true
         env:
           GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
+
+      - name: Cache and restore nugets
+        uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+             ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-
+             ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-
           
       - name: Restore nugets
-        run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
+        run: nuget restore ${{ env.solution }} -ConfigFile nuget.config -LockedMode
         
       - name: Cache SonarCloud packages
         uses: actions/cache@v5.0.5
