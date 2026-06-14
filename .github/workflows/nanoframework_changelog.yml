@@ -55,10 +55,10 @@ jobs:
 
       - name: Validate Git-Iris API key
         env:
-          GIT_IRIS_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GIT_IRIS_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           if [ -z "$GIT_IRIS_API_KEY" ]; then
-           echo "::error::The OPENAI_API_KEY secret must be set to use Git-Iris for AI-powered changelog generation."
+           echo "::error::The ANTHROPIC_API_KEY secret must be set to use Git-Iris for AI-powered changelog generation."
            exit 1
           fi
 
@@ -68,8 +68,8 @@ jobs:
           command: changelog
           from: ${{ env.previousTag }}
           to: ${{ env.tagVersion }}
-          provider: openai
-          api-key: ${{ secrets.OPENAI_API_KEY }}
+          provider: anthropic
+          api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           output-file: CHANGELOG.md
           update-file: true
           version-name: ${{ env.tagVersion }}
