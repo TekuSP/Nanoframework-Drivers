@@ -52,6 +52,15 @@ jobs:
           echo "previousTag=$previousTag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
 
+      - name: Validate Git-Iris API key
+        env:
+          GIT_IRIS_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$GIT_IRIS_API_KEY" ]; then
+           echo "::error::OPENAI_API_KEY secret is required for Git-Iris changelog generation."
+           exit 1
+          fi
+
       - name: Update Changelog with Git-Iris
         uses: hyperb1iss/git-iris@v2
         with:
@@ -63,7 +72,10 @@ jobs:
           output-file: CHANGELOG.md
           update-file: true
           version-name: ${{ env.tagVersion }}
-          custom-instructions: Generate a Keep a Changelog style entry for the nanoFramework driver packages.
+          custom-instructions: |
+            Generate a Keep a Changelog style entry for the nanoFramework driver packages.
+            Group changes under Added, Changed, Fixed, Deprecated, Removed, and Security where applicable.
+            Highlight breaking changes separately at the top of the generated entry.
        
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8.1.1
