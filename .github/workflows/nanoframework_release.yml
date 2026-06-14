@@ -3,6 +3,11 @@ name: Release Nanoframework
 on:
   release:
     types: [published]
+  push:
+    branches:
+      - master
+    paths:
+      - VERSION
   workflow_call:
     inputs:
       prerelease:
@@ -27,7 +32,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: release-${{ github.event.release.tag_name || inputs.tag }}
+  group: release-${{ github.event.release.tag_name || inputs.version || github.sha }}
   cancel-in-progress: true
 
 jobs:
@@ -135,28 +140,15 @@ jobs:
               $version = $tagName
           } else {
               $releaseIsPrerelease = "${{ inputs.prerelease }}" -ieq "true"
+              if ($eventName -eq "push") {
+                  $releaseIsPrerelease = $true
+              }
 
               if ([string]::IsNullOrWhiteSpace($version)) {
-                  # Weekly prereleases bump the SemVer minor version from the latest release tag.
-                  # If no SemVer tags exist yet, use the configured major/minor baseline and bump that minor.
-                  $latestVersion = git tag --list "v*" | ForEach-Object {
-                      if ($_ -match "^v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$") {
-                          [pscustomobject]@{
-                              Major = [int]$Matches.major
-                              Minor = [int]$Matches.minor
-                              Patch = [int]$Matches.patch
-                          }
-                      } else {
-                          Write-Warning "Ignoring tag '$_' because it is not a SemVer release tag."
-                      }
-                  } | Sort-Object Major, Minor, Patch -Descending | Select-Object -First 1
-
-                  if ($null -eq $latestVersion) {
-                      $fallbackMajor = [int]$env:major
-                      $fallbackMinor = [int]$env:minor
-                      $version = "$fallbackMajor.$($fallbackMinor + 1).0"
+                  if (Test-Path "VERSION") {
+                      $version = (Get-Content "VERSION" -Raw).Trim()
                   } else {
-                      $version = "$($latestVersion.Major).$($latestVersion.Minor + 1).0"
+                      $version = "${{ env.major }}.${{ env.minor }}.${{ github.run_number }}"
                   }
               }
           }

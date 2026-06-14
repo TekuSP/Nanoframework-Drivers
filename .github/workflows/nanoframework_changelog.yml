@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Update Changelog
     timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Git Safe Directory
         run: git config --global --add safe.directory "${{ github.workspace }}"
@@ -21,28 +24,55 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
           
-      - name: Set version environment variable
+      - name: Resolve changelog range
         run: |
           $tagName = "${{ github.event.release.tag_name }}"
           if (([string]::IsNullOrEmpty($tagName)))
           {
              $tagName = "${{ inputs.version }}"
           }
+
+          if ([string]::IsNullOrWhiteSpace($tagName))
+          {
+             throw "A release tag or version input is required to update the changelog."
+          }
+
+          if (-not $tagName.StartsWith("v"))
+          {
+             $tagName = "v$tagName"
+          }
+
+          $previousTag = git tag --sort=-v:refname | Where-Object { $_ -ne $tagName } | Select-Object -First 1
+          if ([string]::IsNullOrWhiteSpace($previousTag))
+          {
+             $previousTag = git rev-list --max-parents=0 HEAD
+          }
+
           echo "tagVersion=$tagName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "previousTag=$previousTag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
 
-      - name: Download git-chglog
-        uses: craicoverflow/install-git-chglog@v1.0.0
-        
-      - name: Update Changelog
-        run: git-chglog -o CHANGELOG.md ..${{ env.tagVersion }}
-      
+      - name: Update Changelog with Git-Iris
+        uses: hyperb1iss/git-iris@v2
+        with:
+          command: changelog
+          from: ${{ env.previousTag }}
+          to: ${{ env.tagVersion }}
+          provider: openai
+          api-key: ${{ secrets.OPENAI_API_KEY }}
+          output-file: CHANGELOG.md
+          update-file: true
+          version-name: ${{ env.tagVersion }}
+          custom-instructions: Generate a Keep a Changelog style entry for the nanoFramework driver packages.
+       
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8.1.1
         with:
+          token: ${{ secrets.PR_SECRET }}
           commit-message: update changelog
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
           title: Update Changelog
           body: Update changelog to reflect release changes
           branch: update-changelog
           base: master
-          token: ${{ secrets.PR_SECRET }}
