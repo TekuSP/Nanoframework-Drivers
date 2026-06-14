@@ -112,10 +112,10 @@ jobs:
           $releaseIsPrerelease = $false
 
           if ($eventName -eq "release") {
-              $releaseIsPrerelease = [System.Convert]::ToBoolean("${{ github.event.release.prerelease }}")
+              $releaseIsPrerelease = $${{ github.event.release.prerelease }}
               $version = $tagName
           } else {
-              $releaseIsPrerelease = [System.Convert]::ToBoolean("${{ inputs.prerelease }}")
+              $releaseIsPrerelease = $${{ inputs.prerelease }}
 
               if ([string]::IsNullOrWhiteSpace($version)) {
                   $version = "${{ env.major }}.${{ env.minor }}.${{ github.run_number }}"
@@ -172,7 +172,7 @@ jobs:
 
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v3
-        if: ${{ matrix.configuration == 'Release' }}
+        if: matrix.configuration == 'Release'
         with:
           tag_name: ${{ env.tagName }}
           target_commitish: ${{ github.sha }}
