@@ -2,6 +2,11 @@ name: Update Changelog
 on:
   release:
     types: [published]
+  workflow_run:
+    workflows: ["Release Nanoframework"]
+    types: [completed]
+    branches:
+      - master
   workflow_dispatch:
     inputs:
       version:
@@ -10,6 +15,7 @@ on:
   
 jobs:
   updateChangelog:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     name: Update Changelog
     timeout-minutes: 15
@@ -21,9 +27,10 @@ jobs:
         run: git config --global --add safe.directory "${{ github.workspace }}"
       - uses: actions/checkout@v6.0.3
         with:
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
           fetch-depth: 0
           fetch-tags: true
-          
+           
       - name: Resolve changelog range
         run: |
           $tagName = "${{ github.event.release.tag_name }}"
@@ -32,6 +39,26 @@ jobs:
              $tagName = "${{ inputs.version }}"
           }
 
+          if (([string]::IsNullOrWhiteSpace($tagName)) -and "${{ github.event_name }}" -eq "workflow_run")
+          {
+             if (-not (Test-Path "VERSION"))
+             {
+                throw "VERSION file is required when updating the changelog after the release workflow."
+             }
+
+             $tagName = (Get-Content "VERSION" -Raw).Trim()
+
+             if ($tagName.StartsWith("v"))
+             {
+                $tagName = $tagName.Substring(1)
+             }
+
+             if ($tagName -notmatch "-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*$")
+             {
+                $tagName = "$tagName-preview"
+             }
+          }
+ 
           if ([string]::IsNullOrWhiteSpace($tagName))
           {
              throw "A release tag or version input is required to update the changelog."
