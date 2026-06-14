@@ -150,7 +150,7 @@ pull_request_rules:
       - "#commits-behind > 0"
     actions:
       update:
-  - name: Automatic update version bump pull requests if they are commits behind
+  - name: Automatically update version bump pull requests if they are commits behind
     conditions:
       - author=TekuSP
       - "head ~=release/(weekly-prerelease-version|manual-version-bump)"

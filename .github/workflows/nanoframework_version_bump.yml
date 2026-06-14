@@ -35,7 +35,7 @@ jobs:
 
       - name: Read current version
         id: current_version
-        run: echo "version=$(tr -d '[:space:]' < VERSION)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(tr -d '\n\r' < VERSION)" >> "$GITHUB_OUTPUT"
 
       - name: Bump selected version fragment
         id: bump_version
