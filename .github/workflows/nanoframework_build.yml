@@ -29,7 +29,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5.3.0
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5.2.0
@@ -49,7 +49,9 @@ jobs:
           nuget-version: 'latest'
           
       - name: Install Nanoframework Extension
-        uses: nanoframework/nanobuild@v1.19
+        uses: nanoframework/nanobuild@v1.20
+        with:
+          usePreview: true
         env:
           GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
           
