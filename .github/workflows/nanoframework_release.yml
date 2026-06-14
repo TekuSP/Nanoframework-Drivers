@@ -216,4 +216,4 @@ jobs:
 
       - name: Push nugets to Nuget.org
         run: |
-          nuget push "**/*TekuSP*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json -NoSymbols -SkipDuplicate
+          nuget push "**/*TekuSP*.nupkg" -ApiKey ${{steps.login.outputs.NUGET_API_KEY}} -Source https://api.nuget.org/v3/index.json -NoSymbols -SkipDuplicate
