@@ -89,16 +89,22 @@ jobs:
       - name: Set version environment variable
         run: |
           $tagName = "${{ github.event.release.tag_name }}"
+          $releaseIsPrerelease = [System.Convert]::ToBoolean("${{ github.event.release.prerelease }}")
           # Check if the tag starts with 'v' and remove it
           if ($tagName.StartsWith("v")) {
               $version = $tagName.Substring(1)
           } else {
               $version = $tagName
           }
-          
+
+          if ($releaseIsPrerelease -and $version -notmatch "-") {
+              $version = "$version-preview"
+          }
+           
           Write-Host "The original tag name was: $tagName"
+          Write-Host "The release prerelease flag is: $releaseIsPrerelease"
           Write-Host "The processed version is: $version"
-          
+           
           # Set the environment variable for subsequent steps in the same job
           echo "version=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')

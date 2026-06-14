@@ -1,0 +1,75 @@
+name: Weekly Nanoframework Prerelease
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Publish as a prerelease'
+        required: true
+        type: boolean
+        default: true
+      version:
+        description: 'Optional SemVer version without leading v'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  Release:
+    name: Create weekly prerelease
+    runs-on: ubuntu-latest
+    env:
+      major: '0'
+      minor: '4'
+    steps:
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          TARGET_COMMITISH: ${{ github.sha }}
+          RUN_NUMBER: ${{ github.run_number }}
+          INPUT_VERSION: ${{ inputs.version }}
+          INPUT_PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          $headers = @{
+              Authorization = "Bearer " + $env:GITHUB_TOKEN
+              Accept = "application/vnd.github+json"
+              "X-GitHub-Api-Version" = "2022-11-28"
+          }
+
+          $isPrerelease = $true
+          if ("${{ github.event_name }}" -eq "workflow_dispatch" -and -not [string]::IsNullOrWhiteSpace($env:INPUT_PRERELEASE)) {
+              $isPrerelease = [System.Convert]::ToBoolean($env:INPUT_PRERELEASE)
+          }
+
+          $version = $env:INPUT_VERSION
+          if ([string]::IsNullOrWhiteSpace($version)) {
+              $version = "$env:major.$env:minor.$env:RUN_NUMBER"
+          } elseif ($version.StartsWith("v")) {
+              $version = $version.Substring(1)
+          }
+
+          if ($isPrerelease -and $version -notmatch "-") {
+              $version = "$version-preview"
+          }
+
+          $tagName = "v$version"
+          $body = @{
+              tag_name = $tagName
+              target_commitish = $env:TARGET_COMMITISH
+              name = $tagName
+              body = "Automated weekly prerelease build."
+              draft = $false
+              prerelease = $isPrerelease
+              generate_release_notes = $true
+          } | ConvertTo-Json
+
+          Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$env:REPOSITORY/releases" -Headers $headers -Body $body -ContentType "application/json"
