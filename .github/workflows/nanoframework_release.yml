@@ -138,6 +138,7 @@ jobs:
 
               if ([string]::IsNullOrWhiteSpace($version)) {
                   # Weekly prereleases bump the SemVer minor version from the latest release tag.
+                  # If no SemVer tags exist yet, use the configured major/minor baseline and bump that minor.
                   $latestVersion = git tag --list "v*" | ForEach-Object {
                       if ($_ -match "^v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$") {
                           [pscustomobject]@{
@@ -145,6 +146,8 @@ jobs:
                               Minor = [int]$Matches.minor
                               Patch = [int]$Matches.patch
                           }
+                      } else {
+                          Write-Warning "Ignoring tag '$_' because it is not a SemVer release tag."
                       }
                   } | Sort-Object Major, Minor, Patch -Descending | Select-Object -First 1
 
