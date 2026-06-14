@@ -16,6 +16,9 @@ jobs:
     name: Build NanoFramework SLN
     timeout-minutes: 15
     runs-on: windows-latest
+    concurrency:
+      group: build-${{github.ref}}
+      cancel-in-progress: true
     env:
       solution: 'Meteostanice.sln'
       major: '0'
