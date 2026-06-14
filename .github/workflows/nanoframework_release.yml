@@ -130,7 +130,7 @@ jobs:
           }
 
           # Default generated prereleases to the shared preview suffix when the user did not provide another suffix.
-          if ($releaseIsPrerelease -and $version -notmatch "-[0-9A-Za-z]+([.-][0-9A-Za-z]+)*$") {
+          if ($releaseIsPrerelease -and $version -notmatch "-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*$") {
               $version = "$version-preview"
 
               if (-not $tagNameWasProvided) {
@@ -167,7 +167,7 @@ jobs:
         with:
           name: TekuSP-Drivers
           path: |
-            ${{ github.workspace }}\**\*TekuSP*.nupkg
+            ${{ github.workspace }}/**/*TekuSP*.nupkg
 
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v3
@@ -178,7 +178,7 @@ jobs:
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
-            ${{ github.workspace }}\**\*TekuSP*.nupkg
+            ${{ github.workspace }}/**/*TekuSP*.nupkg
 
       - name: Push nugets to GitHub
         run: |
