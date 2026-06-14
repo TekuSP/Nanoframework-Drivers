@@ -46,7 +46,7 @@ jobs:
           }
 
           $isPrerelease = $true
-          if ("${{ github.event_name }}" -eq "workflow_dispatch" -and -not [string]::IsNullOrWhiteSpace($env:INPUT_PRERELEASE)) {
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
               $isPrerelease = [System.Convert]::ToBoolean($env:INPUT_PRERELEASE)
           }
 
