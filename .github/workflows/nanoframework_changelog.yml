@@ -45,6 +45,7 @@ jobs:
           $previousTag = git tag --sort=-v:refname | Where-Object { $_ -ne $tagName } | Select-Object -First 1
           if ([string]::IsNullOrWhiteSpace($previousTag))
           {
+             Write-Warning "No previous tag found. Generating the changelog from the initial commit."
              $previousTag = git rev-list --max-parents=0 HEAD
           }
 

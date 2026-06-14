@@ -43,8 +43,6 @@ jobs:
     env:
       solution: 'Meteostanice.sln'
       Configuration: Release
-      major: '0'
-      minor: '4'
       GITHUB_ACTOR: ${{ github.actor }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -148,7 +146,7 @@ jobs:
                   if (Test-Path "VERSION") {
                       $version = (Get-Content "VERSION" -Raw).Trim()
                   } else {
-                      $version = "${{ env.major }}.${{ env.minor }}.${{ github.run_number }}"
+                      throw "VERSION file is required when no release tag or version input is provided."
                   }
               }
           }
