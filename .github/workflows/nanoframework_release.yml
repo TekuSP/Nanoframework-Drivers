@@ -3,6 +3,22 @@ name: Release Nanoframework
 on:
   release:
     types: [published]
+  workflow_call:
+    inputs:
+      prerelease:
+        description: 'Publish as a prerelease'
+        required: false
+        type: boolean
+        default: true
+      version:
+        description: 'Optional SemVer version without leading v'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+  packages: write
 
 defaults:
   run:
@@ -17,6 +33,8 @@ jobs:
     runs-on: windows-latest
     env:
       solution: 'Meteostanice.sln'
+      major: '0'
+      minor: '4'
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -88,25 +106,46 @@ jobs:
       
       - name: Set version environment variable
         run: |
+          $eventName = "${{ github.event_name }}"
           $tagName = "${{ github.event.release.tag_name }}"
-          $releaseIsPrerelease = [System.Convert]::ToBoolean("${{ github.event.release.prerelease }}")
-          # Check if the tag starts with 'v' and remove it
-          if ($tagName.StartsWith("v")) {
-              $version = $tagName.Substring(1)
-          } else {
+          $version = "${{ inputs.version }}"
+          $releaseIsPrerelease = $false
+
+          if ($eventName -eq "release") {
+              $releaseIsPrerelease = [System.Convert]::ToBoolean("${{ github.event.release.prerelease }}")
               $version = $tagName
+          } else {
+              $releaseIsPrerelease = [System.Convert]::ToBoolean("${{ inputs.prerelease }}")
+
+              if ([string]::IsNullOrWhiteSpace($version)) {
+                  $version = "${{ env.major }}.${{ env.minor }}.${{ github.run_number }}"
+              }
           }
 
+          # Check if the tag starts with 'v' and remove it for NuGet package version.
+          if ($version.StartsWith("v")) {
+              $version = $version.Substring(1)
+          }
+
+          if ([string]::IsNullOrWhiteSpace($tagName)) {
+              $tagName = "v$version"
+          }
+
+          # Default generated prereleases to the shared preview suffix when the user did not provide another suffix.
           if ($releaseIsPrerelease -and $version -notmatch "-") {
               $version = "$version-preview"
+              $tagName = "v$version"
           }
            
-          Write-Host "The original tag name was: $tagName"
+          Write-Host "The event name is: $eventName"
+          Write-Host "The release tag name is: $tagName"
           Write-Host "The release prerelease flag is: $releaseIsPrerelease"
           Write-Host "The processed version is: $version"
            
           # Set the environment variable for subsequent steps in the same job
           echo "version=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "tagName=$tagName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "releaseIsPrerelease=$releaseIsPrerelease" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
 
       
@@ -129,6 +168,18 @@ jobs:
         with:
           name: TekuSP-Drivers
           path: |
+            ${{ github.workspace }}\**\*TekuSP*.nupkg
+
+      - name: Create or update Github Release
+        uses: softprops/action-gh-release@v3
+        if: ${{ matrix.configuration == 'Release' }}
+        with:
+          tag_name: ${{ env.tagName }}
+          target_commitish: ${{ github.sha }}
+          prerelease: ${{ env.releaseIsPrerelease }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
             ${{ github.workspace }}\**\*TekuSP*.nupkg
 
       - name: Push nugets to Github
