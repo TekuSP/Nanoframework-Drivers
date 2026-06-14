@@ -32,12 +32,16 @@ jobs:
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
     runs-on: windows-latest
+    concurrency:
+      group: analyze-${{github.ref}}
+      cancel-in-progress: true
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
     permissions:
       actions: read
       contents: read
       security-events: write
-
+    env:
+      solution: 'Meteostanice.sln'
     strategy:
       fail-fast: false
       matrix:
@@ -82,28 +86,40 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v5.3.0
       with:
-        dotnet-version: 9.0.x
-
+        dotnet-version: 10.0.x
+  
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v3
       with:
         msbuild-architecture: x64
 
+    # https://github.com/NuGet/setup-nuget
     - name: Install NuGet client
       uses: nuget/setup-nuget@v4.0
       with:
         nuget-version: 'latest'
-
+        
     - name: Install Nanoframework Extension
-      uses: nanoframework/nanobuild@v1.19
+      uses: nanoframework/nanobuild@v1.20
+      with:
+        usePreview: true
       env:
         GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
 
+    - name: Cache and restore nugets
+      uses: actions/cache@v5
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+           ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-
+           ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-
+        
     - name: Restore nugets
-      run: nuget restore Meteostanice.sln -ConfigFile nuget.config
+      run: nuget restore ${{ env.solution }} -ConfigFile nuget.config -LockedMode
 
     - name: Build NanoFramework Application
-      run: msbuild Meteostanice.sln /p:Configuration=$env:Configuration
+      run: msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
       env:
         Configuration: Release
 

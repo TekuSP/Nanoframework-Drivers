@@ -3,20 +3,49 @@ name: Release Nanoframework
 on:
   release:
     types: [published]
+  workflow_call:
+    inputs:
+      prerelease:
+        description: 'Publish as a prerelease'
+        required: false
+        type: boolean
+        default: true
+      version:
+        description: 'Optional SemVer version without leading v'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+  packages: write
 
 defaults:
   run:
     shell: pwsh
+    
+permissions:
+  checks: write
+  contents: write
+  packages: write
+
+concurrency:
+  group: release-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: true
+
 jobs:
   Build:
-    strategy:
-      matrix:
-        configuration: [Release]
     name: Build NanoFramework SLN
     timeout-minutes: 15
     runs-on: windows-latest
     env:
       solution: 'Meteostanice.sln'
+      Configuration: Release
+      major: '0'
+      minor: '4'
+      GITHUB_ACTOR: ${{ github.actor }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -26,7 +55,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5.3.0
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5.2.0
@@ -46,12 +75,23 @@ jobs:
           nuget-version: 'latest'
           
       - name: Install Nanoframework Extension
-        uses: nanoframework/nanobuild@v1.19
+        uses: nanoframework/nanobuild@v1.20
+        with:
+          usePreview: true
         env:
           GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
+
+      - name: Cache and restore nugets
+        uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+             ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-
+             ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-
           
       - name: Restore nugets
-        run: nuget restore ${{ env.solution }} -ConfigFile nuget.config
+        run: nuget restore ${{ env.solution }} -ConfigFile nuget.config -LockedMode
         
       - name: Cache SonarCloud packages
         uses: actions/cache@v5.0.5
@@ -79,7 +119,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          Configuration: ${{ matrix.configuration }}
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"TekuSP_Meteostanice-CSharp" /o:"tekusp" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.scanner.scanAll=false /d:sonar.host.url="https://sonarcloud.io"
@@ -88,19 +127,52 @@ jobs:
       
       - name: Set version environment variable
         run: |
+          $eventName = "${{ github.event_name }}"
           $tagName = "${{ github.event.release.tag_name }}"
-          # Check if the tag starts with 'v' and remove it
-          if ($tagName.StartsWith("v")) {
-              $version = $tagName.Substring(1)
-          } else {
+          $version = "${{ inputs.version }}"
+          $tagNameWasProvided = -not [string]::IsNullOrWhiteSpace($tagName)
+          $releaseIsPrerelease = $false
+
+          if ($eventName -eq "release") {
+              $releaseIsPrerelease = "${{ github.event.release.prerelease }}" -ieq "true"
               $version = $tagName
+          } else {
+              $releaseIsPrerelease = "${{ inputs.prerelease }}" -ieq "true"
+
+              if ([string]::IsNullOrWhiteSpace($version)) {
+                  # Weekly prereleases use the workflow run number as the SemVer patch for a monotonic version.
+                  $version = "${{ env.major }}.${{ env.minor }}.${{ github.run_number }}"
+              }
           }
-          
-          Write-Host "The original tag name was: $tagName"
+
+          # Check if the tag starts with 'v' and remove it for NuGet package version.
+          if ($version.StartsWith("v")) {
+              $version = $version.Substring(1)
+          }
+
+          if ([string]::IsNullOrWhiteSpace($tagName)) {
+              $tagName = "v$version"
+          }
+
+          # Default generated prereleases to the shared preview suffix when the user did not provide another suffix.
+          # A supplied prerelease suffix is a hyphen followed by alphanumeric/hyphen segments separated by dots.
+          if ($releaseIsPrerelease -and $version -notmatch "-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*$") {
+              $version = "$version-preview"
+
+              if (-not $tagNameWasProvided) {
+                  $tagName = "v$version"
+              }
+          }
+           
+          Write-Host "The event name is: $eventName"
+          Write-Host "The release tag name is: $tagName"
+          Write-Host "The release prerelease flag is: $releaseIsPrerelease"
           Write-Host "The processed version is: $version"
-          
+           
           # Set the environment variable for subsequent steps in the same job
           echo "version=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "tagName=$tagName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "releaseIsPrerelease=$releaseIsPrerelease" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh # Explicitly use PowerShell Core (default on windows-latest for 'run')
 
       
@@ -115,17 +187,26 @@ jobs:
       
       - name: Pack nugets
         run: ./GenerateNugets.ps1
-        if: ${{ matrix.configuration == 'Release' }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7.0.1
-        if: ${{ matrix.configuration == 'Release' }}
         with:
           name: TekuSP-Drivers
           path: |
-            ${{ github.workspace }}\**\*TekuSP*.nupkg
+            ${{ github.workspace }}/**/*TekuSP*.nupkg
 
-      - name: Push nugets to Github
+      - name: Create or update GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ env.tagName }}
+          target_commitish: ${{ github.sha }}
+          prerelease: ${{ env.releaseIsPrerelease }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            ${{ github.workspace }}/**/*TekuSP*.nupkg
+
+      - name: Push nugets to GitHub
         run: |
           nuget sources Add -Name github -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -UserName ${{ github.repository_owner }} -Password ${{ secrets.GITHUB_TOKEN }}
           nuget push "**/*TekuSP*.nupkg" -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}

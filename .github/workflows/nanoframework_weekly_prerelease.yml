@@ -1,0 +1,29 @@
+name: Weekly Nanoframework Prerelease
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Publish as a prerelease'
+        required: true
+        type: boolean
+        default: true
+      version:
+        description: 'Optional SemVer version without leading v'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  Release:
+    name: Build and publish weekly prerelease
+    uses: ./.github/workflows/nanoframework_release.yml
+    with:
+      prerelease: ${{ github.event_name == 'schedule' && true || inputs.prerelease }}
+      version: ${{ inputs.version }}
+    secrets: inherit
