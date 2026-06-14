@@ -58,7 +58,7 @@ jobs:
           GIT_IRIS_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           if [ -z "$GIT_IRIS_API_KEY" ]; then
-           echo "::error::OPENAI_API_KEY secret is required for Git-Iris changelog generation."
+           echo "::error::OPENAI_API_KEY secret is required for AI-powered changelog generation via Git-Iris."
            exit 1
           fi
 
@@ -76,6 +76,7 @@ jobs:
           custom-instructions: |
             Generate a Keep a Changelog style entry for the nanoFramework driver packages.
             Group changes under Added, Changed, Fixed, Deprecated, Removed, and Security where applicable.
+            Organize entries by driver or package when multiple Drivers/ packages are affected.
             Highlight breaking changes separately at the top of the generated entry.
        
       - name: Create Pull Request

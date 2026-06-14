@@ -103,7 +103,7 @@ jobs:
           body: |
             User-requested version bump created by @${{ github.actor }}.
 
-            Once this PR is merged into master, the release workflow publishes a prerelease and the changelog workflow updates CHANGELOG.md.
+            Once this PR is merged into master, the VERSION-triggered release workflow publishes a prerelease and the changelog workflow updates CHANGELOG.md.
           branch: release/manual-version-bump
           base: master
           labels: |
