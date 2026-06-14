@@ -10,8 +10,9 @@ on:
         options:
           - major
           - minor
+          - patch
           - custom
-        default: minor
+        default: patch
       custom_version:
         description: 'Custom SemVer version without leading v. Required when version_fragment is custom.'
         required: false
