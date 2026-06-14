@@ -58,7 +58,7 @@ jobs:
           GIT_IRIS_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           if [ -z "$GIT_IRIS_API_KEY" ]; then
-           echo "::error::OPENAI_API_KEY secret is required for AI-powered changelog generation via Git-Iris."
+           echo "::error::The OPENAI_API_KEY secret must be set to use Git-Iris for AI-powered changelog generation."
            exit 1
           fi
 
