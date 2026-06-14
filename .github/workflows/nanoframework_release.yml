@@ -109,13 +109,14 @@ jobs:
           $eventName = "${{ github.event_name }}"
           $tagName = "${{ github.event.release.tag_name }}"
           $version = "${{ inputs.version }}"
+          $tagNameWasProvided = -not [string]::IsNullOrWhiteSpace($tagName)
           $releaseIsPrerelease = $false
 
           if ($eventName -eq "release") {
-              $releaseIsPrerelease = $${{ github.event.release.prerelease }}
+              $releaseIsPrerelease = "${{ github.event.release.prerelease }}" -ieq "true"
               $version = $tagName
           } else {
-              $releaseIsPrerelease = $${{ inputs.prerelease }}
+              $releaseIsPrerelease = "${{ inputs.prerelease }}" -ieq "true"
 
               if ([string]::IsNullOrWhiteSpace($version)) {
                   $version = "${{ env.major }}.${{ env.minor }}.${{ github.run_number }}"
@@ -134,7 +135,10 @@ jobs:
           # Default generated prereleases to the shared preview suffix when the user did not provide another suffix.
           if ($releaseIsPrerelease -and $version -notmatch "-") {
               $version = "$version-preview"
-              $tagName = "v$version"
+
+              if (-not $tagNameWasProvided) {
+                  $tagName = "v$version"
+              }
           }
            
           Write-Host "The event name is: $eventName"
