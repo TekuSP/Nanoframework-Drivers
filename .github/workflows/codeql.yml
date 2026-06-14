@@ -41,7 +41,7 @@ jobs:
       contents: read
       security-events: write
     env:
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      NUGET_PACKAGES: ~/.nuget/packages
       solution: 'Meteostanice.sln'
     strategy:
       fail-fast: false
@@ -88,8 +88,6 @@ jobs:
       uses: actions/setup-dotnet@v5.3.0
       with:
         dotnet-version: 10.0.x
-        cache: true
-        cache-dependency-path: "**/packages.lock.json"
   
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v3
@@ -108,6 +106,14 @@ jobs:
         usePreview: true
       env:
         GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
+
+    - name: Cache and restore nugets
+      uses: actions/cache@v5
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+           ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-
         
     - name: Restore nugets
       run: nuget restore ${{ env.solution }} -ConfigFile nuget.config --locked-mode
