@@ -25,14 +25,12 @@ defaults:
     shell: pwsh
 jobs:
   Build:
-    strategy:
-      matrix:
-        configuration: [Release]
     name: Build NanoFramework SLN
     timeout-minutes: 15
     runs-on: windows-latest
     env:
       solution: 'Meteostanice.sln'
+      Configuration: Release
       major: '0'
       minor: '4'
     steps:
@@ -97,7 +95,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          Configuration: ${{ matrix.configuration }}
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"TekuSP_Meteostanice-CSharp" /o:"tekusp" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.scanner.scanAll=false /d:sonar.host.url="https://sonarcloud.io"
@@ -133,7 +130,7 @@ jobs:
           }
 
           # Default generated prereleases to the shared preview suffix when the user did not provide another suffix.
-          if ($releaseIsPrerelease -and $version -notmatch "-") {
+          if ($releaseIsPrerelease -and $version -notmatch "-[0-9A-Za-z][0-9A-Za-z.-]*$") {
               $version = "$version-preview"
 
               if (-not $tagNameWasProvided) {
@@ -164,11 +161,9 @@ jobs:
       
       - name: Pack nugets
         run: ./GenerateNugets.ps1
-        if: ${{ matrix.configuration == 'Release' }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7.0.1
-        if: ${{ matrix.configuration == 'Release' }}
         with:
           name: TekuSP-Drivers
           path: |
@@ -176,7 +171,6 @@ jobs:
 
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v3
-        if: matrix.configuration == 'Release'
         with:
           tag_name: ${{ env.tagName }}
           target_commitish: ${{ github.sha }}
