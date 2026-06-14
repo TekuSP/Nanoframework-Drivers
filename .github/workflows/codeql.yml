@@ -117,7 +117,7 @@ jobs:
            ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-
         
     - name: Restore nugets
-      run: nuget restore ${{ env.solution }} -ConfigFile nuget.config --locked-mode
+      run: nuget restore ${{ env.solution }} -ConfigFile nuget.config -LockedMode
 
     - name: Build NanoFramework Application
       run: msbuild ${{ env.solution }} /p:Configuration=$env:Configuration
