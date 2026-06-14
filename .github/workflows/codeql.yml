@@ -113,6 +113,7 @@ jobs:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
+           ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-
            ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-
         
     - name: Restore nugets
