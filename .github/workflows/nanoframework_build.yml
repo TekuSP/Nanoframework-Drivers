@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 15
     runs-on: windows-latest
     concurrency:
-      group: build-${{github.ref}}
+      group: build-${{github.ref}}-${{matrix.configuration}}
       cancel-in-progress: true
     env:
       solution: 'Meteostanice.sln'
