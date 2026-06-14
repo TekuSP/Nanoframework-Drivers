@@ -170,7 +170,7 @@ jobs:
           path: |
             ${{ github.workspace }}\**\*TekuSP*.nupkg
 
-      - name: Create or update Github Release
+      - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v3
         if: ${{ matrix.configuration == 'Release' }}
         with:
@@ -182,7 +182,7 @@ jobs:
           files: |
             ${{ github.workspace }}\**\*TekuSP*.nupkg
 
-      - name: Push nugets to Github
+      - name: Push nugets to GitHub
         run: |
           nuget sources Add -Name github -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -UserName ${{ github.repository_owner }} -Password ${{ secrets.GITHUB_TOKEN }}
           nuget push "**/*TekuSP*.nupkg" -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -NoSymbols -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}
