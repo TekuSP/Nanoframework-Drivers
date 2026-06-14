@@ -15,7 +15,6 @@ on:
   
 jobs:
   updateChangelog:
-    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     name: Update Changelog
     timeout-minutes: 15
