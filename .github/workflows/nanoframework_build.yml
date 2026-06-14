@@ -23,7 +23,7 @@ jobs:
       solution: 'Meteostanice.sln'
       major: '0'
       minor: '4'
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      NUGET_PACKAGES:  ~/.nuget/packages
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -34,9 +34,7 @@ jobs:
         uses: actions/setup-dotnet@v5.3.0
         with:
           dotnet-version: 10.0.x
-          cache: true
-          cache-dependency-path: "**/packages.lock.json"
-
+          
       - name: Set up JDK 17
         uses: actions/setup-java@v5.2.0
         with:
@@ -60,6 +58,14 @@ jobs:
           usePreview: true
         env:
           GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
+
+      - name: Cache and restore nugets
+        uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+             ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-
           
       - name: Restore nugets
         run: nuget restore ${{ env.solution }} -ConfigFile nuget.config --locked-mode
