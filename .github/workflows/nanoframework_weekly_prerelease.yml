@@ -3,29 +3,53 @@ name: Weekly Nanoframework Prerelease
 on:
   schedule:
     - cron: '0 0 * * 0'
-  workflow_dispatch:
-    inputs:
-      prerelease:
-        description: 'Publish as a prerelease'
-        required: true
-        type: boolean
-        default: true
-      version:
-        description: 'Optional SemVer version without leading v'
-        required: false
-        type: string
+  workflow_dispatch: {}
 
 permissions:
   contents: write
-  packages: write
-  checks: write
-  id-token: write
+  pull-requests: write
 
 jobs:
-  Release:
-    name: Build and publish weekly prerelease
-    uses: ./.github/workflows/nanoframework_release.yml
-    with:
-      prerelease: ${{ github.event_name == 'schedule' && true || inputs.prerelease }}
-      version: ${{ inputs.version }}
-    secrets: inherit
+  BumpVersion:
+    name: Bump weekly prerelease version
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v6.0.3
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Read current version
+        id: current_version
+        run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+
+      - name: Bump minor version
+        id: bump_version
+        uses: christian-draeger/increment-semantic-version@1.2.3
+        with:
+          current-version: ${{ steps.current_version.outputs.version }}
+          version-fragment: minor
+
+      - name: Update VERSION
+        run: printf '%s\n' '${{ steps.bump_version.outputs.next-version }}' > VERSION
+
+      - name: Create version bump pull request
+        uses: peter-evans/create-pull-request@v8.1.1
+        with:
+          token: ${{ secrets.PR_SECRET }}
+          commit-message: Bump weekly prerelease version to ${{ steps.bump_version.outputs.next-version }}
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+          title: Bump weekly prerelease version to ${{ steps.bump_version.outputs.next-version }}
+          body: |
+            Automated weekly prerelease version bump.
+
+            Once this PR is merged into master, the VERSION-triggered release workflow publishes a weekly prerelease and the changelog workflow updates CHANGELOG.md.
+          branch: release/weekly-prerelease-version
+          base: master
+          labels: |
+            automated
+            cleanup
+          delete-branch: true

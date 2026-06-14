@@ -3,6 +3,11 @@ name: Release Nanoframework
 on:
   release:
     types: [published]
+  push:
+    branches:
+      - master
+    paths:
+      - VERSION
   workflow_call:
     inputs:
       prerelease:
@@ -27,7 +32,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: release-${{ github.event.release.tag_name || inputs.tag }}
+  group: release-${{ github.event.release.tag_name || inputs.version || github.sha }}
   cancel-in-progress: true
 
 jobs:
@@ -38,8 +43,6 @@ jobs:
     env:
       solution: 'Meteostanice.sln'
       Configuration: Release
-      major: '0'
-      minor: '4'
       GITHUB_ACTOR: ${{ github.actor }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -135,10 +138,16 @@ jobs:
               $version = $tagName
           } else {
               $releaseIsPrerelease = "${{ inputs.prerelease }}" -ieq "true"
+              if ($eventName -eq "push") {
+                  $releaseIsPrerelease = $true
+              }
 
               if ([string]::IsNullOrWhiteSpace($version)) {
-                  # Weekly prereleases use the workflow run number as the SemVer patch for a monotonic version.
-                  $version = "${{ env.major }}.${{ env.minor }}.${{ github.run_number }}"
+                  if (Test-Path "VERSION") {
+                      $version = (Get-Content "VERSION" -Raw).Trim()
+                  } else {
+                      throw "VERSION file is required when no release tag or version input is provided."
+                  }
               }
           }
 

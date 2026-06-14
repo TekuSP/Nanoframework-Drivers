@@ -58,10 +58,43 @@ pull_request_rules:
           - cleanup
           - automated
 
+  - name: Automatically version bump PRs
+    conditions:
+      - author=TekuSP
+      - "head ~=release/(weekly-prerelease-version|manual-version-bump)"
+      - "check-success = Build NanoFramework SLN (Release)"
+      - "#commits-behind = 0"
+    actions:
+      merge:
+        method: merge
+        commit_message_template: |
+          Automerge from {{ head }}
+
+          {{ title }} (#{{ number }})
+
+          {{ body }}
+      label:
+        toggle:
+          - cleanup
+          - automated
+
   - name: Automatically approve Changelog PRs
     conditions:
       - author=TekuSP
       - "head ~=update-changelog"
+      - "check-success = Build NanoFramework SLN (Release)"
+      - "#commits-behind = 0"
+    actions:
+      review:
+        type: APPROVE
+      label:
+        toggle:
+          - approved
+
+  - name: Automatically approve version bump PRs
+    conditions:
+      - author=TekuSP
+      - "head ~=release/(weekly-prerelease-version|manual-version-bump)"
       - "check-success = Build NanoFramework SLN (Release)"
       - "#commits-behind = 0"
     actions:
@@ -117,6 +150,13 @@ pull_request_rules:
       - "#commits-behind > 0"
     actions:
       update:
+  - name: Automatically update version bump pull requests if they are commits behind
+    conditions:
+      - author=TekuSP
+      - "head ~=release/(weekly-prerelease-version|manual-version-bump)"
+      - "#commits-behind > 0"
+    actions:
+      update:
   - name: Ask to resolve conflict
     conditions:
       - conflict
@@ -132,6 +172,7 @@ pull_request_rules:
       - merged
       - "-head ~=update-changelog"
       - "-head ~=nfbot/update-dependencies/"
+      - "-head ~=release/(weekly-prerelease-version|manual-version-bump)"
       - "author!=dependabot[bot]"
     actions:
       comment:

@@ -1,0 +1,112 @@
+name: Bump Nanoframework Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_fragment:
+        description: 'Version change to apply'
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - custom
+        default: minor
+      custom_version:
+        description: 'Custom SemVer version without leading v. Required when version_fragment is custom.'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  BumpVersion:
+    name: Create version bump PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v6.0.3
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Read current version
+        id: current_version
+        run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+
+      - name: Bump selected version fragment
+        id: bump_version
+        if: inputs.version_fragment != 'custom'
+        uses: christian-draeger/increment-semantic-version@1.2.3
+        with:
+          current-version: ${{ steps.current_version.outputs.version }}
+          version-fragment: ${{ inputs.version_fragment }}
+
+      - name: Resolve requested version
+        id: requested_version
+        shell: pwsh
+        run: |
+          $currentVersion = "${{ steps.current_version.outputs.version }}"
+          $requestedVersion = "${{ steps.bump_version.outputs.next-version }}"
+
+          if ("${{ inputs.version_fragment }}" -eq "custom") {
+              $requestedVersion = "${{ inputs.custom_version }}".Trim()
+          }
+
+          if ([string]::IsNullOrWhiteSpace($requestedVersion)) {
+              throw "A custom_version input is required when version_fragment is custom."
+          }
+
+          if ($requestedVersion.StartsWith("v")) {
+              $requestedVersion = $requestedVersion.Substring(1)
+          }
+
+          function ConvertTo-VersionParts([string]$version) {
+              if ($version -notmatch "^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)$") {
+                  throw "Version '$version' must follow semantic versioning format (major.minor.patch, e.g., 1.2.3)."
+              }
+
+              return [pscustomobject]@{
+                  Major = [int]$Matches.major
+                  Minor = [int]$Matches.minor
+                  Patch = [int]$Matches.patch
+              }
+          }
+
+          $current = ConvertTo-VersionParts $currentVersion
+          $requested = ConvertTo-VersionParts $requestedVersion
+
+          $isHigher = $requested.Major -gt $current.Major `
+              -or ($requested.Major -eq $current.Major -and $requested.Minor -gt $current.Minor) `
+              -or ($requested.Major -eq $current.Major -and $requested.Minor -eq $current.Minor -and $requested.Patch -gt $current.Patch)
+
+          if (-not $isHigher) {
+              throw "Requested version '$requestedVersion' must be higher than current version '$currentVersion'."
+          }
+
+          "version=$requestedVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Update VERSION
+        run: printf '%s\n' '${{ steps.requested_version.outputs.version }}' > VERSION
+
+      - name: Create version bump pull request
+        uses: peter-evans/create-pull-request@v8.1.1
+        with:
+          token: ${{ secrets.PR_SECRET }}
+          commit-message: Bump version to ${{ steps.requested_version.outputs.version }}
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+          title: Bump version to ${{ steps.requested_version.outputs.version }}
+          body: |
+            User-requested version bump created by @${{ github.actor }}.
+
+            Once this PR is merged into master, the VERSION-triggered release workflow publishes a prerelease and the changelog workflow updates CHANGELOG.md.
+          branch: release/manual-version-bump
+          base: master
+          labels: |
+            automated
+            cleanup
+          delete-branch: true
