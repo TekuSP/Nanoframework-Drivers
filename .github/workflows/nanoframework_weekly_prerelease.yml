@@ -46,7 +46,7 @@ jobs:
           body: |
             Automated weekly prerelease version bump.
 
-            Once this PR is merged into master, the release workflow publishes the weekly prerelease and the changelog workflow updates CHANGELOG.md.
+            Once this PR is merged into master, the release workflow publishes a weekly prerelease and the changelog workflow updates CHANGELOG.md.
           branch: release/weekly-prerelease-version
           base: master
           labels: |
