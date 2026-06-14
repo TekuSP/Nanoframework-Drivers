@@ -116,6 +116,7 @@ jobs:
               $releaseIsPrerelease = "${{ inputs.prerelease }}" -ieq "true"
 
               if ([string]::IsNullOrWhiteSpace($version)) {
+                  # Weekly prereleases use the workflow run number as the SemVer patch for a monotonic version.
                   $version = "${{ env.major }}.${{ env.minor }}.${{ github.run_number }}"
               }
           }
@@ -130,6 +131,7 @@ jobs:
           }
 
           # Default generated prereleases to the shared preview suffix when the user did not provide another suffix.
+          # A supplied prerelease suffix is a hyphen followed by alphanumeric/hyphen segments separated by dots.
           if ($releaseIsPrerelease -and $version -notmatch "-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*$") {
               $version = "$version-preview"
 
