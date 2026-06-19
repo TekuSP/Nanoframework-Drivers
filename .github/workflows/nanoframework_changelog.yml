@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Git Safe Directory
         run: git config --global --add safe.directory "${{ github.workspace }}"
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.ref }}
           fetch-depth: 0
