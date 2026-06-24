@@ -107,7 +107,7 @@ jobs:
         GITHUB_AUTH_TOKEN: ${{ secrets.githubAuth }}
 
     - name: Cache and restore nugets
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: ${{runner.workspace}}\Nanoframework-Drivers\packages
         key: ${{ runner.os }}-${{ runner.arch }}-build-${{ github.workflow }}-${{ github.ref }}-${{ hashFiles('**/packages.lock.json') }}
