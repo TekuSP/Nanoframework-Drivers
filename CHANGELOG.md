@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.9-preview] - 2026-06-28
+
+CI/CD overhaul: adds automated weekly prerelease and manual version bump workflows, migrates changelog generation from `git-chglog` to AI-powered `git-iris`, upgrades all GitHub Actions dependencies, and introduces NuGet package caching with locked restore across all workflows. 120 commits across 11 files (+715, -410).
+
+### Added
+
+- ✨ Add `nanoframework_weekly_prerelease.yml` workflow for automated weekly patch-version bumps via scheduled cron (`0 0 * * 0`) or manual dispatch (607039a)
+- ✨ Add `nanoframework_version_bump.yml` workflow for manual version bumps (major, minor, patch, or custom SemVer) with validation and automatic PR creation (6482bbc)
+- ✨ Add `VERSION` file to track the current release version (`0.4.9`), used by release and changelog workflows as the source of truth
+- ✨ Add root-level `Directory.Build.props` enabling `RestorePackagesWithLockFile` and `RestoreLockedMode` for deterministic NuGet restores
+- ✨ Add NuGet package caching step (`actions/cache@v6`) to build, release, and CodeQL workflows, keyed on `packages.lock.json` hashes
+- ✨ Add concurrency groups to build (`build-${{github.ref}}`) and CodeQL (`analyze-${{github.ref}}`) workflows to cancel redundant runs
+- ✨ Add `workflow_run` trigger to changelog workflow so it fires automatically after the release workflow completes
+- ✨ Add Mergify rules for automatic merge, approval, and update of version bump PRs matching `release/(weekly-prerelease-version|manual-version-bump)` branches
+- ✨ Add `softprops/action-gh-release@v3` step to release workflow for creating or updating GitHub Releases with NuGet artifacts
+- ✨ Add `NuGet/login@v1` OIDC-based NuGet authentication step in release workflow, replacing static API key for `nuget.org` pushes
+
+### Changed
+
+- 🔄 Migrate changelog generation from `craicoverflow/install-git-chglog@v1.0.0` / `git-chglog` to `hyperb1iss/git-iris@v2` with Anthropic API (258f85a)
+- 🔄 Upgrade `actions/checkout` from v6.0.2 to v7.0.0 across all workflows
+- 🔄 Upgrade `actions/setup-dotnet` from v5.1.0 to v5.3.0 and .NET SDK target from 9.0.x to 10.0.x
+- 🔄 Upgrade `actions/cache` from v5.0.3 to v6
+- 🔄 Upgrade `nuget/setup-nuget` from v2.0.1 to v4.0
+- 🔄 Upgrade `microsoft/setup-msbuild` from v2 to v3
+- 🔄 Upgrade `actions/upload-artifact` from v6.0.0 to v7.0.1
+- 🔄 Upgrade `actions/setup-java` from v5.2.0 to v5.3.0
+- 🔄 Upgrade `richardrigutins/replace-in-files` from v2 to v3
+- 🔄 Upgrade `peter-evans/create-pull-request` from v8.1.0 to v8.1.1
+- 🔄 Upgrade `nanoframework/nanobuild` from v1.18 to v1.20 with `usePreview: true`
+- 🔄 Upgrade `nanoframework/nanodu` from v1.0.26 to v1.0.27
+- 🔄 Upgrade Mergify configuration to current format, normalizing indentation (a880c28, PR #202)
+- 🔄 Refactor release workflow to support `push` triggers on `VERSION` file changes and `workflow_call` inputs for prerelease/version parameters
+- 🔄 Add explicit `permissions` block (contents, pull-requests, packages, id-token) and `concurrency` group to release workflow
+- 🔄 Switch NuGet restore to locked mode (`-LockedMode` flag) in build, release, and CodeQL workflows
+- 🔄 Change default weekly version bump fragment from `minor` to `patch` (4572f18)
+
+### Fixed
+
+- 🐛 Fix indentation in `codeql.yml`, `nanoframework_build.yml`, and `nanoframework_release.yml` cache restore-keys blocks (8e17d08, a4c86da, 99f1cf1)
+- 🐛 Fix NuGet restore command syntax in build workflow (0077e95)
+
+### Removed
+
+- 🔥 Remove `craicoverflow/install-git-chglog@v1.0.0` action and `git-chglog` CLI usage from changelog workflow, replaced by Git-Iris
+- 🔥 Remove Mergify `delete_head_branch` rule (branch cleanup now handled by PR settings)
+- 🔥 Remove release workflow `matrix.configuration` strategy in favor of a single `Release` build with `Configuration` set as an env var
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.8-preview] - 2026-06-21
 
 This release overhauls the CI/CD pipeline with automated version management, weekly prerelease publishing, NuGet caching, and upgrades all GitHub Actions dependencies to their latest versions.
