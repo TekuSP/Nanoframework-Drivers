@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.10-preview] - 2026-07-05
+
+Overhaul CI/CD pipelines with automated weekly prerelease versioning, OIDC-based NuGet authentication, NuGet package caching, and .NET 10 migration. Update nanoFramework driver dependencies across all packages.
+
+### Added
+
+- ✨ Add `nanoframework_weekly_prerelease.yml` workflow for automated weekly patch version bumps, triggered on a Sunday schedule or manually via `workflow_dispatch` (607039a)
+- ✨ Add `nanoframework_version_bump.yml` workflow for manual major/minor/patch/custom version bumps with SemVer validation (6482bbcf)
+- ✨ Add `VERSION` file to track the current release version (`0.4.10`), used by both version bump and release workflows
+- ✨ Add root-level `Directory.Build.props` enabling `RestorePackagesWithLockFile` and `RestoreLockedMode` for reproducible builds across all projects (f89f3746)
+- ✨ Add NuGet package caching via `actions/cache@v6` in build, release, and CodeQL workflows (40aee2b1, ab4026a4)
+- ✨ Add concurrency groups with `cancel-in-progress: true` to build and CodeQL workflows to prevent redundant parallel runs (26156540, f3c51aad)
+- ✨ Add `workflow_run` trigger to changelog workflow, enabling automatic changelog generation after releases (86d3dd2b)
+- ✨ Add AI-powered changelog generation using `hyperb1iss/git-iris@v2` with Anthropic, replacing `craicoverflow/install-git-chglog` (258f85ad)
+- ✨ Add Mergify auto-merge rules for `release/weekly-prerelease-version` and `release/manual-version-bump` PR branches
+
+### Changed
+
+- 🔄 Upgrade .NET SDK from 9.0 to 10.0 across build, release, and CodeQL workflows
+- 🔄 Upgrade `nanoframework/nanobuild` from v1.18 to v1.20 with `usePreview: true` enabled
+- 🔄 Upgrade `actions/checkout` from v6.0.2 to v7.0.0
+- 🔄 Upgrade `actions/setup-dotnet` from v5.1.0 to v5.4.0
+- 🔄 Upgrade `actions/setup-java` from v5.2.0 to v5.4.0
+- 🔄 Upgrade `microsoft/setup-msbuild` from v2 to v3
+- 🔄 Upgrade `nuget/setup-nuget` from v2.0.1 to v4.0
+- 🔄 Upgrade `actions/upload-artifact` from v6.0.0 to v7.0.1
+- 🔄 Upgrade `actions/cache` from v5.0.3 to v6
+- 🔄 Upgrade `peter-evans/create-pull-request` from v8.1.0 to v8.1.1
+- 🔄 Upgrade `richardrigutins/replace-in-files` from v2 to v3
+- 🔄 Upgrade `nanoframework/nanodu` from v1.0.26 to v1.0.27
+- 🔄 Change release workflow trigger: now fires on `push` to master when `VERSION` file changes, replacing manual GitHub Release events
+- 🔄 Change default version bump strategy from `minor` to `patch` in weekly prerelease workflow (7e047c7b)
+- 🔄 Upgrade Mergify configuration to current format, replacing deprecated syntax (#202)
+- 🔄 Switch NuGet restore to `-LockedMode` for deterministic dependency resolution
+- 🔄 Update nanoFramework NuGet dependencies across all driver packages:
+  - `nanoFramework.Runtime.Events`: 1.11.32 → 1.11.37 (CST816D, DriverBaseInterfaces.Gpio, PI4IOE5V6408, TCS34725)
+  - `nanoFramework.System.Device.Gpio`: 1.1.57 → 1.1.62 (CST816D, DriverBaseInterfaces.Gpio, PI4IOE5V6408, TCS34725, Meteostanice)
+  - `nanoFramework.System.Device.Spi`: 1.3.82 → 1.3.89 (DriverBaseSPI, SSD1331, Meteostanice)
+  - `nanoFramework.System.IO.Ports`: 1.1.132 → 1.1.139 (DriverBaseUART, MHZ19B)
+  - `nanoFramework.Hardware.Esp32`: 1.6.37 → 1.6.40 (Meteostanice)
+
+### Security
+
+- 🔒 Replace long-lived `secrets.NUGET_KEY` API key with OIDC-based temporary token authentication via `NuGet/login@v1` in the release workflow (7682e586)
+- 🔒 Add `id-token: write` permission to weekly prerelease workflow for OIDC token federation (eb71822b)
+
+### Removed
+
+- 🔥 Remove per-project `Meteostanice/Directory.Build.props` in favor of root-level shared configuration (2164899c)
+
+### Metrics
+
+- Total Commits: 131
+- Files Changed: 48
+- Insertions: +917
+- Deletions: -563
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.9-preview] - 2026-06-28
 
 CI/CD overhaul: adds automated weekly prerelease and manual version bump workflows, migrates changelog generation from `git-chglog` to AI-powered `git-iris`, upgrades all GitHub Actions dependencies, and introduces NuGet package caching with locked restore across all workflows. 120 commits across 11 files (+715, -410).
