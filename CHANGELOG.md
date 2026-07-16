@@ -5,6 +5,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.11-preview] - 2026-07-12
+
+This release overhauls the CI/CD pipeline with automated weekly prerelease versioning, NuGet package caching, OIDC-based NuGet publishing, and upgrades to .NET 10.0.x. All driver packages receive updated nanoFramework NuGet dependencies.
+
+### Added
+
+- ✨ Add weekly prerelease workflow (`nanoframework_weekly_prerelease.yml`) that auto-bumps the patch version every Sunday and creates a PR (607039a, PR #212)
+- ✨ Add manual version bump workflow (`nanoframework_version_bump.yml`) with support for major, minor, patch, and custom SemVer inputs, including monotonic version validation (6482bbc, PR #214)
+- ✨ Add `VERSION` file as single source of truth for project versioning
+- ✨ Add `Directory.Build.props` at repo root for shared NuGet package restore configuration (f89f374)
+- ✨ Add NuGet package caching via `actions/cache@v6` across build, CodeQL, and release workflows (40aee2b, ab4026a, 5ae73a3)
+- ✨ Add concurrency groups with `cancel-in-progress: true` to build, CodeQL, and release workflows (26156540, f3c51aa)
+- ✨ Add Mergify auto-approval and auto-merge rules for version bump PRs (`release/weekly-prerelease-version`, `release/manual-version-bump`) (6482bbc)
+- ✨ Add AI-powered changelog generation via `hyperb1iss/git-iris@v2` with Anthropic provider, triggered on release publication and workflow_run (6482bbc, 86d3dd2)
+
+### Changed
+
+- 🔄 Upgrade .NET SDK from 9.0.x to 10.0.x in build workflow (da90cf3), CodeQL workflow (f40e260), and release workflow (45e8797)
+- 🔄 Upgrade `nanoframework/nanobuild` from v1.18 to v1.20 with `usePreview: true` enabled (ff59e4f bumped to v1.19, then 45e8797 and f40e260 bumped to v1.20)
+- 🔄 Upgrade Mergify configuration to current YAML format (a880c28)
+- 🔄 Switch NuGet restore to locked mode (`-LockedMode` / `--locked-mode`) across all workflows
+- 🔄 Change default weekly version bump from minor to patch increment (4572f18, 7e047c7)
+- ♻️ Update 5 nanoFramework NuGet dependencies across all driver packages and Meteostanice (bac32a1):
+  - `nanoFramework.Hardware.Esp32` 1.6.37 → 1.6.40
+  - `nanoFramework.Runtime.Events` 1.11.32 → 1.11.37
+  - `nanoFramework.System.Device.Gpio` 1.1.57 → 1.1.62
+  - `nanoFramework.System.Device.Spi` 1.3.82 → 1.3.89
+  - `nanoFramework.System.IO.Ports` 1.1.132 → 1.1.139
+- 🔄 Bump GitHub Actions dependencies (net effect across range):
+  - `actions/checkout` 6.0.2 → 7.0.0
+  - `actions/setup-dotnet` 5.1.0 → 5.4.0
+  - `actions/setup-java` 5.2.0 → 5.4.0
+  - `actions/cache` 5.0.3 → 6
+  - `actions/upload-artifact` 6.0.0 → 7.0.1
+  - `nuget/setup-nuget` 2.0.1 → 4.0
+  - `microsoft/setup-msbuild` 2 → 3
+  - `richardrigutins/replace-in-files` 2 → 3
+  - `peter-evans/create-pull-request` 8.1.0 → 8.1.1
+  - `nanoframework/nanodu` 1.0.26 → 1.0.27
+
+### Security
+
+- 🔒 Switch release workflow NuGet publishing from a stored API key secret to OIDC-generated temporary API keys via `NuGet/login@v1`, using `id-token: write` permission (7682e58, eb71822)
+
+### Fixed
+
+- 🐛 Fix NuGet restore command syntax across workflows (0077e95)
+- 🐛 Fix indentation in `codeql.yml`, `nanoframework_build.yml`, and `nanoframework_release.yml` (8e17d08, a4c86da, 99f1cf1)
+
+### Metrics
+
+- Total Commits: 131
+- Files Changed: 48
+- Insertions: +975
+- Deletions: -563
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.10-preview] - 2026-07-05
 
 Overhaul CI/CD pipelines with automated weekly prerelease versioning, OIDC-based NuGet authentication, NuGet package caching, and .NET 10 migration. Update nanoFramework driver dependencies across all packages.
