@@ -20,7 +20,7 @@
     <tags>drivers tekusp net nanoframework sensitivity units</tags>
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.17.11" />
-      <dependency id="UnitsNet.nanoFramework.Duration" version="5.75.0" />
+      <dependency id="UnitsNet.nanoFramework.Duration" version="5.75.1" />
     </dependencies>
   </metadata>
   <files>
