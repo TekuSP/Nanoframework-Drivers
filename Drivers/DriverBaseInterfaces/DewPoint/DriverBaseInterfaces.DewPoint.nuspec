@@ -22,8 +22,8 @@
       <dependency id="nanoFramework.CoreLibrary" version="1.17.11" />
       <dependency id="TekuSP.Drivers.DriverBase.Interfaces.Humidity" version="$version$" />
       <dependency id="TekuSP.Drivers.DriverBase.Interfaces.Temperature" version="$version$" />
-      <dependency id="UnitsNet.nanoFramework.RelativeHumidity" version="5.75.0" />
-      <dependency id="UnitsNet.nanoFramework.Temperature" version="5.75.0" />
+      <dependency id="UnitsNet.nanoFramework.RelativeHumidity" version="5.75.1" />
+      <dependency id="UnitsNet.nanoFramework.Temperature" version="5.75.1" />
     </dependencies>
   </metadata>
   <files>
