@@ -5,6 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.12-preview] - 2026-07-21
+
+This prerelease introduces a fully automated weekly release pipeline with version bumping, AI-powered changelog generation, and NuGet package caching. It also brings NuGet dependency updates across all driver packages and the Meteostanice application.
+
+### Added
+
+- ✨ Add weekly prerelease workflow (`nanoframework_weekly_prerelease.yml`) for automated Sunday patch version bumps and PR creation (607039a)
+- ✨ Add manual version bump workflow (`nanoframework_version_bump.yml`) with SemVer validation and major/minor/patch/custom options (6482bbc)
+- ✨ Add AI-powered changelog generation using Git-Iris with Anthropic, triggered on release completion (ba37304, 258f85a)
+- ✨ Add `VERSION` file as the single source of truth for project versioning (6482bbc)
+- ✨ Add `Directory.Build.props` at repository root to enable `RestorePackagesWithLockFile` and `RestoreLockedMode` across all projects (f89f374)
+- ✨ Add NuGet package caching (`actions/cache`) to build, release, and CodeQL workflows (40aee2b, ab4026a, daaf0c0)
+- ✨ Add concurrency settings to build and CodeQL workflows to cancel redundant runs (2615654, f3c51aa)
+- ✨ Add Mergify auto-merge and auto-approve rules for version bump PRs on `release/weekly-prerelease-version` and `release/manual-version-bump` branches (6482bbc)
+
+### Changed
+
+- 🔄 Bump `nanoFramework.Runtime.Events` from 1.11.32 to 1.11.37 (affects all drivers and Meteostanice) (bac32a1)
+- 🔄 Bump `nanoFramework.System.Device.Gpio` from 1.1.57 to 1.1.62 (affects CST816D, DriverBaseInterfaces.Gpio, DriverBaseSPI, PI4IOE5V6408, SSD1331, TCS34725, Meteostanice) (bac32a1)
+- 🔄 Bump `nanoFramework.System.Device.Spi` from 1.3.82 to 1.3.89 (affects SSD1331, DriverBaseSPI, Meteostanice) (bac32a1)
+- 🔄 Bump `nanoFramework.System.IO.Ports` from 1.1.132 to 1.1.139 (affects DriverBaseUART, MHZ19B, Meteostanice) (bac32a1)
+- 🔄 Bump `nanoFramework.Hardware.Esp32` from 1.6.37 to 1.6.40 (affects Meteostanice) (bac32a1)
+- 🔄 Bump 8 `UnitsNet.nanoFramework.*` packages from 5.75.0 to 5.75.1: Duration, Illuminance, Length, Pressure, Ratio, RelativeHumidity, Temperature, VolumeConcentration (affects HDC1080, LPS22HB, MHZ19B, QMP6988, SHT3x, SHTC3, TCS34725, TSL2561, DriverBaseInterfaces, Meteostanice) (d3a279a)
+- 🔄 Bump `actions/checkout` from 6.0.2 to 7.0.1
+- 🔄 Bump `actions/cache` from 5.0.3 to 6
+- 🔄 Bump `actions/setup-dotnet` from 5.1.0 to 6.0.0
+- 🔄 Bump `actions/setup-java` from 5.2.0 to 5.6.0
+- 🔄 Bump `actions/upload-artifact` from 6.0.0 to 7.0.1
+- 🔄 Bump `nuget/setup-nuget` from 2.0.1 to 4.0
+- 🔄 Bump `microsoft/setup-msbuild` from 2 to 3
+- 🔄 Bump `peter-evans/create-pull-request` from 8.1.0 to 8.1.1
+- 🔄 Bump `richardrigutins/replace-in-files` from 2 to 3
+- 🔄 Bump `nanoframework/nanobuild` from 1.18 to 1.19
+- 🔄 Bump `nanoframework/nanodu` from 1.0.26 to 1.0.27
+- 🔄 Upgrade Mergify configuration to current format (a880c28)
+- 🔄 Change default weekly version bump from minor to patch increment (4572f18, 7e047c7)
+- 🔄 Move `Directory.Build.props` from `Meteostanice/` to repository root for solution-wide coverage (f89f374, 2164899)
+
+### Fixed
+
+- 🐛 Fix NuGet restore command syntax in build workflow (0077e95)
+- 🐛 Fix YAML indentation in `codeql.yml`, `nanoframework_build.yml`, and `nanoframework_release.yml` (8e17d08, a4c86da, 99f1cf1)
+- 🐛 Fix NuGet cache path configuration across build, release, and CodeQL workflows (47b891b, 3bc9173, e63fc5b, 9767855, fb1d3e8, 6b2da22)
+- 🐛 Fix `nanoframework_build.yml` workflow configuration (da1731f)
+
+### Metrics
+
+- Total Commits: 155
+- Files Changed: 81
+- Insertions: +1,237
+- Deletions: -765
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.11-preview] - 2026-07-12
 
 This release overhauls the CI/CD pipeline with automated weekly prerelease versioning, NuGet package caching, OIDC-based NuGet publishing, and upgrades to .NET 10.0.x. All driver packages receive updated nanoFramework NuGet dependencies.
