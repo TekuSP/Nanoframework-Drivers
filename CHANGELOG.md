@@ -5,6 +5,73 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.13-preview] - 2026-07-26
+
+This prerelease introduces **automated version management** with weekly prerelease and manual version bump workflows, upgrades all CI/CD pipelines to .NET 10.0 with OIDC-based NuGet authentication, and updates nanoFramework core and UnitsNet dependencies across all driver packages.
+
+### Added
+
+- ✨ Add weekly prerelease workflow (`nanoframework_weekly_prerelease.yml`) for automated Sunday patch version bumps (607039ac)
+- ✨ Add manual version bump workflow (`nanoframework_version_bump.yml`) supporting major, minor, patch, and custom SemVer increments (6482bbcf)
+- ✨ Add `VERSION` file as centralized version source of truth for all release workflows
+- ✨ Add root-level `Directory.Build.props` with `RestorePackagesWithLockFile` and `RestoreLockedMode` for reproducible NuGet restores (f89f3746)
+- ✨ Add NuGet package caching with lock file-based cache keys in build, release, and CodeQL workflows
+- ✨ Add concurrency groups to build and CodeQL workflows to cancel redundant runs (26156540, f3c51aad)
+- ✨ Add OIDC-based NuGet authentication via `NuGet/login@v1` in release workflow, replacing long-lived API keys
+- ✨ Add automated GitHub release creation via `softprops/action-gh-release@v3` with prerelease flag support
+- ✨ Add AI-powered changelog generation using `hyperb1iss/git-iris@v2` with Anthropic API (258f85ad)
+- ✨ Add Mergify auto-merge rules for version bump PRs (`release/weekly-prerelease-version`, `release/manual-version-bump`)
+
+### Changed
+
+- 🔄 Upgrade .NET SDK from `9.0.x` to `10.0.x` across build, release, and CodeQL workflows
+- 🔄 Upgrade Mergify configuration to current format, add conflict detection comments and merged PR cleanup (a880c285)
+- 🔄 Bump `nanoframework/nanobuild` from 1.18 to 1.20 with preview mode enabled
+- 🔄 Update `nanoframework/nanodu` to v1.0.27
+- 🔄 Change default version bump fragment from `minor` to `patch` (7e047c7b)
+- 🔄 Add `workflow_run` trigger to changelog workflow for post-release automation (86d3dd2b)
+- 🔄 Add `push` trigger on `VERSION` file and `workflow_call` support to release workflow
+- 🔄 Replace `craicoverflow/install-git-chglog` with `hyperb1iss/git-iris@v2` for changelog generation
+- 🔄 Add `-LockedMode` flag to NuGet restore commands for deterministic builds
+
+**GitHub Actions bumps (dependabot):**
+- `actions/checkout`: 6.0.2 → 7.0.1
+- `actions/setup-dotnet`: 5.1.0 → 6.0.0
+- `actions/setup-java`: 5.2.0 → 5.6.0
+- `actions/upload-artifact`: 6.0.0 → 7.0.1
+- `actions/cache`: 5.0.3 → 6
+- `microsoft/setup-msbuild`: 2 → 3
+- `nuget/setup-nuget`: 2.0.1 → 4.0
+- `richardrigutins/replace-in-files`: 2 → 3
+- `peter-evans/create-pull-request`: 8.1.0 → 8.1.1
+
+**NuGet dependency updates (all driver packages):**
+- `nanoFramework.Runtime.Events`: 1.11.32 → 1.11.37
+- `nanoFramework.System.Device.Gpio`: 1.1.57 → 1.1.62
+- `nanoFramework.System.IO.Ports`: 1.1.132 → 1.1.139
+- `UnitsNet.nanoFramework.*` (Temperature, RelativeHumidity, Pressure, Ratio, VolumeConcentration, Duration, Length, Illuminance): 5.75.0 → 5.75.1
+
+**Affected drivers:** CST816D, HDC1080, LPS22HB, MHZ19B, PI4IOE5V6408, QMP6988, SHT3x, SHTC3, SSD1331, TCS34725, TSL2561, DriverBaseSPI, DriverBaseUART, and all DriverBaseInterfaces (Altitude, CO2, DewPoint, Gpio, Humidity, Infrared, Light, Pressure, Sensitivity, Temperature)
+
+### Fixed
+
+- 🐛 Fix NuGet restore command syntax in build workflow (0077e952)
+- 🐛 Fix YAML indentation in `codeql.yml`, `nanoframework_build.yml`, and `nanoframework_release.yml` (8e17d084, a4c86da9, 99f1cf19)
+- 🐛 Fix NuGet cache path configuration, settling on user home directory path (e63fc5b9)
+
+### Security
+
+- 🔒 Remove write permissions from weekly prerelease workflow, add explicit `checks` and `id-token` permissions (67ca104f, 82ec7e9b, eb71822b)
+- 🔒 Add OIDC-based NuGet authentication to eliminate stored API key secrets
+
+### Metrics
+
+- Total Commits: 178
+- Files Changed: 81
+- Insertions: +1,290
+- Deletions: -765
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.12-preview] - 2026-07-21
 
 This prerelease introduces a fully automated weekly release pipeline with version bumping, AI-powered changelog generation, and NuGet package caching. It also brings NuGet dependency updates across all driver packages and the Meteostanice application.
