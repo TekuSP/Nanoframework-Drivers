@@ -5,6 +5,77 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.14-preview] - 2026-08-02
+
+This release overhauls the CI/CD pipeline with automated weekly prerelease versioning, NuGet package caching, .NET 10.0 migration, and AI-powered changelog generation. All driver packages receive NuGet dependency updates.
+
+### Added
+
+- ✨ Add `nanoframework_weekly_prerelease.yml` workflow for automated weekly prerelease builds on a Sunday schedule (607039ac)
+- ✨ Add `nanoframework_version_bump.yml` workflow for manual semantic version bumping with major/minor/patch/custom options (6482bbcf)
+- ✨ Add `VERSION` file as single source of truth for project versioning, consumed by release and changelog workflows
+- ✨ Add `Directory.Build.props` at repository root with `RestorePackagesWithLockFile` and `RestoreLockedMode` for reproducible NuGet restores (f89f3746)
+- ✨ Add NuGet package caching via `actions/cache` across build, release, and CodeQL workflows (40aee2b1, ab4026a4, daaf0c0b)
+- ✨ Add concurrency groups with `cancel-in-progress: true` to build and CodeQL workflows (26156540, f3c51aad)
+- ✨ Add GitHub Release creation step with NuGet package assets in `nanoframework_release.yml` using `softprops/action-gh-release@v3`
+- ✨ Add OIDC-based NuGet authentication via `NuGet/login@v1`, replacing hardcoded API keys in the release workflow
+- ✨ Add `workflow_run` trigger to changelog workflow so it runs automatically after releases (86d3dd2b)
+- ✨ Add Mergify auto-merge and auto-approve rules for `release/weekly-prerelease-version` and `release/manual-version-bump` branches
+
+### Changed
+
+- 🔄 Migrate from .NET 9.0.x to **.NET 10.0.x** across all CI workflows
+- 🔄 Switch changelog generation from `craicoverflow/install-git-chglog` to **Git-Iris** (`hyperb1iss/git-iris@v2`) with Anthropic AI backend (258f85ad)
+- 🔄 Change default weekly version bump from minor to **patch** increment (4572f180, 7e047c7b)
+- 🔄 Upgrade Mergify configuration to current YAML format (a880c285, PR #202)
+- 🔄 Enforce `-LockedMode` on all `nuget restore` commands for deterministic builds
+- 🔄 Update `nanoframework/nanobuild` from 1.18 to 1.20 with `usePreview: true`
+
+#### GitHub Actions version bumps
+
+- `actions/checkout` 6.0.2 → 7.0.1
+- `actions/setup-dotnet` 5.1.0 → 6.0.0
+- `actions/setup-java` 5.2.0 → 5.6.0
+- `actions/cache` 5.0.3 → 6
+- `actions/upload-artifact` 6.0.0 → 7.0.1
+- `microsoft/setup-msbuild` 2 → 3
+- `nuget/setup-nuget` 2.0.1 → 4.0
+- `nanoframework/nanodu` 1.0.26 → 1.0.27
+- `richardrigutins/replace-in-files` 2 → 3
+- `peter-evans/create-pull-request` 8.1.0 → 8.1.1
+
+#### NuGet dependency updates (all driver packages)
+
+- `nanoFramework.Runtime.Events` 1.11.32 → 1.11.39 (CST816D, DriverBaseInterfaces.Gpio, DriverBaseSPI, DriverBaseUART, PI4IOE5V6408, MHZ19B)
+- `nanoFramework.System.Device.Gpio` 1.1.57 → 1.1.64 (CST816D, DriverBaseInterfaces.Gpio, DriverBaseSPI, PI4IOE5V6408)
+- `nanoFramework.System.Device.Spi` 1.3.82 → 1.3.90 (DriverBaseSPI)
+- `nanoFramework.System.IO.Ports` 1.1.132 → 1.1.142 (DriverBaseUART, MHZ19B)
+- `UnitsNet.nanoFramework.Temperature` 5.75.0 → 5.75.1 (DriverBaseInterfaces.Temperature, HDC1080, LPS22HB, SHT3x)
+- `UnitsNet.nanoFramework.RelativeHumidity` 5.75.0 → 5.75.1 (HDC1080, SHT3x)
+- `UnitsNet.nanoFramework.Pressure` 5.75.0 → 5.75.1 (LPS22HB)
+- `UnitsNet.nanoFramework.Ratio` 5.75.0 → 5.75.1 (MHZ19B)
+- `UnitsNet.nanoFramework.VolumeConcentration` 5.75.0 → 5.75.1 (MHZ19B)
+
+### Fixed
+
+- 🐛 Fix `nanoframework_build.yml` workflow syntax and indentation issues (da1731fa, a4c86da9)
+- 🐛 Fix `nuget restore` command syntax across workflows (0077e952)
+- 🐛 Fix indentation in `codeql.yml` restore-keys block (8e17d084)
+- 🐛 Fix indentation in `nanoframework_release.yml` (99f1cf19)
+
+### Removed
+
+- 🔥 Remove `Meteostanice/Directory.Build.props` in favor of the new root-level `Directory.Build.props` (2164899c)
+- 🔥 Remove standalone NuGet cache setup step from build workflow, replaced by unified caching strategy (d81d6be1)
+
+### Metrics
+
+- Total Commits: 155
+- Files Changed: 81
+- Insertions: +1,357
+- Deletions: -765
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.13-preview] - 2026-07-26
 
 This prerelease introduces **automated version management** with weekly prerelease and manual version bump workflows, upgrades all CI/CD pipelines to .NET 10.0 with OIDC-based NuGet authentication, and updates nanoFramework core and UnitsNet dependencies across all driver packages.
