@@ -5,6 +5,70 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.15-preview] - 2026-08-09
+
+This release introduces **automated weekly prerelease workflows** and **manual version bump tooling**, overhauls CI/CD pipeline configuration (NuGet caching, concurrency, permissions), and updates all NuGet and GitHub Actions dependencies across every driver package.
+
+### Added
+
+- Add `nanoframework_weekly_prerelease.yml` workflow for automated Sunday prerelease version bumps with PR creation and auto-merge via Mergify (607039a)
+- Add `nanoframework_version_bump.yml` workflow for on-demand major/minor/patch/custom version bumps with SemVer validation (6482bbc)
+- Add `nanoframework_changelog.yml` trigger on `workflow_run` completion for automated changelog generation after releases (86d3dd2)
+- Add root-level `Directory.Build.props` enforcing NuGet package lock file restoration in locked mode (f89f374)
+- Add `VERSION` file as single source of truth for package versioning, currently at `0.4.15`
+- Add NuGet package caching steps to build, CodeQL, and release workflows (40aee2b, ab4026a, daaf0c0)
+- Add concurrency settings to build and CodeQL workflows to cancel redundant runs (2615654, f3c51aa)
+- Add `id-token` and `checks` permissions to prerelease workflow (eb71822, 82ec7e9)
+- Add Mergify rules for automatic approval and merge of version bump PRs matching `release/(weekly-prerelease-version|manual-version-bump)` branches
+
+### Changed
+
+- **NuGet dependencies (nanoFramework core):**
+  - `nanoFramework.Hardware.Esp32` 1.6.37 → 1.6.42 (Meteostanice)
+  - `nanoFramework.Runtime.Events` 1.11.32 → 1.11.39 (all drivers using events)
+  - `nanoFramework.System.Device.Gpio` 1.1.57 → 1.1.64 (CST816D, PI4IOE5V6408, DriverBaseInterfaces.Gpio, DriverBaseSPI, Meteostanice)
+  - `nanoFramework.System.Device.Spi` 1.3.82 → 1.3.90 (DriverBaseSPI, SSD1331, Meteostanice)
+  - `nanoFramework.System.IO.Ports` 1.1.132 → 1.1.142 (DriverBaseUART, MHZ19B, Meteostanice)
+- **NuGet dependencies (UnitsNet):**
+  - `UnitsNet.nanoFramework.*` 5.75.0 → 5.75.1 for all eight unit packages: Duration, Illuminance, Length, Pressure, Ratio, RelativeHumidity, Temperature, VolumeConcentration
+- **GitHub Actions (major bumps):**
+  - `actions/checkout` 6.0.2 → 7.0.1
+  - `actions/cache` 5.0.3 → 6
+  - `actions/setup-dotnet` 5.1.0 → 6.0.0
+  - `actions/upload-artifact` 6.0.0 → 7.0.1
+  - `nuget/setup-nuget` 2.0.1 → 4.0
+  - `microsoft/setup-msbuild` 2 → 3
+  - `richardrigutins/replace-in-files` 2 → 3
+- **GitHub Actions (minor/patch bumps):**
+  - `actions/setup-java` 5.2.0 → 5.7.0
+  - `peter-evans/create-pull-request` 8.1.0 → 8.1.1
+  - `nanoframework/nanobuild` 1.18 → 1.19
+  - `nanoframework/nanodu` 1.0.26 → 1.0.27
+- Upgrade Mergify configuration to current format, add version-bump automation rules, exclude auto-generated PRs from thank-you comments (a880c28, PR #202)
+- Change default weekly version bump from `minor` to `patch` increment (4572f18, 7e047c7)
+- Update build workflow to use .NET 10.0.x and `nanobuild` v1.20 with preview features
+- Consolidate `Directory.Build.props` from `Meteostanice/` subdirectory to repository root (2164899)
+- Use Anthropic provider for Git-Iris changelog generation (258f85a)
+
+### Fixed
+
+- Fix NuGet restore command syntax in build workflow (0077e95)
+- Fix YAML indentation in `codeql.yml`, `nanoframework_build.yml`, and `nanoframework_release.yml` (8e17d08, a4c86da, 99f1cf1)
+- Fix NuGet cache path configuration across build, CodeQL, and release workflows after iterating through relative, absolute, and user-directory approaches (47b891b, e63fc5b, 9767855)
+
+### Removed
+
+- Remove standalone NuGet cache setup step from build workflow in favor of `actions/cache` integration (d81d6be)
+- Delete `Meteostanice/Directory.Build.props` after consolidation to root (2164899)
+
+### Metrics
+
+- Total Commits: 192
+- Files Changed: 81
+- Insertions: +1,428
+- Deletions: -765
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.14-preview] - 2026-08-02
 
 This release overhauls the CI/CD pipeline with automated weekly prerelease versioning, NuGet package caching, .NET 10.0 migration, and AI-powered changelog generation. All driver packages receive NuGet dependency updates.
