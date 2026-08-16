@@ -5,6 +5,68 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.16-preview] - 2026-08-16
+
+This prerelease introduces automated weekly versioning and changelog generation workflows, refactors all CI/CD pipelines with NuGet caching and concurrency controls, and updates nanoFramework and UnitsNet dependencies across all driver packages.
+
+### Added
+
+- Add **weekly prerelease workflow** (`nanoframework_weekly_prerelease.yml`) that bumps the patch version every Sunday and opens a PR to `master` (607039a)
+- Add **manual version bump workflow** (`nanoframework_version_bump.yml`) supporting major, minor, patch, or custom SemVer increments with validation (6482bbcf)
+- Add **AI-powered changelog generation** via `git-iris` with Anthropic provider, triggered after releases or on demand (`nanoframework_changelog.yml`) (258f85ad)
+- Add `VERSION` file as the single source of truth for project semantic versioning
+- Add `Directory.Build.props` at repository root enforcing `RestorePackagesWithLockFile` and `RestoreLockedMode` for reproducible NuGet restores (f89f3746)
+- Add NuGet package caching (`actions/cache`) to build, release, and CodeQL workflows (40aee2b1, ab4026a4, daaf0c0b)
+- Add concurrency groups with `cancel-in-progress` to build and CodeQL workflows to prevent redundant runs (26156540, f3c51aad)
+- Add Mergify rules for auto-merging and auto-approving version bump PRs (`release/weekly-prerelease-version`, `release/manual-version-bump`) and changelog PRs (`update-changelog`)
+
+### Changed
+
+- Upgrade Mergify configuration to current format, replacing deprecated syntax (a880c285, PR #202)
+- Update release workflow to support `workflow_call` trigger with version/prerelease inputs and `push` trigger on `VERSION` file changes
+- Update release workflow to use OIDC-based NuGet authentication (`id-token: write`) instead of static API keys
+- Bump .NET SDK to `10.0.x` and Java to version `17` (Zulu) across build, release, and CodeQL workflows
+- Change default version bump increment from `minor` to `patch` for weekly prereleases (4572f180, 7e047c7b)
+- Revert version from `0.5.0` back to `0.4.x` series after adjusting bump strategy (b01fa23a)
+
+#### GitHub Actions Dependencies
+
+- Bump `actions/checkout` from 6.0.2 to 7.0.1
+- Bump `actions/upload-artifact` from 6.0.0 to 7.0.1
+- Bump `actions/cache` from 5.0.3 to 6
+- Bump `actions/setup-dotnet` from 5.1.0 to 6.0.0
+- Bump `actions/setup-java` from 5.2.0 to 5.7.0
+- Bump `microsoft/setup-msbuild` from 2 to 3
+- Bump `nuget/setup-nuget` from 2.0.1 to 4.0
+- Bump `peter-evans/create-pull-request` from 8.1.0 to 8.1.1
+- Bump `richardrigutins/replace-in-files` from 2 to 3
+- Bump `nanoframework/nanobuild` from 1.18 to 1.19
+- Bump `nanoframework/nanodu` from 1.0.26 to 1.0.27
+
+#### NuGet Dependencies (all driver packages)
+
+- Bump `nanoFramework.Hardware.Esp32` from 1.6.37 to 1.6.42
+- Bump `nanoFramework.Runtime.Events` from 1.11.32 to 1.11.39
+- Bump `nanoFramework.System.Device.Gpio` from 1.1.57 to 1.1.64
+- Bump `nanoFramework.System.Device.Spi` from 1.3.82 to 1.3.90
+- Bump `nanoFramework.System.IO.Ports` from 1.1.132 to 1.1.142
+- Bump all `UnitsNet.nanoFramework.*` packages from 5.75.0 to 5.75.1 (Duration, Illuminance, Length, Pressure, Ratio, RelativeHumidity, Temperature, VolumeConcentration)
+
+### Fixed
+
+- Fix NuGet restore command syntax in build workflow (0077e952)
+- Fix YAML indentation in `codeql.yml`, `nanoframework_build.yml`, and `nanoframework_release.yml` (8e17d084, a4c86da9, 99f1cf19)
+- Fix NuGet cache path resolution, settling on user home directory after several iterations (e63fc5b9)
+- Remove stale `Meteostanice/Directory.Build.props` in favor of the new root-level file (2164899c)
+
+### Metrics
+
+- Total Commits: 152
+- Files Changed: 81
+- Insertions: +1,492
+- Deletions: -765
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.15-preview] - 2026-08-09
 
 This release introduces **automated weekly prerelease workflows** and **manual version bump tooling**, overhauls CI/CD pipeline configuration (NuGet caching, concurrency, permissions), and updates all NuGet and GitHub Actions dependencies across every driver package.
