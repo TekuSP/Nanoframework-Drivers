@@ -5,6 +5,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.17-preview] - 2026-08-23
+
+This release overhauls CI/CD automation with weekly prerelease workflows, automated version bumping, and AI-powered changelog generation. All driver packages receive NuGet dependency updates, and GitHub Actions dependencies are brought to their latest versions.
+
+### Added
+
+- ✨ Add `nanoframework_weekly_prerelease.yml` workflow for automated weekly prerelease version bumps on a Sunday schedule (`607039ac`, PR #212)
+- ✨ Add `nanoframework_version_bump.yml` workflow for manual major/minor/patch/custom version bumps with validation (`6482bbcf`, PR #214)
+- ✨ Add `VERSION` file as the single source of truth for package versioning
+- ✨ Add root-level `Directory.Build.props` with `RestorePackagesWithLockFile` and `RestoreLockedMode` enabled for reproducible builds (`f89f3746`)
+- ✨ Add NuGet package caching to build, CodeQL, and release workflows (`40aee2b1`, `ab4026a4`, `daaf0c0b`)
+- ✨ Add concurrency groups with `cancel-in-progress: true` to build and CodeQL workflows to prevent redundant runs (`26156540`, `f3c51aad`)
+- ✨ Add `id-token` permission to release workflow for OIDC-based NuGet authentication (`eb71822b`)
+- ✨ Add `workflow_run` trigger to changelog workflow so it fires after the release workflow completes (`86d3dd2b`)
+
+### Changed
+
+- 🔄 Rework release workflow (`nanoframework_release.yml`) to support multi-trigger: release published event, `VERSION` file changes on master, and `workflow_call` with prerelease/version inputs (`07423ba5`, `153f2207`)
+- 🔄 Switch changelog generation to use Anthropic (Claude) as the Git-Iris provider (`258f85ad`)
+- 🔄 Change default version bump fragment from `minor` to `patch` (`4572f180`, `7e047c7b`)
+- 🔄 Upgrade Mergify configuration to current format (`a880c285`, PR #202)
+- 🔄 Move `Directory.Build.props` from `Meteostanice/` to project root (`f89f3746`, `2164899c`)
+- 🔄 Update .NET SDK target from 9.0.x to 10.0.x across all workflows (`da90cf3c`)
+
+#### GitHub Actions dependency bumps
+
+- `actions/checkout`: 6.0.2 → 7.0.1
+- `actions/setup-dotnet`: 5.1.0 → 6.0.0
+- `actions/setup-java`: 5.2.0 → 5.7.0
+- `actions/cache`: 5.0.3 → 6
+- `actions/upload-artifact`: 6.0.0 → 7.0.1
+- `nuget/setup-nuget`: 2.0.1 → 4.0
+- `microsoft/setup-msbuild`: 2 → 3
+- `richardrigutins/replace-in-files`: 2 → 3
+- `peter-evans/create-pull-request`: 8.1.0 → 8.1.1
+- `nanoframework/nanobuild`: 1.18 → 1.19
+- `nanoframework/nanodu`: 1.0.26 → 1.0.27
+
+#### NuGet dependency bumps (all driver packages)
+
+- `nanoFramework.Runtime.Events`: 1.11.32 → 1.11.39
+- `nanoFramework.System.Device.Gpio`: 1.1.57 → 1.1.64
+- `nanoFramework.System.Device.Spi`: 1.3.82 → 1.3.90
+- `nanoFramework.System.IO.Ports`: 1.1.132 → 1.1.142
+- `nanoFramework.Hardware.Esp32`: 1.6.37 → 1.6.42
+- `UnitsNet.nanoFramework.*` (Duration, Illuminance, Length, Pressure, Ratio, RelativeHumidity, Temperature, VolumeConcentration): 5.75.0 → 5.75.1
+
+Affected driver packages: **CST816D**, **DriverBaseInterfaces** (Altitude, CO2, DewPoint, Gpio, Humidity, Infrared, Light, Pressure, Sensitivity, Temperature), **DriverBaseSPI**, **DriverBaseUART**, **HDC1080**, **LPS22HB**, **MHZ19B**, **PI4IOE5V6408**, **QMP6988**, **SHT3x**, **SHTC3**, **SSD1331**, **TCS34725**, **TSL2561**, and **Meteostanice**.
+
+### Fixed
+
+- 🐛 Fix NuGet restore command syntax in build workflow (`0077e952`)
+- 🐛 Fix YAML indentation in `codeql.yml`, `nanoframework_build.yml`, and `nanoframework_release.yml` (`8e17d084`, `a4c86da9`, `99f1cf19`)
+- 🐛 Fix NuGet cache path configuration across build, CodeQL, and release workflows, settling on user home directory path (`e63fc5b9`, `9767855a`, `fb1d3e85`)
+
+### Removed
+
+- 🔥 Remove `Meteostanice/Directory.Build.props` in favor of root-level props file (`2164899c`)
+- 🔥 Remove redundant write permissions from weekly prerelease workflow (`67ca104f`)
+
+### Metrics
+
+- Total Commits: 157
+- Files Changed: 81
+- Insertions: +1,554
+- Deletions: -765
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.16-preview] - 2026-08-16
 
 This prerelease introduces automated weekly versioning and changelog generation workflows, refactors all CI/CD pipelines with NuGet caching and concurrency controls, and updates nanoFramework and UnitsNet dependencies across all driver packages.
