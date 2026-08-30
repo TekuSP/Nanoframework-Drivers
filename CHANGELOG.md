@@ -5,6 +5,72 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.4.18-preview] - 2026-08-30
+
+CI/CD infrastructure overhaul: add automated weekly prerelease and manual version bump workflows, upgrade all GitHub Actions dependencies, introduce NuGet package lock file support, and update NuGet dependencies across all driver packages.
+
+### Added
+
+- ✨ Add weekly prerelease workflow (`nanoframework_weekly_prerelease.yml`) that auto-bumps patch version every Sunday and opens a PR (607039a)
+- ✨ Add manual version bump workflow (`nanoframework_version_bump.yml`) with support for major/minor/patch/custom SemVer inputs and validation (6482bbc)
+- ✨ Add `VERSION` file as the single source of truth for project versioning
+- ✨ Add root `Directory.Build.props` enabling NuGet package lock file restore in locked mode for reproducible builds (f89f374)
+- ✨ Add NuGet package caching steps to build, release, and CodeQL workflows (40aee2b, ab4026a)
+- ✨ Add concurrency settings to build and CodeQL workflows to cancel superseded runs (26156540, f3c51aa)
+- ✨ Add AI-powered changelog generation via `hyperb1iss/git-iris@v2` with Anthropic provider in `nanoframework_changelog.yml`
+- ✨ Add `workflow_run` trigger to changelog workflow so it fires automatically after releases
+- ✨ Add Mergify rules for auto-merge, auto-approve, and auto-update of version bump PRs
+
+### Changed
+
+- 🔄 Upgrade `nanoframework/nanobuild` GitHub Action from v1.18 to v1.20 with `usePreview: true` (ff59e4f, 45e8797)
+- 🔄 Upgrade Mergify configuration to current format, reformat indentation, and add version bump branch handling (PR #202)
+- 🔄 Change default version bump fragment from minor to patch for both weekly and manual workflows (4572f18, 7e047c7)
+- 🔄 Update `nanoFramework.Runtime.Events` from 1.11.32 to 1.11.39 across driver packages
+- 🔄 Update `nanoFramework.System.Device.Gpio` from 1.1.57 to 1.1.64 across driver packages
+- 🔄 Update `UnitsNet.nanoFramework.*` packages from 5.75.0 to 5.75.1 (Temperature, RelativeHumidity, Pressure)
+- 🔄 Move `Directory.Build.props` from `Meteostanice/` to solution root (2164899, f89f374)
+
+#### GitHub Actions Dependency Bumps
+
+| Action | From | To |
+|--------|------|----|
+| `actions/checkout` | 6.0.2 | 7.0.1 |
+| `actions/setup-dotnet` | 5.1.0 | 6.0.0 |
+| `actions/setup-java` | 5.2.0 | 6.0.0 |
+| `actions/upload-artifact` | 6.0.0 | 7.0.1 |
+| `actions/cache` | 5.0.3 | 6 |
+| `microsoft/setup-msbuild` | 2 | 3 |
+| `nuget/setup-nuget` | 2.0.1 | 4.0 |
+| `peter-evans/create-pull-request` | 8.1.0 | 8.1.1 |
+| `richardrigutins/replace-in-files` | 2 | 3 |
+| `nanoframework/nanodu` | 1.0.26 | 1.0.27 |
+| `nanoframework/nanobuild` | 1.18 | 1.20 |
+
+### Fixed
+
+- 🐛 Fix NuGet restore command syntax in build workflow (0077e95)
+- 🐛 Fix YAML indentation in `codeql.yml`, `nanoframework_build.yml`, and `nanoframework_release.yml` (8e17d08, a4c86da, 99f1cf1)
+- 🐛 Fix NuGet cache path resolution across build, release, and CodeQL workflows (multiple commits by TekuSP)
+
+### Removed
+
+- 🔥 Remove `Meteostanice/Directory.Build.props` in favor of the root-level file (2164899)
+- 🔥 Remove NuGet cache setup step that was replaced by `actions/cache` integration (d81d6be)
+- 🔥 Remove `delete_head_branch` Mergify rule (now handled elsewhere)
+
+### Security
+
+- 🔒 Remove write permissions from weekly prerelease workflow and scope to `checks` and `id-token` only (67ca104, 82ec7e9, eb71822)
+
+### Metrics
+
+- Total Commits: 148
+- Files Changed: 81
+- Insertions: +1,607
+- Deletions: -750
+<!-- -------------------------------------------------------------- -->
+
 ## [v0.4.17-preview] - 2026-08-23
 
 This release overhauls CI/CD automation with weekly prerelease workflows, automated version bumping, and AI-powered changelog generation. All driver packages receive NuGet dependency updates, and GitHub Actions dependencies are brought to their latest versions.
